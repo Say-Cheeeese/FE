@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
-    "build:docker": "docker build -t nextjs-docker .",
+    "build:docker": "docker build -t cheese_frontend .",
     "start": "next start",
     "lint": "eslint"
   },
