@@ -2,7 +2,8 @@ name: deploy
 
 on:
   push:
-    branches: [main]
+    branches:
+      - "**" # TODO : ["main"]으로 변경 필요
 
 jobs:
   app-build:
