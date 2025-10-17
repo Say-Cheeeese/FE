@@ -1,7 +1,7 @@
 name: deploy
 
 on:
-  push:
+  pull_request: # TODO : push: 로 변경 필요
     branches:
       - "**" # TODO : ["main"]으로 변경 필요
 
