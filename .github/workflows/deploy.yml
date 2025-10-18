@@ -2,7 +2,7 @@ name: deploy
 
 on:
   push:
-    branches: ['main']
+    branches: [main]
 
 jobs:
   app-build:
@@ -48,7 +48,6 @@ jobs:
             # 기존 컨테이너 종료/삭제
             docker stop ${APP} || true
             docker rm ${APP} || true
-            docker rm -f ${APP}-next || true
 
             # 새 컨테이너(임시 이름) 먼저 띄우고 헬스체크
             docker run -d --name ${APP} \
