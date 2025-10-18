@@ -45,18 +45,15 @@ jobs:
             docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_TOKEN }}
             docker pull $IMAGE
 
-            # 새 컨테이너(임시 이름) 먼저 띄우고 헬스체크
-            docker run -d --name ${APP}-next \
-              --restart=always \
-              -p 80:3000 \
-              $IMAGE
-
             # 기존 컨테이너 종료/삭제
             docker stop ${APP} || true
             docker rm ${APP} || true
 
-            # 새 컨테이너를 정식 이름으로 교체
-            docker rename ${APP}-next ${APP}
+            # 새 컨테이너(임시 이름) 먼저 띄우고 헬스체크
+            docker run -d --name ${APP} \
+              --restart=always \
+              -p 80:3000 \
+              $IMAGE
 
             # 오래된 이미지 정리(선택)
             docker image prune -f || true
