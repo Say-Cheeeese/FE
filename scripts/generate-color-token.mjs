@@ -118,11 +118,11 @@ function collectTextPrimitives(primitiveRoot) {
   const textRoot = {};
   if (!isPlainObject(primitiveRoot)) return textRoot;
 
-  const fontRoot = primitiveRoot.Font;
+  const fontRoot = primitiveRoot.font;
   if (!isPlainObject(fontRoot)) return textRoot;
 
   // Extract font family
-  const fontFamily = fontRoot["font family"]?.primary?.value;
+  const fontFamily = fontRoot.family?.pretendard?.value;
   if (fontFamily) {
     textRoot.font = { fontFamily };
   }
