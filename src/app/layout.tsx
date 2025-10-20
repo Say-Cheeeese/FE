@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
-import localFont from "next/font/local";
-import { Geist, Geist_Mono } from 'next/font/google';
+import localFont from 'next/font/local';
 import './globals.css';
+
 const pretendard = localFont({
-  src: "../../public/fonts/PretendardVariable.woff2",
-  display: "swap",
-  weight: "100 900",
-  variable: "--font-pretendard",
+  src: '../../public/fonts/PretendardVariable.woff2',
+  display: 'swap',
+  weight: '100 900',
+  variable: '--font-pretendard',
 });
 
 export const metadata: Metadata = {
@@ -21,9 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='ko'>
-      <body
-        className={`${pretendard.variable} antialiased`}
-      >
+      <body className={`${pretendard.variable} antialiased`}>
         {children}
       </body>
     </html>
