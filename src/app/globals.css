@@ -212,4 +212,236 @@ body {
   font-family: var(--font-pretendard);
 }
 /* generated-typography-utilities:start */
+@layer utilities {
+  .text-title-lg-bold {
+    font-family: var(--font-primary);
+    font-weight: 700;
+    font-size: var(--font-size-44);
+  }
+  .text-title-lg-semibold {
+    font-family: var(--font-primary);
+    font-weight: 600;
+    font-size: var(--font-size-44);
+  }
+  .text-title-md-bold {
+    font-family: var(--font-primary);
+    font-weight: 700;
+    font-size: var(--font-size-40);
+  }
+  .text-title-md-semibold {
+    font-family: var(--font-primary);
+    font-weight: 600;
+    font-size: var(--font-size-40);
+  }
+  .text-title-sm-bold {
+    font-family: var(--font-primary);
+    font-weight: 700;
+    font-size: var(--font-size-36);
+  }
+  .text-title-sm-semibold {
+    font-family: var(--font-primary);
+    font-weight: 600;
+    font-size: var(--font-size-36);
+  }
+  .text-heading-2xl-bold {
+    font-family: var(--font-primary);
+    font-weight: 700;
+    font-size: var(--font-size-32);
+  }
+  .text-heading-2xl-semibold {
+    font-family: var(--font-primary);
+    font-weight: 600;
+    font-size: var(--font-size-32);
+  }
+  .text-heading-2xl-medium {
+    font-family: var(--font-primary);
+    font-weight: 500;
+    font-size: var(--font-size-32);
+  }
+  .text-heading-2xl-regular {
+    font-family: var(--font-primary);
+    font-weight: 400;
+    font-size: var(--font-size-32);
+  }
+  .text-heading-1xl-bold {
+    font-family: var(--font-primary);
+    font-weight: 700;
+    font-size: var(--font-size-28);
+  }
+  .text-heading-1xl-semibold {
+    font-family: var(--font-primary);
+    font-weight: 600;
+    font-size: var(--font-size-28);
+  }
+  .text-heading-1xl-medium {
+    font-family: var(--font-primary);
+    font-weight: 500;
+    font-size: var(--font-size-28);
+  }
+  .text-heading-1xl-regular {
+    font-family: var(--font-primary);
+    font-weight: 400;
+    font-size: var(--font-size-28);
+  }
+  .text-heading-lg-bold {
+    font-family: var(--font-primary);
+    font-weight: 700;
+    font-size: var(--font-size-24);
+  }
+  .text-heading-lg-semibold {
+    font-family: var(--font-primary);
+    font-weight: 600;
+    font-size: var(--font-size-24);
+  }
+  .text-heading-lg-medium {
+    font-family: var(--font-primary);
+    font-weight: 500;
+    font-size: var(--font-size-24);
+  }
+  .text-heading-lg-regular {
+    font-family: var(--font-primary);
+    font-weight: 400;
+    font-size: var(--font-size-24);
+  }
+  .text-heading-md-bold {
+    font-family: var(--font-primary);
+    font-weight: 700;
+    font-size: var(--font-size-20);
+  }
+  .text-heading-md-semibold {
+    font-family: var(--font-primary);
+    font-weight: 600;
+    font-size: var(--font-size-20);
+  }
+  .text-heading-md-medium {
+    font-family: var(--font-primary);
+    font-weight: 500;
+    font-size: var(--font-size-20);
+  }
+  .text-heading-md-regular {
+    font-family: var(--font-primary);
+    font-weight: 400;
+    font-size: var(--font-size-20);
+  }
+  .text-heading-sm-bold {
+    font-family: var(--font-primary);
+    font-weight: 700;
+    font-size: var(--font-size-18);
+  }
+  .text-heading-sm-semibold {
+    font-family: var(--font-primary);
+    font-weight: 600;
+    font-size: var(--font-size-18);
+  }
+  .text-heading-sm-medium {
+    font-family: var(--font-primary);
+    font-weight: 500;
+    font-size: var(--font-size-18);
+  }
+  .text-heading-sm-regular {
+    font-family: var(--font-primary);
+    font-weight: 400;
+    font-size: var(--font-size-18);
+  }
+  .text-body-1xl-bold {
+    font-family: var(--font-primary);
+    font-weight: 700;
+    font-size: var(--font-size-17);
+  }
+  .text-body-1xl-semibold {
+    font-family: var(--font-primary);
+    font-weight: 600;
+    font-size: var(--font-size-17);
+  }
+  .text-body-1xl-medium {
+    font-family: var(--font-primary);
+    font-weight: 500;
+    font-size: var(--font-size-17);
+  }
+  .text-body-1xl-regular {
+    font-family: var(--font-primary);
+    font-weight: 400;
+    font-size: var(--font-size-17);
+  }
+  .text-body-lg-bold {
+    font-family: var(--font-primary);
+    font-weight: 700;
+    font-size: var(--font-size-16);
+  }
+  .text-body-lg-semibold {
+    font-family: var(--font-primary);
+    font-weight: 600;
+    font-size: var(--font-size-16);
+  }
+  .text-body-lg-medium {
+    font-family: var(--font-primary);
+    font-weight: 500;
+    font-size: var(--font-size-16);
+  }
+  .text-body-lg-regular {
+    font-family: var(--font-primary);
+    font-weight: 400;
+    font-size: var(--font-size-16);
+  }
+  .text-body-md-bold {
+    font-family: var(--font-primary);
+    font-weight: 700;
+    font-size: var(--font-size-15);
+  }
+  .text-body-md-semibold {
+    font-family: var(--font-primary);
+    font-weight: 600;
+    font-size: var(--font-size-15);
+  }
+  .text-body-md-medium {
+    font-family: var(--font-primary);
+    font-weight: 500;
+    font-size: var(--font-size-15);
+  }
+  .text-body-md-regular {
+    font-family: var(--font-primary);
+    font-weight: 400;
+    font-size: var(--font-size-15);
+  }
+  .text-body-sm-bold {
+    font-family: var(--font-primary);
+    font-weight: 700;
+    font-size: var(--font-size-14);
+  }
+  .text-body-sm-semibold {
+    font-family: var(--font-primary);
+    font-weight: 600;
+    font-size: var(--font-size-14);
+  }
+  .text-body-sm-medium {
+    font-family: var(--font-primary);
+    font-weight: 500;
+    font-size: var(--font-size-14);
+  }
+  .text-body-sm-regular {
+    font-family: var(--font-primary);
+    font-weight: 400;
+    font-size: var(--font-size-14);
+  }
+  .text-caption-md-medium {
+    font-family: var(--font-primary);
+    font-weight: 500;
+    font-size: var(--font-size-13);
+  }
+  .text-caption-md-regular {
+    font-family: var(--font-primary);
+    font-weight: 400;
+    font-size: var(--font-size-13);
+  }
+  .text-caption-sm-medium {
+    font-family: var(--font-primary);
+    font-weight: 500;
+    font-size: var(--font-size-12);
+  }
+  .text-caption-sm-regular {
+    font-family: var(--font-primary);
+    font-weight: 400;
+    font-size: var(--font-size-12);
+  }
+}
 /* generated-typography-utilities:end */
