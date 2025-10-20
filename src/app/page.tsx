@@ -2,11 +2,24 @@
 import { useState } from 'react';
 import EmojiPicker from 'emoji-picker-react';
 
+interface EmojiClickData {
+  activeSkinTone: string;
+  emoji: string;
+  imageUrl: string;
+  isCustom: boolean;
+  names: string[];
+  unified: string;
+  unifiedWithoutSkinTone: string;
+}
+
 export default function Home() {
   const [input, setInput] = useState('');
   const [showPicker, setShowPicker] = useState(false);
 
-  const handleEmojiClick = (emojiData: any) => {
+  const handleEmojiClick = (emojiData: EmojiClickData) => {
+    console.log('emojiData:', emojiData);
+    console.log('Type:', typeof emojiData);
+    console.log('Keys:', Object.keys(emojiData));
     setInput((prev) => prev + emojiData.emoji);
   };
 
