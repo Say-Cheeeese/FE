@@ -11,10 +11,12 @@
     "build": "next build --turbopack",
     "build:docker": "docker build -t cheese_frontend .",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "token": "node scripts/generate-color-token.mjs"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.90.2",
+    "emoji-picker-react": "^4.14.2",
     "jotai": "^2.15.0",
     "next": "15.5.4",
     "react": "19.1.0",
