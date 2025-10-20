@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "token": "node scripts/generate-color-token.mjs"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.90.2",
