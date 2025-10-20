@@ -24,8 +24,10 @@ export default function RootLayout({
       <body
         className={`${pretendard.variable} antialiased bg-gray-50 flex items-center justify-center`}
         style={{
-          width: '393px',
-          height: '852px',
+          maxWidth: '393px',
+          maxHeight: '852px',
+          width: '100vw',
+          height: '100dvh',
           margin: '0 auto',
           background: '#fff',
           overflow: 'hidden',
