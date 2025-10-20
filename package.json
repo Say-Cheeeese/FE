@@ -1,10 +1,15 @@
 {
   "name": "cheeese_fe",
   "version": "0.1.0",
+  "packageManager": "pnpm@9.12.3",
+  "engines": {
+    "node": "22.20.0"
+  },
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
+    "build:docker": "docker build -t cheese_frontend .",
     "start": "next start",
     "lint": "eslint",
     "token": "node scripts/generate-color-token.mjs"
@@ -24,6 +29,9 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.5.4",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "prettier": "^3.6.2",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
