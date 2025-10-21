@@ -22,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang='ko'>
       <body
-        className={`${pretendard.variable} antialiased bg-gray-50 flex items-center justify-center`}
+        className={`${pretendard.variable} antialiased`}
         style={{
           maxWidth: '393px',
           maxHeight: '852px',
@@ -31,8 +31,6 @@ export default function RootLayout({
           margin: '0 auto',
           background: '#fff',
           overflow: 'hidden',
-          display: 'flex',
-          flexDirection: 'column',
         }}
       >
         {children}
