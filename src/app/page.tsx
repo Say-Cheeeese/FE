@@ -1,24 +1,33 @@
 import Image from 'next/image';
+import Link from 'next/link';
+import LogoHeader from '@/feature/global/components/LogoHeader';
 
 export default function LoginPage() {
   return (
-    <div>
-      <div className='flex flex-col items-center justify-center gap-[17px]'>
-        <Image
-          src='/assets/login/cheese-icon.svg'
-          width={120}
-          height={120}
-          alt='치즈 아이콘'
-        />
-        <Image
-          src='/assets/login/cheese-logo.svg'
-          width={120}
-          height={120}
-          alt='치즈 아이콘'
-        />
-        <span className='text-body-lg-semibold text-text-subtle'>
-          우리가 특별한 순간을 기억하는 법
+    <div className='px-4 w-full min-h-screen flex flex-col'>
+      {/* 헤더 */}
+      <LogoHeader showLogin={true} />
+      {/* 본문 */}
+      <div className='flex-1 mt-18'>본문</div>
+      {/* footer */}
+      <div className='flex flex-col items-center gap-3 mb-[70px]'>
+        <Link
+          href='/login'
+          className='flex flex-col items-center justify-center cursor-pointer w-full h-14 bg-button-primary-fill rounded-[8px]'
+        >
+          <span className='text-body-1xl-semibold text-text-primary'>
+            우리 앨범 만들기
+          </span>
+        </Link>
+        <span className='text-body-sm-regular text-text-subtler mb-[14px]'>
+          100명이 앨범 만들고 추억 남기는 중
         </span>
+        <Image
+          src='/assets/login/triangle-polygon.svg'
+          width={38}
+          height={43}
+          alt='삼각형'
+        />
       </div>
     </div>
   );
