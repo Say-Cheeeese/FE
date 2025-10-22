@@ -33,7 +33,7 @@ export default function LoginPage() {
       <div className='flex flex-col gap-2 mb-[171px] mt-10'>
         <div className='flex flex-col items-center justify-center'>
           <div
-            className='py-2 pl-[14px] pr-5 bg-surface-inverse w-[177px] h-9 rounded-full cursor-pointer'
+            className='py-2 pl-[14px] bg-surface-inverse w-[177px] h-9 rounded-full cursor-pointer'
             onClick={() => setShowEmojiModal(true)}
           >
             <span className='text-body-sm-semibold text-text-basic-inverse flex items-center gap-1'>

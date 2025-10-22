@@ -13,9 +13,9 @@ export default function KakaoSignupButton() {
       const res = await fetch(REDIRECT_URI, {
         method: 'GET',
       });
-      const data = await res.text();
+      let data = await res.json();
       console.log('백엔드 응답:', data);
-      window.location.href = kakaoUrl;
+      // window.location.href = kakaoUrl;
     } catch (err) {
       console.error('카카오 인증 GET 요청 실패:', err);
     }
@@ -31,7 +31,7 @@ export default function KakaoSignupButton() {
         height={18}
         alt='카카오 로고'
       />
-      <span className='text-15-semibold text-kakao-text'>카카오 로그인</span>
+      <span className='text-15-600 text-[rgba(0,0,0,0.85)]'>카카오 로그인</span>
     </div>
   );
 }

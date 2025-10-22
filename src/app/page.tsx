@@ -1,14 +1,16 @@
+import LogoHeader from '@/global/components/LogoHeader';
 import Image from 'next/image';
 import Link from 'next/link';
-import LogoHeader from '@/feature/global/components/LogoHeader';
-
+import { ChevronRight } from 'lucide-react';
 export default function LoginPage() {
   return (
     <div className='px-4 w-full min-h-screen flex flex-col'>
       {/* 헤더 */}
       <LogoHeader showLogin={true} />
       {/* 본문 */}
-      <div className='flex-1 mt-18'>본문</div>
+      <div className='flex-1 mt-18'>
+        <ChevronRight className='w-6 h-6' strokeWidth={1} color='#000'/>
+      </div>
       {/* footer */}
       <div className='flex flex-col items-center gap-3 mb-[70px]'>
         <Link
