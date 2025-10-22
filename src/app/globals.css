@@ -211,9 +211,28 @@ body {
   color: var(--foreground);
   font-family: var(--font-pretendard);
 }
+
+/* 모달 애니메이션 */
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.3s ease-out;
+}
 /* generated-typography-utilities:start */
 @layer utilities {
   .text-title-lg-bold {
+    font-family: var(--font-primary);
+    font-weight: 700;
+    font-size: var(--font-size-44);
+  }
+  .text-44-700 {
     font-family: var(--font-primary);
     font-weight: 700;
     font-size: var(--font-size-44);
@@ -223,7 +242,17 @@ body {
     font-weight: 600;
     font-size: var(--font-size-44);
   }
+  .text-44-600 {
+    font-family: var(--font-primary);
+    font-weight: 600;
+    font-size: var(--font-size-44);
+  }
   .text-title-md-bold {
+    font-family: var(--font-primary);
+    font-weight: 700;
+    font-size: var(--font-size-40);
+  }
+  .text-40-700 {
     font-family: var(--font-primary);
     font-weight: 700;
     font-size: var(--font-size-40);
@@ -233,7 +262,17 @@ body {
     font-weight: 600;
     font-size: var(--font-size-40);
   }
+  .text-40-600 {
+    font-family: var(--font-primary);
+    font-weight: 600;
+    font-size: var(--font-size-40);
+  }
   .text-title-sm-bold {
+    font-family: var(--font-primary);
+    font-weight: 700;
+    font-size: var(--font-size-36);
+  }
+  .text-36-700 {
     font-family: var(--font-primary);
     font-weight: 700;
     font-size: var(--font-size-36);
@@ -243,7 +282,17 @@ body {
     font-weight: 600;
     font-size: var(--font-size-36);
   }
+  .text-36-600 {
+    font-family: var(--font-primary);
+    font-weight: 600;
+    font-size: var(--font-size-36);
+  }
   .text-heading-2xl-bold {
+    font-family: var(--font-primary);
+    font-weight: 700;
+    font-size: var(--font-size-32);
+  }
+  .text-32-700 {
     font-family: var(--font-primary);
     font-weight: 700;
     font-size: var(--font-size-32);
@@ -253,7 +302,17 @@ body {
     font-weight: 600;
     font-size: var(--font-size-32);
   }
+  .text-32-600 {
+    font-family: var(--font-primary);
+    font-weight: 600;
+    font-size: var(--font-size-32);
+  }
   .text-heading-2xl-medium {
+    font-family: var(--font-primary);
+    font-weight: 500;
+    font-size: var(--font-size-32);
+  }
+  .text-32-500 {
     font-family: var(--font-primary);
     font-weight: 500;
     font-size: var(--font-size-32);
@@ -263,7 +322,17 @@ body {
     font-weight: 400;
     font-size: var(--font-size-32);
   }
+  .text-32-400 {
+    font-family: var(--font-primary);
+    font-weight: 400;
+    font-size: var(--font-size-32);
+  }
   .text-heading-1xl-bold {
+    font-family: var(--font-primary);
+    font-weight: 700;
+    font-size: var(--font-size-28);
+  }
+  .text-28-700 {
     font-family: var(--font-primary);
     font-weight: 700;
     font-size: var(--font-size-28);
@@ -273,7 +342,17 @@ body {
     font-weight: 600;
     font-size: var(--font-size-28);
   }
+  .text-28-600 {
+    font-family: var(--font-primary);
+    font-weight: 600;
+    font-size: var(--font-size-28);
+  }
   .text-heading-1xl-medium {
+    font-family: var(--font-primary);
+    font-weight: 500;
+    font-size: var(--font-size-28);
+  }
+  .text-28-500 {
     font-family: var(--font-primary);
     font-weight: 500;
     font-size: var(--font-size-28);
@@ -283,7 +362,17 @@ body {
     font-weight: 400;
     font-size: var(--font-size-28);
   }
+  .text-28-400 {
+    font-family: var(--font-primary);
+    font-weight: 400;
+    font-size: var(--font-size-28);
+  }
   .text-heading-lg-bold {
+    font-family: var(--font-primary);
+    font-weight: 700;
+    font-size: var(--font-size-24);
+  }
+  .text-24-700 {
     font-family: var(--font-primary);
     font-weight: 700;
     font-size: var(--font-size-24);
@@ -293,7 +382,17 @@ body {
     font-weight: 600;
     font-size: var(--font-size-24);
   }
+  .text-24-600 {
+    font-family: var(--font-primary);
+    font-weight: 600;
+    font-size: var(--font-size-24);
+  }
   .text-heading-lg-medium {
+    font-family: var(--font-primary);
+    font-weight: 500;
+    font-size: var(--font-size-24);
+  }
+  .text-24-500 {
     font-family: var(--font-primary);
     font-weight: 500;
     font-size: var(--font-size-24);
@@ -303,7 +402,17 @@ body {
     font-weight: 400;
     font-size: var(--font-size-24);
   }
+  .text-24-400 {
+    font-family: var(--font-primary);
+    font-weight: 400;
+    font-size: var(--font-size-24);
+  }
   .text-heading-md-bold {
+    font-family: var(--font-primary);
+    font-weight: 700;
+    font-size: var(--font-size-20);
+  }
+  .text-20-700 {
     font-family: var(--font-primary);
     font-weight: 700;
     font-size: var(--font-size-20);
@@ -313,7 +422,17 @@ body {
     font-weight: 600;
     font-size: var(--font-size-20);
   }
+  .text-20-600 {
+    font-family: var(--font-primary);
+    font-weight: 600;
+    font-size: var(--font-size-20);
+  }
   .text-heading-md-medium {
+    font-family: var(--font-primary);
+    font-weight: 500;
+    font-size: var(--font-size-20);
+  }
+  .text-20-500 {
     font-family: var(--font-primary);
     font-weight: 500;
     font-size: var(--font-size-20);
@@ -323,7 +442,17 @@ body {
     font-weight: 400;
     font-size: var(--font-size-20);
   }
+  .text-20-400 {
+    font-family: var(--font-primary);
+    font-weight: 400;
+    font-size: var(--font-size-20);
+  }
   .text-heading-sm-bold {
+    font-family: var(--font-primary);
+    font-weight: 700;
+    font-size: var(--font-size-18);
+  }
+  .text-18-700 {
     font-family: var(--font-primary);
     font-weight: 700;
     font-size: var(--font-size-18);
@@ -333,7 +462,17 @@ body {
     font-weight: 600;
     font-size: var(--font-size-18);
   }
+  .text-18-600 {
+    font-family: var(--font-primary);
+    font-weight: 600;
+    font-size: var(--font-size-18);
+  }
   .text-heading-sm-medium {
+    font-family: var(--font-primary);
+    font-weight: 500;
+    font-size: var(--font-size-18);
+  }
+  .text-18-500 {
     font-family: var(--font-primary);
     font-weight: 500;
     font-size: var(--font-size-18);
@@ -343,7 +482,17 @@ body {
     font-weight: 400;
     font-size: var(--font-size-18);
   }
+  .text-18-400 {
+    font-family: var(--font-primary);
+    font-weight: 400;
+    font-size: var(--font-size-18);
+  }
   .text-body-1xl-bold {
+    font-family: var(--font-primary);
+    font-weight: 700;
+    font-size: var(--font-size-17);
+  }
+  .text-17-700 {
     font-family: var(--font-primary);
     font-weight: 700;
     font-size: var(--font-size-17);
@@ -353,7 +502,17 @@ body {
     font-weight: 600;
     font-size: var(--font-size-17);
   }
+  .text-17-600 {
+    font-family: var(--font-primary);
+    font-weight: 600;
+    font-size: var(--font-size-17);
+  }
   .text-body-1xl-medium {
+    font-family: var(--font-primary);
+    font-weight: 500;
+    font-size: var(--font-size-17);
+  }
+  .text-17-500 {
     font-family: var(--font-primary);
     font-weight: 500;
     font-size: var(--font-size-17);
@@ -363,7 +522,17 @@ body {
     font-weight: 400;
     font-size: var(--font-size-17);
   }
+  .text-17-400 {
+    font-family: var(--font-primary);
+    font-weight: 400;
+    font-size: var(--font-size-17);
+  }
   .text-body-lg-bold {
+    font-family: var(--font-primary);
+    font-weight: 700;
+    font-size: var(--font-size-16);
+  }
+  .text-16-700 {
     font-family: var(--font-primary);
     font-weight: 700;
     font-size: var(--font-size-16);
@@ -373,7 +542,17 @@ body {
     font-weight: 600;
     font-size: var(--font-size-16);
   }
+  .text-16-600 {
+    font-family: var(--font-primary);
+    font-weight: 600;
+    font-size: var(--font-size-16);
+  }
   .text-body-lg-medium {
+    font-family: var(--font-primary);
+    font-weight: 500;
+    font-size: var(--font-size-16);
+  }
+  .text-16-500 {
     font-family: var(--font-primary);
     font-weight: 500;
     font-size: var(--font-size-16);
@@ -383,7 +562,17 @@ body {
     font-weight: 400;
     font-size: var(--font-size-16);
   }
+  .text-16-400 {
+    font-family: var(--font-primary);
+    font-weight: 400;
+    font-size: var(--font-size-16);
+  }
   .text-body-md-bold {
+    font-family: var(--font-primary);
+    font-weight: 700;
+    font-size: var(--font-size-15);
+  }
+  .text-15-700 {
     font-family: var(--font-primary);
     font-weight: 700;
     font-size: var(--font-size-15);
@@ -393,7 +582,17 @@ body {
     font-weight: 600;
     font-size: var(--font-size-15);
   }
+  .text-15-600 {
+    font-family: var(--font-primary);
+    font-weight: 600;
+    font-size: var(--font-size-15);
+  }
   .text-body-md-medium {
+    font-family: var(--font-primary);
+    font-weight: 500;
+    font-size: var(--font-size-15);
+  }
+  .text-15-500 {
     font-family: var(--font-primary);
     font-weight: 500;
     font-size: var(--font-size-15);
@@ -403,7 +602,17 @@ body {
     font-weight: 400;
     font-size: var(--font-size-15);
   }
+  .text-15-400 {
+    font-family: var(--font-primary);
+    font-weight: 400;
+    font-size: var(--font-size-15);
+  }
   .text-body-sm-bold {
+    font-family: var(--font-primary);
+    font-weight: 700;
+    font-size: var(--font-size-14);
+  }
+  .text-14-700 {
     font-family: var(--font-primary);
     font-weight: 700;
     font-size: var(--font-size-14);
@@ -413,7 +622,17 @@ body {
     font-weight: 600;
     font-size: var(--font-size-14);
   }
+  .text-14-600 {
+    font-family: var(--font-primary);
+    font-weight: 600;
+    font-size: var(--font-size-14);
+  }
   .text-body-sm-medium {
+    font-family: var(--font-primary);
+    font-weight: 500;
+    font-size: var(--font-size-14);
+  }
+  .text-14-500 {
     font-family: var(--font-primary);
     font-weight: 500;
     font-size: var(--font-size-14);
@@ -423,7 +642,17 @@ body {
     font-weight: 400;
     font-size: var(--font-size-14);
   }
+  .text-14-400 {
+    font-family: var(--font-primary);
+    font-weight: 400;
+    font-size: var(--font-size-14);
+  }
   .text-caption-md-medium {
+    font-family: var(--font-primary);
+    font-weight: 500;
+    font-size: var(--font-size-13);
+  }
+  .text-13-500 {
     font-family: var(--font-primary);
     font-weight: 500;
     font-size: var(--font-size-13);
@@ -433,7 +662,17 @@ body {
     font-weight: 400;
     font-size: var(--font-size-13);
   }
+  .text-13-400 {
+    font-family: var(--font-primary);
+    font-weight: 400;
+    font-size: var(--font-size-13);
+  }
   .text-caption-sm-medium {
+    font-family: var(--font-primary);
+    font-weight: 500;
+    font-size: var(--font-size-12);
+  }
+  .text-12-500 {
     font-family: var(--font-primary);
     font-weight: 500;
     font-size: var(--font-size-12);
@@ -443,5 +682,24 @@ body {
     font-weight: 400;
     font-size: var(--font-size-12);
   }
+  .text-12-400 {
+    font-family: var(--font-primary);
+    font-weight: 400;
+    font-size: var(--font-size-12);
+  }
 }
 /* generated-typography-utilities:end */
+
+/* 모달 애니메이션 */
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.3s ease-out;
+}
