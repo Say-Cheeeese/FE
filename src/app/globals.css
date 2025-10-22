@@ -1,10 +1,10 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
 
-/* generated-color-tokens:start */
+  /* generated-color-tokens:start */
   --color-primary-25: #fffbeb;
   --color-primary-50: #fff7d6;
   --color-primary-100: #fff2c2;
@@ -66,9 +66,9 @@
   --color-alpha-primary-yellow-50: #ffcd1480;
   --color-alpha-primary-yellow-20: #ffcd1433;
   --color-alpha-primary-yellow-0: #ffcd1400;
-/* generated-color-tokens:end */
+  /* generated-color-tokens:end */
 
-/* generated-text-tokens:start */
+  /* generated-text-tokens:start */
   --font-family-primary: pretendard;
   --font-size-12: 12px;
   --font-size-13: 13px;
@@ -93,7 +93,7 @@
   --font-weight-500: 500;
   --font-weight-600: 600;
   --font-weight-700: 700;
-/* generated-text-tokens:end */
+  /* generated-text-tokens:end */
 }
 
 @theme inline {
@@ -102,7 +102,7 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 
-/* generated-semantic-tokens:start */
+  /* generated-semantic-tokens:start */
   --color-button-primary-fill: var(--color-primary-400);
   --color-button-primary-fill-pressed: var(--color-primary-500);
   --color-button-disabled-fill: var(--color-neutral-100);
@@ -173,9 +173,9 @@
   --color-action-secondary: var(--color-neutral-0);
   --color-action-primary-pressed: var(--color-primary-400);
   --color-action-primary: var(--color-primary-25);
-/* generated-semantic-tokens:end */
+  /* generated-semantic-tokens:end */
 
-/* generated-typography-tokens:start */
+  /* generated-typography-tokens:start */
   --font-primary: var(--font-family-primary);
   --text-12: var(--font-size-12);
   --text-13: var(--font-size-13);
@@ -196,7 +196,7 @@
   --leading-36: var(--line-height-36);
   --text-40: var(--font-size-40);
   --text-44: var(--font-size-44);
-/* generated-typography-tokens:end */
+  /* generated-typography-tokens:end */
 }
 
 @media (prefers-color-scheme: dark) {

@@ -235,7 +235,20 @@ function buildTypographyUtilitiesCssFromToken(token) {
   const styleGroups = ['title', 'heading', 'body', 'caption'];
   // fontSize/weight 매핑용
   const sizeMap = {
-    0: '12', 1: '13', 2: '14', 3: '15', 4: '16', 5: '17', 6: '18', 7: '20', 8: '24', 9: '28', 10: '32', 11: '36', 12: '40', 13: '44',
+    0: '12',
+    1: '13',
+    2: '14',
+    3: '15',
+    4: '16',
+    5: '17',
+    6: '18',
+    7: '20',
+    8: '24',
+    9: '28',
+    10: '32',
+    11: '36',
+    12: '40',
+    13: '44',
   };
   const weightMap = {
     'pretendard-0': '700',

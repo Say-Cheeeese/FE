@@ -18,7 +18,9 @@ export default function LogoHeader({ showLogin = true }: LogoHeaderProps) {
         {showLogin && (
           <Link href='/login'>
             <div className='py-[10px] px-3 cursor-pointer'>
-              <span className='text-body-sm-medium text-text-basic'>로그인</span>
+              <span className='text-body-sm-medium text-text-basic'>
+                로그인
+              </span>
             </div>
           </Link>
         )}

@@ -9,7 +9,7 @@ export default function LoginPage() {
       <LogoHeader showLogin={true} />
       {/* 본문 */}
       <div className='flex-1 mt-18'>
-        <ChevronRight className='w-6 h-6' strokeWidth={1} color='#000'/>
+        <ChevronRight className='w-6 h-6' strokeWidth={1} color='#000' />
       </div>
       {/* footer */}
       <div className='flex flex-col items-center gap-3 mb-[70px]'>

@@ -1,6 +1,6 @@
 'use client';
-import React, { useState } from 'react'
-import { X } from 'lucide-react'
+import React, { useState } from 'react';
+import { X } from 'lucide-react';
 export default function ProfileNameInput() {
   const [inputValue, setInputValue] = useState('');
   const [isFocused, setIsFocused] = useState(false);
@@ -19,15 +19,17 @@ export default function ProfileNameInput() {
   return (
     <div>
       <div className='flex flex-col gap-2'>
-        <div className='h-5 text-body-sm-semibold text-text-basic px-2'>이름</div>
+        <div className='h-5 text-body-sm-semibold text-text-basic px-2'>
+          이름
+        </div>
         <div className='relative'>
-          <input 
-            type='text' 
+          <input
+            type='text'
             value={inputValue}
             onChange={handleInputChange}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
-            className='p-4 bg-element-gray-lighter w-full rounded-[8px] text-body-lg-medium text-text-basic placeholder:text-text-subtier focus:outline-1 focus:outline-border-primary' 
+            className='p-4 bg-element-gray-lighter w-full rounded-[8px] text-body-lg-medium text-text-basic placeholder:text-text-subtier focus:outline-1 focus:outline-border-primary'
             placeholder='친구들이 알아볼 수 있도록 설정해주세요'
           />
           {isFocused && inputValue && (
@@ -37,7 +39,7 @@ export default function ProfileNameInput() {
               onTouchStart={(e) => e.preventDefault()}
               onClick={() => setInputValue('')}
             >
-                <X size={13} strokeWidth={4} color='#fff'/>
+              <X size={13} strokeWidth={4} color='#fff' />
             </button>
           )}
         </div>
@@ -48,5 +50,5 @@ export default function ProfileNameInput() {
         )}
       </div>
     </div>
-  )
+  );
 }

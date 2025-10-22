@@ -1,4 +1,3 @@
-import OnBoardingMain from '@/feature/onboarding/components/ProfileNameInput';
 import ProfileImage from '@/feature/onboarding/components/ProfileImage';
 import LogoHeader from '@/global/components/LogoHeader';
 import ProfileNameInput from '@/feature/onboarding/components/ProfileNameInput';
