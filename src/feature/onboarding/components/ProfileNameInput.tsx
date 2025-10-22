@@ -1,15 +1,23 @@
 'use client';
 import React, { useState } from 'react';
 import { X } from 'lucide-react';
-export default function ProfileNameInput() {
-  const [inputValue, setInputValue] = useState('');
+
+interface ProfileNameInputProps {
+  nickname: string;
+  onNicknameChange: (nickname: string) => void;
+}
+
+export default function ProfileNameInput({
+  nickname,
+  onNicknameChange,
+}: ProfileNameInputProps) {
   const [isFocused, setIsFocused] = useState(false);
   const [showError, setShowError] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     if (value.length <= 10) {
-      setInputValue(value);
+      onNicknameChange(value);
       setShowError(false);
     } else {
       setShowError(true);
@@ -25,19 +33,19 @@ export default function ProfileNameInput() {
         <div className='relative'>
           <input
             type='text'
-            value={inputValue}
+            value={nickname}
             onChange={handleInputChange}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
             className='p-4 bg-element-gray-lighter w-full rounded-[8px] text-body-lg-medium text-text-basic placeholder:text-text-subtier focus:outline-1 focus:outline-border-primary'
             placeholder='친구들이 알아볼 수 있도록 설정해주세요'
           />
-          {isFocused && inputValue && (
+          {isFocused && nickname && (
             <button
               className='absolute right-4 top-1/2 transform -translate-y-1/2 p-1 w-5 h-5 bg-element-gray flex items-center justify-center rounded-full'
               onMouseDown={(e) => e.preventDefault()}
               onTouchStart={(e) => e.preventDefault()}
-              onClick={() => setInputValue('')}
+              onClick={() => onNicknameChange('')}
             >
               <X size={13} strokeWidth={4} color='#fff' />
             </button>

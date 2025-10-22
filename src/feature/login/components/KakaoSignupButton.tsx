@@ -10,12 +10,11 @@ export default function KakaoSignupButton() {
 
   const handleKakaoLogin = async () => {
     try {
-      const res = await fetch(REDIRECT_URI, {
-        method: 'GET',
-      });
-      let data = await res.json();
-      console.log('백엔드 응답:', data);
-      // window.location.href = kakaoUrl;
+      // const res = await fetch(REDIRECT_URI, {
+      //   method: 'GET',
+      // });
+      window.location.href =
+        'http://dev.say-cheese.me/oauth2/authorization/kakao';
     } catch (err) {
       console.error('카카오 인증 GET 요청 실패:', err);
     }

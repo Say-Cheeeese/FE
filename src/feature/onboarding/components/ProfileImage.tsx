@@ -17,16 +17,24 @@ const imageList = [
   'smile10.svg',
 ];
 
-export default function ProfileImage() {
-  const [selectedImage, setSelectedImage] = useState('smile1.svg');
+interface ProfileImageProps {
+  selectedImage: string | null;
+  onImageSelect: (image: string) => void;
+}
+
+export default function ProfileImage({
+  selectedImage,
+  onImageSelect,
+}: ProfileImageProps) {
   const [showModal, setShowModal] = useState(false);
+  const currentImage = selectedImage || 'smile1.svg';
 
   return (
-    <div className='flex flex-col items-center mt-22'>
+    <div className='flex flex-col items-center mt-22 mb-10'>
       {/* 프로필 이미지 */}
       <div className='relative'>
         <Image
-          src={`/assets/onboarding/${selectedImage}`}
+          src={`/assets/onboarding/${currentImage}`}
           width={100}
           height={100}
           alt='프로필 이미지'
@@ -46,8 +54,11 @@ export default function ProfileImage() {
         isOpen={showModal}
         onClose={() => setShowModal(false)}
         imageList={imageList}
-        selectedImage={selectedImage}
-        onImageSelect={setSelectedImage}
+        selectedImage={currentImage}
+        onImageSelect={(image) => {
+          onImageSelect(image);
+          setShowModal(false);
+        }}
       />
     </div>
   );

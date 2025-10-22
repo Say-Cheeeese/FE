@@ -56,7 +56,7 @@ export default function ImageModal({
 
       {/* 모달 컨테이너 */}
       <div className='fixed inset-x-0 bottom-0 z-51 flex justify-center'>
-        <div className='bg-white rounded-t-[20px] p-6 shadow-xl w-full max-w-[393px] mx-auto animate-slide-up'>
+        <div className='bg-white rounded-t-[20px] p-6 pt-0 shadow-xl w-full max-w-[393px] mx-auto animate-slide-up'>
           {/* 헤더
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-body-lg-semibold text-text-basic">프로필 이미지 선택</h2>
@@ -74,11 +74,10 @@ export default function ImageModal({
               <button
                 key={img}
                 onClick={() => handleImageClick(img)}
-                className={`p-1 rounded-full transition-all ${
-                  img === selectedImage
-                    ? 'ring-2 ring-blue-500 ring-offset-2'
-                    : 'hover:ring-2 hover:ring-gray-300'
-                }`}
+                className={
+                  'p-1 rounded-full transition-all' +
+                  (img === selectedImage ? ' ring-3 ring-element-primary' : '')
+                }
               >
                 <Image
                   src={`/assets/onboarding/${img}`}
