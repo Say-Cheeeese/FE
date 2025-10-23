@@ -1,11 +1,19 @@
 'use client';
 import { useState } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
 import ProfileImage from '@/feature/onboarding/components/ProfileImage';
 import LogoHeader from '@/global/components/LogoHeader';
 import ProfileNameInput from '@/feature/onboarding/components/ProfileNameInput';
 import { ProfileAgree } from '@/feature/onboarding/components/ProfileAgree';
+import { termContent } from '@/feature/onboarding/const/termContent';
+import TermHeader from '@/feature/onboarding/components/TermHeader';
 
 export default function OnBoarding() {
+  const searchParams = useSearchParams();
+  const termType = searchParams.get('term');
+  const currentTerm = termType
+    ? termContent[termType as keyof typeof termContent]
+    : null;
   // 프로필 이미지 상태
   const [selectedImage, setSelectedImage] = useState<string>('smile1.svg');
 
@@ -38,6 +46,21 @@ export default function OnBoarding() {
       // 가입 완료 API 호출 등
     }
   };
+
+  // 약관 상세가 있을 때 렌더링
+  if (currentTerm) {
+    return (
+      <div className='bg-white min-h-screen'>
+        <TermHeader title={currentTerm.title} />
+        <div className='pt-[100px] px-5 pb-20 h-full'>
+          <div
+            className='max-h-[80vh] overflow-y-auto'
+            dangerouslySetInnerHTML={{ __html: currentTerm.content }}
+          />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className='flex flex-col px-4'>

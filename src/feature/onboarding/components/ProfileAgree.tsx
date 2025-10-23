@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import { ChevronRight, Check } from 'lucide-react';
+import Link from 'next/link';
 
 interface AgreementItem {
   id: string;
@@ -49,12 +50,8 @@ export const ProfileAgree = ({
     onAgreementsChange(newAgreements);
   };
 
-  const handleDetailClick = (id: string) => {
-    console.log(`Detail clicked for: ${id}`);
-  };
-
   return (
-    <div className='flex flex-col items-start gap-4 w-full max-w-[400px] mx-auto px-1 mt-8'>
+    <div className='flex flex-col items-start gap-4 w-full max-w-[430px] mx-auto px-1 mt-8'>
       <div className='flex py-4 px-2 w-full items-start gap-3 border-b border-divider-gray'>
         <button
           onClick={handleAllAgree}
@@ -96,14 +93,13 @@ export const ProfileAgree = ({
                 {item.label}
               </span>
             </div>
-            <button
-              onClick={() => handleDetailClick(item.id)}
+            <Link
+              href={`/onboarding?term=${item.id}`}
               className='w-6 h-6 flex-shrink-0 relative flex items-center justify-center'
-              type='button'
               aria-label={`${item.label} 상세보기`}
             >
               <ChevronRight size={14} strokeWidth={2} color='#94969E' />
-            </button>
+            </Link>
           </div>
         ))}
       </div>
