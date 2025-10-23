@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import ProfileImage from '@/feature/onboarding/components/ProfileImage';
 import LogoHeader from '@/global/components/LogoHeader';
 import ProfileNameInput from '@/feature/onboarding/components/ProfileNameInput';
