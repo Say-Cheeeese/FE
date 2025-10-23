@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
     );
 
     if (!response.ok) {
-      throw new Error('Backend authentication failed');
+      throw new Error('kakao code GET요청 중 200응답이 아닌 다른 응답 발생');
     }
 
     const data = await response.json();
@@ -39,6 +39,7 @@ export async function GET(request: NextRequest) {
         userId: data.result.userId,
         name: data.result.name,
         email: data.result.email,
+        isOnboarded: data.result.isOnboarded,
       },
     });
 
@@ -47,7 +48,7 @@ export async function GET(request: NextRequest) {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      maxAge: 60 * 60, // 1시간
+      maxAge: 60 * 60 * 2, // 2시간
       path: '/',
     });
 
@@ -59,22 +60,22 @@ export async function GET(request: NextRequest) {
       path: '/',
     });
 
-    // 성공적으로 토큰 설정 후 /onboarding으로 리다이렉트
-    const redirectUrl = new URL('/onboarding', request.url);
+    // isOnboarded 값에 따라 리다이렉트 경로 분기
+    const redirectPath = data.result.isOnboarded ? '/main' : '/onboarding';
+    const redirectUrl = new URL(redirectPath, request.url);
     redirectUrl.searchParams.set('login', 'success');
+    redirectUrl.searchParams.set(
+      'onboarding',
+      data.result.isOnboarded.toString(),
+    );
     redirectUrl.searchParams.set('userId', data.result.userId);
     redirectUrl.searchParams.set('name', encodeURIComponent(data.result.name));
     console.log('리다이렉트 URL:', redirectUrl.toString());
-    console.log('설정된 사용자 정보:', {
-      userId: data.result.userId,
-      name: data.result.name,
-      email: data.result.email,
-    });
     return NextResponse.redirect(redirectUrl);
   } catch (error) {
     console.error('OAuth callback error:', error);
     return NextResponse.json(
-      { error: 'Authentication failed' },
+      { error: '서버사이드에서 토큰 처리 중 오류 발생' },
       { status: 500 },
     );
   }
