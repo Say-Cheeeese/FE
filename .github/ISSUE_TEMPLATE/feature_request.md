@@ -1,9 +1,9 @@
 ---
 name: Frontend Issue
 about: 프론트엔드 관련 이슈 및 개발 요청 (UI/UX, 컴포넌트, 페이지 등)
-title: ""
-labels: ""
-assignees: ""
+title: ''
+labels: ''
+assignees: ''
 ---
 
 ## 🎯 이슈 유형

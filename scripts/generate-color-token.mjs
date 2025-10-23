@@ -229,9 +229,35 @@ function buildTypographyUtilitiesCssFromToken(token) {
   const start = '/* generated-typography-utilities:start */';
   const end = '/* generated-typography-utilities:end */';
   lines.push(start);
+  lines.push('@layer utilities {');
 
-  // 지원하는 스타일 그룹
+  // 지원하는 스타일 그룹 (global에서)
   const styleGroups = ['title', 'heading', 'body', 'caption'];
+  // fontSize/weight 매핑용
+  const sizeMap = {
+    0: '12',
+    1: '13',
+    2: '14',
+    3: '15',
+    4: '16',
+    5: '17',
+    6: '18',
+    7: '20',
+    8: '24',
+    9: '28',
+    10: '32',
+    11: '36',
+    12: '40',
+    13: '44',
+  };
+  const weightMap = {
+    'pretendard-0': '700',
+    'pretendard-1': '600',
+    'pretendard-2': '500',
+    'pretendard-3': '400',
+  };
+
+  // 기존 그룹별 유틸리티 생성
   for (const group of styleGroups) {
     const groupObj = token[group];
     if (!groupObj) continue;
@@ -241,28 +267,61 @@ function buildTypographyUtilitiesCssFromToken(token) {
         const styleObj = sizeObj[weightKey];
         if (!styleObj || styleObj.type !== 'typography') continue;
         const value = styleObj.value;
-        // 클래스명: text-{group}-{sizeKey}-{weightKey} (ex: text-title-lg-bold)
-        const className = `text-${group}-${sizeKey}-${weightKey}`;
-        lines.push(`@utility ${className} {`);
-        if (value.fontFamily) lines.push(`  font-family: var(--font-primary);`);
-        if (value.fontWeight)
-          lines.push(`  font-weight: var(--font-weight-${weightKey});`);
-        if (value.fontSize)
-          lines.push(
-            `  font-size: var(--text-${value.fontSize.replace(/\D/g, '')});`,
-          );
-        if (value.lineHeight)
-          lines.push(
-            `  line-height: var(--leading-${value.lineHeight.replace(/\D/g, '')});`,
-          );
-        if (value.letterSpacing)
-          lines.push(
-            `  letter-spacing: var(--tracking-${value.letterSpacing.replace(/\D/g, '')});`,
-          );
-        lines.push(`}`);
+
+        // 클래스명: text-{group}-{sizeKey}-{weightKey} (ex: text-body-lg-semibold)
+        const className = `.text-${group}-${sizeKey}-${weightKey}`;
+        lines.push(`  ${className} {`);
+
+        // fontFamily 처리
+        if (value.fontFamily) {
+          lines.push(`    font-family: var(--font-primary);`);
+        }
+
+        // fontWeight 처리 - 참조값에서 실제 weight 매핑
+        let weightValue = '400';
+        if (value.fontWeight) {
+          const weightRef = value.fontWeight;
+          if (weightRef.includes('pretendard-0')) weightValue = '700';
+          else if (weightRef.includes('pretendard-1')) weightValue = '600';
+          else if (weightRef.includes('pretendard-2')) weightValue = '500';
+          else if (weightRef.includes('pretendard-3')) weightValue = '400';
+          lines.push(`    font-weight: ${weightValue};`);
+        }
+
+        // fontSize 처리 - 참조값에서 실제 사이즈 추출
+        let actualSize = '16';
+        if (value.fontSize) {
+          const sizeRef = value.fontSize;
+          const sizeMatch = sizeRef.match(/fontSize\.(\d+)/);
+          if (sizeMatch) {
+            actualSize = sizeMap[sizeMatch[1]] || '16';
+            lines.push(`    font-size: var(--font-size-${actualSize});`);
+          }
+        }
+
+        // letterSpacing 처리 (보통 0이므로 생략 가능)
+        if (value.letterSpacing && !value.letterSpacing.includes('0')) {
+          lines.push(`    letter-spacing: var(--letter-spacing-0);`);
+        }
+
+        lines.push(`  }`);
+
+        // 추가: text-{size}-{weight} 형태 유틸리티 생성
+        if (actualSize && weightValue) {
+          const simpleClass = `.text-${actualSize}-${weightValue}`;
+          lines.push(`  ${simpleClass} {`);
+          if (value.fontFamily) {
+            lines.push(`    font-family: var(--font-primary);`);
+          }
+          lines.push(`    font-weight: ${weightValue};`);
+          lines.push(`    font-size: var(--font-size-${actualSize});`);
+          lines.push(`  }`);
+        }
       }
     }
   }
+
+  lines.push('}');
   lines.push(end);
   return lines;
 }
@@ -302,8 +361,9 @@ async function main() {
   const textPrimitives = collectTextPrimitives(primitiveMode);
 
   // typography utility를 token.json의 스타일 네이밍 기반으로 생성
-  const typographyUtilityLines =
-    buildTypographyUtilitiesCssFromToken(primitiveMode);
+  const typographyUtilityLines = buildTypographyUtilitiesCssFromToken(
+    tokens.global || {},
+  );
 
   // Read globals.css to inject tokens
   let globalsCss = await readFile(globalsPath, 'utf8');
