@@ -2,19 +2,10 @@
 import Image from 'next/image';
 
 export default function KakaoSignupButton() {
-  const REST_API_KEY = process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY;
-  const REDIRECT_URI = `${process.env.NEXT_PUBLIC_API_DEV_URL}/oauth2/authorization/kakao`;
-  const kakaoUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${encodeURIComponent(
-    REDIRECT_URI || '',
-  )}&response_type=code`;
-
+  const KAKAO_AUTH_URL = process.env.NEXT_PUBLIC_KAKAO_AUTH_URL;
   const handleKakaoLogin = async () => {
     try {
-      // const res = await fetch(REDIRECT_URI, {
-      //   method: 'GET',
-      // });
-      window.location.href =
-        'http://dev.say-cheese.me/oauth2/authorization/kakao';
+      window.location.href = KAKAO_AUTH_URL ?? '';
     } catch (err) {
       console.error('카카오 인증 GET 요청 실패:', err);
     }
