@@ -8,7 +8,7 @@ interface LogoHeaderProps {
 export default function LogoHeader({ showLogin = true }: LogoHeaderProps) {
   return (
     <div className='fixed top-0 left-0 right-0 bg-white z-50'>
-      <div className='mx-auto max-w-[393px] w-full flex justify-between px-5 h-18 items-center'>
+      <div className='mx-auto max-w-[430px] w-full flex justify-between px-5 h-18 items-center'>
         <Image
           src='/assets/login/cheese-logo.svg'
           width={120}

@@ -1,7 +1,6 @@
 'use client';
 import React, { useEffect } from 'react';
 import Image from 'next/image';
-import { X } from 'lucide-react';
 
 interface ImageModalProps {
   isOpen: boolean;
@@ -23,24 +22,16 @@ export default function ImageModal({
     onClose();
   };
 
-  // ESC 키로 모달 닫기
+  // 모달이 열릴 때 스크롤 방지
   useEffect(() => {
-    const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onClose();
-      }
-    };
-
     if (isOpen) {
-      document.addEventListener('keydown', handleEsc);
-      document.body.style.overflow = 'hidden'; // 스크롤 방지
+      document.body.style.overflow = 'hidden';
     }
 
     return () => {
-      document.removeEventListener('keydown', handleEsc);
       document.body.style.overflow = 'unset';
     };
-  }, [isOpen, onClose]);
+  }, [isOpen]);
 
   // 닫힘 애니메이션 끝나면 onClose 호출 (불필요하므로 삭제)
 
@@ -56,7 +47,7 @@ export default function ImageModal({
 
       {/* 모달 컨테이너 */}
       <div className='fixed inset-x-0 bottom-0 z-51 flex justify-center'>
-        <div className='bg-white rounded-t-[20px] p-6 pt-0 shadow-xl w-full max-w-[393px] mx-auto animate-slide-up'>
+        <div className='bg-white rounded-t-[20px] p-6 pt-0 shadow-xl w-full max-w-[430px] mx-auto animate-slide-up'>
           {/* 헤더
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-body-lg-semibold text-text-basic">프로필 이미지 선택</h2>

@@ -24,7 +24,7 @@ export default function RootLayout({
       <body
         className={`${pretendard.variable} antialiased`}
         style={{
-          maxWidth: '393px',
+          maxWidth: '430px',
           maxHeight: '852px',
           width: '100vw',
           height: '100dvh',
