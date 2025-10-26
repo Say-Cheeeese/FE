@@ -43,7 +43,6 @@ export async function GET(request: NextRequest) {
 
     // HttpOnly 쿠키 설정
     responseWithCookies.cookies.set('accessToken', data.result.accessToken, {
-      httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
       maxAge: 60 * 60 * 2, // 2시간
@@ -51,7 +50,6 @@ export async function GET(request: NextRequest) {
     });
 
     responseWithCookies.cookies.set('refreshToken', data.result.refreshToken, {
-      httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
       maxAge: 60 * 60 * 24 * 7, // 7일
