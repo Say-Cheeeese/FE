@@ -1,3 +1,4 @@
+import { Settings } from 'lucide-react';
 import Image from 'next/image';
 
 interface ProfileMypageProps {}
@@ -5,7 +6,7 @@ interface ProfileMypageProps {}
 export default function ProfileMypage({}: ProfileMypageProps) {
   return (
     <section className='px-5 py-4'>
-      <div className='flex items-center gap-4'>
+      <div className='flex gap-4'>
         <div className='flex items-center justify-center overflow-hidden rounded-full'>
           <Image
             src='/assets/onboarding/smile1.svg'
@@ -17,11 +18,11 @@ export default function ProfileMypage({}: ProfileMypageProps) {
         </div>
 
         <div className='flex-1'>
-          <div className='mb-2'>
+          <div className='mb-1'>
             <span className='text-body-lg-semibold text-text-basic'>제리</span>
           </div>
 
-          <div className='grid grid-cols-3 gap-6'>
+          <div className='grid grid-cols-3 gap-8'>
             <div className='flex flex-col'>
               <span className='text-heading-sm-semibold text-text-basic'>
                 21
@@ -47,6 +48,15 @@ export default function ProfileMypage({}: ProfileMypageProps) {
               </span>
             </div>
           </div>
+        </div>
+        <div className='h-full'>
+          <button type='button' aria-label='설정'>
+            <Settings
+              width={24}
+              height={24}
+              color={'var(--color-icon-basic)'}
+            />
+          </button>
         </div>
       </div>
     </section>
