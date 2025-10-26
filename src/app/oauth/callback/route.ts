@@ -3,7 +3,6 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const code = searchParams.get('code');
-  console.log('인가 코드:', code);
 
   if (!code) {
     return NextResponse.json(
@@ -29,7 +28,6 @@ export async function GET(request: NextRequest) {
     }
 
     const data = await response.json();
-    console.log('가져온 데이터', data);
 
     // 토큰을 HttpOnly 쿠키로 설정
     const responseWithCookies = NextResponse.json({
@@ -70,10 +68,8 @@ export async function GET(request: NextRequest) {
     );
     redirectUrl.searchParams.set('userId', data.result.userId);
     redirectUrl.searchParams.set('name', encodeURIComponent(data.result.name));
-    console.log('리다이렉트 URL:', redirectUrl.toString());
     return NextResponse.redirect(redirectUrl);
   } catch (error) {
-    console.error('OAuth callback error:', error);
     return NextResponse.json(
       { error: '서버사이드에서 토큰 처리 중 오류 발생' },
       { status: 500 },

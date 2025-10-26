@@ -25,13 +25,13 @@ interface ProfileAgreeProps {
   onAgreementsChange: (agreements: Record<string, boolean>) => void;
 }
 
-export const ProfileAgree = ({
+export function ProfileAgree({
   agreements,
   onAgreementsChange,
-}: ProfileAgreeProps) => {
+}: ProfileAgreeProps) {
   const allAgreed = agreementItems.every((item) => agreements[item.id]);
 
-  const handleAllAgree = () => {
+  function handleAllAgree() {
     const newValue = !allAgreed;
     const newAgreements = {
       terms: newValue,
@@ -40,15 +40,15 @@ export const ProfileAgree = ({
       marketing: newValue,
     };
     onAgreementsChange(newAgreements);
-  };
+  }
 
-  const handleIndividualAgree = (id: string) => {
+  function handleIndividualAgree(id: string) {
     const newAgreements = {
       ...agreements,
       [id]: !agreements[id],
     };
     onAgreementsChange(newAgreements);
-  };
+  }
 
   return (
     <div className='flex flex-col items-start gap-4 w-full max-w-[430px] mx-auto px-1 mt-8'>
@@ -105,4 +105,4 @@ export const ProfileAgree = ({
       </div>
     </div>
   );
-};
+}
