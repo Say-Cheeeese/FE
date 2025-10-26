@@ -38,6 +38,7 @@ client.interceptors.response.use(
     const originalRequest = error.config;
 
     if (error.response?.status === 401 && !originalRequest._retry) {
+      // TODO 401이 떠도 토큰갱신 필요없는경우 정의
       //   if (originalRequest.url?.includes('/auth/login')) {
       //     return Promise.reject(error);
       //   }
@@ -105,6 +106,7 @@ async function request<T>(
     const errorMessage = `API Error: ${status ?? 'N/A'}`;
 
     if (status === 500 || status === 401) {
+      // TODO 에러발생 시 공통 토스트 필요하면 추가
       // toast.show(errorMessage);
     }
 
