@@ -3,9 +3,14 @@ import { ChevronDown } from 'lucide-react';
 interface ButtonMoreProps {}
 
 export default function ButtonMore({}: ButtonMoreProps) {
+  const handleClick = () => {
+    /** TODO 더보기동작 */
+  };
+
   return (
     <button
       type='button'
+      onClick={handleClick}
       className='bg-button-tertiary-fill flex w-full justify-center rounded-lg py-3'
     >
       <span className='text-body-lg-semibold text-text-subtle'>1개 더보기</span>
