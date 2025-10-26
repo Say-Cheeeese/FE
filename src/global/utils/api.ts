@@ -83,7 +83,12 @@ client.interceptors.response.use(
 async function request<T>(
   method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH',
   { path, params, headers, body }: RequestOptions,
-): Promise<{ data: T; status: number }> {
+): Promise<{
+  result: T;
+  code: number;
+  isSuccess: boolean;
+  message: string;
+}> {
   const url = `${path}${buildQuery(params)}`;
 
   const config: AxiosRequestConfig = {
@@ -94,7 +99,12 @@ async function request<T>(
   };
 
   try {
-    const res = await client.request<{ data: T; status: number }>(config);
+    const res = await client.request<{
+      result: T;
+      code: number;
+      isSuccess: boolean;
+      message: string;
+    }>(config);
     return res.data;
   } catch (err) {
     const e = err as AxiosError;
