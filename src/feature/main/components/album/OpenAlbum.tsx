@@ -1,8 +1,23 @@
 import PersonSvg from './PersonSvg';
 
-interface OpenAlbumProps {}
+interface OpenAlbumProps {
+  expirationTime: string;
+  title: string;
+  date: string;
+  author: string;
+  totalMembers: number;
+  joinedMembers: number;
+  thumbnails: string[];
+}
 
-export default function OpenAlbum() {
+export default function OpenAlbum({
+  expirationTime,
+  title,
+  date,
+  author,
+  totalMembers,
+  joinedMembers,
+}: OpenAlbumProps) {
   return (
     <article className='drop-shadow-25-5 w-full overflow-hidden rounded-[20px]'>
       <div className='relative'>
@@ -43,27 +58,27 @@ export default function OpenAlbum() {
 
         <div className='absolute top-3 left-3'>
           <span className='text-caption-sm-medium bg-element-alpha-dark inline-block rounded-full px-[10px] py-1 font-semibold text-white'>
-            소멸까지 3일 2시간
+            소멸까지 {expirationTime}
           </span>
         </div>
       </div>
 
       <div className='flex h-full items-end gap-3 px-4 py-6'>
+        {/* TODO : 프로필이미지 삽입 */}
         <div className='h-14 w-14 shrink-0 rounded-full bg-neutral-200' />
-
         <div className='flex-1'>
-          <h3 className='text-heading-sm-semibold text-text-basic'>
-            큐시즘 MT
-          </h3>
+          <h3 className='text-heading-sm-semibold text-text-basic'>{title}</h3>
           <p className='text-body-sm-medium mt-[2px] text-neutral-600'>
-            2025.08.23 · 맹소현
+            {`${date}  ·   ${author}`}
           </p>
         </div>
 
         <div className='flex h-full flex-col'>
           <div className='text-text-subtle flex items-center gap-2'>
             <PersonSvg />
-            <span className='text-[15px] font-semibold'>7 / 8 명</span>
+            <span className='text-[15px] font-semibold'>
+              {joinedMembers} / {totalMembers} 명
+            </span>
           </div>
         </div>
       </div>
