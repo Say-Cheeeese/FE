@@ -13,7 +13,9 @@ export default function ToggleAlbumType({
 }: ToggleAlbumTypeProps) {
   return (
     <div
-      className={'bg-element-gray-light flex w-full gap-[2px] rounded-full p-1'}
+      className={
+        'bg-element-gray-light mb-4 flex w-full gap-[2px] rounded-full p-1'
+      }
     >
       {Object.entries(labels).map(([key, label]) => {
         const albumType = key as AlbumType;

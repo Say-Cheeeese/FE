@@ -1,19 +1,72 @@
-'use client';
-import { useState } from 'react';
-import ToggleAlbumType, { AlbumType } from './ToggleAlbumType';
+import PersonSvg from './PersonSvg';
 
 interface OpenAlbumProps {}
 
-export default function OpenAlbum({}: OpenAlbumProps) {
-  const [albumType, setAlbumType] = useState<AlbumType>('all');
-
+export default function OpenAlbum() {
   return (
-    <section className='px-5'>
-      <h2 className='text-heading-md-semibold pb-4'>열린 앨범 4</h2>
-      <ToggleAlbumType
-        value={albumType}
-        onChange={(next) => setAlbumType(next)}
-      />
-    </section>
+    <article className='drop-shadow-25-5 w-full overflow-hidden rounded-[20px]'>
+      <div className='relative'>
+        <div>
+          <div
+            className='grid h-[162px] gap-[2px]'
+            style={{
+              gridTemplateColumns: '2fr 1fr',
+              gridTemplateRows: '1fr 1fr',
+              gridTemplateAreas: `
+        "main side1"
+        "main side2"
+      `,
+            }}
+          >
+            <div
+              className='bg-neutral-200'
+              style={{
+                gridArea: 'main',
+              }}
+            />
+
+            <div
+              className='bg-neutral-300'
+              style={{
+                gridArea: 'side1',
+              }}
+            />
+
+            <div
+              className='bg-neutral-400'
+              style={{
+                gridArea: 'side2',
+              }}
+            />
+          </div>
+        </div>
+
+        <div className='absolute top-3 left-3'>
+          <span className='text-caption-sm-medium bg-element-alpha-dark inline-block rounded-full px-[10px] py-1 font-semibold text-white'>
+            소멸까지 3일 2시간
+          </span>
+        </div>
+      </div>
+
+      <div className='flex h-full items-end gap-3 px-4 py-6'>
+        <div className='h-14 w-14 shrink-0 rounded-full bg-neutral-200' />
+
+        <div className='flex-1'>
+          <h3 className='text-heading-sm-semibold text-text-basic'>
+            큐시즘 MT
+          </h3>
+          <p className='text-body-sm-medium mt-[2px] text-neutral-600'>
+            2025.08.23 · 맹소현
+          </p>
+        </div>
+
+        <div className='flex h-full flex-col'>
+          <div className='text-text-subtle flex items-center gap-2'>
+            <PersonSvg />
+            <span className='text-[15px] font-semibold'>7 / 8 명</span>
+          </div>
+        </div>
+      </div>
+    </article>
   );
 }

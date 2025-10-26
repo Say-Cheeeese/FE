@@ -261,6 +261,7 @@ function buildTypographyUtilitiesCssFromToken(token) {
   // 그룹별 유틸리티 생성
   for (const group of styleGroups) {
     const groupObj = token[group];
+
     if (!groupObj) continue;
 
     for (const sizeKey of Object.keys(groupObj)) {
@@ -330,6 +331,29 @@ function buildTypographyUtilitiesCssFromToken(token) {
         lines.push('}');
         lines.push('');
       }
+    }
+  }
+
+  // dropshadow 스타일 처리
+  for (const key of Object.keys(token)) {
+    const shadowObj = token[key];
+
+    if (
+      shadowObj.type === 'boxShadow' &&
+      shadowObj.value.type === 'dropShadow'
+    ) {
+      const value = shadowObj.value;
+      const shadowKey = key; // dropshadow-{blur}-{spread}
+
+      // 클래스명: drop-shadow-{blur}-{spread}
+      const shadowUtility = `@utility drop-shadow-${value.blur}-${value.spread} {`;
+      lines.push(shadowUtility);
+
+      // box-shadow 속성 추가
+      const boxShadowValue = `${value.x}px ${value.y}px ${value.blur}px ${value.spread}px ${value.color}`;
+      lines.push(`  box-shadow: ${boxShadowValue};`);
+      lines.push('}');
+      lines.push('');
     }
   }
 

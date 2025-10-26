@@ -824,6 +824,14 @@ body {
   font-size: var(--font-size-12);
 }
 
+@utility drop-shadow-25-5 {
+  box-shadow: 0px 0px 25px 5px #00000014;
+}
+
+@utility drop-shadow-10-5 {
+  box-shadow: 0px 0px 10px 5px #0000000d;
+}
+
 /* generated-typography-utilities:end */
 
 /* 모달 애니메이션 */
