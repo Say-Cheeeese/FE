@@ -1,7 +1,6 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import EmojiPicker from 'emoji-picker-react';
-import { api } from '@/global/utils/api';
 
 interface EmojiClickData {
   activeSkinTone: string;
