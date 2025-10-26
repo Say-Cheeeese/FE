@@ -229,10 +229,10 @@ function buildTypographyUtilitiesCssFromToken(token) {
   const start = '/* generated-typography-utilities:start */';
   const end = '/* generated-typography-utilities:end */';
   lines.push(start);
-  lines.push('@layer utilities {');
 
   // 지원하는 스타일 그룹 (global에서)
   const styleGroups = ['title', 'heading', 'body', 'caption'];
+
   // fontSize/weight 매핑용
   const sizeMap = {
     0: '12',
@@ -250,6 +250,7 @@ function buildTypographyUtilitiesCssFromToken(token) {
     12: '40',
     13: '44',
   };
+
   const weightMap = {
     'pretendard-0': '700',
     'pretendard-1': '600',
@@ -257,27 +258,30 @@ function buildTypographyUtilitiesCssFromToken(token) {
     'pretendard-3': '400',
   };
 
-  // 기존 그룹별 유틸리티 생성
+  // 그룹별 유틸리티 생성
   for (const group of styleGroups) {
     const groupObj = token[group];
     if (!groupObj) continue;
+
     for (const sizeKey of Object.keys(groupObj)) {
       const sizeObj = groupObj[sizeKey];
       for (const weightKey of Object.keys(sizeObj)) {
         const styleObj = sizeObj[weightKey];
         if (!styleObj || styleObj.type !== 'typography') continue;
+
         const value = styleObj.value;
 
-        // 클래스명: text-{group}-{sizeKey}-{weightKey} (ex: text-body-lg-semibold)
-        const className = `.text-${group}-${sizeKey}-${weightKey}`;
-        lines.push(`  ${className} {`);
+        // 클래스명: text-{group}-{sizeKey}-{weightKey}
+        // ex) @utility text-body-lg-semibold { … }
+        const utilityName = `@utility text-${group}-${sizeKey}-${weightKey} {`;
+        lines.push(utilityName);
 
-        // fontFamily 처리
+        // font-family
         if (value.fontFamily) {
-          lines.push(`    font-family: var(--font-primary);`);
+          lines.push(`  font-family: var(--font-primary);`);
         }
 
-        // fontWeight 처리 - 참조값에서 실제 weight 매핑
+        // font-weight
         let weightValue = '400';
         if (value.fontWeight) {
           const weightRef = value.fontWeight;
@@ -285,43 +289,50 @@ function buildTypographyUtilitiesCssFromToken(token) {
           else if (weightRef.includes('pretendard-1')) weightValue = '600';
           else if (weightRef.includes('pretendard-2')) weightValue = '500';
           else if (weightRef.includes('pretendard-3')) weightValue = '400';
-          lines.push(`    font-weight: ${weightValue};`);
+          lines.push(`  font-weight: ${weightValue};`);
         }
 
-        // fontSize 처리 - 참조값에서 실제 사이즈 추출
+        // font-size
         let actualSize = '16';
         if (value.fontSize) {
           const sizeRef = value.fontSize;
           const sizeMatch = sizeRef.match(/fontSize\.(\d+)/);
           if (sizeMatch) {
             actualSize = sizeMap[sizeMatch[1]] || '16';
-            lines.push(`    font-size: var(--font-size-${actualSize});`);
+            lines.push(`  font-size: var(--font-size-${actualSize});`);
           }
         }
 
-        // letterSpacing 처리 (보통 0이므로 생략 가능)
+        // letter-spacing
         if (value.letterSpacing && !value.letterSpacing.includes('0')) {
-          lines.push(`    letter-spacing: var(--letter-spacing-0);`);
+          lines.push(`  letter-spacing: var(--letter-spacing-0);`);
         }
 
-        lines.push(`  }`);
-
-        // 추가: text-{size}-{weight} 형태 유틸리티 생성
-        if (actualSize && weightValue) {
-          const simpleClass = `.text-${actualSize}-${weightValue}`;
-          lines.push(`  ${simpleClass} {`);
-          if (value.fontFamily) {
-            lines.push(`    font-family: var(--font-primary);`);
+        // line-height
+        if (value.lineHeight) {
+          const lineRef = value.lineHeight.match(/(\d+)/);
+          if (lineRef) {
+            lines.push(`  line-height: var(--line-height-${lineRef[1]});`);
           }
-          lines.push(`    font-weight: ${weightValue};`);
-          lines.push(`    font-size: var(--font-size-${actualSize});`);
-          lines.push(`  }`);
         }
+
+        lines.push('}');
+        lines.push(''); // 줄바꿈
+
+        // 추가: text-{size}-{weight} 형태의 단순 버전도 생성
+        const simpleUtility = `@utility text-${actualSize}-${weightValue} {`;
+        lines.push(simpleUtility);
+        if (value.fontFamily) {
+          lines.push(`  font-family: var(--font-primary);`);
+        }
+        lines.push(`  font-weight: ${weightValue};`);
+        lines.push(`  font-size: var(--font-size-${actualSize});`);
+        lines.push('}');
+        lines.push('');
       }
     }
   }
 
-  lines.push('}');
   lines.push(end);
   return lines;
 }

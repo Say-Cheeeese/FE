@@ -19,7 +19,7 @@ export default function ProfileMypage({}: ProfileMypageProps) {
         {/* 이름 + 통계 */}
         <div className='flex-1'>
           <div className='mb-2'>
-            <span className='text-base font-medium text-gray-900'>제리</span>
+            <span className='text-body-lg-semibold text-gray-900'>제리</span>
           </div>
 
           <div className='grid grid-cols-3 gap-6'>
