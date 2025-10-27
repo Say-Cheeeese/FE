@@ -1,7 +1,5 @@
-'use client';
 import Image from 'next/image';
 import KakaoSignupButton from '@/feature/login/components/KakaoSignupButton';
-import { useState } from 'react';
 
 export default function LoginPage() {
   return (
