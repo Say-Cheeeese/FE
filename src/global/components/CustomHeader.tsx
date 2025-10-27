@@ -94,13 +94,7 @@ export default function CustomHeader({
 
       {/* 오른쪽: 커스텀 컴포넌트 */}
       {rightContent && (
-        <div className='flex items-center gap-4'>
-          {Array.isArray(rightContent)
-            ? rightContent.map((item, index) => (
-                <React.Fragment key={index}>{item}</React.Fragment>
-              ))
-            : rightContent}
-        </div>
+        <div className='flex items-center gap-4'>{rightContent}</div>
       )}
     </div>
   );
