@@ -30,7 +30,7 @@ export default function ProfileImage({
   const currentImage = selectedImage || 'smile1.svg';
 
   return (
-    <div className='flex flex-col items-center mt-22 mb-10'>
+    <div className='mt-22 mb-10 flex flex-col items-center'>
       {/* 프로필 이미지 */}
       <div className='relative'>
         <Image
@@ -42,7 +42,7 @@ export default function ProfileImage({
         />
         {/* 연필 아이콘 (수정 버튼) */}
         <button
-          className='absolute bottom-0 right-0 w-8 h-8 bg-element-gray-dark rounded-full flex items-center justify-center shadow'
+          className='bg-element-gray-dark absolute right-0 bottom-0 flex h-8 w-8 items-center justify-center rounded-full shadow'
           onClick={() => setShowModal(true)}
         >
           <Pencil width={18.6} height={18.6} color='#fff' />
