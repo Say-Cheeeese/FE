@@ -2,13 +2,8 @@ import React from 'react';
 import EmojiPicker from 'emoji-picker-react';
 
 interface EmojiClickData {
-  activeSkinTone: string;
   emoji: string;
-  imageUrl: string;
-  isCustom: boolean;
-  names: string[];
   unified: string;
-  unifiedWithoutSkinTone: string;
 }
 
 interface EmojiModalProps {
@@ -41,6 +36,7 @@ const EmojiModal: React.FC<EmojiModalProps> = ({
             transform: 'translateY(100%)',
             animation: 'slideUp 0.3s forwards',
             position: 'relative',
+            filter: 'drop-shadow(0 0 25px rgba(0, 0, 0, 0.08))',
           }}
         >
           <button
