@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import Input from '@/global/components/Input';
+import XInput from '@/global/components/XInput';
 
 interface ProfileNameInputProps {
   nickname: string;
@@ -23,7 +23,7 @@ export default function ProfileNameInput({
   };
 
   return (
-    <Input
+    <XInput
       label='이름'
       value={nickname}
       onChange={handleNicknameChange}

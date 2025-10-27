@@ -18,7 +18,7 @@ interface InputProps
   showClear?: boolean;
 }
 
-export default function Input({
+export default function XInput({
   label,
   value,
   onChange,
