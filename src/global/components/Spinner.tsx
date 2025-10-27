@@ -1,8 +1,8 @@
 export default function Spinner() {
   return (
-    <div className='flex items-center justify-center w-full h-full py-10'>
+    <div className='flex h-full w-full items-center justify-center py-10'>
       <svg
-        className='animate-spin h-8 w-8 text-primary-400'
+        className='text-primary-400 h-8 w-8 animate-spin'
         xmlns='http://www.w3.org/2000/svg'
         fill='none'
         viewBox='0 0 24 24'
