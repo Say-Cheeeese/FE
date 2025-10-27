@@ -41,13 +41,13 @@ export default function ImageModal({
     <>
       {/* 백드롭 (배경 어둡게) */}
       <div
-        className='fixed inset-0 bg-[rgba(24,25,27,0.2)] z-50 transition-opacity duration-300'
+        className='fixed inset-0 z-50 bg-[rgba(24,25,27,0.2)] transition-opacity duration-300'
         onClick={onClose}
       />
 
       {/* 모달 컨테이너 */}
       <div className='fixed inset-x-0 bottom-0 z-51 flex justify-center'>
-        <div className='bg-white rounded-t-[20px] p-6 pt-0 shadow-xl w-full max-w-[430px] mx-auto animate-slide-up'>
+        <div className='animate-slide-up mx-auto w-full max-w-[430px] rounded-t-[20px] bg-white p-6 pt-0 shadow-xl'>
           {/* 헤더
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-body-lg-semibold text-text-basic">프로필 이미지 선택</h2>
@@ -58,16 +58,16 @@ export default function ImageModal({
               <X size={20} className="text-text-subtle" />
             </button>
           </div> */}
-          <div className='absolute left-1/2 -translate-x-1/2 top-[10px] w-12 h-[6px] bg-element-gray rounded-full'></div>
+          <div className='bg-element-gray absolute top-[10px] left-1/2 h-[6px] w-12 -translate-x-1/2 rounded-full'></div>
           {/* 이미지 그리드 */}
-          <div className='grid grid-cols-5 gap-4 justify-items-center pt-10'>
+          <div className='grid grid-cols-5 justify-items-center gap-4 pt-10'>
             {imageList.map((img) => (
               <button
                 key={img}
                 onClick={() => handleImageClick(img)}
                 className={
-                  'p-1 rounded-full transition-all' +
-                  (img === selectedImage ? ' ring-3 ring-element-primary' : '')
+                  'rounded-full p-1 transition-all' +
+                  (img === selectedImage ? ' ring-element-primary ring-3' : '')
                 }
               >
                 <Image

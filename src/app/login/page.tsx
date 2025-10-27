@@ -5,8 +5,8 @@ import { useState } from 'react';
 
 export default function LoginPage() {
   return (
-    <div className='flex flex-col h-screen px-4 w-full'>
-      <div className='flex flex-col items-center gap-[17px] w-full mt-[173px] flex-1'>
+    <div className='flex h-screen w-full flex-col px-4'>
+      <div className='mt-[173px] flex w-full flex-1 flex-col items-center gap-[17px]'>
         <Image
           src='/assets/login/cheese-icon.svg'
           width={120}
@@ -23,9 +23,9 @@ export default function LoginPage() {
           우리가 특별한 순간을 기억하는 법
         </span>
       </div>
-      <div className='flex flex-col gap-2 mb-[171px] mt-10'>
+      <div className='mt-10 mb-[171px] flex flex-col gap-2'>
         <div className='flex flex-col items-center justify-center'>
-          <div className='py-2 pl-[14px] bg-surface-inverse w-[177px] h-9 rounded-full cursor-pointer'>
+          <div className='bg-surface-inverse h-9 w-[177px] cursor-pointer rounded-full py-2 pl-[14px]'>
             <span className='text-body-sm-semibold text-text-basic-inverse flex items-center gap-1'>
               ⚡️3초만에 빠른 회원가입
             </span>

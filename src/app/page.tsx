@@ -4,18 +4,18 @@ import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
 export default function LoginPage() {
   return (
-    <div className='px-4 w-full min-h-screen flex flex-col'>
+    <div className='flex min-h-screen w-full flex-col px-4'>
       {/* 헤더 */}
       <LogoHeader showLogin={true} />
       {/* 본문 */}
-      <div className='flex-1 mt-18'>
-        <ChevronRight className='w-6 h-6' strokeWidth={1} color='#000' />
+      <div className='mt-18 flex-1'>
+        <ChevronRight className='h-6 w-6' strokeWidth={1} color='#000' />
       </div>
       {/* footer */}
-      <div className='flex flex-col items-center gap-3 mb-[70px]'>
+      <div className='mb-[70px] flex flex-col items-center gap-3'>
         <Link
           href='/login'
-          className='flex flex-col items-center justify-center cursor-pointer w-full h-14 bg-button-primary-fill rounded-[8px]'
+          className='bg-button-primary-fill flex h-14 w-full cursor-pointer flex-col items-center justify-center rounded-[8px]'
         >
           <span className='text-body-1xl-semibold text-text-primary'>
             우리 앨범 만들기

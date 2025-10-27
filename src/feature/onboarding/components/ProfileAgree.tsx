@@ -51,21 +51,21 @@ export function ProfileAgree({
   }
 
   return (
-    <div className='flex flex-col items-start gap-4 w-full max-w-[430px] mx-auto px-1 mt-8'>
-      <div className='flex py-4 px-2 w-full items-start gap-3 border-b border-divider-gray'>
+    <div className='mx-auto mt-8 flex w-full max-w-[430px] flex-col items-start gap-4 px-1'>
+      <div className='border-divider-gray flex w-full items-start gap-3 border-b px-2 py-4'>
         <button
           onClick={handleAllAgree}
-          className='w-6 h-6'
+          className='h-6 w-6'
           type='button'
           aria-label='전체 동의하기'
         >
           <div
-            className={`w-6 h-6 rounded-full border ${allAgreed ? 'border-none bg-element-primary' : 'border-border-gray-light'} flex items-center justify-center`}
+            className={`h-6 w-6 rounded-full border ${allAgreed ? 'bg-element-primary border-none' : 'border-border-gray-light'} flex items-center justify-center`}
           >
             {allAgreed && <Check size={16} strokeWidth={2.5} color='#424349' />}
           </div>
         </button>
-        <div className='text-body-lg-bold leading-6 text-text-subtle'>
+        <div className='text-body-lg-bold text-text-subtle leading-6'>
           전체 동의하기
         </div>
       </div>
@@ -74,9 +74,9 @@ export function ProfileAgree({
         {agreementItems.map((item) => (
           <div
             key={item.id}
-            className='flex w-full px-2 sm:px-1.5 xs:px-1 justify-between items-center'
+            className='xs:px-1 flex w-full items-center justify-between px-2 sm:px-1.5'
           >
-            <div className='flex items-center gap-2 xs:gap-1.5'>
+            <div className='xs:gap-1.5 flex items-center gap-2'>
               <button
                 onClick={() => handleIndividualAgree(item.id)}
                 className='flex-shrink-0'
@@ -89,13 +89,13 @@ export function ProfileAgree({
                   color={agreements[item.id] ? '#996300' : '#c9cacf'}
                 />
               </button>
-              <span className='text-15-400 sm:text-14-400 xs:text-13-400 leading-6 xs:leading-5 text-text-subtler'>
+              <span className='text-15-400 sm:text-14-400 xs:text-13-400 xs:leading-5 text-text-subtler leading-6'>
                 {item.label}
               </span>
             </div>
             <Link
               href={`/onboarding?term=${item.id}`}
-              className='w-6 h-6 flex-shrink-0 relative flex items-center justify-center'
+              className='relative flex h-6 w-6 flex-shrink-0 items-center justify-center'
               aria-label={`${item.label} 상세보기`}
             >
               <ChevronRight size={14} strokeWidth={2} color='#94969E' />
