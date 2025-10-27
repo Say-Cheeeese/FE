@@ -10,7 +10,7 @@ export default function OpenAlbumContainer({}: OpenAlbumContainerProps) {
   const [albumType, setAlbumType] = useState<AlbumType>('all');
 
   return (
-    <section className='px-5'>
+    <section className='mb-16 px-5'>
       <h2 className='text-heading-md-semibold pb-4'>열린 앨범 4</h2>
       <ToggleAlbumType
         value={albumType}
