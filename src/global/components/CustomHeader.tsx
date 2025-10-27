@@ -79,12 +79,12 @@ export default function CustomHeader({
   }
 
   return (
-    <div className='w-full max-w-[430px] h-18 fixed top-0 left-1/2 -translate-x-1/2 bg-white z-50 flex items-center justify-between px-5 border-b border-divider-gray'>
+    <div className='border-divider-gray fixed top-0 left-1/2 z-50 flex h-18 w-full max-w-[430px] -translate-x-1/2 items-center justify-between border-b bg-white px-5'>
       {/* 왼쪽: 뒤로가기 + 타이틀 */}
-      <div className='flex gap-2 items-center'>
+      <div className='flex items-center gap-2'>
         <button
           onClick={handleBackClick}
-          className='p-0 m-0 bg-transparent border-none'
+          className='m-0 border-none bg-transparent p-0'
           aria-label='뒤로가기'
         >
           <ChevronLeft width={24} height={24} color='#424349' />

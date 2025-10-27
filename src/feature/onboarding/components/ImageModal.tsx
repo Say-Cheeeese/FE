@@ -44,7 +44,7 @@ export default function ImageModal({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className='fixed inset-0 bg-[rgba(24,25,27,0.2)] z-50'
+            className='fixed inset-0 z-50 bg-[rgba(24,25,27,0.2)]'
             onClick={onClose}
           />
 
@@ -55,11 +55,11 @@ export default function ImageModal({
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
               transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-              className='bg-white rounded-t-[20px] p-6 pt-0 shadow-xl w-full max-w-[430px] mx-auto'
+              className='mx-auto w-full max-w-[430px] rounded-t-[20px] bg-white p-6 pt-0 shadow-xl'
             >
-              <div className='absolute left-1/2 -translate-x-1/2 top-[10px] w-12 h-[6px] bg-element-gray rounded-full'></div>
+              <div className='bg-element-gray absolute top-[10px] left-1/2 h-[6px] w-12 -translate-x-1/2 rounded-full'></div>
               {/* 이미지 그리드 */}
-              <div className='grid grid-cols-5 gap-4 justify-items-center pt-10'>
+              <div className='grid grid-cols-5 justify-items-center gap-4 pt-10'>
                 {imageList.map((img, index) => (
                   <motion.button
                     key={img}
@@ -68,9 +68,9 @@ export default function ImageModal({
                     transition={{ delay: index * 0.03, duration: 0.2 }}
                     onClick={() => handleImageClick(img)}
                     className={
-                      'p-1 rounded-full transition-all' +
+                      'rounded-full p-1 transition-all' +
                       (img === selectedImage
-                        ? ' ring-3 ring-element-primary'
+                        ? ' ring-element-primary ring-3'
                         : '')
                     }
                     whileTap={{ scale: 0.8 }}

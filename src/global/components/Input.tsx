@@ -46,7 +46,7 @@ export default function Input({
     <div className={className}>
       <div className='flex flex-col gap-2'>
         {label && (
-          <div className='h-5 text-body-sm-semibold text-text-basic px-2'>
+          <div className='text-body-sm-semibold text-text-basic h-5 px-2'>
             {label}
           </div>
         )}
@@ -59,22 +59,14 @@ export default function Input({
             onBlur={() => setIsFocused(false)}
             disabled={disabled}
             maxLength={maxLength}
-            className={`
-              p-4 bg-element-gray-lighter w-full rounded-[8px]
-              text-body-lg-medium text-text-basic
-              placeholder:text-text-subtier
-              focus:outline-1 focus:outline-border-primary
-              disabled:opacity-50 disabled:cursor-not-allowed
-              ${error ? 'outline-1 outline-text-error' : ''}
-              ${shouldShowClear ? 'pr-12' : ''}
-            `}
+            className={`bg-element-gray-lighter text-body-lg-medium text-text-basic placeholder:text-text-subtier focus:outline-border-primary w-full rounded-[8px] p-4 focus:outline-1 disabled:cursor-not-allowed disabled:opacity-50 ${error ? 'outline-text-error outline-1' : ''} ${shouldShowClear ? 'pr-12' : ''} `}
             {...restProps}
           />
 
           {shouldShowClear && (
             <button
               type='button'
-              className='absolute right-4 top-1/2 -translate-y-1/2 p-1 w-5 h-5 bg-element-gray flex items-center justify-center rounded-full hover:bg-element-gray-dark transition-colors'
+              className='bg-element-gray hover:bg-element-gray-dark absolute top-1/2 right-4 flex h-5 w-5 -translate-y-1/2 items-center justify-center rounded-full p-1 transition-colors'
               onMouseDown={(e) => e.preventDefault()}
               onTouchStart={(e) => e.preventDefault()}
               onClick={handleClear}
@@ -87,7 +79,7 @@ export default function Input({
 
         {(error || helperText) && (
           <div
-            className={`px-2 text-caption-sm-medium ${
+            className={`text-caption-sm-medium px-2 ${
               error ? 'text-text-error' : 'text-text-subtier'
             }`}
           >
