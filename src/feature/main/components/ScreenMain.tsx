@@ -2,12 +2,14 @@ import LongButton from '@/global/components/LongButton';
 import CloseAlbumContainer from './close-album/CloseAlbumContainer';
 import OpenAlbumContainer from './open-album/OpenAlbumContainer';
 import ProfileMypage from './profile/ProfileMypage';
+import LogoHeader from '@/global/components/LogoHeader';
 
 interface ScreenMainProps {}
 
 export default function ScreenMain({}: ScreenMainProps) {
   return (
     <main className=''>
+      <LogoHeader />
       <ProfileMypage />
       <OpenAlbumContainer />
       <CloseAlbumContainer />
