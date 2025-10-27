@@ -6,7 +6,7 @@ import LogoHeader from '@/global/components/LogoHeader';
 import ProfileNameInput from '@/feature/onboarding/components/ProfileNameInput';
 import { ProfileAgree } from '@/feature/onboarding/components/ProfileAgree';
 import { TermContent } from '@/feature/onboarding/components/TermContent';
-import TermHeader from '@/feature/onboarding/components/TermHeader';
+import CustomHeader from '@/global/components/CustomHeader';
 
 export default function OnBoardingClient() {
   const searchParams = useSearchParams();
@@ -52,7 +52,7 @@ export default function OnBoardingClient() {
   if (currentTerm) {
     return (
       <div className='bg-white min-h-screen'>
-        <TermHeader title={currentTerm.title} />
+        <CustomHeader title={currentTerm.title} />
         <div className='pt-[100px] px-5 pb-20 h-full'>
           <currentTerm.content />
         </div>
