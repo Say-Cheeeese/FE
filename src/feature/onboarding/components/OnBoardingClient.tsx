@@ -8,7 +8,7 @@ import { ProfileAgree } from '@/feature/onboarding/components/ProfileAgree';
 import { TermContent } from '@/feature/onboarding/components/TermContent';
 import TermHeader from '@/feature/onboarding/components/TermHeader';
 
-export default function OnBoarding() {
+export default function OnBoardingClient() {
   const searchParams = useSearchParams();
   const termType = searchParams.get('term');
   const currentTerm =
