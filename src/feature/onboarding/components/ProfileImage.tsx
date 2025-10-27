@@ -23,7 +23,7 @@ interface ProfileImageProps {
 }
 
 export default function ProfileImage({
-  selectedImage,
+  selectedImage,  
   onImageSelect,
 }: ProfileImageProps) {
   const [showModal, setShowModal] = useState(false);
@@ -42,7 +42,7 @@ export default function ProfileImage({
         />
         {/* 연필 아이콘 (수정 버튼) */}
         <button
-          className='absolute bottom-0 right-0 w-8 h-8 bg-element-gray-dark rounded-full flex items-center justify-center shadow'
+          className='absolute bottom-0 right-0 w-8 h-8 bg-element-gray-darker rounded-full flex items-center justify-center shadow'
           onClick={() => setShowModal(true)}
         >
           <Pencil width={18.6} height={18.6} color='#fff' />
