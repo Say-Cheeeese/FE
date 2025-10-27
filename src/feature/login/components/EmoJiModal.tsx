@@ -26,14 +26,14 @@ const EmojiModal: React.FC<EmojiModalProps> = ({
   return (
     <>
       {/* 오버레이 배경 */}
-      <div className='fixed inset-0 bg-opacity-60 z-40' onClick={onClose}></div>
+      <div className='bg-opacity-60 fixed inset-0 z-40' onClick={onClose}></div>
       {/* 바텀시트 모달 */}
       <div
-        className='fixed left-0 right-0 bottom-0 z-50 flex justify-center items-end'
+        className='fixed right-0 bottom-0 left-0 z-50 flex items-end justify-center'
         style={{ pointerEvents: 'none' }}
       >
         <div
-          className='bg-white rounded-t-xl shadow-lg p-4 mb-0'
+          className='mb-0 rounded-t-xl bg-white p-4 shadow-lg'
           style={{
             width: 320,
             maxWidth: '100vw',
@@ -44,7 +44,7 @@ const EmojiModal: React.FC<EmojiModalProps> = ({
           }}
         >
           <button
-            className='absolute right-4 top-4 text-lg text-gray-400 hover:text-gray-600'
+            className='absolute top-4 right-4 text-lg text-gray-400 hover:text-gray-600'
             onClick={onClose}
             style={{ zIndex: 10 }}
             aria-label='닫기'

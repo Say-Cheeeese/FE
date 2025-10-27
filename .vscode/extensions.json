@@ -1,0 +1,6 @@
+{
+  "recommendations": [
+    "esbenp.prettier-vscode", // Prettier - 코드 포매터
+    "bradlc.vscode-tailwindcss" // Tailwind CSS IntelliSense
+  ]
+}

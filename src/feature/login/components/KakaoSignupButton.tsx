@@ -12,7 +12,7 @@ export default function KakaoSignupButton() {
   };
   return (
     <div
-      className='flex justify-center items-center gap-2 w-full h-[56px] bg-[#FEE500] rounded-[6px] cursor-pointer mb-[171px]'
+      className='mb-[171px] flex h-[56px] w-full cursor-pointer items-center justify-center gap-2 rounded-[6px] bg-[#FEE500]'
       onClick={handleKakaoLogin}
     >
       <Image

@@ -51,9 +51,9 @@ export default function OnBoardingClient() {
   // 약관 상세가 있을 때 렌더링
   if (currentTerm) {
     return (
-      <div className='bg-white min-h-screen'>
+      <div className='min-h-screen bg-white'>
         <CustomHeader title={currentTerm.title} />
-        <div className='pt-[100px] px-5 pb-20 h-full'>
+        <div className='h-full px-5 pt-[100px] pb-20'>
           <currentTerm.content />
         </div>
       </div>
@@ -73,7 +73,7 @@ export default function OnBoardingClient() {
         onAgreementsChange={setAgreements}
       />
       <button
-        className={`fixed left-1/2 -translate-x-1/2 bottom-5 h-14 rounded-[8px] w-[calc(100%-32px)] max-w-[368px] ${
+        className={`fixed bottom-5 left-1/2 h-14 w-[calc(100%-32px)] max-w-[368px] -translate-x-1/2 rounded-[8px] ${
           isFormComplete
             ? 'bg-button-primary-fill cursor-pointer'
             : 'bg-button-disabled-fill cursor-not-allowed'

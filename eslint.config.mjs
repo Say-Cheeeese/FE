@@ -24,6 +24,9 @@ const eslintConfig = [
       'next-env.d.ts',
       'scripts/**',
     ],
+    rules: {
+      '@typescript-eslint/no-empty-object-type': 'off', // 빈 타입 객체 허용
+    },
   },
 ];
 

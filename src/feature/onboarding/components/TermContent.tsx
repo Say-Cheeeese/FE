@@ -15,10 +15,10 @@ const TermsComponent: FC = () => (
         </div>
       </div>
       <div className='flex flex-col gap-1'>
-        <div className='text-sm font-bold leading-5 text-[#424349]'>
+        <div className='text-sm leading-5 font-bold text-[#424349]'>
           제1조 (서비스의 내용)
         </div>
-        <div className='text-xs font-normal leading-[18px] text-[#747681]'>
+        <div className='text-xs leading-[18px] font-normal text-[#747681]'>
           이 서비스는 사용자가 QR코드 또는 URL을 통해 웹페이지에 접속하여 사진을
           업로드하고, 다른 사용자와 함께 공유하며, 7일이 경과한 후 자동으로
           삭제되는 단기형 공유 앨범을 제공합니다. 본 서비스는 별도의
@@ -26,10 +26,10 @@ const TermsComponent: FC = () => (
         </div>
       </div>
       <div className='flex flex-col gap-1'>
-        <div className='text-sm font-bold leading-5 text-[#424349]'>
+        <div className='text-sm leading-5 font-bold text-[#424349]'>
           제2조 (이용자의 의무)
         </div>
-        <div className='text-xs font-normal leading-[18px] text-[#747681]'>
+        <div className='text-xs leading-[18px] font-normal text-[#747681]'>
           이용자는 서비스를 이용함에 있어 다음 각 호의 행위를 하여서는 아니
           됩니다.
           <p>
@@ -54,10 +54,10 @@ const TermsComponent: FC = () => (
         </div>
       </div>
       <div className='flex flex-col gap-1'>
-        <div className='text-sm font-bold leading-5 text-[#424349]'>
+        <div className='text-sm leading-5 font-bold text-[#424349]'>
           제3조 (서비스의 변경 및 중단)
         </div>
-        <div className='text-xs font-normal leading-[18px] text-[#747681]'>
+        <div className='text-xs leading-[18px] font-normal text-[#747681]'>
           회사는 서비스의 개선을 위하여 제공 중인 서비스의 전부 또는 일부를
           변경하거나 중단할 수 있습니다.
           <br />
@@ -67,10 +67,10 @@ const TermsComponent: FC = () => (
         </div>
       </div>
       <div className='flex flex-col gap-1'>
-        <div className='text-sm font-bold leading-5 text-[#424349]'>
+        <div className='text-sm leading-5 font-bold text-[#424349]'>
           제4조 (면책)
         </div>
-        <div className='text-xs font-normal leading-[18px] text-[#747681]'>
+        <div className='text-xs leading-[18px] font-normal text-[#747681]'>
           회사는 천재지변, 시스템 장애, 통신 두절 등 불가항력적인 사유로 인한
           서비스 중단 및 데이터 손실에 대하여 책임을 지지 않습니다. 이용자가
           업로드한 모든 콘텐츠의 저작권 및 책임은 전적으로 해당 이용자에게
@@ -86,10 +86,10 @@ const PrivacyComponent: FC = () => (
   <div className='max-h-[80vh] overflow-y-auto'>
     <div className='flex flex-col gap-8'>
       <div className='flex flex-col gap-1'>
-        <div className='text-sm font-bold leading-5 text-[#424349]'>
+        <div className='text-sm leading-5 font-bold text-[#424349]'>
           개인정보 수집 및 이용 동의
         </div>
-        <div className='text-xs font-normal leading-[18px] text-[#747681]'>
+        <div className='text-xs leading-[18px] font-normal text-[#747681]'>
           회사는 서비스 제공을 위하여 다음과 같은 개인정보를 수집하고
           이용합니다.
           <p>① 수집 항목</p>
@@ -136,10 +136,10 @@ const ThirdPartyComponent: FC = () => (
   <div className='max-h-[80vh] overflow-y-auto'>
     <div className='flex flex-col gap-8'>
       <div className='flex flex-col gap-1'>
-        <div className='text-sm font-bold leading-5 text-[#424349]'>
+        <div className='text-sm leading-5 font-bold text-[#424349]'>
           개인정보의 제3자 제공 동의
         </div>
-        <div className='text-xs font-normal leading-[18px] text-[#747681]'>
+        <div className='text-xs leading-[18px] font-normal text-[#747681]'>
           회사는 서비스의 안정적 운영과 기능 제공을 위하여, 이용자의 개인정보를
           아래와 같이 제3자에게 제공합니다. 회사는 정보통신망 이용촉진 및
           정보보호 등에 관한 법률 및 개인정보보호법 등 관련 법령을 준수하며,
@@ -182,10 +182,10 @@ const MarketingComponent: FC = () => (
   <div className='max-h-[80vh] overflow-y-auto'>
     <div className='flex flex-col gap-8'>
       <div className='flex flex-col gap-1'>
-        <div className='text-sm font-bold leading-5 text-[#424349]'>
+        <div className='text-sm leading-5 font-bold text-[#424349]'>
           마케팅 정보 수신 동의
         </div>
-        <div className='text-xs font-normal leading-[18px] text-[#747681]'>
+        <div className='text-xs leading-[18px] font-normal text-[#747681]'>
           회사는 이벤트, 신규 서비스, 프로모션 등 유용한 정보를 이메일,
           문자메시지, 카카오 알림톡 등의 방법으로 발송할 수 있습니다.
           <br /> 이용자는 마케팅 정보 수신에 동의하지 않아도 기본 서비스 이용에
