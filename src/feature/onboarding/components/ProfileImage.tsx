@@ -23,7 +23,7 @@ interface ProfileImageProps {
 }
 
 export default function ProfileImage({
-  selectedImage,  
+  selectedImage,
   onImageSelect,
 }: ProfileImageProps) {
   const [showModal, setShowModal] = useState(false);
