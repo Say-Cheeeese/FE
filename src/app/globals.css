@@ -66,7 +66,7 @@
   --color-alpha-primary-yellow-50: #ffcd1480;
   --color-alpha-primary-yellow-20: #ffcd1433;
   --color-alpha-primary-yellow-0: #ffcd1400;
-/* generated-color-tokens:end */
+  /* generated-color-tokens:end */
 
   /* generated-text-tokens:start */
   --font-family-primary: pretendard;
@@ -93,7 +93,7 @@
   --font-weight-500: 500;
   --font-weight-600: 600;
   --font-weight-700: 700;
-/* generated-text-tokens:end */
+  /* generated-text-tokens:end */
 }
 
 @theme inline {
@@ -185,7 +185,7 @@
   --color-action-secondary: var(--color-neutral-0);
   --color-action-primary-pressed: var(--color-primary-400);
   --color-action-primary: var(--color-primary-25);
-/* generated-semantic-tokens:end */
+  /* generated-semantic-tokens:end */
 
   /* generated-typography-tokens:start */
   --font-primary: var(--font-family-primary);
@@ -208,7 +208,7 @@
   --leading-36: var(--line-height-36);
   --text-40: var(--font-size-40);
   --text-44: var(--font-size-44);
-/* generated-typography-tokens:end */
+  /* generated-typography-tokens:end */
 }
 
 @media (prefers-color-scheme: dark) {
@@ -845,17 +845,3 @@ body {
 }
 
 /* generated-typography-utilities:end */
-
-/* 모달 애니메이션 */
-@keyframes slide-up {
-  from {
-    transform: translateY(100%);
-  }
-  to {
-    transform: translateY(0);
-  }
-}
-
-.animate-slide-up {
-  animation: slide-up 0.3s ease-out;
-}
