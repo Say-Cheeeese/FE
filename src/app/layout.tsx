@@ -30,7 +30,6 @@ export default function RootLayout({
           height: '100dvh',
           margin: '0 auto',
           background: '#fff',
-          overflow: 'hidden',
         }}
       >
         {children}
