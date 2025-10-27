@@ -66,7 +66,7 @@
   --color-alpha-primary-yellow-50: #ffcd1480;
   --color-alpha-primary-yellow-20: #ffcd1433;
   --color-alpha-primary-yellow-0: #ffcd1400;
-  /* generated-color-tokens:end */
+/* generated-color-tokens:end */
 
   /* generated-text-tokens:start */
   --font-family-primary: pretendard;
@@ -93,7 +93,7 @@
   --font-weight-500: 500;
   --font-weight-600: 600;
   --font-weight-700: 700;
-  /* generated-text-tokens:end */
+/* generated-text-tokens:end */
 }
 
 @theme inline {
@@ -113,16 +113,21 @@
   --color-button-tertiary-border: var(--color-neutral-600);
   --color-button-tertiary-fill-pressed: var(--color-neutral-50);
   --color-button-tertiary-fill: var(--color-neutral-25);
+  --color-button-accent-fill: var(--color-accent-500);
+  --color-button-accent-pressed: var(--color-accent-600);
   --color-background-white: var(--color-neutral-0);
   --color-background-dim: var(--color-alpha-black-black-75);
   --color-background-dim-dark: var(--color-alpha-black-black-20);
   --color-background-dim-darker: var(--color-alpha-black-black-50);
+  --color-background-dim-darkest: var(--color-alpha-black-black-75);
+  --color-background-brand: var(--color-primary-25);
   --color-surface-surface-default: var(--color-neutral-50);
   --color-surface-surface-muted: var(--color-neutral-100);
   --color-surface-surface-elevated: var(--color-neutral-25);
   --color-surface-white: var(--color-neutral-0);
   --color-surface-info: var(--color-alpha-black-black-75);
-  --color-surface-inverse: var(--color-neutral-900);
+  --color-surface-inverse: var(--color-neutral-800);
+  --color-surface-inverse-default: var(--color-neutral-900);
   --color-text-basic: var(--color-neutral-900);
   --color-text-subtle: var(--color-neutral-700);
   --color-text-disabled: var(--color-neutral-400);
@@ -147,24 +152,31 @@
   --color-brand-primary: var(--color-primary-400);
   --color-element-primary: var(--color-primary-400);
   --color-element-primary-light: var(--color-primary-100);
-  --color-element-primary-lighter: var(--color-primary-25);
+  --color-element-primary-lighter: var(--color-primary-50);
   --color-element-primary-alpha: var(--color-alpha-primary-yellow-20);
   --color-element-gray-subtler: var(--color-neutral-25);
   --color-element-gray-subtle: var(--color-neutral-50);
-  --color-element-gray: var(--color-neutral-200);
+  --color-element-gray: var(--color-neutral-100);
   --color-element-gray-lighter: var(--color-neutral-25);
   --color-element-gray-light: var(--color-neutral-50);
-  --color-element-gray-dark: var(--color-neutral-500);
+  --color-element-gray-dark: var(--color-neutral-200);
   --color-element-alpha-light: var(--color-alpha-white-white-80);
   --color-element-white: var(--color-neutral-0);
   --color-element-alpha-dark: var(--color-alpha-black-black-50);
+  --color-element-primary-lightest: var(--color-primary-25);
+  --color-element-gray-darker: var(--color-neutral-400);
+  --color-element-disabled: var(--color-neutral-100);
+  --color-element-accent-light: var(--color-accent-300);
+  --color-element-letter: var(--color-primary-200);
   --color-border-primary: var(--color-primary-400);
-  --color-border-primary-light: var(--color-primary-100);
+  --color-border-primary-light: var(--color-primary-200);
   --color-border-error: var(--color-accent-500);
   --color-border-gray: var(--color-neutral-300);
   --color-border-gray-light: var(--color-neutral-200);
   --color-border-gray-dark: var(--color-neutral-600);
   --color-border-gray-darker: var(--color-neutral-800);
+  --color-border-primary-lighter: var(--color-primary-100);
+  --color-border-gray-lighter: var(--color-neutral-100);
   --color-divider-gray: var(--color-neutral-100);
   --color-divider-gray-dark: var(--color-neutral-600);
   --color-divider-gray-light: var(--color-neutral-25);
@@ -173,7 +185,7 @@
   --color-action-secondary: var(--color-neutral-0);
   --color-action-primary-pressed: var(--color-primary-400);
   --color-action-primary: var(--color-primary-25);
-  /* generated-semantic-tokens:end */
+/* generated-semantic-tokens:end */
 
   /* generated-typography-tokens:start */
   --font-primary: var(--font-family-primary);
@@ -196,7 +208,7 @@
   --leading-36: var(--line-height-36);
   --text-40: var(--font-size-40);
   --text-44: var(--font-size-44);
-  /* generated-typography-tokens:end */
+/* generated-typography-tokens:end */
 }
 
 @media (prefers-color-scheme: dark) {
