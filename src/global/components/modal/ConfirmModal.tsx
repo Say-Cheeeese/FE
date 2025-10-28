@@ -1,4 +1,3 @@
-// components/common/ConfirmDialog.tsx
 'use client';
 
 import { useCallback } from 'react';
@@ -13,6 +12,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { cn } from '@/lib/utils';
 
 type ConfirmModalProps = {
   /** 트리거 버튼/노드 (예: <button>탈퇴하기</button>) */
@@ -42,8 +42,8 @@ export default function ConfirmModal({
   confirmText = '확인',
   onCancel,
   onConfirm,
-  cancelClassName = 'text-body-lg-semibold text-text-subtle bg-button-tertiary-fill hover:bg-neutral-200',
-  confirmClassName = 'text-body-lg-semibold text-text-primary bg-button-primary-fill hover:bg-yellow-400/90',
+  cancelClassName = '',
+  confirmClassName = '',
 }: ConfirmModalProps) {
   const handleConfirm = useCallback(async () => {
     try {
@@ -74,13 +74,22 @@ export default function ConfirmModal({
         </AlertDialogHeader>
 
         <AlertDialogFooter className='grid grid-cols-2'>
-          <AlertDialogCancel onClick={handleCancel} className={cancelClassName}>
+          <AlertDialogCancel
+            onClick={handleCancel}
+            className={cn(
+              cancelClassName,
+              'text-body-lg-semibold text-text-subtle bg-button-tertiary-fill hover:bg-neutral-200',
+            )}
+          >
             {cancelText}
           </AlertDialogCancel>
 
           <AlertDialogAction
             onClick={handleConfirm}
-            className={confirmClassName}
+            className={cn(
+              confirmClassName,
+              'text-body-lg-semibold text-text-primary bg-button-primary-fill hover:bg-yellow-400/90',
+            )}
           >
             {confirmText}
           </AlertDialogAction>

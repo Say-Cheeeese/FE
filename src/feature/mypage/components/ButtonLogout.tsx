@@ -4,7 +4,7 @@ interface ButtonLogoutProps {
   onConfirm?: () => Promise<void> | void;
 }
 
-export function ButtonLogout({ onConfirm }: ButtonLogoutProps) {
+export default function ButtonLogout({ onConfirm }: ButtonLogoutProps) {
   const handleConfirm = async () => {
     try {
       if (onConfirm) await onConfirm();
