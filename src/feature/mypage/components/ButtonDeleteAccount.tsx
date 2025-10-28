@@ -1,14 +1,4 @@
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
+import ConfirmModal from '@/global/components/modal/ConfirmModal';
 
 interface ButtonDeleteAccountProps {
   onConfirm?: () => Promise<void> | void;
@@ -17,45 +7,26 @@ interface ButtonDeleteAccountProps {
 export default function ButtonDeleteAccount({
   onConfirm,
 }: ButtonDeleteAccountProps) {
-  async function handleConfirm() {
+  const handleConfirm = async () => {
     try {
       if (onConfirm) await onConfirm();
     } catch (err) {
       console.error(err);
     }
-  }
+  };
 
   return (
-    <AlertDialog>
-      <AlertDialogTrigger asChild>
+    <ConfirmModal
+      trigger={
         <button className='cursor-pointer py-4 text-left' type='button'>
           탈퇴하기
         </button>
-      </AlertDialogTrigger>
-
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle className='text-heading-sm-semibold text-text-basic pt-6'>
-            정말 탈퇴하시겠어요?
-          </AlertDialogTitle>
-          <AlertDialogDescription className='pb-6'>
-            계정은 삭제되며, 복구되지 않아요.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-
-        <AlertDialogFooter className='grid grid-cols-2'>
-          <AlertDialogCancel className='text-body-lg-semibold text-text-subtle bg-button-tertiary-fill hover:bg-neutral-200'>
-            다음에
-          </AlertDialogCancel>
-
-          <AlertDialogAction
-            onClick={handleConfirm}
-            className='text-body-lg-semibold text-text-primary bg-button-primary-fill hover:bg-yellow-400/90'
-          >
-            탈퇴하기
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+      }
+      title='정말 탈퇴하시겠어요?'
+      description='계정은 삭제되며, 복구되지 않아요.'
+      cancelText='다음에'
+      confirmText='탈퇴하기'
+      onConfirm={handleConfirm}
+    />
   );
 }
