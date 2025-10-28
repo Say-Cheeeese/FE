@@ -54,6 +54,8 @@ import React, { ReactNode } from 'react';
 import { ChevronLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
+const HEADER_HEIGHT = 72;
+
 interface CustomHeaderProps {
   /** 헤더 중앙에 표시될 타이틀 */
   title: string;
@@ -79,23 +81,27 @@ export default function CustomHeader({
   }
 
   return (
-    <div className='border-divider-gray fixed top-0 left-1/2 z-50 flex h-18 w-full max-w-[430px] -translate-x-1/2 items-center justify-between border-b bg-white px-5'>
-      {/* 왼쪽: 뒤로가기 + 타이틀 */}
-      <div className='flex items-center gap-2'>
-        <button
-          onClick={handleBackClick}
-          className='m-0 border-none bg-transparent p-0'
-          aria-label='뒤로가기'
-        >
-          <ChevronLeft width={24} height={24} color='#424349' />
-        </button>
-        <span className='text-heading-md-bold text-text-subtle'>{title}</span>
-      </div>
+    <>
+      <div className='border-divider-gray fixed top-0 left-1/2 z-50 flex h-18 w-full max-w-[430px] -translate-x-1/2 items-center justify-between border-b bg-white px-5'>
+        {/* 왼쪽: 뒤로가기 + 타이틀 */}
+        <div className='flex items-center gap-2'>
+          <button
+            onClick={handleBackClick}
+            className='m-0 border-none bg-transparent p-0'
+            aria-label='뒤로가기'
+          >
+            <ChevronLeft width={24} height={24} color='#424349' />
+          </button>
+          <span className='text-heading-md-bold text-text-subtle'>{title}</span>
+        </div>
 
-      {/* 오른쪽: 커스텀 컴포넌트 */}
-      {rightContent && (
-        <div className='flex items-center gap-4'>{rightContent}</div>
-      )}
-    </div>
+        {/* 오른쪽: 커스텀 컴포넌트 */}
+        {rightContent && (
+          <div className='flex items-center gap-4'>{rightContent}</div>
+        )}
+      </div>
+      {/* 헤더로인해 가려지는 영역이 없도록 아래 요소 추가 */}
+      <div style={{ height: HEADER_HEIGHT }} />
+    </>
   );
 }
