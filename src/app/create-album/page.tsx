@@ -5,7 +5,6 @@ import CustomHeader from '@/global/components/CustomHeader';
 import React, { useState } from 'react';
 
 export default function Page() {
-
   return (
     <div>
       <CustomHeader title='앨범 만들기' />
