@@ -40,10 +40,10 @@ export default function AlbumEmojiSelector({
         </button>
       </div>
 
-      {/* 이모지 피커 (이미지 바로 아래 표시) */}
+      {/* 이모지 피커 (fixed로 고정) */}
       {showPicker && (
         <div
-          className='z-50 mt-4'
+          className='fixed top-1/2 left-1/2 z-50 -translate-x-1/2 -translate-y-1/2'
           style={{
             filter: 'drop-shadow(0 0 25px rgba(0, 0, 0, 0.08))',
           }}
@@ -55,7 +55,7 @@ export default function AlbumEmojiSelector({
             searchDisabled
             skinTonesDisabled
             previewConfig={{ showPreview: false }}
-            lazyLoadEmojis={true}
+            lazyLoadEmojis={false}
           />
         </div>
       )}

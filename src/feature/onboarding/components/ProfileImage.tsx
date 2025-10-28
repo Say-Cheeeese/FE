@@ -1,8 +1,9 @@
 'use client';
-import React, { useState } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import { Pencil } from 'lucide-react';
-import ImageModal from './ImageModal';
+import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
+import { DrawerClose } from '@/components/ui/drawer';
 
 const imageList = [
   'smile1.svg',
@@ -26,7 +27,6 @@ export default function ProfileImage({
   selectedImage,
   onImageSelect,
 }: ProfileImageProps) {
-  const [showModal, setShowModal] = useState(false);
   const currentImage = selectedImage || 'smile1.svg';
 
   return (
@@ -41,25 +41,38 @@ export default function ProfileImage({
           className='rounded-full'
         />
         {/* 연필 아이콘 (수정 버튼) */}
-        <button
-          className='bg-element-gray-dark absolute right-0 bottom-0 flex h-8 w-8 items-center justify-center rounded-full shadow'
-          onClick={() => setShowModal(true)}
+        <BottomSheetModal
+          trigger={
+            <button className='bg-element-gray-dark absolute right-0 bottom-0 flex h-8 w-8 items-center justify-center rounded-full shadow'>
+              <Pencil width={18.6} height={18.6} color='#fff' />
+            </button>
+          }
+          showCloseButton={false}
+          className='px-6'
+          dismissible={true}
         >
-          <Pencil width={18.6} height={18.6} color='#fff' />
-        </button>
+          <div className='grid grid-cols-5 justify-items-center gap-4 pt-6 pb-6'>
+            {imageList.map((img) => (
+              <DrawerClose key={img} asChild>
+                <button
+                  onClick={() => onImageSelect(img)}
+                  className={`rounded-full p-1 transition-all ${
+                    img === currentImage ? 'ring-element-primary ring-3' : ''
+                  }`}
+                >
+                  <Image
+                    src={`/assets/onboarding/${img}`}
+                    width={60}
+                    height={60}
+                    alt={img}
+                    className='rounded-full'
+                  />
+                </button>
+              </DrawerClose>
+            ))}
+          </div>
+        </BottomSheetModal>
       </div>
-
-      {/* 이미지 선택 모달 */}
-      <ImageModal
-        isOpen={showModal}
-        onClose={() => setShowModal(false)}
-        imageList={imageList}
-        selectedImage={currentImage}
-        onImageSelect={(image) => {
-          onImageSelect(image);
-          setShowModal(false);
-        }}
-      />
     </div>
   );
 }
