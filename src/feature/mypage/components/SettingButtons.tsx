@@ -3,23 +3,9 @@ import Link from 'next/link';
 import { ButtonLogout } from './ButtonLogout';
 import ButtonDeleteAccount from './ButtonDeleteAccount';
 
-interface SettingButtonsProps {
-  onLogout?: () => Promise<void> | void; // next-auth 사용 시 () => signOut()
-}
+interface SettingButtonsProps {}
 
-export default function SettingButtons({ onLogout }: SettingButtonsProps) {
-  async function handleLogout() {
-    try {
-      if (onLogout) await onLogout();
-      // 예: next-auth
-      // await signOut({ callbackUrl: '/' })
-      // 또는 커스텀 API
-      // await fetch('/api/logout', { method: 'POST' })
-    } catch (e) {
-      console.error(e);
-    }
-  }
-
+export default function SettingButtons({}: SettingButtonsProps) {
   return (
     <section className='text-body-lg-medium text-text-subtle flex flex-col px-6'>
       <Link className='py-4' href='/'>
