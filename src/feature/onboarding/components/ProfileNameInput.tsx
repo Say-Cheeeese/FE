@@ -5,11 +5,13 @@ import XInput from '@/global/components/XInput';
 interface ProfileNameInputProps {
   nickname: string;
   onNicknameChange: (nickname: string) => void;
+  onErrorChange?: (hasError: boolean) => void;
 }
 
 export default function ProfileNameInput({
   nickname,
   onNicknameChange,
+  onErrorChange,
 }: ProfileNameInputProps) {
   const [error, setError] = useState<string>('');
 
@@ -20,8 +22,10 @@ export default function ProfileNameInput({
     // 유효하지 않은 문자가 있으면 에러 표시하지만 입력은 막지 않음
     if (!validPattern.test(value)) {
       setError('10글자 이내의 한글, 영문만 쓸 수 있어요');
+      onErrorChange?.(true);
     } else {
       setError('');
+      onErrorChange?.(false);
     }
 
     onNicknameChange(value);

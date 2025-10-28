@@ -21,6 +21,9 @@ export default function OnBoardingClient() {
   // 닉네임 상태
   const [nickname, setNickname] = useState<string>('');
 
+  // 닉네임 에러 상태
+  const [hasNicknameError, setHasNicknameError] = useState<boolean>(false);
+
   // 동의 상태
   const [agreements, setAgreements] = useState<Record<string, boolean>>({
     terms: false,
@@ -35,7 +38,10 @@ export default function OnBoardingClient() {
 
   // 모든 필수 입력 완료 확인
   const isFormComplete =
-    selectedImage && nickname.trim() !== '' && isRequiredAgreed;
+    selectedImage &&
+    nickname.trim() !== '' &&
+    !hasNicknameError &&
+    isRequiredAgreed;
 
   const handleSubmit = () => {
     if (isFormComplete) {
@@ -67,7 +73,11 @@ export default function OnBoardingClient() {
         selectedImage={selectedImage}
         onImageSelect={setSelectedImage}
       />
-      <ProfileNameInput nickname={nickname} onNicknameChange={setNickname} />
+      <ProfileNameInput
+        nickname={nickname}
+        onNicknameChange={setNickname}
+        onErrorChange={setHasNicknameError}
+      />
       <ProfileAgree
         agreements={agreements}
         onAgreementsChange={setAgreements}

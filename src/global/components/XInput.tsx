@@ -1,20 +1,14 @@
 'use client';
-import React, { useState, InputHTMLAttributes } from 'react';
+import React, { useState, InputHTMLAttributes, useRef } from 'react';
 import { X } from 'lucide-react';
 
 interface InputProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
-  /** 입력 필드 위에 표시될 라벨 텍스트 */
   label?: string;
-  /** 입력 필드의 현재 값 */
   value: string;
-  /** 값이 변경될 때 호출되는 콜백 함수 */
   onChange: (value: string) => void;
-  /** 에러 메시지 (표시 시 빨간색으로 나타남) */
   error?: string;
-  /** 입력 필드 아래 표시될 도움말 텍스트 */
   helperText?: string;
-  /** 포커스 시 입력 내용을 지우는 X 버튼 표시 여부 (기본값: true) */
   showClear?: boolean;
 }
 
@@ -28,9 +22,11 @@ export default function XInput({
   className,
   disabled,
   maxLength,
+  type,
   ...restProps
 }: InputProps) {
   const [isFocused, setIsFocused] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange(e.target.value);
@@ -38,6 +34,13 @@ export default function XInput({
 
   const handleClear = () => {
     onChange('');
+    inputRef.current?.focus();
+  };
+
+  const handleInputClick = () => {
+    if (type === 'date' && inputRef.current) {
+      inputRef.current.showPicker?.();
+    }
   };
 
   const shouldShowClear = showClear && isFocused && value && !disabled;
@@ -53,13 +56,37 @@ export default function XInput({
 
         <div className='relative'>
           <input
+            ref={inputRef}
             value={value}
+            type={type}
             onChange={handleInputChange}
+            onClick={handleInputClick}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
             disabled={disabled}
             maxLength={maxLength}
-            className={`bg-element-gray-lighter text-body-lg-medium text-text-basic placeholder:text-text-subtier focus:outline-border-primary w-full rounded-[8px] p-4 focus:outline-1 disabled:cursor-not-allowed disabled:opacity-50 ${error ? 'outline-text-error outline-1' : ''} ${shouldShowClear ? 'pr-12' : ''} `}
+            className={`bg-element-gray-lighter text-body-lg-medium text-text-basic placeholder:text-text-subtier focus:outline-border-primary w-full rounded-[8px] p-4 focus:outline-1 disabled:cursor-not-allowed disabled:opacity-50 ${
+              error ? 'outline-text-error outline-1' : ''
+            } ${shouldShowClear ? 'pr-12' : ''} ${
+              type === 'date' ? 'cursor-pointer' : ''
+            } ${
+              type === 'number'
+                ? '[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none'
+                : ''
+            }`}
+            style={
+              type === 'date' && !value
+                ? {
+                    colorScheme: 'light',
+                    color: '#8E9398',
+                  }
+                : type === 'date'
+                  ? {
+                      colorScheme: 'light',
+                      color: '#18191B',
+                    }
+                  : undefined
+            }
             {...restProps}
           />
 

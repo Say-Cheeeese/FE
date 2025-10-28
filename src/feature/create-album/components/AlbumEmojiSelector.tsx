@@ -25,7 +25,7 @@ export default function AlbumEmojiSelector({
   };
 
   return (
-    <div className='mt-22 mb-10 flex flex-col items-center'>
+    <div className='mt-[113px] mb-10 flex flex-col items-center'>
       {/* 이모지 표시 */}
       <div className='relative'>
         <div className='bg-element-gray-lighter flex h-[100px] w-[100px] items-center justify-center rounded-full text-[50px]'>
