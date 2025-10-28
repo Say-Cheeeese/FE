@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { ButtonLogout } from './ButtonLogout';
+import ButtonLogout from './ButtonLogout';
 import ButtonDeleteAccount from './ButtonDeleteAccount';
 
 interface SettingButtonsProps {}
