@@ -57,7 +57,7 @@ export default function ImageModal({
               transition={{ type: 'spring', damping: 30, stiffness: 300 }}
               className='mx-auto w-full max-w-[430px] rounded-t-[20px] bg-white p-6 pt-0 shadow-xl'
             >
-              <div className='bg-element-gray absolute top-[10px] left-1/2 h-[6px] w-12 -translate-x-1/2 rounded-full'></div>
+              <div className='bg-element-gray absolute top-2.5 left-1/2 h-1.5 w-12 -translate-x-1/2 rounded-full'></div>
               {/* 이미지 그리드 */}
               <div className='grid grid-cols-5 justify-items-center gap-4 pt-10'>
                 {imageList.map((img, index) => (
