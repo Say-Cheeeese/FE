@@ -1,21 +1,22 @@
-'use client';
-
 import {
   AlertDialog,
-  AlertDialogTrigger,
+  AlertDialogAction,
+  AlertDialogCancel,
   AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogFooter,
-  AlertDialogCancel,
-  AlertDialogAction,
+  AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 
-interface ButtonLogoutProps {
+interface ButtonDeleteAccountProps {
   onConfirm?: () => Promise<void> | void;
 }
 
-export function ButtonLogout({ onConfirm }: ButtonLogoutProps) {
+export default function ButtonDeleteAccount({
+  onConfirm,
+}: ButtonDeleteAccountProps) {
   async function handleConfirm() {
     try {
       if (onConfirm) await onConfirm();
@@ -28,15 +29,18 @@ export function ButtonLogout({ onConfirm }: ButtonLogoutProps) {
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <button className='cursor-pointer py-4 text-left' type='button'>
-          로그아웃
+          탈퇴하기
         </button>
       </AlertDialogTrigger>
 
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle className='text-heading-sm-semibold text-text-basic pt-6 pb-6'>
-            로그아웃 하시겠어요?
+          <AlertDialogTitle className='text-heading-sm-semibold text-text-basic pt-6'>
+            정말 탈퇴하시겠어요?
           </AlertDialogTitle>
+          <AlertDialogDescription className='pb-6'>
+            계정은 삭제되며, 복구되지 않아요.
+          </AlertDialogDescription>
         </AlertDialogHeader>
 
         <AlertDialogFooter className='grid grid-cols-2'>
@@ -48,7 +52,7 @@ export function ButtonLogout({ onConfirm }: ButtonLogoutProps) {
             onClick={handleConfirm}
             className='text-body-lg-semibold text-text-primary bg-button-primary-fill hover:bg-yellow-400/90'
           >
-            로그아웃
+            탈퇴하기
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

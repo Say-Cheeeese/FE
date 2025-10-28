@@ -1,16 +1,7 @@
 'use client';
 import Link from 'next/link';
-import {
-  AlertDialog,
-  AlertDialogTrigger,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogFooter,
-  AlertDialogCancel,
-  AlertDialogAction,
-} from '@/components/ui/alert-dialog';
 import { ButtonLogout } from './ButtonLogout';
+import ButtonDeleteAccount from './ButtonDeleteAccount';
 
 interface SettingButtonsProps {
   onLogout?: () => Promise<void> | void; // next-auth 사용 시 () => signOut()
@@ -38,9 +29,7 @@ export default function SettingButtons({ onLogout }: SettingButtonsProps) {
         개인정보 처리방침
       </Link>
       <ButtonLogout />
-      <button className='cursor-pointer py-4 text-left' type='button'>
-        탈퇴하기
-      </button>
+      <ButtonDeleteAccount />
     </section>
   );
 }
