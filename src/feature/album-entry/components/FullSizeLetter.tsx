@@ -6,7 +6,7 @@ export default function FullSizeLetter({}: FullSizeLetterProps) {
   return (
     <>
       {/* 편지지 */}
-      <div className='border-border-primary-lighter relative z-10 mx-9 mt-12 rounded-[20px] border bg-white pb-100 shadow-[0_12px_40px_rgba(0,0,0,0.08)]'>
+      <div className='border-border-primary-lighter relative z-10 mx-9 mt-20 rounded-[20px] border bg-white pb-100 shadow-[0_12px_40px_rgba(0,0,0,0.08)]'>
         <header className='border-border-gray-lighter flex items-center gap-2 border-b px-5 py-5'>
           <Image
             src={`/assets/onboarding/smile1.svg`}
