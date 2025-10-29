@@ -1,13 +1,36 @@
 'use client';
 
-import * as React from 'react';
+import { useEffect } from 'react';
 import { Drawer as DrawerPrimitive } from 'vaul';
 
 import { cn } from '@/lib/utils';
-
 function Drawer({
   ...props
 }: React.ComponentProps<typeof DrawerPrimitive.Root>) {
+  useEffect(() => {
+    const cleanup = () => {
+      document.body.removeAttribute('data-scroll-locked');
+      document.body.style.paddingLeft = '';
+      document.body.style.paddingRight = '';
+      document.body.style.marginLeft = 'auto';
+      document.body.style.marginRight = 'auto';
+      document.body.style.overflow = '';
+    };
+
+    const observer = new MutationObserver(() => {
+      if (document.body.hasAttribute('data-scroll-locked')) {
+        console.log('Scroll locked');
+        cleanup();
+      }
+    });
+
+    observer.observe(document.body, { attributes: true });
+
+    return () => {
+      observer.disconnect();
+      cleanup();
+    };
+  }, []);
   return <DrawerPrimitive.Root data-slot='drawer' {...props} />;
 }
 
