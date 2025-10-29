@@ -3,12 +3,19 @@ import Link from 'next/link';
 
 interface LogoHeaderProps {
   showLogin?: boolean;
+  bgColor?: string;
 }
 
-export default function LogoHeader({ showLogin = true }: LogoHeaderProps) {
+export default function LogoHeader({
+  showLogin = true,
+  bgColor = 'white',
+}: LogoHeaderProps) {
   return (
     <>
-      <div className='fixed top-0 right-0 left-0 z-50'>
+      <div
+        className='fixed top-0 right-0 left-0 z-50'
+        style={{ background: bgColor }}
+      >
         <div className='mx-auto flex h-18 w-full max-w-[430px] items-center justify-between px-5'>
           <Image
             src='/assets/login/cheese-logo.svg'
