@@ -8,7 +8,7 @@ interface LogoHeaderProps {
 export default function LogoHeader({ showLogin = true }: LogoHeaderProps) {
   return (
     <>
-      <div className='fixed top-0 right-0 left-0 z-50 bg-white'>
+      <div className='fixed top-0 right-0 left-0 z-50'>
         <div className='mx-auto flex h-18 w-full max-w-[430px] items-center justify-between px-5'>
           <Image
             src='/assets/login/cheese-logo.svg'
@@ -18,7 +18,7 @@ export default function LogoHeader({ showLogin = true }: LogoHeaderProps) {
           />
           {showLogin && (
             <Link href='/login'>
-              <div className='cursor-pointer px-3 py-[10px]'>
+              <div className='cursor-pointer px-3 py-2.5'>
                 <span className='text-body-sm-medium text-text-basic'>
                   로그인
                 </span>
