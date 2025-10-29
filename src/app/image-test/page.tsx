@@ -3,6 +3,18 @@
 import exifr from 'exifr'; // ★ 추가
 import { ChangeEvent, SyntheticEvent, useEffect, useState } from 'react';
 
+function generateUUID() {
+  if (window.crypto?.randomUUID) {
+    return window.crypto.randomUUID();
+  }
+  // fallback
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0;
+    const v = c === 'x' ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+}
+
 const FILE_SIZE = 2000;
 
 type PreviewItem = {
@@ -92,7 +104,7 @@ export default function UploadPreview100() {
       files.map(async (f) => {
         const { ts, source } = await getImageCreatedMs(f);
         return {
-          id: `${f.name}-${crypto.randomUUID()}`, // 중복 파일명 대비
+          id: `${f.name}-${generateUUID()}`, // 중복 파일명 대비
           name: f.name,
           size: f.size,
           type: f.type,
