@@ -72,7 +72,7 @@ export default function CreateAlbumList() {
           <span className='text-text-basic text-heading-md-bold'>
             치즈 앨범 메뉴얼
           </span>
-          <ul className='flex flex-col gap-2'>
+          <ul className='text-text-subtle text-16-500 flex list-disc flex-col gap-2 pl-5'>
             <li>이 앨범은 7일 뒤 자동으로 사라져요.</li>
             <li>메이커는 규칙을 어긴 참여자를 내보낼 수 있어요.</li>
             <li>메이커는 모든 사진을 정리 • 삭제할 수 있어요</li>
