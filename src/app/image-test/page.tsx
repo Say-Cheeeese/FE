@@ -69,11 +69,9 @@ export default function UploadPreview100() {
 
   useEffect(() => {
     return () => {
-      // NOTE : 여기서 클린업을 하게될 경우, 스크롤 내려 하단에 위치한 이미지는 url 로드에 실패할 수 있다. 따라서 주석처리함.
-      // 언제 blob url을 revoke할지 고민해봐야함. (최적화)
-      // items.forEach((it) => URL.revokeObjectURL(it.url));
+      items.forEach((it) => URL.revokeObjectURL(it.url));
     };
-  }, [items]);
+  }, []);
 
   async function handlePick(e: ChangeEvent<HTMLInputElement>) {
     const fl = e.target.files;
