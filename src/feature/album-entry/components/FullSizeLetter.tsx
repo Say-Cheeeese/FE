@@ -18,7 +18,7 @@ export default function FullSizeLetter({}: FullSizeLetterProps) {
           <span className='text-body-lg-semibold text-text-subtler'>맹쏘</span>
         </header>
 
-        <section className='flex flex-col items-center px-6 py-8'>
+        <section className='flex flex-col items-center py-8'>
           <div className='mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-gray-100 text-3xl'>
             🍔
           </div>
