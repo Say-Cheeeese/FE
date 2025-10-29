@@ -1,8 +1,7 @@
-// UploadPreview100.tsx
 'use client';
 
-import * as React from 'react';
 import exifr from 'exifr'; // ★ 추가
+import { ChangeEvent, SyntheticEvent, useEffect, useState } from 'react';
 
 const FILE_SIZE = 2000;
 
@@ -58,26 +57,25 @@ async function getImageCreatedMs(
       const ms = dt.getTime();
       if (!Number.isNaN(ms)) return { ts: ms, source: 'exif' };
     }
-  } catch {
-    // ignore; 폴백으로 진행
-  }
+  } catch {}
   // 스크린샷/편집본/소셜 다운로드 등 EXIF 없음 → 파일 시스템 타임스탬프 사용
   return { ts: file.lastModified, source: 'file' };
 }
 
 export default function UploadPreview100() {
-  const [items, setItems] = React.useState<PreviewItem[]>([]);
-  const [limit, setLimit] = React.useState(FILE_SIZE);
-  const [loadingCount, setLoadingCount] = React.useState(0);
+  const [items, setItems] = useState<PreviewItem[]>([]);
+  const [limit, setLimit] = useState(FILE_SIZE);
+  const [loadingCount, setLoadingCount] = useState(0);
 
-  // Cleanup URLs when component unmounts or list resets
-  React.useEffect(() => {
+  useEffect(() => {
     return () => {
+      // NOTE : 여기서 클린업을 하게될 경우, 스크롤 내려 하단에 위치한 이미지는 url 로드에 실패할 수 있다. 따라서 주석처리함.
+      // 언제 blob url을 revoke할지 고민해봐야함. (최적화)
       // items.forEach((it) => URL.revokeObjectURL(it.url));
     };
   }, [items]);
 
-  async function handlePick(e: React.ChangeEvent<HTMLInputElement>) {
+  async function handlePick(e: ChangeEvent<HTMLInputElement>) {
     const fl = e.target.files;
     if (!fl) return;
 
@@ -112,7 +110,7 @@ export default function UploadPreview100() {
     setLoadingCount(next.length);
   }
 
-  function onImgLoad(i: number, ev: React.SyntheticEvent<HTMLImageElement>) {
+  function onImgLoad(i: number, ev: SyntheticEvent<HTMLImageElement>) {
     const el = ev.currentTarget;
     const loadedAt = performance.now();
     setItems((prev) => {
