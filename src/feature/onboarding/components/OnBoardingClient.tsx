@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import ProfileImage from '@/feature/onboarding/components/ProfileImage';
 import LogoHeader from '@/global/components/LogoHeader';
+import LongButton from '@/global/components/LongButton';
 import ProfileNameInput from '@/feature/onboarding/components/ProfileNameInput';
 import { ProfileAgree } from '@/feature/onboarding/components/ProfileAgree';
 import { TermContent } from '@/feature/onboarding/components/TermContent';
@@ -82,23 +83,13 @@ export default function OnBoardingClient() {
         agreements={agreements}
         onAgreementsChange={setAgreements}
       />
-      <button
-        className={`fixed bottom-5 left-1/2 h-14 w-[calc(100%-32px)] max-w-[368px] -translate-x-1/2 rounded-[8px] ${
-          isFormComplete
-            ? 'bg-button-primary-fill cursor-pointer'
-            : 'bg-button-disabled-fill cursor-not-allowed'
-        }`}
-        onClick={handleSubmit}
+      <LongButton
+        text='가입 완료하기'
         disabled={!isFormComplete}
-      >
-        <span
-          className={`text-body-1xl-semibold ${
-            isFormComplete ? 'text-text-primary' : 'text-text-disabled'
-          }`}
-        >
-          가입 완료하기
-        </span>
-      </button>
+        onClick={handleSubmit}
+        bottomGap={20}
+        sideGap={16}
+      />
     </div>
   );
 }

@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import AlbumEmojiSelector from './AlbumEmojiSelector';
 import CreateInputList from './CreateInputList';
 import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
+import LongButton from '@/global/components/LongButton';
 
 export default function CreateAlbumList() {
   const [selectedEmoji, setSelectedEmoji] = useState('😊');
@@ -46,22 +47,11 @@ export default function CreateAlbumList() {
       />
       <BottomSheetModal
         trigger={
-          <button
-            className={`fixed bottom-5 left-1/2 h-14 w-[calc(100%-32px)] max-w-[368px] -translate-x-1/2 rounded-lg ${
-              isFormComplete
-                ? 'bg-button-primary-fill cursor-pointer'
-                : 'bg-button-disabled-fill cursor-not-allowed'
-            }`}
+          <LongButton
+            text='앨범 만들기'
             disabled={!isFormComplete}
-          >
-            <span
-              className={`text-body-1xl-semibold ${
-                isFormComplete ? 'text-text-primary' : 'text-text-disabled'
-              }`}
-            >
-              앨범 만들기
-            </span>
-          </button>
+            sideGap={16}
+          />
         }
         showCloseButton={false}
         className='px-6 pt-10 pb-5'
@@ -72,12 +62,13 @@ export default function CreateAlbumList() {
           <span className='text-text-basic text-heading-md-bold'>
             치즈 앨범 메뉴얼
           </span>
-          <ul className='text-text-subtle text-16-500 flex list-disc flex-col gap-2 pl-5'>
+          <ul className='text-text-subtle text-16-500 mb-[166px] flex list-disc flex-col gap-2 pl-5'>
             <li>이 앨범은 7일 뒤 자동으로 사라져요.</li>
             <li>메이커는 규칙을 어긴 참여자를 내보낼 수 있어요.</li>
             <li>메이커는 모든 사진을 정리 • 삭제할 수 있어요</li>
           </ul>
         </div>
+        <LongButton text='확인' />
       </BottomSheetModal>
     </div>
   );
