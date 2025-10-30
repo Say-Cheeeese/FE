@@ -1,4 +1,4 @@
-import LogoHeader from '@/global/components/LogoHeader';
+import LogoHeader from '@/global/components/header/LogoHeader';
 import FullSizeLetter from './FullSizeLetter';
 
 export default function ScreenAlbumEntry() {

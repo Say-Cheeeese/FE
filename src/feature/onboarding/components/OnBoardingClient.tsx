@@ -2,11 +2,11 @@
 import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import ProfileImage from '@/feature/onboarding/components/ProfileImage';
-import LogoHeader from '@/global/components/LogoHeader';
+import LogoHeader from '@/global/components/header/LogoHeader';
 import ProfileNameInput from '@/feature/onboarding/components/ProfileNameInput';
 import { ProfileAgree } from '@/feature/onboarding/components/ProfileAgree';
 import { TermContent } from '@/feature/onboarding/components/TermContent';
-import CustomHeader from '@/global/components/CustomHeader';
+import CustomHeader from '@/global/components/header/CustomHeader';
 
 export default function OnBoardingClient() {
   const searchParams = useSearchParams();

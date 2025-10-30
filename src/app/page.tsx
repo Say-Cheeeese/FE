@@ -1,4 +1,4 @@
-import LogoHeader from '@/global/components/LogoHeader';
+import LogoHeader from '@/global/components/header/LogoHeader';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
