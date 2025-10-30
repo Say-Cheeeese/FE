@@ -1,12 +1,13 @@
 'use client';
-import { useState } from 'react';
-import { useSearchParams } from 'next/navigation';
-import ProfileImage from '@/feature/onboarding/components/ProfileImage';
-import LogoHeader from '@/global/components/LogoHeader';
-import ProfileNameInput from '@/feature/onboarding/components/ProfileNameInput';
 import { ProfileAgree } from '@/feature/onboarding/components/ProfileAgree';
+import ProfileImage from '@/feature/onboarding/components/ProfileImage';
 import { TermContent } from '@/feature/onboarding/components/TermContent';
 import CustomHeader from '@/global/components/CustomHeader';
+import LogoHeader from '@/global/components/LogoHeader';
+import LongButton from '@/global/components/LongButton';
+import XInput from '@/global/components/XInput';
+import { useSearchParams } from 'next/navigation';
+import { useState } from 'react';
 
 export default function OnBoardingClient() {
   const searchParams = useSearchParams();
@@ -20,6 +21,23 @@ export default function OnBoardingClient() {
 
   // 닉네임 상태
   const [nickname, setNickname] = useState<string>('');
+
+  // 닉네임 에러 상태
+  const [nicknameError, setNicknameError] = useState<string>('');
+
+  // 닉네임 변경 핸들러 (validation 포함)
+  const handleNicknameChange = (value: string) => {
+    // 한글(완성형+자음+모음), 영문, 숫자만 허용하는 정규식
+    const validPattern = /^[가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9]*$/;
+
+    if (!validPattern.test(value)) {
+      setNicknameError('10글자 이내의 한글, 영문, 숫자만 쓸 수 있어요');
+    } else {
+      setNicknameError('');
+    }
+
+    setNickname(value);
+  };
 
   // 동의 상태
   const [agreements, setAgreements] = useState<Record<string, boolean>>({
@@ -35,7 +53,10 @@ export default function OnBoardingClient() {
 
   // 모든 필수 입력 완료 확인
   const isFormComplete =
-    selectedImage && nickname.trim() !== '' && isRequiredAgreed;
+    selectedImage &&
+    nickname.trim() !== '' &&
+    nicknameError === '' &&
+    isRequiredAgreed;
 
   const handleSubmit = () => {
     if (isFormComplete) {
@@ -67,28 +88,26 @@ export default function OnBoardingClient() {
         selectedImage={selectedImage}
         onImageSelect={setSelectedImage}
       />
-      <ProfileNameInput nickname={nickname} onNicknameChange={setNickname} />
+      <XInput
+        label='이름'
+        value={nickname}
+        onChange={handleNicknameChange}
+        placeholder='친구들이 알아볼 수 있도록 설정해주세요'
+        error={nicknameError}
+        maxLength={10}
+      />
+
       <ProfileAgree
         agreements={agreements}
         onAgreementsChange={setAgreements}
       />
-      <button
-        className={`fixed bottom-5 left-1/2 h-14 w-[calc(100%-32px)] max-w-[368px] -translate-x-1/2 rounded-[8px] ${
-          isFormComplete
-            ? 'bg-button-primary-fill cursor-pointer'
-            : 'bg-button-disabled-fill cursor-not-allowed'
-        }`}
-        onClick={handleSubmit}
+      <LongButton
+        text='가입 완료하기'
         disabled={!isFormComplete}
-      >
-        <span
-          className={`text-body-1xl-semibold ${
-            isFormComplete ? 'text-text-primary' : 'text-text-disabled'
-          }`}
-        >
-          가입 완료하기
-        </span>
-      </button>
+        onClick={handleSubmit}
+        bottomGap={20}
+        sideGap={16}
+      />
     </div>
   );
 }
