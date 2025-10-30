@@ -22,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang='ko'>
       <body
-        className={`${pretendard.variable} antialiased`}
+        className={`${pretendard.className} antialiased`}
         style={{
           maxWidth: '430px',
           width: '100vw',
