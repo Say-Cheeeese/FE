@@ -17,12 +17,13 @@ export default function LongButton({
   bottomGap = 20,
   noFixed = false,
 }: LongButtonProps) {
-  // noFixed가 true면 스타일 속성 없음, false면 left/right 값 적용
+  // noFixed가 true면 스타일 속성 없음, false면 left/right/bottom 값 적용
   const buttonStyle = noFixed
     ? {}
     : {
-        left: sideGap,
-        right: sideGap,
+        left: `${sideGap}px`,
+        right: `${sideGap}px`,
+        bottom: `calc(${bottomGap}px + env(safe-area-inset-bottom))`,
       };
 
   return (
@@ -34,7 +35,7 @@ export default function LongButton({
       className={`text-body-1xl-semibold h-14 rounded-lg transition-colors duration-100 ${
         noFixed
           ? 'w-full' // noFixed일 때: 가로 100%
-          : `fixed bottom-[calc(${bottomGap}px+env(safe-area-inset-bottom))] z-50 mx-auto max-w-[430px]` // fixed일 때: 기존 스타일
+          : 'fixed z-50 mx-auto max-w-[430px]' // fixed일 때: 기존 스타일
       } ${
         disabled
           ? 'bg-button-disabled-fill text-text-disabled cursor-not-allowed'

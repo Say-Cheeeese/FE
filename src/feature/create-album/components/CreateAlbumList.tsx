@@ -1,9 +1,9 @@
 'use client';
-import React, { useState } from 'react';
+import LongButton from '@/global/components/LongButton';
+import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
+import { useState } from 'react';
 import AlbumEmojiSelector from './AlbumEmojiSelector';
 import CreateInputList from './CreateInputList';
-import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
-import LongButton from '@/global/components/LongButton';
 
 export default function CreateAlbumList() {
   const [selectedEmoji, setSelectedEmoji] = useState('😊');
@@ -22,12 +22,13 @@ export default function CreateAlbumList() {
     // API 호출 등
   };
 
+  const participantCountNumber = parseInt(participantCount, 10);
   const isFormComplete =
     eventName.trim() !== '' &&
     eventDate.trim() !== '' &&
     participantCount.trim() !== '' &&
-    parseInt(participantCount, 10) >= 1 &&
-    parseInt(participantCount, 10) <= 64 &&
+    participantCountNumber >= 1 &&
+    participantCountNumber <= 64 &&
     !hasFormError;
 
   return (
@@ -51,6 +52,8 @@ export default function CreateAlbumList() {
             text='앨범 만들기'
             disabled={!isFormComplete}
             sideGap={16}
+            noFixed={false}
+            bottomGap={20}
           />
         }
         showCloseButton={false}

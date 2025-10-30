@@ -1,8 +1,6 @@
 'use client';
-import AlbumEmojiSelector from '@/feature/create-album/components/AlbumEmojiSelector';
 import CreateAlbumList from '@/feature/create-album/components/CreateAlbumList';
 import CustomHeader from '@/global/components/CustomHeader';
-import React, { useState } from 'react';
 
 export default function Page() {
   return (

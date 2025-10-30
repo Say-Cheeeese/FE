@@ -1,13 +1,13 @@
 'use client';
-import { useState } from 'react';
-import { useSearchParams } from 'next/navigation';
-import ProfileImage from '@/feature/onboarding/components/ProfileImage';
-import LogoHeader from '@/global/components/LogoHeader';
-import LongButton from '@/global/components/LongButton';
-import ProfileNameInput from '@/feature/onboarding/components/ProfileNameInput';
 import { ProfileAgree } from '@/feature/onboarding/components/ProfileAgree';
+import ProfileImage from '@/feature/onboarding/components/ProfileImage';
 import { TermContent } from '@/feature/onboarding/components/TermContent';
 import CustomHeader from '@/global/components/CustomHeader';
+import LogoHeader from '@/global/components/LogoHeader';
+import LongButton from '@/global/components/LongButton';
+import XInput from '@/global/components/XInput';
+import { useSearchParams } from 'next/navigation';
+import { useState } from 'react';
 
 export default function OnBoardingClient() {
   const searchParams = useSearchParams();
@@ -23,7 +23,21 @@ export default function OnBoardingClient() {
   const [nickname, setNickname] = useState<string>('');
 
   // 닉네임 에러 상태
-  const [hasNicknameError, setHasNicknameError] = useState<boolean>(false);
+  const [nicknameError, setNicknameError] = useState<string>('');
+
+  // 닉네임 변경 핸들러 (validation 포함)
+  const handleNicknameChange = (value: string) => {
+    // 한글(완성형+자음+모음), 영문, 숫자만 허용하는 정규식
+    const validPattern = /^[가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9]*$/;
+
+    if (!validPattern.test(value)) {
+      setNicknameError('10글자 이내의 한글, 영문, 숫자만 쓸 수 있어요');
+    } else {
+      setNicknameError('');
+    }
+
+    setNickname(value);
+  };
 
   // 동의 상태
   const [agreements, setAgreements] = useState<Record<string, boolean>>({
@@ -41,7 +55,7 @@ export default function OnBoardingClient() {
   const isFormComplete =
     selectedImage &&
     nickname.trim() !== '' &&
-    !hasNicknameError &&
+    nicknameError === '' &&
     isRequiredAgreed;
 
   const handleSubmit = () => {
@@ -74,11 +88,15 @@ export default function OnBoardingClient() {
         selectedImage={selectedImage}
         onImageSelect={setSelectedImage}
       />
-      <ProfileNameInput
-        nickname={nickname}
-        onNicknameChange={setNickname}
-        onErrorChange={setHasNicknameError}
+      <XInput
+        label='이름'
+        value={nickname}
+        onChange={handleNicknameChange}
+        placeholder='친구들이 알아볼 수 있도록 설정해주세요'
+        error={nicknameError}
+        maxLength={10}
       />
+
       <ProfileAgree
         agreements={agreements}
         onAgreementsChange={setAgreements}

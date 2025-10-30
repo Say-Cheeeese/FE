@@ -19,7 +19,6 @@ function Drawer({
 
     const observer = new MutationObserver(() => {
       if (document.body.hasAttribute('data-scroll-locked')) {
-        console.log('Scroll locked');
         cleanup();
       }
     });
