@@ -53,17 +53,22 @@ export default function ScreenPhotoShareEntry({}: ScreenPhotoShareEntryProps) {
           <p className='text-body-md-medium text-text-subtle'>2025.08.23</p>
         </div>
 
-        <div className='mt-8 w-full'>
+        <div className='my-8 w-full'>
           <MarqueeCarousel items={cards} itemWidth={180} />
         </div>
 
+        {/* 말풍선 */}
         <div className='relative mt-6 mb-6 px-6'>
-          <div className='drop-shadow-25-5 relative mx-auto w-fit rounded-2xl bg-white px-4 py-2.5'>
+          <div className='relative mx-auto w-fit rounded-2xl bg-white px-4 py-2.5 shadow-[0_2px_8px_rgba(0,0,0,0.15)]'>
             <div className='text-body-md-medium text-text-basic flex items-center space-x-2'>
-              <span role='img'>📸</span>
+              <span role='img' aria-label='카메라'>
+                📸
+              </span>
               <span>지금 930장 더 올릴 수 있어요</span>
             </div>
-            <div className='border-t-2.5 drop-shadow-25-5 absolute top-full left-1/2 h-0 w-0 -translate-x-1/2 border-x-2 border-x-transparent border-t-white' />
+            <div className='absolute top-[85%] left-1/2 h-3 w-3 -translate-x-1/2'>
+              <div className='absolute inset-0 rotate-45 bg-white shadow-[2px_3px_4px_rgba(0,0,0,0.1)]' />
+            </div>
           </div>
         </div>
 
