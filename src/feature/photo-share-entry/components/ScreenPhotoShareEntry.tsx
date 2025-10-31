@@ -1,13 +1,36 @@
-import AutoCarousel from '@/global/components/carousel/AutoCarousel';
+import MarqueeCarousel from '@/global/components/carousel/MarqueeCarousel';
 import CustomHeader from '@/global/components/header/CustomHeader';
 import LongButton from '@/global/components/LongButton';
+import AlbumPreviewCard from './AlbumPreviewCard';
 
-const cards = Array.from({ length: 5 }).map((_, i) => (
-  <div
-    key={i}
-    className='flex h-[110px] w-[180px] items-center justify-center rounded-2xl bg-yellow-200 text-lg font-semibold shadow-[0_4px_12px_rgba(0,0,0,0.08)]'
-  >
-    카드 {i + 1}
+const cards = [
+  {
+    imageUrl: 'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d',
+    nickname: '1김수한무거북이와두루미',
+    profileUrl: '/assets/onboarding/smile1.svg',
+  },
+  {
+    imageUrl: 'https://images.unsplash.com/photo-1519681393784-d120267933ba',
+    nickname: '2박치기대왕펭귄',
+    profileUrl: '/assets/onboarding/smile2.svg',
+  },
+  {
+    imageUrl: 'https://images.unsplash.com/photo-1506765515384-028b60a970df',
+    nickname: '3최강얼음요정',
+    profileUrl: '/assets/onboarding/smile3.svg',
+  },
+  {
+    imageUrl: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f',
+    nickname: '4이불밖은위험해',
+    profileUrl: '/assets/onboarding/smile4.svg',
+  },
+].map((item, i) => (
+  <div key={i}>
+    <AlbumPreviewCard
+      imageUrl={item.imageUrl}
+      nickname={item.nickname}
+      profileUrl={item.profileUrl}
+    />
   </div>
 ));
 
@@ -31,7 +54,7 @@ export default function ScreenPhotoShareEntry({}: ScreenPhotoShareEntryProps) {
         </div>
 
         <div className='mt-8 w-full'>
-          <AutoCarousel items={cards} itemWidth={180} />
+          <MarqueeCarousel items={cards} itemWidth={180} />
         </div>
 
         <div className='relative mt-6 mb-6 px-6'>
