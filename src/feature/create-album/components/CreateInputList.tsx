@@ -1,6 +1,6 @@
 'use client';
 import XInput from '@/global/components/XInput';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 interface CreateInputListProps {
   eventName: string;
