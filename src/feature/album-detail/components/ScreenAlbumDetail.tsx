@@ -55,11 +55,7 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
 
   return (
     <>
-      <BottomSheetModal
-        title={'띱 6개'}
-        trigger={<button>btn</button>}
-        showHandle={false}
-      >
+      <BottomSheetModal title={'띱 6개'} trigger={<button>btn</button>}>
         <div className='flex flex-col'>
           {mockMembers.map((member) => (
             <ItemMemberData
@@ -73,11 +69,7 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
         </div>
       </BottomSheetModal>
 
-      <BottomSheetModal
-        title={'사진 정보'}
-        trigger={<button>button2</button>}
-        showHandle={false}
-      >
+      <BottomSheetModal title={'사진 정보'} trigger={<button>button2</button>}>
         <SectionPhotoData />
       </BottomSheetModal>
     </>

@@ -43,25 +43,27 @@ export default function BottomSheetModal({
       <DrawerContent
         className={cn(
           className,
-          'mx-auto flex max-w-[430px] flex-col border-none px-4 py-6',
+          'mx-auto flex max-w-[430px] flex-col border-none',
         )}
         showHandle={showHandle}
       >
-        {/* 스크린리더용 제목 (항상 필요) */}
-        <DrawerTitle
-          className={`text-heading-md-bold mb-4 px-2 ${title ? '' : 'sr-only'}`}
-        >
-          {title || '모달'}
-        </DrawerTitle>
+        <div className='px-4 py-6'>
+          {/* 스크린리더용 제목 (항상 필요) */}
+          <DrawerTitle
+            className={`text-heading-md-bold mb-4 px-2 ${title ? '' : 'sr-only'}`}
+          >
+            {title || '모달'}
+          </DrawerTitle>
 
-        {showCloseButton && (
-          <div className='relative'>
-            <DrawerClose className='text-text-subtle hover:text-text-basic absolute top-4 right-4 transition-colors'>
-              ✕
-            </DrawerClose>
-          </div>
-        )}
-        {children}
+          {showCloseButton && (
+            <div className='relative'>
+              <DrawerClose className='text-text-subtle hover:text-text-basic absolute top-4 right-4 transition-colors'>
+                ✕
+              </DrawerClose>
+            </div>
+          )}
+          {children}
+        </div>
       </DrawerContent>
     </Drawer>
   );
