@@ -1,5 +1,5 @@
+'use client';
 import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
-
 import ItemMemberData from './ItemMemberData';
 import SectionPhotoData from './SectionPhotoData';
 
@@ -70,7 +70,15 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
       </BottomSheetModal>
 
       <BottomSheetModal title={'사진 정보'} trigger={<button>button2</button>}>
-        <SectionPhotoData />
+        <SectionPhotoData
+          photoInfo={{
+            uploaderName: '임민서',
+            takenAt: '2025-06-03T23:59:00Z',
+            uploadedAt: '2025-06-04T23:59:00Z',
+          }}
+          isShowDeleteButton
+          onDeleteClick={() => console.log('삭제 버튼 클릭!')}
+        />
       </BottomSheetModal>
     </>
   );
