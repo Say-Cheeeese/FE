@@ -1,6 +1,5 @@
 'use client';
 
-import React from 'react';
 import {
   Drawer,
   DrawerClose,
@@ -9,6 +8,7 @@ import {
   DrawerTrigger,
 } from '@/components/ui/drawer';
 import { cn } from '@/lib/utils';
+import React from 'react';
 
 type BottomSheetModalProps = {
   /** 트리거 버튼/노드 (예: <button>열기</button>) */
@@ -43,12 +43,12 @@ export default function BottomSheetModal({
       <DrawerContent
         className={cn(
           className,
-          'mx-auto flex max-w-[430px] flex-col border-none',
+          'mx-auto flex max-w-[430px] flex-col border-none px-4 py-6',
         )}
         showHandle={showHandle}
       >
         {/* 스크린리더용 제목 (항상 필요) */}
-        <DrawerTitle className={title ? '' : 'sr-only'}>
+        <DrawerTitle className={`mb-4 px-2 ${title ? '' : 'sr-only'}`}>
           {title || '모달'}
         </DrawerTitle>
 
