@@ -45,7 +45,6 @@ export async function GET(request: NextRequest) {
 
     // ✅ 쿠키 설정 (redirect 응답에 바로 세팅)
     res.cookies.set('ACCESS_TOKEN', data.result.accessToken, {
-      httpOnly: true, // 보안상 true 권장
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
       maxAge: 60 * 60 * 2, // 2시간
@@ -53,7 +52,6 @@ export async function GET(request: NextRequest) {
     });
 
     res.cookies.set('REFRESH_TOKEN', data.result.refreshToken, {
-      httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
       maxAge: 60 * 60 * 24 * 7, // 7일

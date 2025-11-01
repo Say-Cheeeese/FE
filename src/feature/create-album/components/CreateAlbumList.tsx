@@ -1,8 +1,9 @@
 'use client';
 import LongButton from '@/global/components/LongButton';
 import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { createAlbumApi } from '../api/createAlbumApi';
+import { useCreateAlbum } from '../hook/useCreateAlbum';
 import AlbumEmojiSelector from './AlbumEmojiSelector';
 import CreateInputList from './CreateInputList';
 
@@ -14,27 +15,36 @@ const emojiToUnicode = (emoji: string): string => {
 };
 
 export default function CreateAlbumList() {
+  const router = useRouter();
   const [selectedEmoji, setSelectedEmoji] = useState('😊');
   const [eventName, setEventName] = useState('');
   const [eventDate, setEventDate] = useState('');
   const [participantCount, setParticipantCount] = useState('');
   const [hasFormError, setHasFormError] = useState(false);
 
-  const handleSubmit = async () => {
+  const { mutate: createAlbum } = useCreateAlbum();
+
+  const handleSubmit = () => {
     const emojiUnicode = emojiToUnicode(selectedEmoji);
-    try {
-      const result = await createAlbumApi({
+    createAlbum(
+      {
         themeEmoji: emojiUnicode,
         title: eventName,
         participant: parseInt(participantCount, 10),
         eventDate,
-      });
-      console.log('앨범 생성 성공:', result);
-      // TODO: 성공 후 페이지 이동 등 추가 작업
-    } catch (err) {
-      console.error('앨범 생성 실패:', err);
-      // TODO: 에러 처리
-    }
+      },
+      {
+        onSuccess: (result) => {
+          console.log('앨범 생성 성공:', result);
+          if (result.code) {
+            router.push(`/create-album/${result.code}`);
+          }
+        },
+        onError: (err) => {
+          console.error('앨범 생성 실패:', err);
+        },
+      },
+    );
   };
 
   const participantCountNumber = parseInt(participantCount, 10);
