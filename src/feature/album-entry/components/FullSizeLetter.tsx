@@ -1,8 +1,11 @@
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 interface FullSizeLetterProps {}
 
 export default function FullSizeLetter({}: FullSizeLetterProps) {
+  const router = useRouter();
+
   return (
     <>
       {/* 편지지 */}
@@ -36,6 +39,7 @@ export default function FullSizeLetter({}: FullSizeLetterProps) {
           </span>
 
           <button
+            onClick={() => router.push('/photo-share-entry')}
             type='button'
             className='bg-button-primary-fill text-body-lg-semibold text-text-inverse mt-8 w-[230px] rounded-[14px] px-6 py-3'
           >

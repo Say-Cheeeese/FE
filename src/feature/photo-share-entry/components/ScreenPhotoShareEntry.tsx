@@ -33,9 +33,13 @@ const MOCK_CARDS: AlbumCard[] = [
   },
 ];
 
-interface ScreenPhotoShareEntryProps {}
+interface ScreenPhotoShareEntryProps {
+  albumId: string;
+}
 
-export default function ScreenPhotoShareEntry({}: ScreenPhotoShareEntryProps) {
+export default function ScreenPhotoShareEntry({
+  albumId,
+}: ScreenPhotoShareEntryProps) {
   const cards = MOCK_CARDS; // ✅ 나중에 API 결과로 교체 예정
 
   return (
