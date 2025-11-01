@@ -77,8 +77,8 @@ export default function ConfirmModal({
           <AlertDialogCancel
             onClick={handleCancel}
             className={cn(
-              cancelClassName,
               'typo-body-lg-semibold text-text-subtle bg-button-tertiary-fill hover:bg-neutral-200',
+              cancelClassName,
             )}
           >
             {cancelText}
@@ -87,8 +87,8 @@ export default function ConfirmModal({
           <AlertDialogAction
             onClick={handleConfirm}
             className={cn(
-              confirmClassName,
               'typo-body-lg-semibold text-text-primary bg-button-primary-fill hover:bg-yellow-400/90',
+              confirmClassName,
             )}
           >
             {confirmText}
