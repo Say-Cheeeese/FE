@@ -1,5 +1,6 @@
 'use client';
 import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
+import ConfirmModal from '@/global/components/modal/ConfirmModal';
 import ItemMemberData from './ItemMemberData';
 import SectionPhotoData from './SectionPhotoData';
 
@@ -80,6 +81,13 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
           onDeleteClick={() => console.log('삭제 버튼 클릭!')}
         />
       </BottomSheetModal>
+      <ConfirmModal
+        title='사진을 삭제할까요?'
+        description='지운 사진은 다시 복구할 수 없어요.'
+        cancelText='취소'
+        confirmText='삭제하기'
+        trigger={<button>버튼</button>}
+      />
     </>
   );
 }
