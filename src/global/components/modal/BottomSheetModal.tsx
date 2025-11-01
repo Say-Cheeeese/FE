@@ -48,7 +48,9 @@ export default function BottomSheetModal({
         showHandle={showHandle}
       >
         {/* 스크린리더용 제목 (항상 필요) */}
-        <DrawerTitle className={`mb-4 px-2 ${title ? '' : 'sr-only'}`}>
+        <DrawerTitle
+          className={`text-heading-md-bold mb-4 px-2 ${title ? '' : 'sr-only'}`}
+        >
           {title || '모달'}
         </DrawerTitle>
 

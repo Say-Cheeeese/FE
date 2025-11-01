@@ -1,6 +1,7 @@
 import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
 
 import ItemMemberData from './ItemMemberData';
+import SectionPhotoData from './SectionPhotoData';
 
 interface ScreenAlbumDetailProps {
   albumId: string;
@@ -70,6 +71,14 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
             />
           ))}
         </div>
+      </BottomSheetModal>
+
+      <BottomSheetModal
+        title={'사진 정보'}
+        trigger={<button>button2</button>}
+        showHandle={false}
+      >
+        <SectionPhotoData />
       </BottomSheetModal>
     </>
   );
