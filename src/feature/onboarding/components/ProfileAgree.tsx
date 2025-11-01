@@ -1,6 +1,5 @@
 'use client';
-import React from 'react';
-import { ChevronRight, Check } from 'lucide-react';
+import { Check, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 
 interface AgreementItem {
@@ -65,7 +64,7 @@ export function ProfileAgree({
             {allAgreed && <Check size={16} strokeWidth={2.5} color='#424349' />}
           </div>
         </button>
-        <div className='text-body-lg-bold text-text-subtle leading-6'>
+        <div className='typo-body-lg-bold text-text-subtle leading-6'>
           전체 동의하기
         </div>
       </div>

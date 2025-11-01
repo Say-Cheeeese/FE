@@ -1,6 +1,5 @@
 'use client';
 
-import { useCallback } from 'react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,6 +12,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { cn } from '@/lib/utils';
+import { useCallback } from 'react';
 
 type ConfirmModalProps = {
   /** 트리거 버튼/노드 (예: <button>탈퇴하기</button>) */
@@ -65,7 +65,7 @@ export default function ConfirmModal({
 
       <AlertDialogContent>
         <AlertDialogHeader className='pb-6'>
-          <AlertDialogTitle className='text-heading-sm-semibold text-text-basic pt-6'>
+          <AlertDialogTitle className='typo-heading-sm-semibold text-text-basic pt-6'>
             {title}
           </AlertDialogTitle>
           {description ? (
@@ -78,7 +78,7 @@ export default function ConfirmModal({
             onClick={handleCancel}
             className={cn(
               cancelClassName,
-              'text-body-lg-semibold text-text-subtle bg-button-tertiary-fill hover:bg-neutral-200',
+              'typo-body-lg-semibold text-text-subtle bg-button-tertiary-fill hover:bg-neutral-200',
             )}
           >
             {cancelText}
@@ -88,7 +88,7 @@ export default function ConfirmModal({
             onClick={handleConfirm}
             className={cn(
               confirmClassName,
-              'text-body-lg-semibold text-text-primary bg-button-primary-fill hover:bg-yellow-400/90',
+              'typo-body-lg-semibold text-text-primary bg-button-primary-fill hover:bg-yellow-400/90',
             )}
           >
             {confirmText}
