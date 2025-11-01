@@ -3,6 +3,7 @@ import LongButton from '@/global/components/LongButton';
 import { ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+
 export default function LoginPage() {
   return (
     <div className='flex min-h-screen w-full flex-col px-4'>
