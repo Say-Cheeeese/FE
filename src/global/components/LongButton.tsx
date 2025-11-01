@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface LongButtonProps {
   text: string;
   disabled?: boolean;
@@ -32,7 +30,7 @@ export default function LongButton({
       disabled={disabled}
       onClick={onClick}
       style={buttonStyle}
-      className={`text-body-1xl-semibold h-14 rounded-lg transition-colors duration-100 ${
+      className={`typo-body-1xl-semibold h-14 rounded-lg transition-colors duration-100 ${
         noFixed
           ? 'w-full' // noFixed일 때: 가로 100%
           : 'fixed z-50 mx-auto max-w-[430px]' // fixed일 때: 기존 스타일

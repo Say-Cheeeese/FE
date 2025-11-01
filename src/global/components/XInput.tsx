@@ -1,6 +1,6 @@
 'use client';
-import React, { useState, InputHTMLAttributes, useRef } from 'react';
 import { X } from 'lucide-react';
+import React, { InputHTMLAttributes, useRef, useState } from 'react';
 
 interface InputProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
@@ -59,7 +59,7 @@ export default function XInput({
     <div className={className}>
       <div className='flex flex-col gap-2'>
         {label && (
-          <div className='text-body-sm-semibold text-text-basic h-5 px-2'>
+          <div className='typo-body-sm-semibold text-text-basic h-5 px-2'>
             {label}
           </div>
         )}
@@ -75,7 +75,7 @@ export default function XInput({
             onBlur={() => setIsFocused(false)}
             disabled={disabled}
             maxLength={maxLength}
-            className={`bg-element-gray-lighter text-body-lg-medium text-text-basic placeholder:text-text-subtier w-full rounded-[8px] p-4 disabled:cursor-not-allowed disabled:opacity-50 ${
+            className={`bg-element-gray-lighter typo-body-lg-medium text-text-basic placeholder:text-text-subtier w-full rounded-[8px] p-4 disabled:cursor-not-allowed disabled:opacity-50 ${
               error
                 ? 'outline-text-error outline-1'
                 : 'focus:outline-border-primary focus:outline-1'
@@ -116,7 +116,7 @@ export default function XInput({
 
         {(error || helperText) && (
           <div
-            className={`text-caption-sm-medium px-2 ${
+            className={`typo-caption-sm-medium px-2 ${
               error ? 'text-text-error' : 'text-text-subtier'
             }`}
           >

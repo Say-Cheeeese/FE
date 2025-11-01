@@ -15,7 +15,7 @@ export default function FullSizeLetter({}: FullSizeLetterProps) {
             alt='프로필 사진'
             className='rounded-full'
           />
-          <span className='text-body-lg-semibold text-text-subtler'>맹쏘</span>
+          <span className='typo-body-lg-semibold text-text-subtler'>맹쏘</span>
         </header>
 
         <section className='flex flex-col items-center py-8'>
@@ -23,21 +23,21 @@ export default function FullSizeLetter({}: FullSizeLetterProps) {
             <span>🍔</span>
           </div>
 
-          <h2 className='text-heading-sm-semibold text-text-basic text-center'>
+          <h2 className='typo-heading-sm-semibold text-text-basic text-center'>
             김수한무거북이와두루미삼천갑자
           </h2>
 
-          <p className='text-body-sm-regular text-text-subtler pt-1'>
+          <p className='typo-body-sm-regular text-text-subtler pt-1'>
             2025.08.23
           </p>
 
-          <span className='text-caption-sm-medium text-text-basic-inverse bg-element-primary mt-3 inline-flex items-center rounded-full px-2.5 py-1'>
+          <span className='typo-caption-sm-medium text-text-basic-inverse bg-element-primary mt-3 inline-flex items-center rounded-full px-2.5 py-1'>
             앨범 소멸까지 2시간 5분
           </span>
 
           <button
             type='button'
-            className='bg-button-primary-fill text-body-lg-semibold text-text-inverse mt-8 w-[230px] rounded-[14px] px-6 py-3'
+            className='bg-button-primary-fill typo-body-lg-semibold text-text-inverse mt-8 w-[230px] rounded-[14px] px-6 py-3'
           >
             초대 수락하고 앨범 보기
           </button>
