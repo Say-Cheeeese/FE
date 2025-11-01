@@ -2,8 +2,16 @@
 import LongButton from '@/global/components/LongButton';
 import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
 import { useState } from 'react';
+import { createAlbumApi } from '../api/createAlbumApi';
 import AlbumEmojiSelector from './AlbumEmojiSelector';
 import CreateInputList from './CreateInputList';
+
+// 이모지를 유니코드 코드포인트 형식으로 변환 (예: 😊 → U+1F60A)
+const emojiToUnicode = (emoji: string): string => {
+  const codePoint = emoji.codePointAt(0);
+  if (!codePoint) return '';
+  return `U+${codePoint.toString(16).toUpperCase().padStart(4, '0')}`;
+};
 
 export default function CreateAlbumList() {
   const [selectedEmoji, setSelectedEmoji] = useState('😊');
@@ -12,14 +20,21 @@ export default function CreateAlbumList() {
   const [participantCount, setParticipantCount] = useState('');
   const [hasFormError, setHasFormError] = useState(false);
 
-  const handleSubmit = () => {
-    console.log('앨범 생성:', {
-      emoji: selectedEmoji,
-      eventName,
-      eventDate,
-      participantCount,
-    });
-    // API 호출 등
+  const handleSubmit = async () => {
+    const emojiUnicode = emojiToUnicode(selectedEmoji);
+    try {
+      const result = await createAlbumApi({
+        themeEmoji: emojiUnicode,
+        title: eventName,
+        participant: parseInt(participantCount, 10),
+        eventDate,
+      });
+      console.log('앨범 생성 성공:', result);
+      // TODO: 성공 후 페이지 이동 등 추가 작업
+    } catch (err) {
+      console.error('앨범 생성 실패:', err);
+      // TODO: 에러 처리
+    }
   };
 
   const participantCountNumber = parseInt(participantCount, 10);
@@ -71,7 +86,7 @@ export default function CreateAlbumList() {
             <li>메이커는 모든 사진을 정리 • 삭제할 수 있어요</li>
           </ul>
         </div>
-        <LongButton text='확인' />
+        <LongButton text='확인' onClick={handleSubmit} />
       </BottomSheetModal>
     </div>
   );
