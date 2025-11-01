@@ -18,12 +18,10 @@ export interface CreateAlbumResponse {
 /**
  * 앨범 생성 API
  * @param data 앨범 생성 요청 데이터
- * @returns 생성된 앨범 정보
+ * @returns API 응답 전체 (isSuccess, code, message, result 포함)
  */
-export async function createAlbumApi(
-  data: CreateAlbumRequest,
-): Promise<CreateAlbumResponse> {
-  const response = await api.post<CreateAlbumResponse>({
+export async function createAlbumApi(data: CreateAlbumRequest) {
+  return await api.post<CreateAlbumResponse>({
     path: '/v1/album',
     body: {
       themeEmoji: data.themeEmoji,
@@ -32,6 +30,4 @@ export async function createAlbumApi(
       eventDate: data.eventDate,
     },
   });
-  console.log('Create Album Response:', response.result);
-  return response.result;
 }
