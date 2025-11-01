@@ -3,7 +3,14 @@ import CustomHeader from '@/global/components/header/CustomHeader';
 import LongButton from '@/global/components/LongButton';
 import AlbumPreviewCard from './AlbumPreviewCard';
 
-const cards = [
+interface AlbumCard {
+  imageUrl: string;
+  nickname: string;
+  profileUrl: string;
+}
+
+// ✅ API 연동 전까지는 상수로 유지
+const MOCK_CARDS: AlbumCard[] = [
   {
     imageUrl: 'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d',
     nickname: '1김수한무거북이와두루미',
@@ -24,19 +31,13 @@ const cards = [
     nickname: '4이불밖은위험해',
     profileUrl: '/assets/onboarding/smile4.svg',
   },
-].map((item, i) => (
-  <div key={i}>
-    <AlbumPreviewCard
-      imageUrl={item.imageUrl}
-      nickname={item.nickname}
-      profileUrl={item.profileUrl}
-    />
-  </div>
-));
+];
 
 interface ScreenPhotoShareEntryProps {}
 
 export default function ScreenPhotoShareEntry({}: ScreenPhotoShareEntryProps) {
+  const cards = MOCK_CARDS; // ✅ 나중에 API 결과로 교체 예정
+
   return (
     <>
       <CustomHeader title='앨범 채우기' />
@@ -54,7 +55,23 @@ export default function ScreenPhotoShareEntry({}: ScreenPhotoShareEntryProps) {
         </div>
 
         <div className='my-8 w-full'>
-          <MarqueeCarousel items={cards} itemWidth={180} />
+          {cards.length === 0 ? (
+            // TODO : 디자인팀 로띠전달되면 연동
+            <div>로띠</div>
+          ) : (
+            <MarqueeCarousel
+              items={cards.map((item, i) => (
+                <div key={i}>
+                  <AlbumPreviewCard
+                    imageUrl={item.imageUrl}
+                    nickname={item.nickname}
+                    profileUrl={item.profileUrl}
+                  />
+                </div>
+              ))}
+              itemWidth={180}
+            />
+          )}
         </div>
 
         {/* 말풍선 */}
