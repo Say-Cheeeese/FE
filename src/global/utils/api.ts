@@ -1,10 +1,10 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
+import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from '../constants/cookies';
 import { buildQuery } from './buildQuery';
 import { getCookie, removeCookie, setCookie } from './cookies';
-import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from '../constants/cookies';
 
 // TODO : 공통으로 사용하는 api url 을 사용해야함. 임시 상수 생성
-const API_URL = 'http://dev.say-cheese.me';
+const API_URL = 'https://dev.say-cheese.me';
 
 type RequestOptions = {
   path: string;
@@ -39,7 +39,7 @@ client.interceptors.response.use(
 
     if (error.response?.status === 401 && !originalRequest._retry) {
       // TODO 401이 떠도 토큰갱신 필요없는경우 정의
-      //   if (originalRequest.url?.includes('/auth/login')) {
+      //   if (     originalRequest.url?.includes('/auth/login')) {
       //     return Promise.reject(error);
       //   }
 

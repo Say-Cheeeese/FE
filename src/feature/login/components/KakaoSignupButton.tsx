@@ -2,9 +2,10 @@
 import Image from 'next/image';
 
 export default function KakaoSignupButton() {
-  const KAKAO_AUTH_URL = process.env.NEXT_PUBLIC_KAKAO_AUTH_URL;
+  const KAKAO_AUTH_URL = 'https://dev.say-cheese.me/oauth2/authorization/kakao';
   const handleKakaoLogin = async () => {
     try {
+      console.log('KAKAO_AUTH_URL:', KAKAO_AUTH_URL);
       window.location.href = KAKAO_AUTH_URL ?? '';
     } catch (err) {
       console.error('카카오 인증 GET 요청 실패:', err);
