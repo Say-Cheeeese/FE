@@ -1,8 +1,8 @@
 import LogoHeader from '@/global/components/LogoHeader';
 import LongButton from '@/global/components/LongButton';
+import { ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ChevronRight } from 'lucide-react';
 export default function LoginPage() {
   return (
     <div className='flex min-h-screen w-full flex-col px-4'>
@@ -17,7 +17,7 @@ export default function LoginPage() {
         <Link href='/login' className='w-full'>
           <LongButton text='우리 앨범 만들기' noFixed={true} />
         </Link>
-        <span className='text-body-sm-regular text-text-subtler mb-[14px]'>
+        <span className='typo-body-sm-regular text-text-subtler mb-[14px]'>
           100명이 앨범 만들고 추억 남기는 중
         </span>
         <Image

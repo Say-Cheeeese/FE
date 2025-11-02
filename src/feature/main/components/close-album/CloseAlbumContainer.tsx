@@ -1,6 +1,6 @@
 import { ChevronRight } from 'lucide-react';
-import CloseAlbum from './CloseAlbum';
 import Link from 'next/link';
+import CloseAlbum from './CloseAlbum';
 
 interface CloseAlbumContainerProps {}
 
@@ -9,7 +9,7 @@ export default function CloseAlbumContainer({}: CloseAlbumContainerProps) {
     <section className='mb-10 px-5'>
       {/* TODO : 링크주소 변경 필요 */}
       <Link href='/'>
-        <h3 className='text-heading-md-semibold text-text-subtle mb-4 flex items-center'>
+        <h3 className='typo-heading-md-semibold text-text-subtle mb-4 flex items-center'>
           닫힌 앨범 4{' '}
           <ChevronRight
             width={24}

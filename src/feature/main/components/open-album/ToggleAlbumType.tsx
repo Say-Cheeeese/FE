@@ -27,7 +27,7 @@ export default function ToggleAlbumType({
             type='button'
             onClick={() => onChange(albumType)}
             className={[
-              'text-body-md-medium flex-1 rounded-full py-2 transition-all',
+              'typo-body-md-medium flex-1 rounded-full py-2 transition-all',
               isActive
                 ? 'bg-element-white text-text-basic drop-shadow-sm'
                 : 'text-text-disabled bg-transparent',

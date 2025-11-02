@@ -26,8 +26,8 @@ export default function ProfileSetting({
           </div>
 
           <div className='flex flex-col gap-[2px]'>
-            <h2 className='text-heading-sm-semibold text-text-basic'>{name}</h2>
-            <p className='text-body-lg-regular text-text-disabled'>{email}</p>
+            <h2 className='typo-heading-sm-semibold text-text-basic'>{name}</h2>
+            <p className='typo-body-lg-regular text-text-disabled'>{email}</p>
           </div>
         </div>
       </div>
