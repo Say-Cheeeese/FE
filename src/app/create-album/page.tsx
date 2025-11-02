@@ -1,6 +1,6 @@
 'use client';
 import CreateAlbumList from '@/feature/create-album/components/CreateAlbumList';
-import CustomHeader from '@/global/components/CustomHeader';
+import CustomHeader from '@/global/components/header/CustomHeader';
 
 export default function Page() {
   return (

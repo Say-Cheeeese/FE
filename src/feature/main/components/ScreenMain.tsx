@@ -2,7 +2,7 @@ import LongButton from '@/global/components/LongButton';
 import CloseAlbumContainer from './close-album/CloseAlbumContainer';
 import OpenAlbumContainer from './open-album/OpenAlbumContainer';
 import ProfileMypage from './profile/ProfileMypage';
-import LogoHeader from '@/global/components/LogoHeader';
+import LogoHeader from '@/global/components/header/LogoHeader';
 
 interface ScreenMainProps {}
 

@@ -1,4 +1,4 @@
-import CustomHeader from '@/global/components/CustomHeader';
+import CustomHeader from '@/global/components/header/CustomHeader';
 import ProfileSetting from './ProfileSetting';
 import SettingButtons from './SettingButtons';
 
