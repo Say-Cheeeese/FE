@@ -3,7 +3,12 @@ import LongButton from '@/global/components/LongButton';
 import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { useCreateAlbum } from '../hook/useCreateAlbum';
+import {
+  useCreateAlbum,
+  type CreateAlbumApiResponse,
+  type CreateAlbumError,
+} from '../hook/useCreateAlbum';
+
 import AlbumEmojiSelector from './AlbumEmojiSelector';
 import CreateInputList from './CreateInputList';
 
@@ -34,13 +39,14 @@ export default function CreateAlbumList() {
         eventDate,
       },
       {
-        onSuccess: (result) => {
+        onSuccess: (result: CreateAlbumApiResponse) => {
           console.log('앨범 생성 성공:', result);
-          if (result.code) {
-            router.push(`/create-album/${result.code}`);
+          if (result.result.code) {
+            router.push(`/create-album/${result.result.code}`);
           }
         },
-        onError: (err) => {
+        onError: (err: CreateAlbumError) => {
+          alert(err.message);
           console.error('앨범 생성 실패:', err);
         },
       },

@@ -1,4 +1,5 @@
 'use client';
+
 import XInput from '@/global/components/XInput';
 import { useState } from 'react';
 
@@ -76,6 +77,12 @@ export default function CreateInputList({
     onErrorChange?.(error !== '' || eventNameError !== '');
   };
 
+  // 오늘 날짜를 한국(KST) 기준으로 구하고, 어제 날짜를 YYYY-MM-DD로 구함
+  const kstNow = new Date(Date.now() + 9 * 60 * 60 * 1000);
+  const yesterday = new Date(kstNow.getTime() - 24 * 60 * 60 * 1000)
+    .toISOString()
+    .split('T')[0];
+
   return (
     <div className='flex flex-col gap-6 px-4'>
       <XInput
@@ -92,6 +99,7 @@ export default function CreateInputList({
         onChange={onEventDateChange}
         placeholder='YYYY-MM-DD'
         type='date'
+        max={yesterday}
       />
       <XInput
         label='참여 인원'

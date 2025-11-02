@@ -107,12 +107,17 @@ async function request<T>(
     }>(config);
     return res.data;
   } catch (err) {
-    const e = err as AxiosError;
-    const status = e.response?.status;
-    const statusText =
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (e.response as any)?.statusText || e.message || 'Unknown Error';
+    const e = err as AxiosError<{
+      code: number;
+      isSuccess: boolean;
+      message: string;
+    }>;
+    if (e.response?.data) {
+      throw e.response.data;
+    }
 
+    const status = e.response?.status;
+    const statusText = e.message || 'Unknown Error';
     const errorMessage = `API Error: ${status ?? 'N/A'}`;
 
     if (status === 500 || status === 401) {
