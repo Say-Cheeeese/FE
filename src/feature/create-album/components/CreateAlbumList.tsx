@@ -1,25 +1,50 @@
 'use client';
 import LongButton from '@/global/components/LongButton';
 import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { useCreateAlbum } from '../hook/useCreateAlbum';
 import AlbumEmojiSelector from './AlbumEmojiSelector';
 import CreateInputList from './CreateInputList';
 
+// 이모지를 유니코드 코드포인트 형식으로 변환 (예: 😊 → U+1F60A)
+const emojiToUnicode = (emoji: string): string => {
+  const codePoint = emoji.codePointAt(0);
+  if (!codePoint) return '';
+  return `U+${codePoint.toString(16).toUpperCase().padStart(4, '0')}`;
+};
+
 export default function CreateAlbumList() {
+  const router = useRouter();
   const [selectedEmoji, setSelectedEmoji] = useState('😊');
   const [eventName, setEventName] = useState('');
   const [eventDate, setEventDate] = useState('');
   const [participantCount, setParticipantCount] = useState('');
   const [hasFormError, setHasFormError] = useState(false);
 
+  const { mutate: createAlbum } = useCreateAlbum();
+
   const handleSubmit = () => {
-    console.log('앨범 생성:', {
-      emoji: selectedEmoji,
-      eventName,
-      eventDate,
-      participantCount,
-    });
-    // API 호출 등
+    const emojiUnicode = emojiToUnicode(selectedEmoji);
+    createAlbum(
+      {
+        themeEmoji: emojiUnicode,
+        title: eventName,
+        participant: parseInt(participantCount, 10),
+        eventDate,
+      },
+      {
+        onSuccess: (result) => {
+          console.log('앨범 생성 성공:', result);
+          if (result.code) {
+            router.push(`/create-album/${result.code}`);
+          }
+        },
+        onError: (err) => {
+          console.error('앨범 생성 실패:', err);
+        },
+      },
+    );
   };
 
   const participantCountNumber = parseInt(participantCount, 10);
@@ -71,7 +96,7 @@ export default function CreateAlbumList() {
             <li>메이커는 모든 사진을 정리 • 삭제할 수 있어요</li>
           </ul>
         </div>
-        <LongButton text='확인' />
+        <LongButton text='확인' onClick={handleSubmit} />
       </BottomSheetModal>
     </div>
   );
