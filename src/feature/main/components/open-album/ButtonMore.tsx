@@ -13,7 +13,7 @@ export default function ButtonMore({}: ButtonMoreProps) {
       onClick={handleClick}
       className='bg-button-tertiary-fill flex w-full justify-center rounded-lg py-3'
     >
-      <span className='text-body-lg-semibold text-text-subtle'>1개 더보기</span>
+      <span className='typo-body-lg-semibold text-text-subtle'>1개 더보기</span>
       <ChevronDown color={'var(--color-text-subtle)'} width={20} height={20} />
     </button>
   );

@@ -57,7 +57,7 @@ export default function OpenAlbum({
         </div>
 
         <div className='absolute top-3 left-3'>
-          <span className='text-caption-sm-medium bg-element-alpha-dark inline-block rounded-full px-[10px] py-1 font-semibold text-white'>
+          <span className='typo-caption-sm-medium bg-element-alpha-dark inline-block rounded-full px-[10px] py-1 font-semibold text-white'>
             소멸까지 {expirationTime}
           </span>
         </div>
@@ -67,8 +67,8 @@ export default function OpenAlbum({
         {/* TODO : 프로필이미지 삽입 */}
         <div className='h-14 w-14 shrink-0 rounded-full bg-neutral-200' />
         <div className='flex-1'>
-          <h3 className='text-heading-sm-semibold text-text-basic'>{title}</h3>
-          <p className='text-body-sm-medium mt-[2px] text-neutral-600'>
+          <h3 className='typo-heading-sm-semibold text-text-basic'>{title}</h3>
+          <p className='typo-body-sm-medium mt-[2px] text-neutral-600'>
             {`${date}  ·   ${author}`}
           </p>
         </div>

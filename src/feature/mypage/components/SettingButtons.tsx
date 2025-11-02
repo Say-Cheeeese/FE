@@ -1,13 +1,13 @@
 'use client';
 import Link from 'next/link';
-import ButtonLogout from './ButtonLogout';
 import ButtonDeleteAccount from './ButtonDeleteAccount';
+import ButtonLogout from './ButtonLogout';
 
 interface SettingButtonsProps {}
 
 export default function SettingButtons({}: SettingButtonsProps) {
   return (
-    <section className='text-body-lg-medium text-text-subtle flex flex-col px-6'>
+    <section className='typo-body-lg-medium text-text-subtle flex flex-col px-6'>
       <Link className='py-4' href='/'>
         서비스 이용약관
       </Link>

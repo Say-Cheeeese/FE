@@ -19,31 +19,31 @@ export default function ProfileMypage({}: ProfileMypageProps) {
 
         <div className='flex-1'>
           <div className='mb-1'>
-            <span className='text-body-lg-semibold text-text-basic'>제리</span>
+            <span className='typo-body-lg-semibold text-text-basic'>제리</span>
           </div>
 
           <div className='grid grid-cols-3 gap-8'>
             <div className='flex flex-col'>
-              <span className='text-heading-sm-semibold text-text-basic'>
+              <span className='typo-heading-sm-semibold text-text-basic'>
                 21
               </span>
-              <span className='text-body-sm-regular text-text-subtle'>
+              <span className='typo-body-sm-regular text-text-subtle'>
                 앨범 수
               </span>
             </div>
             <div className='flex flex-col'>
-              <span className='text-text-basic text-heading-sm-semibold'>
+              <span className='text-text-basic typo-heading-sm-semibold'>
                 203
               </span>
-              <span className='text-body-sm-regular text-text-subtle'>
+              <span className='typo-body-sm-regular text-text-subtle'>
                 올린 사진
               </span>
             </div>
             <div className='flex flex-col'>
-              <span className='text-heading-sm-semibold text-text-basic'>
+              <span className='typo-heading-sm-semibold text-text-basic'>
                 441
               </span>
-              <span className='text-body-sm-regular text-text-subtle'>
+              <span className='typo-body-sm-regular text-text-subtle'>
                 받은 띱
               </span>
             </div>

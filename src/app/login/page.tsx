@@ -1,5 +1,5 @@
-import Image from 'next/image';
 import KakaoSignupButton from '@/feature/login/components/KakaoSignupButton';
+import Image from 'next/image';
 
 export default function LoginPage() {
   return (
@@ -17,14 +17,14 @@ export default function LoginPage() {
           height={120}
           alt='치즈 아이콘'
         />
-        <span className='text-body-lg-semibold text-text-subtle'>
+        <span className='typo-body-lg-semibold text-text-subtle'>
           우리가 특별한 순간을 기억하는 법
         </span>
       </div>
       <div className='mt-10 mb-[171px] flex flex-col gap-2'>
         <div className='flex flex-col items-center justify-center'>
           <div className='bg-surface-inverse h-9 w-[177px] cursor-pointer rounded-full py-2 pl-[14px]'>
-            <span className='text-body-sm-semibold text-text-basic-inverse flex items-center gap-1'>
+            <span className='typo-body-sm-semibold text-text-basic-inverse flex items-center gap-1'>
               ⚡️3초만에 빠른 회원가입
             </span>
           </div>

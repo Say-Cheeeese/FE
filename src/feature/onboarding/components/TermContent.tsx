@@ -5,10 +5,10 @@ const TermsComponent: FC = () => (
   <div className='max-h-[80vh] overflow-y-auto'>
     <div className='flex flex-col gap-8'>
       <div className='flex flex-col gap-1'>
-        <div className='text-body-sm-bold leading-5 text-[#424349]'>
+        <div className='typo-body-sm-bold leading-5 text-[#424349]'>
           이용약관 동의
         </div>
-        <div className='text-caption-sm-medium leading-[18px] text-[#747681]'>
+        <div className='typo-caption-sm-medium leading-[18px] text-[#747681]'>
           본 약관은 치이이즈(이하 &quot;회사&quot;)가 제공하는 웹 기반 사진 공유
           서비스(이하 &quot;서비스&quot;)의 이용과 관련하여 회사와 이용자 간의
           권리, 의무 및 책임 사항, 기타 필요한 사항을 규정함을 목적으로 합니다.

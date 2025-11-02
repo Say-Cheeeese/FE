@@ -26,7 +26,7 @@ export default function LogoHeader({
           {showLogin && (
             <Link href='/login'>
               <div className='cursor-pointer px-3 py-2.5'>
-                <span className='text-body-sm-medium text-text-basic'>
+                <span className='typo-body-sm-medium text-text-basic'>
                   로그인
                 </span>
               </div>
