@@ -1,3 +1,5 @@
+import ConfirmModal from '@/global/components/modal/ConfirmModal';
+
 interface PhotoInfo {
   uploaderName: string;
   takenAt: string;
@@ -53,13 +55,21 @@ export default function SectionPhotoData({
       </dl>
 
       {isShowDeleteButton && (
-        <button
-          type='button'
-          onClick={onDeleteClick}
-          className='bg-element-gray-lighter text-body-1xl-semibold text-text-error w-full rounded-xl py-4'
-        >
-          사진 삭제하기
-        </button>
+        <ConfirmModal
+          title='사진을 삭제할까요?'
+          description='지운 사진은 다시 복구할 수 없어요.'
+          cancelText='취소'
+          confirmText='삭제하기'
+          trigger={
+            <button
+              type='button'
+              onClick={onDeleteClick}
+              className='bg-element-gray-lighter text-body-1xl-semibold text-text-error w-full rounded-xl py-4'
+            >
+              사진 삭제하기
+            </button>
+          }
+        />
       )}
     </section>
   );

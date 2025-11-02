@@ -1,5 +1,5 @@
 import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
-import ConfirmModal from '@/global/components/modal/ConfirmModal';
+import { Download, Heart, Info } from 'lucide-react';
 import ItemMemberData from './ItemMemberData';
 import SectionPhotoData from './SectionPhotoData';
 
@@ -52,8 +52,37 @@ interface FooterPhotoDetailProps {}
 
 export default function FooterPhotoDetail({}: FooterPhotoDetailProps) {
   return (
-    <>
-      <BottomSheetModal title={'띱 6개'} trigger={<button>btn</button>}>
+    <section className='mx-10 flex justify-around'>
+      <BottomSheetModal
+        title={'사진 정보'}
+        trigger={
+          <button>
+            <Info width={24} height={24} color='white' />
+          </button>
+        }
+      >
+        <SectionPhotoData
+          photoInfo={{
+            uploaderName: '임민서',
+            takenAt: '2025-06-03T23:59:00Z',
+            uploadedAt: '2025-06-04T23:59:00Z',
+          }}
+          isShowDeleteButton
+          onDeleteClick={() => console.log('삭제 버튼 클릭!')}
+        />
+      </BottomSheetModal>
+      <button>
+        <Download width={24} height={24} color='white' />
+      </button>
+      <BottomSheetModal
+        title={'띱 6개'}
+        trigger={
+          <button className='text-text-basic-inverse typo-body-lg-semibold flex gap-1'>
+            <Heart width={24} height={24} color='white' />
+            <span>0</span>
+          </button>
+        }
+      >
         <div className='flex flex-col'>
           {mockMembers.map((member) => (
             <ItemMemberData
@@ -66,24 +95,6 @@ export default function FooterPhotoDetail({}: FooterPhotoDetailProps) {
           ))}
         </div>
       </BottomSheetModal>
-      <BottomSheetModal title={'사진 정보'} trigger={<button>button2</button>}>
-        <SectionPhotoData
-          photoInfo={{
-            uploaderName: '임민서',
-            takenAt: '2025-06-03T23:59:00Z',
-            uploadedAt: '2025-06-04T23:59:00Z',
-          }}
-          isShowDeleteButton
-          onDeleteClick={() => console.log('삭제 버튼 클릭!')}
-        />
-      </BottomSheetModal>
-      <ConfirmModal
-        title='사진을 삭제할까요?'
-        description='지운 사진은 다시 복구할 수 없어요.'
-        cancelText='취소'
-        confirmText='삭제하기'
-        trigger={<button>버튼</button>}
-      />
-    </>
+    </section>
   );
 }
