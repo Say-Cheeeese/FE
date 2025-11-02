@@ -272,9 +272,9 @@ function buildTypographyUtilitiesCssFromToken(token) {
 
         const value = styleObj.value;
 
-        // 클래스명: text-{group}-{sizeKey}-{weightKey}
-        // ex) @utility text-body-lg-semibold { … }
-        const utilityName = `@utility text-${group}-${sizeKey}-${weightKey} {`;
+        // 클래스명: typo-{group}-{sizeKey}-{weightKey}
+        // ex) @utility typo-body-lg-semibold { … }
+        const utilityName = `@utility typo-${group}-${sizeKey}-${weightKey} {`;
         lines.push(utilityName);
 
         // font-family
@@ -320,8 +320,8 @@ function buildTypographyUtilitiesCssFromToken(token) {
         lines.push('}');
         lines.push(''); // 줄바꿈
 
-        // 추가: text-{size}-{weight} 형태의 단순 버전도 생성
-        const simpleUtility = `@utility text-${actualSize}-${weightValue} {`;
+        // 추가: typo-{size}-{weight} 형태의 단순 버전도 생성
+        const simpleUtility = `@utility typo-${actualSize}-${weightValue} {`;
         lines.push(simpleUtility);
         if (value.fontFamily) {
           lines.push(`  font-family: var(--font-primary);`);

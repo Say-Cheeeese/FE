@@ -62,7 +62,7 @@ export default function CreateAlbumList() {
         showHandle={false}
       >
         <div className='flex flex-col gap-4 px-2'>
-          <span className='text-text-basic text-heading-md-bold'>
+          <span className='text-text-basic typo-heading-md-bold'>
             치즈 앨범 메뉴얼
           </span>
           <ul className='text-text-subtle text-16-500 mb-[166px] flex list-disc flex-col gap-2 pl-5'>

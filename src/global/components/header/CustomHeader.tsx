@@ -50,9 +50,9 @@
  */
 
 'use client';
-import React, { ReactNode } from 'react';
 import { ChevronLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { ReactNode } from 'react';
 
 const HEADER_HEIGHT = 72;
 
@@ -97,7 +97,7 @@ export default function CustomHeader({
             </button>
           )}
 
-          <span className='text-heading-md-bold text-text-subtle'>{title}</span>
+          <span className='typo-heading-md-bold text-text-subtle'>{title}</span>
         </div>
 
         {/* 오른쪽: 커스텀 컴포넌트 */}

@@ -29,10 +29,10 @@ export default function CloseAlbum({
       </div>
 
       <div className='flex flex-col justify-center'>
-        <h4 className='text-body-md-semibold text-text-basic text-left'>
+        <h4 className='typo-body-md-semibold text-text-basic text-left'>
           {title}
         </h4>
-        <div className='text-body-sm-medium text-text-subtler'>
+        <div className='typo-body-sm-medium text-text-subtler'>
           {date} · {author}
         </div>
       </div>
