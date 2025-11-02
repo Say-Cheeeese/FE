@@ -27,7 +27,6 @@ export async function GET(request: NextRequest) {
     }
 
     const data = await response.json();
-    console.log('카카오 인증 응답 data:', data);
 
     // ✅ 쿠키 세팅 및 리디렉션
     const redirectPath = data.result.isOnboarded ? '/main' : '/onboarding';

@@ -40,7 +40,6 @@ export default function CreateAlbumList() {
       },
       {
         onSuccess: (result: CreateAlbumApiResponse) => {
-          console.log('앨범 생성 성공:', result);
           if (result.result.code) {
             router.push(`/create-album/${result.result.code}`);
           }
