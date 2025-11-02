@@ -1,8 +1,8 @@
 'use client';
-import DrawerPhotoList from './DrawerPhotoList';
+
 import FooterPhotoDetail from './FooterPhotoDetail';
 import HeaderPhotoDetail from './HeaderPhotoDetail';
-import LargePhoto from './LargePhoto';
+import SwiperPhotoList from './SwiperPhotoList';
 
 interface ScreenAlbumDetailProps {
   albumId: string;
@@ -10,10 +10,10 @@ interface ScreenAlbumDetailProps {
 
 export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
   return (
-    <main className='bg-surface-inverse flex h-dvh w-full flex-col'>
+    <main className='bg-surface-inverse flex h-dvh w-full flex-col justify-between'>
       <HeaderPhotoDetail />
-      <LargePhoto />
-      <DrawerPhotoList />
+      {/* <LargePhoto /> */}
+      <SwiperPhotoList />
       <FooterPhotoDetail />
     </main>
   );
