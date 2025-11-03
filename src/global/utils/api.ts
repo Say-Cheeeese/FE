@@ -36,6 +36,7 @@ client.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+    console.log(error.response);
 
     if (error.response?.status === 401 && !originalRequest._retry) {
       // TODO 401이 떠도 토큰갱신 필요없는경우 정의
@@ -48,13 +49,15 @@ client.interceptors.response.use(
       try {
         const refreshToken = getCookie(REFRESH_TOKEN_KEY);
         if (!refreshToken) {
+          console.log('No refresh token');
+          removeCookie(ACCESS_TOKEN_KEY);
+          removeCookie(REFRESH_TOKEN_KEY);
+          window.location.href = '/login';
           throw new Error('No refresh token');
         }
 
-        const response = await axios.post(`${API_URL}/v1/auth/reissue`, null, {
-          data: {
-            refreshToken,
-          },
+        const response = await axios.post(`${API_URL}/v1/auth/reissue`, {
+          refreshToken,
         });
 
         const { accessToken, refreshToken: newRefreshToken } =
@@ -72,6 +75,7 @@ client.interceptors.response.use(
         removeCookie(ACCESS_TOKEN_KEY);
         removeCookie(REFRESH_TOKEN_KEY);
         console.error('Token refresh failed:', refreshError);
+        window.location.href = '/login';
         return Promise.reject(refreshError);
       }
     }
