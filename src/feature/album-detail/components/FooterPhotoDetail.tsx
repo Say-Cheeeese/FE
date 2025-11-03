@@ -56,7 +56,7 @@ export default function FooterPhotoDetail({}: FooterPhotoDetailProps) {
       <BottomSheetModal
         title={'사진 정보'}
         trigger={
-          <button>
+          <button className='flex w-12 justify-center'>
             <Info width={24} height={24} color='white' />
           </button>
         }
@@ -71,13 +71,14 @@ export default function FooterPhotoDetail({}: FooterPhotoDetailProps) {
           onDeleteClick={() => console.log('삭제 버튼 클릭!')}
         />
       </BottomSheetModal>
-      <button>
+      <button className='flex w-12 justify-center'>
         <Download width={24} height={24} color='white' />
       </button>
+
       <BottomSheetModal
         title={'띱 6개'}
         trigger={
-          <button className='text-text-basic-inverse typo-body-lg-semibold flex gap-1'>
+          <button className='text-text-basic-inverse typo-body-lg-semibold flex w-12 justify-center gap-1'>
             <Heart width={24} height={24} color='white' />
             <span>0</span>
           </button>

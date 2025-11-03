@@ -39,17 +39,20 @@ export default function SwiperPhotoList({
   const [mainSwiper, setMainSwiper] = useState<SwiperType | null>(null);
   const [thumbSwiper, setThumbSwiper] = useState<SwiperType | null>(null);
   const [thumbOffset, setThumbOffset] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
     const updateOffset = () => {
       const vw = window.innerWidth;
-      const thumb = 30;
-      setThumbOffset((vw - thumb) / 2);
+      const thumb = 27;
+      setThumbOffset(vw / 2 - thumb);
     };
     updateOffset();
     window.addEventListener('resize', updateOffset);
     return () => window.removeEventListener('resize', updateOffset);
   }, []);
+
+  console.log(thumbOffset);
 
   return (
     <div className='relative flex h-full flex-col gap-4'>
@@ -61,6 +64,8 @@ export default function SwiperPhotoList({
           spaceBetween={16}
           className={`w-full ${aspectRatio} overflow-hidden`}
           onSlideChange={(sw) => {
+            const idx = sw.activeIndex;
+            setActiveIndex(idx);
             if (thumbSwiper && !thumbSwiper.destroyed) {
               thumbSwiper.slideTo(sw.activeIndex);
             }
@@ -89,59 +94,45 @@ export default function SwiperPhotoList({
           watchSlidesProgress
           className='custom-thumb-swiper relative w-full px-3 py-2 backdrop-blur-md'
           onSlideChange={(sw) => {
+            const idx = sw.activeIndex;
+            setActiveIndex(idx);
             if (mainSwiper && !mainSwiper.destroyed) {
               mainSwiper.slideTo(sw.activeIndex);
             }
           }}
         >
-          {images.map((src, i) => (
-            <SwiperSlide
-              key={i}
-              className='thumb-slide flex items-center justify-center transition-all duration-300'
-              onClick={() => {
-                mainSwiper?.slideTo(i);
-                thumbSwiper?.slideTo(i);
-              }}
-            >
-              <img
-                src={src}
-                alt={`thumb-${i}`}
-                className='thumb-img rounded-[6px] object-cover transition-all duration-200 data-[swiper-slide-active]:ring-2 data-[swiper-slide-active]:ring-white'
-              />
-            </SwiperSlide>
-          ))}
+          {images.map((src, i) => {
+            const isActive = activeIndex === i;
+            return (
+              <SwiperSlide
+                key={i}
+                className={`thumb-slide flex items-center justify-center`}
+                // TODO : tailwind로 아래 값을 관리할 경우, transition이 잘 적용되지 않는 문제가 있음.
+                style={{
+                  width: isActive ? 30 : 15,
+                  height: 30,
+                  marginLeft: isActive ? 12 : 1,
+                  marginRight: isActive ? 12 : 1,
+                  transition: 'width 0.3s ease, margin 0.3s ease',
+                }}
+                onClick={() => {
+                  setActiveIndex(i);
+                  mainSwiper?.slideTo(i);
+                  thumbSwiper?.slideTo(i);
+                }}
+              >
+                <img
+                  src={src}
+                  alt={`thumb-${i}`}
+                  width={30}
+                  height={30}
+                  className='thumb-img h-full w-full rounded-[6px] object-cover'
+                />
+              </SwiperSlide>
+            );
+          })}
         </Swiper>
       </div>
-
-      {/* 👇 크기 + 간격 스타일 */}
-      <style jsx global>{`
-        /* 모든 썸네일 기본 크기 및 간격 */
-        .custom-thumb-swiper .thumb-slide {
-          width: 15px !important;
-          height: 30px !important;
-          margin-left: 1px !important;
-          margin-right: 1px !important;
-        }
-
-        .custom-thumb-swiper .thumb-img {
-          width: 100%;
-          height: 100%;
-        }
-
-        /* 활성(선택된) 썸네일 */
-        .custom-thumb-swiper .swiper-slide-active {
-          width: 30px !important;
-          height: 30px !important;
-          margin-left: 12px !important; /* 좌우 간격 합쳐서 12px 효과 */
-          margin-right: 12px !important;
-        }
-
-        /* 활성 슬라이드 주변 시각적으로 더 넓게 보이게 전환 효과 */
-        .custom-thumb-swiper .thumb-slide,
-        .custom-thumb-swiper .swiper-slide-active {
-          transition: all 0.25s ease;
-        }
-      `}</style>
     </div>
   );
 }
