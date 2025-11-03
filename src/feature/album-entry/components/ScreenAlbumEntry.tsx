@@ -1,7 +1,13 @@
-import LogoHeader from '@/global/components/LogoHeader';
+import LogoHeader from '@/global/components/header/LogoHeader';
 import FullSizeLetter from './FullSizeLetter';
 
-export default function ScreenAlbumEntry() {
+interface ScreenAlbumEntryProps {
+  albumId: string;
+}
+
+export default function ScreenAlbumEntry({ albumId }: ScreenAlbumEntryProps) {
+  // TODO : albumId 로 api 받아오기.
+
   return (
     <main className='bg-background-brand relative min-h-screen overflow-hidden'>
       <LogoHeader bgColor='var(--color-background-brand)' />

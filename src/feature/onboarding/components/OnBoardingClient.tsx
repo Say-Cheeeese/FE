@@ -2,8 +2,8 @@
 import { ProfileAgree } from '@/feature/onboarding/components/ProfileAgree';
 import ProfileImage from '@/feature/onboarding/components/ProfileImage';
 import { TermContent } from '@/feature/onboarding/components/TermContent';
-import CustomHeader from '@/global/components/CustomHeader';
-import LogoHeader from '@/global/components/LogoHeader';
+import CustomHeader from '@/global/components/header/CustomHeader';
+import LogoHeader from '@/global/components/header/LogoHeader';
 import LongButton from '@/global/components/LongButton';
 import XInput from '@/global/components/XInput';
 import { useSearchParams } from 'next/navigation';
