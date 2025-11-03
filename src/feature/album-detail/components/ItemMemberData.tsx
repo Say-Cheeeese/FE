@@ -24,19 +24,19 @@ export default function ItemMemberData({
       </div>
 
       <div className='flex items-center gap-2'>
-        <span className='text-body-md-semibold text-text-subtle'>
+        <span className='typo-body-lg-semibold text-text-subtle'>
           {nickname}
         </span>
 
         <div className='flex items-center gap-1'>
           {isMe && (
-            <span className='text-caption-sm-medium text-text-subtler bg-element-gray-light inline-flex h-[18px] items-center rounded-full px-1 py-0.5'>
+            <span className='typo-caption-sm-medium text-text-subtler bg-element-gray-light inline-flex items-center rounded-full px-1'>
               나
             </span>
           )}
 
           {isMaker && (
-            <span className='text-caption-sm-medium bg-element-primary-lighter text-text-secondary inline-flex h-[18px] items-center rounded-full px-2'>
+            <span className='typo-caption-sm-medium bg-element-primary-lighter text-text-secondary inline-flex items-center rounded-full px-2'>
               메이커
             </span>
           )}

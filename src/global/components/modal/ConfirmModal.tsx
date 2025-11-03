@@ -65,7 +65,7 @@ export default function ConfirmModal({
 
       <AlertDialogContent>
         <AlertDialogHeader className='pb-6'>
-          <AlertDialogTitle className='typo-heading-sm-semibold text-text-basic pt-6'>
+          <AlertDialogTitle className='typo-heading-sm-semibold text-text-basic pt-4'>
             {title}
           </AlertDialogTitle>
           {description ? (
@@ -77,7 +77,7 @@ export default function ConfirmModal({
           <AlertDialogCancel
             onClick={handleCancel}
             className={cn(
-              'typo-body-lg-semibold text-text-subtle bg-button-tertiary-fill hover:bg-neutral-200',
+              'typo-body-lg-semibold text-text-subtle bg-button-tertiary-fill h-auto border-none py-3 hover:bg-neutral-200',
               cancelClassName,
             )}
           >
@@ -87,7 +87,7 @@ export default function ConfirmModal({
           <AlertDialogAction
             onClick={handleConfirm}
             className={cn(
-              'typo-body-lg-semibold text-text-primary bg-button-primary-fill hover:bg-yellow-400/90',
+              'typo-body-lg-semibold text-text-primary bg-button-primary-fill h-auto py-3 hover:bg-yellow-400/90',
               confirmClassName,
             )}
           >

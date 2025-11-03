@@ -34,21 +34,21 @@ export default function SectionPhotoData({
   onDeleteClick,
 }: SectionPhotoDataProps) {
   return (
-    <section className='text-body-lg-medium flex flex-col gap-6 rounded-3xl bg-white px-3 py-2'>
+    <section className='typo-body-lg-medium flex flex-col gap-6 rounded-3xl bg-white px-3 py-2'>
       <dl className='flex flex-col gap-4'>
         <div className='flex items-center justify-between'>
-          <dt className='text-text-subtle'>업로드한 사람</dt>
-          <dd className='text-text-subtler'>{photoInfo.uploaderName}</dd>
+          <dt className='text-text-subtle w-1/3'>업로드한 사람</dt>
+          <dd className='text-text-subtler flex-1'>{photoInfo.uploaderName}</dd>
         </div>
         <div className='flex items-center justify-between'>
-          <dt className='text-text-subtle'>촬영 시각</dt>
-          <dd className='text-text-subtler'>
+          <dt className='text-text-subtle w-1/3'>촬영 시각</dt>
+          <dd className='text-text-subtler flex-1'>
             {formatKoreanDateTime(photoInfo.takenAt)}
           </dd>
         </div>
         <div className='flex items-center justify-between'>
-          <dt className='text-text-subtle'>업로드 시각</dt>
-          <dd className='text-text-subtler'>
+          <dt className='text-text-subtle w-1/3'>업로드 시각</dt>
+          <dd className='text-text-subtler flex-1'>
             {formatKoreanDateTime(photoInfo.uploadedAt)}
           </dd>
         </div>
@@ -60,11 +60,12 @@ export default function SectionPhotoData({
           description='지운 사진은 다시 복구할 수 없어요.'
           cancelText='취소'
           confirmText='삭제하기'
+          confirmClassName='text-text-basic-inverse bg-button-accent-fill'
           trigger={
             <button
               type='button'
               onClick={onDeleteClick}
-              className='bg-element-gray-lighter text-body-1xl-semibold text-text-error w-full rounded-xl py-4'
+              className='bg-element-gray-lighter typo-body-1xl-semibold text-text-error w-full rounded-xl py-4'
             >
               사진 삭제하기
             </button>
