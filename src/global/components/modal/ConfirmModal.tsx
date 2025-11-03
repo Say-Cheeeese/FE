@@ -12,7 +12,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { cn } from '@/lib/utils';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 
 type ConfirmModalProps = {
   /** 트리거 버튼/노드 (예: <button>탈퇴하기</button>) */
@@ -58,6 +58,25 @@ export default function ConfirmModal({
   const handleCancel = useCallback(() => {
     onCancel?.();
   }, [onCancel]);
+
+  useEffect(() => {
+    // data-scroll-locked 속성 제거
+    const removeScrollLock = () => {
+      const body = document.body;
+      if (body.hasAttribute('data-scroll-locked')) {
+        body.removeAttribute('data-scroll-locked');
+      }
+    };
+
+    // 컴포넌트 마운트 시와 주기적으로 체크
+    removeScrollLock();
+    const interval = setInterval(removeScrollLock, 100);
+
+    return () => {
+      clearInterval(interval);
+      removeScrollLock();
+    };
+  }, []);
 
   return (
     <AlertDialog>
