@@ -12,6 +12,7 @@ interface SwiperPhotoListProps {
 }
 
 export default function SwiperPhotoList({
+  // TODO : 임시 이미지 리스트
   images = [
     'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d',
     'https://images.unsplash.com/photo-1519681393784-d120267933ba',
