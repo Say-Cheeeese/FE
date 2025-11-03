@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/css';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { calcThumbSwiperCenterOffset } from '../util/calcThumbSwiperCenterOffset';
 
 interface SwiperPhotoListProps {
   images?: string[];
@@ -44,8 +45,15 @@ export default function SwiperPhotoList({
   useEffect(() => {
     const updateOffset = () => {
       const vw = window.innerWidth;
-      const thumb = 27;
-      setThumbOffset(vw / 2 - thumb);
+      setThumbOffset(
+        calcThumbSwiperCenterOffset({
+          viewportWidth: vw,
+          activeMargin: 12,
+          activeWidth: 30,
+          inactiveWidth: 15,
+          index: 0,
+        }),
+      );
     };
     updateOffset();
     window.addEventListener('resize', updateOffset);
@@ -69,15 +77,20 @@ export default function SwiperPhotoList({
             }
           }}
         >
-          {images.map((src, i) => (
-            <SwiperSlide key={i}>
-              <img
-                src={src}
-                alt={`photo-${i}`}
-                className='h-full w-full object-contain'
-              />
-            </SwiperSlide>
-          ))}
+          {images.map((src, i) => {
+            const isActive = activeIndex === i;
+            return (
+              <SwiperSlide key={i}>
+                <img
+                  src={src}
+                  fetchPriority={isActive ? 'high' : 'auto'}
+                  loading={isActive ? 'eager' : 'lazy'}
+                  alt={`photo-${i}`}
+                  className='h-full w-full object-contain'
+                />
+              </SwiperSlide>
+            );
+          })}
         </Swiper>
       </div>
 
@@ -86,7 +99,7 @@ export default function SwiperPhotoList({
         <Swiper
           onSwiper={setThumbSwiper}
           slidesPerView='auto'
-          spaceBetween={2} // 👈 기본 간격 2px
+          spaceBetween={2}
           slidesOffsetBefore={thumbOffset}
           slidesOffsetAfter={thumbOffset}
           watchSlidesProgress
@@ -97,6 +110,16 @@ export default function SwiperPhotoList({
             if (mainSwiper && !mainSwiper.destroyed) {
               mainSwiper.slideTo(sw.activeIndex);
             }
+            const vw = window.innerWidth;
+            sw.setTranslate(
+              calcThumbSwiperCenterOffset({
+                viewportWidth: vw,
+                activeMargin: 12,
+                activeWidth: 30,
+                inactiveWidth: 15,
+                index: idx,
+              }),
+            ); // 내가 정한 픽셀로 이동
           }}
         >
           {images.map((src, i) => {
@@ -104,7 +127,7 @@ export default function SwiperPhotoList({
             return (
               <SwiperSlide
                 key={i}
-                className={`thumb-slide flex items-center justify-center`}
+                className={`thumb-slide ${isActive && 'mx-3!'} flex items-center justify-center`}
                 // TODO : tailwind로 아래 값을 관리할 경우, transition이 잘 적용되지 않는 문제가 있음.
                 style={{
                   width: isActive ? 30 : 15,
@@ -121,6 +144,7 @@ export default function SwiperPhotoList({
               >
                 <img
                   src={src}
+                  loading='lazy'
                   alt={`thumb-${i}`}
                   width={30}
                   height={30}
