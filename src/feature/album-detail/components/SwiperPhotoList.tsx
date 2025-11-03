@@ -52,6 +52,7 @@ export default function SwiperPhotoList({
           activeMargin: 12,
           activeWidth: 30,
           inactiveWidth: 15,
+          inactiveMargin: 2,
           index: 0,
         }),
       );
@@ -118,6 +119,7 @@ export default function SwiperPhotoList({
                 activeMargin: 12,
                 activeWidth: 30,
                 inactiveWidth: 15,
+                inactiveMargin: 2,
                 index: idx,
               }),
             ); // 내가 정한 픽셀로 이동
@@ -134,7 +136,7 @@ export default function SwiperPhotoList({
                   width: isActive ? 30 : 15,
                   height: 30,
                   marginLeft: isActive ? 12 : 0,
-                  marginRight: isActive ? 12 : 0,
+                  marginRight: isActive ? 12 : 2,
                   transition: 'width 0.3s ease, margin 0.3s ease',
                 }}
                 onClick={() => {

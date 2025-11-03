@@ -22,6 +22,11 @@ interface CalcThumbSwiperCenterOffsetProps {
   inactiveWidth: number;
 
   /**
+   * 비활성 썸네일의 좌우 margin 값 (px 단위)
+   */
+  inactiveMargin: number;
+
+  /**
    * 현재 활성화된 슬라이드의 인덱스
    */
   index: number;
@@ -33,13 +38,14 @@ export const calcThumbSwiperCenterOffset = ({
   activeWidth,
   activeMargin,
   inactiveWidth,
+  inactiveMargin,
   index,
 }: CalcThumbSwiperCenterOffsetProps) => {
   // 화면 중앙에서 활성 썸네일의 중심까지 거리
   const baseOffset = viewportWidth / 2 - (activeMargin + activeWidth / 2);
 
   // 인덱스만큼 비활성 썸네일 폭만큼 왼쪽으로 이동
-  const indexOffset = inactiveWidth * index;
+  const indexOffset = (inactiveWidth + inactiveMargin) * index;
 
   return baseOffset - indexOffset;
 };
