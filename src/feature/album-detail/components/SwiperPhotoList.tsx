@@ -142,6 +142,7 @@ export default function SwiperPhotoList({
                   thumbSwiper?.slideTo(i);
                 }}
               >
+                {/* TODO : 이미지 아직 불러오는 중일때 스켈레톤 띄우기 */}
                 <img
                   src={src}
                   loading='lazy'
