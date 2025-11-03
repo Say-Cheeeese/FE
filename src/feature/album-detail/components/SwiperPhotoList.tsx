@@ -124,7 +124,7 @@ export default function SwiperPhotoList({
                   alt={`thumb-${i}`}
                   width={30}
                   height={30}
-                  className='thumb-img h-full w-full rounded-[6px] object-cover'
+                  className='thumb-img h-full w-full rounded-xs object-cover'
                 />
               </SwiperSlide>
             );
