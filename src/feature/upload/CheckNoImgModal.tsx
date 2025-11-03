@@ -16,7 +16,8 @@ export default function CheckNoImgModal({
     <ConfirmModal
       trigger={trigger}
       title='올릴 사진이 없나요?'
-      description='나만 포착한 순간,\n작은 돌멩이 사진이라도 좋아요.'
+      description={`나만 포착한 순간,
+작은 돌멩이 사진이라도 좋아요.`}
       cancelText='앨범 채우기'
       confirmText='정말 없어요'
       onCancel={onCancel}

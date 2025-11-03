@@ -78,12 +78,18 @@ export default function UploadAlbumPage() {
             </div>
           </div>
           <div className='w-full px-4'>
-            <CheckNoImgModal
-              trigger={
-                <LongButton text='내가 찍은 사진 공유하기' noFixed={true} />
-              }
-            />
+            <LongButton text='내가 찍은 사진 공유하기' noFixed={true} />
           </div>
+          <CheckNoImgModal
+            trigger={
+              <button
+                type='button'
+                className='typo-body-sm-medium text-text-subtler mt-3'
+              >
+                올릴 사진이 없어요
+              </button>
+            }
+          />
         </div>
       </main>
     </div>
