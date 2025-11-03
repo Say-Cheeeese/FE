@@ -1,5 +1,6 @@
 import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
 import { Download, Heart, Info } from 'lucide-react';
+import { useState } from 'react';
 import ItemMemberData from './ItemMemberData';
 import SectionPhotoData from './SectionPhotoData';
 
@@ -51,6 +52,14 @@ const mockMembers = [
 interface FooterPhotoDetailProps {}
 
 export default function FooterPhotoDetail({}: FooterPhotoDetailProps) {
+  const [isDeep, setIsDeep] = useState(false);
+  const [deepCount, setDeepCount] = useState(0);
+
+  const handleDeepToggle = () => {
+    setIsDeep((prev) => !prev);
+    setDeepCount((prev) => (isDeep ? prev - 1 : prev + 1));
+  };
+
   return (
     <section className='mx-10 flex justify-around py-5'>
       <BottomSheetModal
@@ -71,31 +80,48 @@ export default function FooterPhotoDetail({}: FooterPhotoDetailProps) {
           onDeleteClick={() => console.log('삭제 버튼 클릭!')}
         />
       </BottomSheetModal>
+
       <button className='flex w-12 justify-center'>
         <Download width={24} height={24} color='white' />
       </button>
 
-      <BottomSheetModal
-        title={'띱 6개'}
-        trigger={
-          <button className='text-text-basic-inverse typo-body-lg-semibold flex w-12 justify-center gap-1'>
-            <Heart width={24} height={24} color='white' />
-            <span>0</span>
-          </button>
-        }
-      >
-        <div className='flex flex-col'>
-          {mockMembers.map((member) => (
-            <ItemMemberData
-              key={member.id}
-              profileImageUrl={member.profileImageUrl}
-              nickname={member.nickname}
-              isMe={member.isMe}
-              isMaker={member.isMaker}
-            />
-          ))}
-        </div>
-      </BottomSheetModal>
+      <div className='typo-body-lg-semibold flex w-12 justify-center gap-1'>
+        <button type='button' onClick={handleDeepToggle}>
+          <Heart
+            width={24}
+            height={24}
+            fill={isDeep ? 'var(--color-icon-primary)' : 'transparent'}
+            color={
+              isDeep ? 'var(--color-icon-primary)' : 'var(--color-icon-inverse)'
+            }
+          />
+        </button>
+
+        <BottomSheetModal
+          title={`띱 ${deepCount}개`}
+          trigger={
+            <button>
+              <span
+                className={`${isDeep ? 'text-text-brand' : 'text-text-basic-inverse'}`}
+              >
+                {deepCount}
+              </span>
+            </button>
+          }
+        >
+          <div className='flex flex-col'>
+            {mockMembers.map((member) => (
+              <ItemMemberData
+                key={member.id}
+                profileImageUrl={member.profileImageUrl}
+                nickname={member.nickname}
+                isMe={member.isMe}
+                isMaker={member.isMaker}
+              />
+            ))}
+          </div>
+        </BottomSheetModal>
+      </div>
     </section>
   );
 }
