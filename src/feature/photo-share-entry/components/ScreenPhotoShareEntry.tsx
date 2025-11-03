@@ -99,7 +99,7 @@ export default function ScreenPhotoShareEntry({
 
         <button
           type='button'
-          className='text-body-md-medium text-text-subtler mt-3 px-6 underline'
+          className='typo-body-md-medium text-text-subtler mt-3 px-6 underline'
         >
           올릴 사진이 없어요
         </button>
