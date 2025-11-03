@@ -52,8 +52,6 @@ export default function SwiperPhotoList({
     return () => window.removeEventListener('resize', updateOffset);
   }, []);
 
-  console.log(thumbOffset);
-
   return (
     <div className='relative flex h-full flex-col gap-4'>
       {/* 위: 메인 이미지 Swiper */}
@@ -111,8 +109,8 @@ export default function SwiperPhotoList({
                 style={{
                   width: isActive ? 30 : 15,
                   height: 30,
-                  marginLeft: isActive ? 12 : 1,
-                  marginRight: isActive ? 12 : 1,
+                  marginLeft: isActive ? 12 : 0,
+                  marginRight: isActive ? 12 : 0,
                   transition: 'width 0.3s ease, margin 0.3s ease',
                 }}
                 onClick={() => {
