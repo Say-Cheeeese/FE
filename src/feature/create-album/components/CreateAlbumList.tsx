@@ -41,7 +41,7 @@ export default function CreateAlbumList() {
       {
         onSuccess: (result: CreateAlbumApiResponse) => {
           if (result.result.code) {
-            router.push(`/create-album/${result.result.code}`);
+            router.push(`/create-album/${result.result.code}/complete`);
           }
         },
         onError: (err: CreateAlbumError) => {
