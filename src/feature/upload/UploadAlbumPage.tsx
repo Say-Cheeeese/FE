@@ -1,8 +1,13 @@
+'use client';
+
+import { handleFileUpload } from '@/feature/create-album/utils/handleFileUpload';
 import AlbumPreviewCard from '@/feature/photo-share-entry/components/AlbumPreviewCard';
 import CheckNoImgModal from '@/feature/upload/CheckNoImgModal';
 import MarqueeCarousel from '@/global/components/carousel/MarqueeCarousel';
 import CustomHeader from '@/global/components/header/CustomHeader';
 import LongButton from '@/global/components/LongButton';
+import { useParams, useRouter } from 'next/navigation';
+import { useRef } from 'react';
 
 interface AlbumCard {
   imageUrl: string;
@@ -15,9 +20,29 @@ const MOCK_CARDS: AlbumCard[] = [];
 
 export default function UploadAlbumPage() {
   const cards = MOCK_CARDS; // ✅ 나중에 API 결과로 교체 예정
+  const params = useParams();
+  const router = useRouter();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  function handleButtonClick() {
+    fileInputRef.current?.click();
+  }
+
+  async function onFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const albumId = params.albumId as string;
+    await handleFileUpload(e, albumId, router);
+  }
 
   return (
     <div className='flex flex-col'>
+      <input
+        ref={fileInputRef}
+        type='file'
+        accept='image/*'
+        multiple
+        onChange={onFileChange}
+        className='hidden'
+      />
       <CustomHeader title='앨범 채우기' />
       <main className='flex min-h-[calc(100vh-72px)] flex-col items-center justify-between pt-6 pb-[calc(20px+env(safe-area-inset-bottom))]'>
         <div className='flex w-full flex-col items-center'>
@@ -78,7 +103,11 @@ export default function UploadAlbumPage() {
             </div>
           </div>
           <div className='w-full px-4'>
-            <LongButton text='내가 찍은 사진 공유하기' noFixed={true} />
+            <LongButton
+              text='내가 찍은 사진 공유하기'
+              noFixed={true}
+              onClick={handleButtonClick}
+            />
           </div>
           <CheckNoImgModal
             trigger={
