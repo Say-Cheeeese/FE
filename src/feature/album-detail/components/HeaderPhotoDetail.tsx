@@ -5,10 +5,16 @@ interface HeaderPhotoDetailProps {}
 export default function HeaderPhotoDetail({}: HeaderPhotoDetailProps) {
   return (
     <section className='flex items-center justify-between gap-3 p-5'>
-      <div>
-        <img src='/assets/onboarding/smile1.svg' width='32' height='32' />
+      <div className='h-8 w-8 flex-shrink-0'>
+        <img
+          src='/assets/onboarding/smile1.svg'
+          alt='프로필사진'
+          width='32'
+          height='32'
+          className='h-full w-full'
+        />
       </div>
-      <span className='typo-heading-sm-semibold text-text-basic-inverse w-full'>
+      <span className='typo-heading-sm-semibold text-text-basic-inverse flex-1 truncate'>
         김수한무거북이와두루
       </span>
       <button type='button'>
