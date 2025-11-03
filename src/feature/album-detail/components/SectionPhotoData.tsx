@@ -61,10 +61,10 @@ export default function SectionPhotoData({
           cancelText='취소'
           confirmText='삭제하기'
           confirmClassName='text-text-basic-inverse bg-button-accent-fill'
+          onConfirm={onDeleteClick}
           trigger={
             <button
               type='button'
-              onClick={onDeleteClick}
               className='bg-element-gray-lighter typo-body-1xl-semibold text-text-error w-full rounded-xl py-4'
             >
               사진 삭제하기
