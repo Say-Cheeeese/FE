@@ -12,7 +12,7 @@ export default function CreateComplete({ albumId }: CreateCompleteProps) {
   const router = useRouter();
 
   const handleClick = () => {
-    router.push(`/album/upload/${albumId}}`);
+    router.push(`/album/upload/${albumId}`);
   };
 
   return (
