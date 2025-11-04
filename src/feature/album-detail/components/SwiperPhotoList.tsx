@@ -78,6 +78,29 @@ export default function SwiperPhotoList({
               thumbSwiper.slideTo(sw.activeIndex);
             }
           }}
+          onTap={(swiper, event) => {
+            if (!swiper || swiper.destroyed) return;
+            // 마우스/터치 겸용으로 clientX 추출
+            const e = event as MouseEvent | TouchEvent;
+            let clientX: number | null = null;
+
+            if ('clientX' in e) {
+              clientX = e.clientX;
+            } else if ('changedTouches' in e && e.changedTouches.length > 0) {
+              clientX = e.changedTouches[0].clientX;
+            }
+
+            if (clientX == null) return;
+
+            const { left, width } = swiper.el.getBoundingClientRect();
+            const clickPosition = clientX - left;
+
+            if (clickPosition < width / 2) {
+              swiper.slidePrev();
+            } else {
+              swiper.slideNext();
+            }
+          }}
         >
           {images.map((src, i) => {
             const isActive = activeIndex === i;
