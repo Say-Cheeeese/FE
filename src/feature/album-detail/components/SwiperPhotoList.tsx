@@ -103,7 +103,7 @@ export default function SwiperPhotoList({
             mainSwiper.slidePrev();
           }}
           className='absolute top-0 left-0 z-10 h-full w-1/2 cursor-pointer bg-transparent'
-          aria-label='previous'
+          aria-label='이전'
         />
 
         {/* 오른쪽 클릭 영역: 다음 슬라이드 */}
@@ -114,7 +114,7 @@ export default function SwiperPhotoList({
             mainSwiper.slideNext();
           }}
           className='absolute top-0 right-0 z-10 h-full w-1/2 cursor-pointer bg-transparent'
-          aria-label='next'
+          aria-label='다음'
         />
       </div>
 
