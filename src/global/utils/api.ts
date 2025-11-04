@@ -36,7 +36,6 @@ client.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-    console.log(error.response);
 
     if (error.response?.status === 401 && !originalRequest._retry) {
       // TODO 401이 떠도 토큰갱신 필요없는경우 정의

@@ -8,7 +8,7 @@ export function saveFilesToStore(files: File[]) {
   const setImages = useImageStore.getState().setImages;
   setImages(
     files.map((file) => ({
-      id: `${file.name}-${file.size}-${file.lastModified}`,
+      id: `${file.name}-${crypto.randomUUID()}`,
       file,
     })),
   );

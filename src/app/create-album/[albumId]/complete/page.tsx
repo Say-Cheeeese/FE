@@ -1,6 +1,6 @@
 import CreateComplete from '@/feature/create-album/components/CreateComplete';
 
-export default async function page({
+export default async function Page({
   params,
 }: {
   params: Promise<{ albumId: string }>;

@@ -8,9 +8,9 @@ import { useEffect } from 'react';
 import { checkAvailableCount } from '../api/checkAvailableCount';
 import { validateImages } from '../utils/validateImages';
 
-type WaitingAlbumProps = {
+interface WaitingAlbumProps {
   albumId: string;
-};
+}
 
 export default function WaitingAlbum({ albumId }: WaitingAlbumProps) {
   const router = useRouter();
@@ -54,6 +54,7 @@ export default function WaitingAlbum({ albumId }: WaitingAlbumProps) {
         const elapsedTime = Date.now() - startTime;
         const remainingTime = Math.max(0, 1000 - elapsedTime);
         await new Promise((resolve) => setTimeout(resolve, remainingTime));
+        alert('사진 업로드 중 에러가 발생했습니다.');
         router.push(`/album/${albumId}/main`);
       }
     };

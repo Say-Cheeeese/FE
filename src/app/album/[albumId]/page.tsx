@@ -6,7 +6,7 @@ type PageProps = {
   }>;
 };
 
-export default async function page({ params }: PageProps) {
+export default async function Page({ params }: PageProps) {
   const { albumId } = await params;
   return <WaitingAlbum albumId={albumId} />;
 }

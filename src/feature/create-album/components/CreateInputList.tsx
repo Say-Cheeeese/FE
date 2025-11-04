@@ -77,11 +77,13 @@ export default function CreateInputList({
     onErrorChange?.(error !== '' || eventNameError !== '');
   };
 
-  // 오늘 날짜를 한국(KST) 기준으로 구하고, 어제 날짜를 YYYY-MM-DD로 구함
-  const kstNow = new Date(Date.now() + 9 * 60 * 60 * 1000);
-  const yesterday = new Date(kstNow.getTime() - 24 * 60 * 60 * 1000)
-    .toISOString()
-    .split('T')[0];
+  // 로컬 시간대 기준으로 어제 날짜를 YYYY-MM-DD로 계산
+  const yesterdayDate = new Date();
+  yesterdayDate.setDate(yesterdayDate.getDate() - 1);
+  const yyyy = yesterdayDate.getFullYear();
+  const mm = String(yesterdayDate.getMonth() + 1).padStart(2, '0'); // 0-11이므로 +1
+  const dd = String(yesterdayDate.getDate()).padStart(2, '0');
+  const yesterday = `${yyyy}-${mm}-${dd}`;
 
   return (
     <div className='flex flex-col gap-6 px-4'>

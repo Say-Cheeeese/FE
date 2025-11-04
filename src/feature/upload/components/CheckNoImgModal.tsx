@@ -1,11 +1,11 @@
 import ConfirmModal from '@/global/components/modal/ConfirmModal';
 import { ReactNode } from 'react';
 
-type CheckNoImgModalProps = {
+interface CheckNoImgModalProps {
   trigger: ReactNode;
   onConfirm?: () => void;
   onCancel?: () => void;
-};
+}
 
 export default function CheckNoImgModal({
   trigger,
