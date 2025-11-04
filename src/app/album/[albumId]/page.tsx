@@ -1,11 +1,12 @@
 import WaitingAlbum from '@/feature/create-album/components/WaitingAlbum';
 
 type PageProps = {
-  params: {
+  params: Promise<{
     albumId: string;
-  };
+  }>;
 };
 
-export default function page({ params }: PageProps) {
-  return <WaitingAlbum albumId={params.albumId} />;
+export default async function page({ params }: PageProps) {
+  const { albumId } = await params;
+  return <WaitingAlbum albumId={albumId} />;
 }
