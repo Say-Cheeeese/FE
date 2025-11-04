@@ -78,6 +78,29 @@ export default function SwiperPhotoList({
               thumbSwiper.slideTo(sw.activeIndex);
             }
           }}
+          onTap={(swiper, event) => {
+            if (!swiper || swiper.destroyed) return;
+            // 마우스/터치 겸용으로 clientX 추출
+            const e = event as MouseEvent | TouchEvent;
+            let clientX: number | null = null;
+
+            if ('clientX' in e) {
+              clientX = e.clientX;
+            } else if ('changedTouches' in e && e.changedTouches.length > 0) {
+              clientX = e.changedTouches[0].clientX;
+            }
+
+            if (clientX == null) return;
+
+            const { left, width } = swiper.el.getBoundingClientRect();
+            const clickPosition = clientX - left;
+
+            if (clickPosition < width / 2) {
+              swiper.slidePrev();
+            } else {
+              swiper.slideNext();
+            }
+          }}
         >
           {images.map((src, i) => {
             const isActive = activeIndex === i;
@@ -94,28 +117,6 @@ export default function SwiperPhotoList({
             );
           })}
         </Swiper>
-
-        {/* 왼쪽 클릭 영역: 이전 슬라이드 */}
-        <button
-          type='button'
-          onClick={() => {
-            if (!mainSwiper || mainSwiper.destroyed) return;
-            mainSwiper.slidePrev();
-          }}
-          className='absolute top-0 left-0 z-10 h-full w-1/2 cursor-pointer bg-transparent'
-          aria-label='이전'
-        />
-
-        {/* 오른쪽 클릭 영역: 다음 슬라이드 */}
-        <button
-          type='button'
-          onClick={() => {
-            if (!mainSwiper || mainSwiper.destroyed) return;
-            mainSwiper.slideNext();
-          }}
-          className='absolute top-0 right-0 z-10 h-full w-1/2 cursor-pointer bg-transparent'
-          aria-label='다음'
-        />
       </div>
 
       {/* 아래: 썸네일 컨트롤러 */}
@@ -131,20 +132,32 @@ export default function SwiperPhotoList({
           onSlideChange={(sw) => {
             const idx = sw.activeIndex;
             setActiveIndex(idx);
-            if (mainSwiper && !mainSwiper.destroyed) {
-              mainSwiper.slideTo(sw.activeIndex);
+            if (thumbSwiper && !thumbSwiper.destroyed) {
+              thumbSwiper.slideTo(sw.activeIndex);
             }
-            const vw = window.innerWidth;
-            sw.setTranslate(
-              calcThumbSwiperCenterOffset({
-                viewportWidth: vw,
-                activeMargin: 12,
-                activeWidth: 30,
-                inactiveWidth: 15,
-                inactiveMargin: 2,
-                index: idx,
-              }),
-            ); // 내가 정한 픽셀로 이동
+          }}
+          onClick={(swiper, event) => {
+            if (!swiper || swiper.destroyed) return;
+            // 마우스/터치 겸용으로 clientX 추출
+            const e = event as MouseEvent | TouchEvent;
+            let clientX: number | null = null;
+
+            if ('clientX' in e) {
+              clientX = e.clientX;
+            } else if ('changedTouches' in e && e.changedTouches.length > 0) {
+              clientX = e.changedTouches[0].clientX;
+            }
+
+            if (clientX == null) return;
+
+            const { left, width } = swiper.el.getBoundingClientRect();
+            const clickPosition = clientX - left;
+
+            if (clickPosition < width / 2) {
+              swiper.slidePrev();
+            } else {
+              swiper.slideNext();
+            }
           }}
         >
           {images.map((src, i) => {
