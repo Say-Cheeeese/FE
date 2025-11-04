@@ -1,5 +1,10 @@
-import UploadAlbumPage from '@/feature/upload/UploadAlbumPage';
+import UploadAlbumPage from '@/feature/upload/components/UploadAlbumPage';
 
-export default function Page() {
-  return <UploadAlbumPage />;
+type PageProps = {
+  params: Promise<{ albumId: string }>;
+};
+
+export default async function Page({ params }: PageProps) {
+  const { albumId } = await params;
+  return <UploadAlbumPage albumId={albumId} />;
 }

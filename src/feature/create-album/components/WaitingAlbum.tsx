@@ -39,8 +39,8 @@ export default function WaitingAlbum({ albumId }: WaitingAlbumProps) {
         }
 
         // 6MB 초과 파일이 없을 때만 서버 업로드 가능 개수 검증
-        const isAvailable = await checkAvailableCount(albumId, files.length);
-        if (!isAvailable) {
+        const availableCount = await checkAvailableCount(albumId);
+        if (files.length > availableCount) {
           // 업로드 가능 개수 초과 시 select로 이동
           router.push(`/album/${albumId}/select`);
           return;
