@@ -24,7 +24,7 @@ export async function validateUpload(
   }
 
   // 2. 업로드 가능 개수 검증
-  const canUpload = await checkAvailableCount(albumId, files.length);
+  const canUpload = await checkAvailableCount(albumId);
   if (!canUpload) {
     return {
       ok: false,
