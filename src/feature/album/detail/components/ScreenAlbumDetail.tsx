@@ -1,5 +1,7 @@
 import CustomHeader from '@/global/components/header/CustomHeader';
 import { ArrowDownUp, Menu } from 'lucide-react';
+import AlbumInfos from './AlbumInfos';
+import PhotoList from './PhotoList';
 
 interface ScreenAlbumDetailProps {}
 
@@ -24,6 +26,10 @@ export default function ScreenAlbumDetail({}: ScreenAlbumDetailProps) {
           </div>
         }
       />
+      <div className='flex flex-col'>
+        <AlbumInfos />
+        <PhotoList />
+      </div>
     </>
   );
 }
