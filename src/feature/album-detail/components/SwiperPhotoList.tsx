@@ -105,7 +105,7 @@ export default function SwiperPhotoList({
           {images.map((src, i) => {
             const isActive = activeIndex === i;
             return (
-              <SwiperSlide key={i} className=''>
+              <SwiperSlide key={i}>
                 <div className='flex h-full items-center justify-center'>
                   <img
                     src={src}
