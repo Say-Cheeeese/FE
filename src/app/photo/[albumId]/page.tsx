@@ -1,4 +1,4 @@
-import ScreenAlbumDetail from '@/feature/photo-detail/components/ScreenAlbumDetail';
+import ScreenPhotoDetail from '@/feature/photo-detail/components/ScreenPhotoDetail';
 
 export default async function Page({
   params,
@@ -7,5 +7,5 @@ export default async function Page({
 }) {
   const { albumId } = await params;
 
-  return <ScreenAlbumDetail albumId={albumId} />;
+  return <ScreenPhotoDetail albumId={albumId} />;
 }
