@@ -52,10 +52,10 @@ export default function ScreenPhotoShareEntry({
         </div>
 
         <div className='mt-3 flex flex-col items-center px-6'>
-          <h2 className='text-heading-md-semibold text-text-basic'>
+          <h2 className='typo-heading-md-semibold text-text-basic'>
             큐시즘 MT
           </h2>
-          <p className='text-body-md-medium text-text-subtle'>2025.08.23</p>
+          <p className='typo-body-md-medium text-text-subtle'>2025.08.23</p>
         </div>
 
         <div className='my-8 w-full'>
@@ -81,7 +81,7 @@ export default function ScreenPhotoShareEntry({
         {/* 말풍선 */}
         <div className='relative mt-6 mb-6 px-6'>
           <div className='relative mx-auto w-fit rounded-2xl bg-white px-4 py-2.5 shadow-[0_2px_8px_rgba(0,0,0,0.15)]'>
-            <div className='text-body-md-medium text-text-basic flex items-center space-x-2'>
+            <div className='typo-body-md-medium text-text-basic flex items-center space-x-2'>
               <span role='img' aria-label='카메라'>
                 📸
               </span>
@@ -99,7 +99,7 @@ export default function ScreenPhotoShareEntry({
 
         <button
           type='button'
-          className='text-body-md-medium text-text-subtler mt-3 px-6 underline'
+          className='typo-body-md-medium text-text-subtler mt-3 px-6 underline'
         >
           올릴 사진이 없어요
         </button>

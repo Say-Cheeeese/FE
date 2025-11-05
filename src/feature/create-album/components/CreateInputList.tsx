@@ -1,6 +1,7 @@
 'use client';
+
 import XInput from '@/global/components/XInput';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 interface CreateInputListProps {
   eventName: string;
@@ -76,6 +77,14 @@ export default function CreateInputList({
     onErrorChange?.(error !== '' || eventNameError !== '');
   };
 
+  // 로컬 시간대 기준으로 어제 날짜를 YYYY-MM-DD로 계산
+  const yesterdayDate = new Date();
+  yesterdayDate.setDate(yesterdayDate.getDate() - 1);
+  const yyyy = yesterdayDate.getFullYear();
+  const mm = String(yesterdayDate.getMonth() + 1).padStart(2, '0'); // 0-11이므로 +1
+  const dd = String(yesterdayDate.getDate()).padStart(2, '0');
+  const yesterday = `${yyyy}-${mm}-${dd}`;
+
   return (
     <div className='flex flex-col gap-6 px-4'>
       <XInput
@@ -92,6 +101,7 @@ export default function CreateInputList({
         onChange={onEventDateChange}
         placeholder='YYYY-MM-DD'
         type='date'
+        max={yesterday}
       />
       <XInput
         label='참여 인원'

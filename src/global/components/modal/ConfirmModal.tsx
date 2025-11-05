@@ -12,7 +12,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { cn } from '@/lib/utils';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 
 type ConfirmModalProps = {
   /** 트리거 버튼/노드 (예: <button>탈퇴하기</button>) */
@@ -59,6 +59,25 @@ export default function ConfirmModal({
     onCancel?.();
   }, [onCancel]);
 
+  useEffect(() => {
+    // data-scroll-locked 속성 제거
+    const removeScrollLock = () => {
+      const body = document.body;
+      if (body.hasAttribute('data-scroll-locked')) {
+        body.removeAttribute('data-scroll-locked');
+      }
+    };
+
+    // 컴포넌트 마운트 시와 주기적으로 체크
+    removeScrollLock();
+    const interval = setInterval(removeScrollLock, 100);
+
+    return () => {
+      clearInterval(interval);
+      removeScrollLock();
+    };
+  }, []);
+
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>
@@ -69,7 +88,12 @@ export default function ConfirmModal({
             {title}
           </AlertDialogTitle>
           {description ? (
-            <AlertDialogDescription>{description}</AlertDialogDescription>
+            <AlertDialogDescription
+              className='typo-body-lg-regular text-text-subtle whitespace-pre-line'
+              style={{ whiteSpace: 'pre-line' }}
+            >
+              {description}
+            </AlertDialogDescription>
           ) : null}
         </AlertDialogHeader>
 
@@ -77,7 +101,9 @@ export default function ConfirmModal({
           <AlertDialogCancel
             onClick={handleCancel}
             className={cn(
-              'typo-body-lg-semibold text-text-subtle bg-button-tertiary-fill h-auto border-none py-3 hover:bg-neutral-200',
+              'flex h-12 items-center justify-center px-5 py-2.5',
+              'bg-button-tertiary-fill hover:bg-neutral-200',
+              'typo-body-lg-semibold! text-text-subtle!',
               cancelClassName,
             )}
           >
@@ -87,7 +113,10 @@ export default function ConfirmModal({
           <AlertDialogAction
             onClick={handleConfirm}
             className={cn(
-              'typo-body-lg-semibold text-text-primary bg-button-primary-fill h-auto py-3 hover:bg-yellow-400/90',
+              'flex h-12 items-center justify-center px-5 py-2.5',
+              'bg-button-primary-fill active:bg-button-primary-fill-pressed active:text-text-primary',
+              'typo-body-lg-semibold! text-text-primary!',
+              'transition-colors duration-100',
               confirmClassName,
             )}
           >

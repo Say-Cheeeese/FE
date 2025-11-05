@@ -26,7 +26,7 @@ export default function AlbumPreviewCard({
           alt={`${nickname}님의 프로필사진`}
           className='h-6 w-6 rounded-full object-cover'
         />
-        <span className='text-body-sm-semibold truncate'>{nickname}</span>
+        <span className='typo-body-sm-semibold truncate'>{nickname}</span>
       </div>
     </div>
   );

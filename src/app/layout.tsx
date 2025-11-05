@@ -1,3 +1,4 @@
+import QueryProvider from '@/global/context/QueryProvider';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import Script from 'next/script';
@@ -49,7 +50,7 @@ export default function RootLayout({
       </Script>
 
       <body
-        className={`${pretendard.variable} antialiased`}
+        className={`${pretendard.className} antialiased`}
         style={{
           maxWidth: '430px',
           width: '100vw',
@@ -57,7 +58,7 @@ export default function RootLayout({
           background: '#fff',
         }}
       >
-        {children}
+        <QueryProvider>{children}</QueryProvider>
       </body>
     </html>
   );

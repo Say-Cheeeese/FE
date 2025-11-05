@@ -1,3 +1,7 @@
+import {
+  ACCESS_TOKEN_KEY,
+  REFRESH_TOKEN_KEY,
+} from '@/global/constants/cookies';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
@@ -12,7 +16,6 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    // 백엔드 서버에 code 전송
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_DEV_URL}/v1/auth/exchange?code=${code}`,
       {
@@ -29,34 +32,7 @@ export async function GET(request: NextRequest) {
 
     const data = await response.json();
 
-    // 토큰을 HttpOnly 쿠키로 설정
-    const responseWithCookies = NextResponse.json({
-      isSuccess: data.isSuccess,
-      message: data.message,
-      user: {
-        userId: data.result.userId,
-        name: data.result.name,
-        email: data.result.email,
-        isOnboarded: data.result.isOnboarded,
-      },
-    });
-
-    // HttpOnly 쿠키 설정
-    responseWithCookies.cookies.set('accessToken', data.result.accessToken, {
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 60 * 60 * 2, // 2시간
-      path: '/',
-    });
-
-    responseWithCookies.cookies.set('refreshToken', data.result.refreshToken, {
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 60 * 60 * 24 * 7, // 7일
-      path: '/',
-    });
-
-    // isOnboarded 값에 따라 리다이렉트 경로 분기
+    // ✅ 쿠키 세팅 및 리디렉션
     const redirectPath = data.result.isOnboarded ? '/main' : '/onboarding';
     const redirectUrl = new URL(redirectPath, request.url);
     redirectUrl.searchParams.set('login', 'success');
@@ -66,8 +42,28 @@ export async function GET(request: NextRequest) {
     );
     redirectUrl.searchParams.set('userId', data.result.userId);
     redirectUrl.searchParams.set('name', encodeURIComponent(data.result.name));
-    return NextResponse.redirect(redirectUrl);
+
+    // redirect 응답 객체 생성
+    const res = NextResponse.redirect(redirectUrl);
+
+    // ✅ 쿠키 설정 (redirect 응답에 바로 세팅)
+    res.cookies.set(ACCESS_TOKEN_KEY, data.result.accessToken, {
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 2, // 2시간
+      path: '/',
+    });
+
+    res.cookies.set(REFRESH_TOKEN_KEY, data.result.refreshToken, {
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24 * 7, // 7일
+      path: '/',
+    });
+
+    return res;
   } catch (error) {
+    console.error('Auth callback error:', error);
     return NextResponse.json(
       { error: '서버사이드에서 토큰 처리 중 오류 발생' },
       { status: 500 },

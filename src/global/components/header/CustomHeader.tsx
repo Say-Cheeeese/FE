@@ -105,8 +105,11 @@ export default function CustomHeader({
           <div className='flex items-center gap-4'>{rightContent}</div>
         )}
       </div>
-      {/* 헤더로인해 가려지는 영역이 없도록 아래 요소 추가 */}
-      <div style={{ height: HEADER_HEIGHT }} />
+      {/* 헤더로 인해 가려지는 영역이 없도록 아래 요소 추가 */}
+      <div
+        style={{ height: HEADER_HEIGHT }}
+        className={`[height:${HEADER_HEIGHT}px]`}
+      />
     </>
   );
 }

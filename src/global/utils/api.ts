@@ -1,10 +1,10 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
+import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from '../constants/cookies';
 import { buildQuery } from './buildQuery';
 import { getCookie, removeCookie, setCookie } from './cookies';
-import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from '../constants/cookies';
 
 // TODO : 공통으로 사용하는 api url 을 사용해야함. 임시 상수 생성
-const API_URL = 'http://dev.say-cheese.me';
+const API_URL = 'https://dev.say-cheese.me';
 
 type RequestOptions = {
   path: string;
@@ -39,7 +39,7 @@ client.interceptors.response.use(
 
     if (error.response?.status === 401 && !originalRequest._retry) {
       // TODO 401이 떠도 토큰갱신 필요없는경우 정의
-      //   if (originalRequest.url?.includes('/auth/login')) {
+      //   if (     originalRequest.url?.includes('/auth/login')) {
       //     return Promise.reject(error);
       //   }
 
@@ -48,13 +48,15 @@ client.interceptors.response.use(
       try {
         const refreshToken = getCookie(REFRESH_TOKEN_KEY);
         if (!refreshToken) {
+          console.log('No refresh token');
+          removeCookie(ACCESS_TOKEN_KEY);
+          removeCookie(REFRESH_TOKEN_KEY);
+          window.location.href = '/login';
           throw new Error('No refresh token');
         }
 
-        const response = await axios.post(`${API_URL}/v1/auth/reissue`, null, {
-          data: {
-            refreshToken,
-          },
+        const response = await axios.post(`${API_URL}/v1/auth/reissue`, {
+          refreshToken,
         });
 
         const { accessToken, refreshToken: newRefreshToken } =
@@ -72,6 +74,7 @@ client.interceptors.response.use(
         removeCookie(ACCESS_TOKEN_KEY);
         removeCookie(REFRESH_TOKEN_KEY);
         console.error('Token refresh failed:', refreshError);
+        window.location.href = '/login';
         return Promise.reject(refreshError);
       }
     }
@@ -107,12 +110,17 @@ async function request<T>(
     }>(config);
     return res.data;
   } catch (err) {
-    const e = err as AxiosError;
-    const status = e.response?.status;
-    const statusText =
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (e.response as any)?.statusText || e.message || 'Unknown Error';
+    const e = err as AxiosError<{
+      code: number;
+      isSuccess: boolean;
+      message: string;
+    }>;
+    if (e.response?.data) {
+      throw e.response.data;
+    }
 
+    const status = e.response?.status;
+    const statusText = e.message || 'Unknown Error';
     const errorMessage = `API Error: ${status ?? 'N/A'}`;
 
     if (status === 500 || status === 401) {
