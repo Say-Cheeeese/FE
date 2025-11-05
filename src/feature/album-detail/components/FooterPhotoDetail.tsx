@@ -61,7 +61,7 @@ export default function FooterPhotoDetail({}: FooterPhotoDetailProps) {
   };
 
   return (
-    <section className='mx-10 flex justify-around py-5'>
+    <section className='mx-10 flex shrink-0 justify-around py-5'>
       <BottomSheetModal
         title={'사진 정보'}
         trigger={
