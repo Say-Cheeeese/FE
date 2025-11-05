@@ -1,4 +1,4 @@
-import ScreenAlbumDetail from '@/feature/album-detail/components/ScreenAlbumDetail';
+import ScreenAlbumDetail from '@/feature/photo-detail/components/ScreenAlbumDetail';
 
 export default async function Page({
   params,
