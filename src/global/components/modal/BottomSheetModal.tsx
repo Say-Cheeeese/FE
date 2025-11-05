@@ -1,6 +1,5 @@
 'use client';
 
-import React from 'react';
 import {
   Drawer,
   DrawerClose,
@@ -9,6 +8,7 @@ import {
   DrawerTrigger,
 } from '@/components/ui/drawer';
 import { cn } from '@/lib/utils';
+import React from 'react';
 
 type BottomSheetModalProps = {
   /** 트리거 버튼/노드 (예: <button>열기</button>) */
@@ -47,19 +47,23 @@ export default function BottomSheetModal({
         )}
         showHandle={showHandle}
       >
-        {/* 스크린리더용 제목 (항상 필요) */}
-        <DrawerTitle className={title ? '' : 'sr-only'}>
-          {title || '모달'}
-        </DrawerTitle>
+        <div className='px-4 py-6'>
+          {/* 스크린리더용 제목 (항상 필요) */}
+          <DrawerTitle
+            className={`typo-heading-md-bold mb-4 px-2 ${title ? '' : 'sr-only'}`}
+          >
+            {title || '모달'}
+          </DrawerTitle>
 
-        {showCloseButton && (
-          <div className='relative'>
-            <DrawerClose className='text-text-subtle hover:text-text-basic absolute top-4 right-4 transition-colors'>
-              ✕
-            </DrawerClose>
-          </div>
-        )}
-        {children}
+          {showCloseButton && (
+            <div className='relative'>
+              <DrawerClose className='text-text-subtle hover:text-text-basic absolute top-4 right-4 transition-colors'>
+                ✕
+              </DrawerClose>
+            </div>
+          )}
+          {children}
+        </div>
       </DrawerContent>
     </Drawer>
   );

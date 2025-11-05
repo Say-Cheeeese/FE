@@ -84,7 +84,7 @@ export default function ConfirmModal({
 
       <AlertDialogContent>
         <AlertDialogHeader className='pb-6'>
-          <AlertDialogTitle className='typo-heading-sm-semibold text-text-basic pt-6'>
+          <AlertDialogTitle className='typo-heading-sm-semibold text-text-basic pt-4'>
             {title}
           </AlertDialogTitle>
           {description ? (
