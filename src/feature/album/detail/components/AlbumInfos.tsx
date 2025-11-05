@@ -1,6 +1,6 @@
 'use client';
 
-import BestCheeseCut from './BestCheeseCut';
+import AlbumBestCut from './AlbumBestCut';
 
 interface AlbumInfosProps {}
 
@@ -15,7 +15,7 @@ export default function AlbumInfos({}: AlbumInfosProps) {
 
         {/* 텍스트 블록 */}
         <div className='flex flex-col'>
-          <h1 className='typo-heading-md-bold text-text-basic truncate text-[15px] font-semibold'>
+          <h1 className='typo-heading-md-bold text-text-basic truncate'>
             큐시즘 MT
           </h1>
           <span className='typo-body-sm-regular text-text-subtler'>
@@ -24,7 +24,7 @@ export default function AlbumInfos({}: AlbumInfosProps) {
         </div>
       </div>
 
-      <BestCheeseCut />
+      <AlbumBestCut />
     </section>
   );
 }
