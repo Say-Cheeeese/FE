@@ -5,8 +5,7 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { checkAvailableCount } from '../api/checkAvailableCount';
-import { validateImages } from '../utils/validateImages';
+import { validateUpload } from '../utils/validateUpload';
 
 interface WaitingAlbumProps {
   albumId: string;
@@ -24,29 +23,21 @@ export default function WaitingAlbum({ albumId }: WaitingAlbumProps) {
         // 1. 이미지 파일 추출
         const files = images.map((img) => img.file);
 
-        // 2. 6MB 초과 파일 검증
-        const validation = validateImages(files);
+        // 2. 업로드 검증(용량 + 업로드 가능 개수)
+        const result = await validateUpload(files, albumId);
 
-        // 3. 최소 1초 대기 보장
+        // 3. 최소 1초 대기 보장 후 분기
         const elapsedTime = Date.now() - startTime;
         const remainingTime = Math.max(0, 1000 - elapsedTime);
         await new Promise((resolve) => setTimeout(resolve, remainingTime));
-        if (!validation.valid) {
-          console.error('Oversized files:', validation.oversizedFiles);
-          // 6MB 초과 파일이 있으면 select 페이지로 리다이렉트
+
+        if (!result.ok) {
+          // 용량 초과 또는 업로드 가능 개수 초과 시 select로 이동
           router.push(`/album/${albumId}/select`);
           return;
         }
 
-        // 6MB 초과 파일이 없을 때만 서버 업로드 가능 개수 검증
-        const availableCount = await checkAvailableCount(albumId);
-        if (files.length > availableCount) {
-          // 업로드 가능 개수 초과 시 select로 이동
-          router.push(`/album/${albumId}/select`);
-          return;
-        }
-
-        // 검증 통과하면 main 페이지로 이동
+        // 검증 통과 시 main 페이지로 이동
         router.push(`/album/${albumId}/main`);
       } catch (err) {
         console.error('Image validation error:', err);

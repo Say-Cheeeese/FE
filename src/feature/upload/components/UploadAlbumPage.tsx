@@ -51,6 +51,7 @@ export default function UploadAlbumPage({ albumId }: UploadAlbumPageProps) {
           <AvailableCountBubble albumId={albumId} />
           <UploadButton albumId={albumId} />
           <CheckNoImgModal
+            albumId={albumId}
             trigger={
               <button
                 type='button'
