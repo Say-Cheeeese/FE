@@ -87,7 +87,7 @@ export default function OpenAlbum({
             )}
 
             {/* 썸네일 3개일 때만 side2 */}
-            {count === 3 && (
+            {count >= 3 && (
               <div
                 style={{ gridArea: 'side2' }}
                 className='overflow-hidden bg-neutral-400'

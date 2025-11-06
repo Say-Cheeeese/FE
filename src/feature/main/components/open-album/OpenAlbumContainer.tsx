@@ -4,8 +4,6 @@ import ButtonMore from './ButtonMore';
 import OpenAlbum from './OpenAlbum';
 import ToggleAlbumType, { AlbumType } from './ToggleAlbumType';
 
-interface OpenAlbumContainerProps {}
-
 interface OpenAlbumItem {
   author: string;
   date: string;
@@ -17,61 +15,64 @@ interface OpenAlbumItem {
   isMine: boolean;
 }
 
+// 실제 데이터라고 가정
+const albums: OpenAlbumItem[] = [
+  {
+    author: '임민서',
+    date: '2025.08.09',
+    expirationTime: '2일 2시간',
+    joinedMembers: 7,
+    totalMembers: 8,
+    title: '큐시즘 OT',
+    thumbnails: [
+      '/ut/1주차_1.jpg',
+      '/ut/1주차_2.jpg',
+      '/ut/1주차_3.jpg',
+      '/ut/1주차_4.jpg',
+    ],
+    isMine: true,
+  },
+  {
+    author: '이유정',
+    date: '2025.08.16',
+    expirationTime: '3일 12시간',
+    joinedMembers: 7,
+    totalMembers: 8,
+    title: '집중협업세션',
+    thumbnails: [
+      '/ut/2주차_1.jpg',
+      '/ut/2주차_2.jpg',
+      '/ut/2주차_3.jpg',
+      '/ut/2주차_4.jpg',
+    ],
+    isMine: false,
+  },
+  {
+    author: '맹소현',
+    date: '2025.08.23',
+    expirationTime: '4일 2시간',
+    joinedMembers: 7,
+    totalMembers: 8,
+    title: '큐시즘 UT',
+    thumbnails: ['/ut/3주차_1.jpg', '/ut/3주차_2.jpg', '/ut/3주차_3.jpg'],
+    isMine: false,
+  },
+  {
+    author: '정윤서',
+    date: '2025.08.30',
+    expirationTime: '5일 2시간',
+    joinedMembers: 7,
+    totalMembers: 8,
+    title: '파트별 상호 피드백',
+    isMine: false,
+  },
+];
+
+interface OpenAlbumContainerProps {}
+
 export default function OpenAlbumContainer({}: OpenAlbumContainerProps) {
   const [albumType, setAlbumType] = useState<AlbumType>('all');
   const [visibleCount, setVisibleCount] = useState(2);
-
-  // 실제 데이터라고 가정
-  const albums: OpenAlbumItem[] = [
-    {
-      author: '맹소현',
-      date: '2025.08.23',
-      expirationTime: '3일 2시간',
-      joinedMembers: 7,
-      totalMembers: 8,
-      title: '큐시즘 MT',
-      thumbnails: [
-        'https://fastly.picsum.photos/id/1/200/300.jpg?hmac=jH5bDkLr6Tgy3oAg5khKCHeunZMHq0ehBZr6vGifPLY',
-        'https://fastly.picsum.photos/id/1/200/300.jpg?hmac=jH5bDkLr6Tgy3oAg5khKCHeunZMHq0ehBZr6vGifPLY',
-        'https://fastly.picsum.photos/id/1/200/300.jpg?hmac=jH5bDkLr6Tgy3oAg5khKCHeunZMHq0ehBZr6vGifPLY',
-      ],
-      isMine: true,
-    },
-    {
-      author: '맹소현',
-      date: '2025.08.23',
-      expirationTime: '3일 2시간',
-      joinedMembers: 7,
-      totalMembers: 8,
-      title: '큐시즘 MT',
-      thumbnails: [
-        'https://fastly.picsum.photos/id/1/200/300.jpg?hmac=jH5bDkLr6Tgy3oAg5khKCHeunZMHq0ehBZr6vGifPLY',
-        'https://fastly.picsum.photos/id/1/200/300.jpg?hmac=jH5bDkLr6Tgy3oAg5khKCHeunZMHq0ehBZr6vGifPLY',
-      ],
-      isMine: false,
-    },
-    {
-      author: '맹소현',
-      date: '2025.08.23',
-      expirationTime: '3일 2시간',
-      joinedMembers: 7,
-      totalMembers: 8,
-      title: '큐시즘 MT',
-      thumbnails: [
-        'https://fastly.picsum.photos/id/1/200/300.jpg?hmac=jH5bDkLr6Tgy3oAg5khKCHeunZMHq0ehBZr6vGifPLY',
-      ],
-      isMine: false,
-    },
-    {
-      author: '맹소현',
-      date: '2025.08.23',
-      expirationTime: '3일 2시간',
-      joinedMembers: 7,
-      totalMembers: 8,
-      title: '큐시즘 MT',
-      isMine: false,
-    },
-  ];
 
   useEffect(() => {
     setVisibleCount(2);
