@@ -3,9 +3,10 @@
 import { useCheckImages } from '@/feature/create-album/hook/useCheckImages';
 import { validateImages } from '@/feature/create-album/utils/validateImages';
 import LongButton from '@/global/components/LongButton';
+import { AlbumToastList } from '@/global/components/toast/AlbumToast';
 import { useImageStore } from '@/store/useImageStore';
 import Image from 'next/image';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 
 type ImageWithUrl = {
@@ -18,15 +19,24 @@ type ImageWithUrl = {
 export default function SelectAlbumBody() {
   const { albumId } = useParams() as { albumId: string };
   const { images } = useImageStore();
+  const router = useRouter();
+
+  // images가 없으면 업로드 페이지로 이동
+  useEffect(() => {
+    if (images.length === 0 && albumId) {
+      router.push(`/album/upload/${albumId}`);
+    }
+  }, [images, albumId, router]);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [availableCount, setAvailableCount] = useState<number | null>(null);
-  const [toast, setToast] = useState<string | null>(null);
+  const [toasts, setToasts] = useState<string[]>([]);
   const { mutate: checkImagesMutate } = useCheckImages();
 
   const showToast = (message: string) => {
-    setToast(message);
-    const id = setTimeout(() => setToast(null), 2500);
-    return () => clearTimeout(id);
+    setToasts((prev) => [...prev, message]);
+    // setTimeout(() => {
+    //   setToasts((prev) => prev.slice(1));
+    // }, 2000);
   };
   console.log('images:', images);
   const processedImages = useMemo<ImageWithUrl[]>(() => {
@@ -69,11 +79,11 @@ export default function SelectAlbumBody() {
           const msgs: string[] = [];
           if (oversizedFiles.length > 0) {
             msgs.push(
-              `${oversizedFiles.length}장의 사진이 6MB를 초과하여 선택할 수 없습니다.`,
+              `6MB를 초과한 사진 ${oversizedFiles.length}장이 제외되었어요`,
             );
           }
           if (files.length > availableCount) {
-            msgs.push(`최대 ${availableCount}장까지 업로드할 수 있어요.`);
+            msgs.push('지금 앨범에 담을 수 있는 만큼만 선택되었어요');
           }
           if (msgs.length) showToast(msgs.join(' '));
         },
@@ -105,7 +115,7 @@ export default function SelectAlbumBody() {
           총 {images.length}장
         </span>
         <span className='typo-body-lg-medium text-text-subtle'>
-          {selectedIds.size}/{availableCount ?? '-'}
+          {selectedIds.size}/{availableCount}
         </span>
       </div>
       <div
@@ -145,11 +155,7 @@ export default function SelectAlbumBody() {
         text={`앨범에 ${selectedIds.size}장 채우기`}
         noFixed={false}
       />
-      {toast && (
-        <div className='fixed bottom-6 left-1/2 z-[2000] -translate-x-1/2 rounded-md bg-black/80 px-4 py-2 text-white shadow-md'>
-          {toast}
-        </div>
-      )}
+      {toasts.length > 0 && <AlbumToastList toasts={toasts} />}
     </div>
   );
 }
