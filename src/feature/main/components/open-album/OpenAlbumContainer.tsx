@@ -83,7 +83,7 @@ export default function OpenAlbumContainer({}: OpenAlbumContainerProps) {
   return (
     <section className='mb-16 px-5'>
       <h2 className='typo-heading-md-semibold pb-4'>
-        열린 앨범 {filteredAlbums.length}
+        열린 앨범 {albums.length}
       </h2>
       <ToggleAlbumType
         value={albumType}
