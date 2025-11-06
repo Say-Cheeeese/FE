@@ -2,7 +2,9 @@
 import { useState } from 'react';
 import ButtonMore from './ButtonMore';
 import OpenAlbum from './OpenAlbum';
-import ToggleAlbumType, { AlbumType } from './ToggleAlbumType';
+import ToggleAlbumType from './ToggleAlbumType';
+
+type AlbumType = 'all' | 'mine';
 
 interface OpenAlbumContainerProps {}
 
@@ -14,6 +16,7 @@ export default function OpenAlbumContainer({}: OpenAlbumContainerProps) {
       <h2 className='typo-heading-md-semibold pb-4'>열린 앨범 4</h2>
       <ToggleAlbumType
         value={albumType}
+        labels={{ all: '전체', mine: '내가 만든 앨범' }}
         onChange={(next) => setAlbumType(next)}
       />
       <div className='mt-4 mb-5 flex flex-col gap-5'>
