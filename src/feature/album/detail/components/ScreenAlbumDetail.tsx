@@ -1,6 +1,7 @@
 import CustomHeader from '@/global/components/header/CustomHeader';
 import { ArrowDownUp, Menu } from 'lucide-react';
 import AlbumInfos from './AlbumInfos';
+import FooterAlbumDetail from './FooterAlbumDetail';
 import PhotoList from './PhotoList';
 
 interface ScreenAlbumDetailProps {
@@ -32,6 +33,7 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
         <AlbumInfos />
         <PhotoList />
       </div>
+      <FooterAlbumDetail />
     </>
   );
 }

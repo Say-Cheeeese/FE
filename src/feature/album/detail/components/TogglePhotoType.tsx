@@ -1,20 +1,21 @@
-'use client';
 export type AlbumType = 'all' | 'mine';
 
-interface ToggleAlbumTypeProps {
+interface TogglePhotoTypeProps {
   value: AlbumType;
   onChange: (next: AlbumType) => void;
   labels?: Record<AlbumType | string, string>;
 }
 
-export default function ToggleAlbumType({
+export default function TogglePhotoType({
   value,
   onChange,
   labels = { all: '전체', mine: '내가 만든 앨범' },
-}: ToggleAlbumTypeProps) {
+}: TogglePhotoTypeProps) {
   return (
     <div
-      className={'bg-element-gray-light flex w-full gap-[2px] rounded-full p-1'}
+      className={
+        'bg-element-gray-light mb-4 flex w-full gap-[2px] rounded-full p-1'
+      }
     >
       {Object.entries(labels).map(([key, label]) => {
         const albumType = key as AlbumType;

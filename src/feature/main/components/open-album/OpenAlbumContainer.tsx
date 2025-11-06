@@ -16,7 +16,7 @@ export default function OpenAlbumContainer({}: OpenAlbumContainerProps) {
         value={albumType}
         onChange={(next) => setAlbumType(next)}
       />
-      <div className='mb-5 flex flex-col gap-5'>
+      <div className='mt-4 mb-5 flex flex-col gap-5'>
         <OpenAlbum
           author='맹소현'
           date='2025.08.23'
