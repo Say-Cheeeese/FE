@@ -3,9 +3,9 @@
 import { useCheckImages } from '@/feature/create-album/hook/useCheckImages';
 import { validateImages } from '@/feature/create-album/utils/validateImages';
 import LongButton from '@/global/components/LongButton';
+import PhotoBox from '@/global/components/photo/PhotoBox';
 import { AlbumToastList } from '@/global/components/toast/AlbumToast';
 import { useImageStore } from '@/store/useImageStore';
-import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 
@@ -125,26 +125,17 @@ export default function SelectAlbumBody() {
         {processedImages.map((img) => {
           const isSelected = selectedIds.has(img.id);
           return (
-            <div
-              key={img.id}
-              className='relative w-full'
-              style={{ paddingTop: '100%' }} // 정사각형 박스
-              onClick={() => toggleSelect(img.id, img.isOversized)}
-            >
-              <Image
-                src={img.url}
-                alt={`이미지 ${img.id}`}
-                fill
-                className={`absolute top-0 left-0 h-full w-full object-cover ${img.isOversized ? 'opacity-30' : ''} ${!isSelected && !img.isOversized ? 'opacity-50' : ''}`}
+            <div key={img.id} className='relative aspect-square w-full'>
+              <PhotoBox
+                imageSrc={img.url}
+                imageAlt={`이미지 ${img.id}`}
+                pressed={isSelected}
+                disabled={img.isOversized}
+                onPress={() => toggleSelect(img.id, img.isOversized)}
               />
               {img.isOversized && (
-                <div className='absolute inset-0 flex items-center justify-center bg-black/50'>
-                  <span className='text-body-sm-bold text-white'>6MB 초과</span>
-                </div>
-              )}
-              {!img.isOversized && isSelected && (
-                <div className='absolute top-2 right-2 flex h-6 w-6 items-center justify-center rounded-full bg-blue-500'>
-                  <span className='text-white'>✓</span>
+                <div className='pointer-events-none absolute inset-0 z-10 flex items-center justify-center bg-black/50'>
+                  <span className='typo-body-sm-bold text-white'>6MB 초과</span>
                 </div>
               )}
             </div>
