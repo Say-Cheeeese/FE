@@ -38,7 +38,7 @@ export default function CloseAlbumContainer() {
         </h3>
       </Link>
       <div className='flex flex-col gap-4'>
-        {closeAlbums.length < 0 ? (
+        {closeAlbums.length > 0 ? (
           closeAlbums.map((album, index) => (
             <CloseAlbum
               key={index}
