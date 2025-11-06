@@ -68,9 +68,7 @@ export default function PhotoBox({
           // pressed나 downloaded일 때만 border 추가
           (pressed || downloaded) && 'border-[3px]',
           pressed && 'border-border-primary',
-          downloaded &&
-            !pressed &&
-            'border-b-border-primary border-t-transparent border-r-transparent border-l-transparent',
+          downloaded && !pressed && 'border-b-border-primary border-t-transparent border-r-transparent border-l-transparent',
         )}
       />
 
