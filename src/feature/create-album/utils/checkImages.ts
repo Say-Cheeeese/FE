@@ -1,6 +1,5 @@
 import { checkAvailableCount } from '@/feature/create-album/api/checkAvailableCount';
 import { validateImages } from '@/feature/create-album/utils/validateImages';
-import { checkAvailableCountServer } from '../api/checkAvailableCount.server';
 
 export type CheckImagesResult = {
   oversizedFiles: string[];
@@ -18,7 +17,7 @@ export async function checkImages(
   albumId: string,
 ): Promise<CheckImagesResult> {
   const { oversizedFiles } = validateImages(files);
-  const availableCount = await checkAvailableCountServer(albumId);
+  const availableCount = await checkAvailableCount(albumId);
 
   return {
     oversizedFiles,
