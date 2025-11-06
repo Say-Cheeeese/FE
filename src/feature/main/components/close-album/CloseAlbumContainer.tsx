@@ -1,16 +1,35 @@
 import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
+import EmptyAlbum from '../EmptyAlbum';
 import CloseAlbum from './CloseAlbum';
 
-interface CloseAlbumContainerProps {}
+interface CloseAlbumData {
+  title: string;
+  date: string;
+  author: string;
+  images: string[];
+}
 
-export default function CloseAlbumContainer({}: CloseAlbumContainerProps) {
+const closeAlbums: CloseAlbumData[] = [
+  {
+    title: '큐시즘 OT',
+    date: '2025.08.09',
+    author: '임민서',
+    images: [
+      '/ut/1주차_1.jpg',
+      '/ut/1주차_2.jpg',
+      '/ut/1주차_3.jpg',
+      '/ut/1주차_4.jpg',
+    ],
+  },
+];
+
+export default function CloseAlbumContainer() {
   return (
-    <section className='mb-10 px-5'>
-      {/* TODO : 링크주소 변경 필요 */}
+    <section className='mb-20 px-5'>
       <Link href='/'>
         <h3 className='typo-heading-md-semibold text-text-subtle mb-4 flex items-center'>
-          닫힌 앨범 4{' '}
+          닫힌 앨범 {closeAlbums.length}
           <ChevronRight
             width={24}
             height={24}
@@ -19,50 +38,19 @@ export default function CloseAlbumContainer({}: CloseAlbumContainerProps) {
         </h3>
       </Link>
       <div className='flex flex-col gap-4'>
-        <CloseAlbum
-          title='큐시즘 MT'
-          date='2025.08.23'
-          author='맹소현'
-          images={[
-            'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d',
-            'https://images.unsplash.com/photo-1519681393784-d120267933ba',
-            'https://images.unsplash.com/photo-1506765515384-028b60a970df',
-            'https://images.unsplash.com/photo-1522202176988-66273c2fd55f',
-          ]}
-        />
-        <CloseAlbum
-          title='큐시즘 MT'
-          date='2025.08.23'
-          author='맹소현'
-          images={[
-            'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d',
-            'https://images.unsplash.com/photo-1519681393784-d120267933ba',
-            'https://images.unsplash.com/photo-1506765515384-028b60a970df',
-            'https://images.unsplash.com/photo-1522202176988-66273c2fd55f',
-          ]}
-        />
-        <CloseAlbum
-          title='큐시즘 MT'
-          date='2025.08.23'
-          author='맹소현'
-          images={[
-            'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d',
-            'https://images.unsplash.com/photo-1519681393784-d120267933ba',
-            'https://images.unsplash.com/photo-1506765515384-028b60a970df',
-            'https://images.unsplash.com/photo-1522202176988-66273c2fd55f',
-          ]}
-        />
-        <CloseAlbum
-          title='큐시즘 MT'
-          date='2025.08.23'
-          author='맹소현'
-          images={[
-            'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d',
-            'https://images.unsplash.com/photo-1519681393784-d120267933ba',
-            'https://images.unsplash.com/photo-1506765515384-028b60a970df',
-            'https://images.unsplash.com/photo-1522202176988-66273c2fd55f',
-          ]}
-        />
+        {closeAlbums.length < 0 ? (
+          closeAlbums.map((album, index) => (
+            <CloseAlbum
+              key={index}
+              title={album.title}
+              date={album.date}
+              author={album.author}
+              images={album.images}
+            />
+          ))
+        ) : (
+          <EmptyAlbum title={`앨범이 일주일이 지나 닫히면\n여기에 표시돼요`} />
+        )}
       </div>
     </section>
   );
