@@ -20,7 +20,7 @@ interface PhotoBoxProps {
 export default function PhotoBox({
   size = 82,
   responsive = false,
-  likeCount = 0,
+  likeCount,
   liked = false,
   downloaded = false,
   pressed: initialPressed = false,
@@ -30,7 +30,7 @@ export default function PhotoBox({
   onPress,
 }: PhotoBoxProps) {
   const [pressed, setPressed] = useState(initialPressed);
-  const showLike = 0 < likeCount;
+  const showLike = likeCount !== undefined;
 
   const handlePress = () => {
     if (disabled) return;

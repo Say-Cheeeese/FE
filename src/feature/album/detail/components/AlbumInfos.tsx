@@ -8,7 +8,6 @@ export default function AlbumInfos({}: AlbumInfosProps) {
   return (
     <section className='border-divider-gray-light border-b-[6px] px-5 py-4'>
       <div className='mb-6 flex items-center gap-5'>
-        {/* 이모지 */}
         <div className='bg-element-gray-lighter flex h-[74px] w-[74px] items-center justify-center rounded-full text-[28px]'>
           😀
         </div>
