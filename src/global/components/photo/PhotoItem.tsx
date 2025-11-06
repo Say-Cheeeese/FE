@@ -1,3 +1,4 @@
+import { cn } from '@/lib/utils';
 import { Check, Heart } from 'lucide-react';
 import { useState } from 'react';
 
@@ -45,16 +46,15 @@ export default function PhotoItem({
       type='button'
       style={baseSizeStyle}
       onClick={handlePress}
-      className={[
+      className={cn(
         'relative shrink-0 overflow-hidden rounded-[8px] border-[3px] border-white',
         pressed
-          ? 'border-border-primary! bg-background-dim-darker'
+          ? 'border-border-primary bg-background-dim-darker'
           : downloaded
             ? 'border-b-border-primary border-b-[3px]'
-            : 'border border-transparent',
-      ]
-        .filter(Boolean)
-        .join(' ')}
+            : 'border-transparent border-white',
+        disabled && 'pointer-events-none opacity-60',
+      )}
     >
       <div className='aspect-square w-full overflow-hidden'>
         <img

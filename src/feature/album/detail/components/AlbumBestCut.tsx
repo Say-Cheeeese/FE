@@ -1,5 +1,5 @@
 import LongButton from '@/global/components/LongButton';
-import PhotoItem from './PhotoItem';
+import PhotoItem from '../../../../global/components/photo/PhotoItem';
 
 interface AlbumBestCutProps {}
 
