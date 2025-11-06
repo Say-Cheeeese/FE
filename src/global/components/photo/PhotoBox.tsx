@@ -2,7 +2,7 @@ import { cn } from '@/lib/utils';
 import { Check, Heart } from 'lucide-react';
 import { useState } from 'react';
 
-interface PhotoItemProps {
+interface PhotoBoxProps {
   size?: number; // px
   likeCount?: number;
   liked?: boolean;
@@ -14,7 +14,7 @@ interface PhotoItemProps {
   onPress?: (pressed: boolean) => void;
 }
 
-export default function PhotoItem({
+export default function PhotoBox({
   size = 82,
   likeCount = 0,
   liked = false,
@@ -24,7 +24,7 @@ export default function PhotoItem({
   imageSrc,
   imageAlt = '사진',
   onPress,
-}: PhotoItemProps) {
+}: PhotoBoxProps) {
   const [pressed, setPressed] = useState(initialPressed);
   const baseSizeStyle = {
     width: `${size}px`,

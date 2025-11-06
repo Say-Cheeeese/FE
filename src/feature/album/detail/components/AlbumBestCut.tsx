@@ -1,5 +1,5 @@
 import LongButton from '@/global/components/LongButton';
-import PhotoItem from '../../../../global/components/photo/PhotoItem';
+import PhotoBox from '../../../../global/components/photo/PhotoBox';
 
 interface AlbumBestCutProps {}
 
@@ -14,27 +14,27 @@ export default function AlbumBestCut({}: AlbumBestCutProps) {
       {/* 사진 리스트 */}
       <div className='scrollbar-hide -mx-5 mb-3 overflow-x-auto px-5'>
         <div className='flex min-w-max gap-2'>
-          <PhotoItem
+          <PhotoBox
             imageSrc='https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d'
             downloaded
             likeCount={1}
             liked
             pressed
           />
-          <PhotoItem
+          <PhotoBox
             imageSrc='https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d'
             disabled
           />
-          <PhotoItem
+          <PhotoBox
             imageSrc='https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d'
             pressed
           />
-          <PhotoItem
+          <PhotoBox
             imageSrc='https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d'
             downloaded
           />
-          <PhotoItem imageSrc='https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d' />
-          <PhotoItem imageSrc='https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d' />
+          <PhotoBox imageSrc='https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d' />
+          <PhotoBox imageSrc='https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d' />
         </div>
       </div>
 
