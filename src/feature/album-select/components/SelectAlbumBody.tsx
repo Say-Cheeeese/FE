@@ -56,10 +56,10 @@ export default function SelectAlbumBody() {
     [processedImages],
   );
 
-  const oversizedImages = useMemo(
-    () => processedImages.filter((img) => img.isOversized),
-    [processedImages],
-  );
+  // const oversizedImages = useMemo(
+  //   () => processedImages.filter((img) => img.isOversized),
+  //   [processedImages],
+  // );
 
   // 초기 선택: 유효한 이미지만 선택
   useEffect(() => {
@@ -94,17 +94,24 @@ export default function SelectAlbumBody() {
     );
   }, [images, albumId, checkImagesMutate]);
 
-  const toggleSelect = (id: string, isOversized: boolean) => {
+  const toggleSelect = (
+    id: string,
+    isOversized: boolean,
+    nextSelected?: boolean,
+  ) => {
     if (isOversized) return; // 6MB 초과는 선택 불가
 
     setSelectedIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) {
-        next.delete(id);
-      } else {
-        next.add(id);
+      const updated = new Set(prev);
+      if (typeof nextSelected === 'boolean') {
+        if (nextSelected) updated.add(id);
+        else updated.delete(id);
+        return updated;
       }
-      return next;
+      // fallback: toggle
+      if (updated.has(id)) updated.delete(id);
+      else updated.add(id);
+      return updated;
     });
   };
 
@@ -119,25 +126,24 @@ export default function SelectAlbumBody() {
         </span>
       </div>
       <div
-        className='mb-[calc(76px+env(safe-area-inset-bottom))] grid grid-cols-3 gap-2 overflow-y-auto'
-        style={{ height: 'calc(100vh - 96px)' }}
+        className='scrollbar-hide mb-[calc(76px+env(safe-area-inset-bottom))] grid grid-cols-3 gap-[3.5px] overflow-y-auto'
+        style={{ maxHeight: 'calc(100vh - 96px)' }}
       >
         {processedImages.map((img) => {
           const isSelected = selectedIds.has(img.id);
           return (
             <div key={img.id} className='relative aspect-square w-full'>
-              <PhotoBox
-                imageSrc={img.url}
-                imageAlt={`이미지 ${img.id}`}
-                pressed={isSelected}
-                disabled={img.isOversized}
-                onPress={() => toggleSelect(img.id, img.isOversized)}
-              />
-              {img.isOversized && (
-                <div className='pointer-events-none absolute inset-0 z-10 flex items-center justify-center bg-black/50'>
-                  <span className='typo-body-sm-bold text-white'>6MB 초과</span>
-                </div>
-              )}
+              <div className='absolute inset-0'>
+                <PhotoBox
+                  imageSrc={img.url}
+                  imageAlt={`이미지 ${img.id}`}
+                  pressed={isSelected}
+                  disabled={img.isOversized}
+                  onPress={(next) => {
+                    toggleSelect(img.id, img.isOversized, next);
+                  }}
+                />
+              </div>
             </div>
           );
         })}

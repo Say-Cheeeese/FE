@@ -15,7 +15,7 @@ interface PhotoBoxProps {
 }
 
 export default function PhotoBox({
-  size = 82,
+  size,
   likeCount = 0,
   liked = false,
   downloaded = false,
@@ -26,10 +26,16 @@ export default function PhotoBox({
   onPress,
 }: PhotoBoxProps) {
   const [pressed, setPressed] = useState(initialPressed);
-  const baseSizeStyle = {
-    width: `${size}px`,
-    height: `${size}px`,
-  };
+
+  // size가 없으면 w-full h-full로 부모를 채움
+  const sizeClasses = size ? '' : 'h-full w-full';
+  const baseSizeStyle = size
+    ? {
+        width: `${size}px`,
+        height: `${size}px`,
+      }
+    : {};
+
   const showLike = 0 < likeCount;
 
   const handlePress = () => {
@@ -47,24 +53,26 @@ export default function PhotoBox({
       style={baseSizeStyle}
       onClick={handlePress}
       className={cn(
-        'relative shrink-0 overflow-hidden rounded-[8px] border-[3px] border-white',
-        pressed
-          ? 'border-border-primary bg-background-dim-darker'
-          : downloaded
-            ? 'border-b-border-primary border-b-[3px]'
-            : 'border-transparent',
+        'relative box-border shrink-0 overflow-hidden rounded-[8px]',
+        sizeClasses,
         disabled && 'pointer-events-none opacity-60',
       )}
     >
-      <div className='aspect-square w-full overflow-hidden'>
-        <img
-          src={imageSrc}
-          width={size}
-          height={size}
-          alt={imageAlt}
-          className='h-full w-full object-cover'
-        />
-      </div>
+      <img
+        src={imageSrc}
+        width={size}
+        height={size}
+        alt={imageAlt}
+        className={cn(
+          'aspect-square w-full rounded-[8px] object-cover',
+          // pressed나 downloaded일 때만 border 추가
+          (pressed || downloaded) && 'border-[3px]',
+          pressed && 'border-border-primary',
+          downloaded &&
+            !pressed &&
+            'border-b-border-primary border-t-transparent border-r-transparent border-l-transparent',
+        )}
+      />
 
       {disabled && (
         <div className='bg-background-dim-darkest pointer-events-none absolute inset-0 z-20' />
