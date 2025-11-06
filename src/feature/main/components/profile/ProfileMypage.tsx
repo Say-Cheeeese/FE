@@ -1,4 +1,3 @@
-import { Settings } from 'lucide-react';
 import Image from 'next/image';
 
 interface ProfileMypageProps {}
@@ -50,13 +49,14 @@ export default function ProfileMypage({}: ProfileMypageProps) {
           </div>
         </div>
         <div className='h-full'>
-          <button type='button' aria-label='설정'>
+          {/* TODO : 설정페이지 구현 전까지 주석처리 */}
+          {/* <button type='button' aria-label='설정'>
             <Settings
               width={24}
               height={24}
               color={'var(--color-icon-basic)'}
             />
-          </button>
+          </button> */}
         </div>
       </div>
     </section>
