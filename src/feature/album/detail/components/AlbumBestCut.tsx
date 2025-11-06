@@ -24,6 +24,7 @@ export default function AlbumBestCut({}: AlbumBestCutProps) {
           <PhotoBox
             imageSrc='https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d'
             disabled
+            likeCount={1}
           />
           <PhotoBox
             imageSrc='https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d'

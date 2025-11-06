@@ -67,7 +67,7 @@ export default function PhotoBox({
       </div>
 
       {disabled && (
-        <div className='bg-background-dim-darkest pointer-events-none absolute inset-0' />
+        <div className='bg-background-dim-darkest pointer-events-none absolute inset-0 z-20' />
       )}
 
       {pressed && (
