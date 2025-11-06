@@ -52,7 +52,7 @@ export default function PhotoItem({
           ? 'border-border-primary bg-background-dim-darker'
           : downloaded
             ? 'border-b-border-primary border-b-[3px]'
-            : 'border-transparent border-white',
+            : 'border-transparent',
         disabled && 'pointer-events-none opacity-60',
       )}
     >
