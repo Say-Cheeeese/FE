@@ -3,9 +3,11 @@ import { ArrowDownUp, Menu } from 'lucide-react';
 import AlbumInfos from './AlbumInfos';
 import PhotoList from './PhotoList';
 
-interface ScreenAlbumDetailProps {}
+interface ScreenAlbumDetailProps {
+  albumId: string;
+}
 
-export default function ScreenAlbumDetail({}: ScreenAlbumDetailProps) {
+export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
   return (
     <>
       <CustomHeader

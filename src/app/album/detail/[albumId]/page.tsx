@@ -1,7 +1,12 @@
 import ScreenAlbumDetail from '@/feature/album/detail/components/ScreenAlbumDetail';
 
-interface PageProps {}
+interface PageProps {
+  params: Promise<{
+    albumId: string;
+  }>;
+}
 
-export default function Page({}: PageProps) {
-  return <ScreenAlbumDetail />;
+export default async function Page({ params }: PageProps) {
+  const { albumId } = await params;
+  return <ScreenAlbumDetail albumId={albumId} />;
 }
