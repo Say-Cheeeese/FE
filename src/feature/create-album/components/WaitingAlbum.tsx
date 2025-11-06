@@ -80,6 +80,7 @@ export default function WaitingAlbum({ albumId }: WaitingAlbumProps) {
         alt='wait-icon'
         width={116}
         height={78}
+        priority
       />
       <div className='text-16-500 text-text-subtle flex items-center gap-1'>
         <span>잠시만 기다려주세요</span>
