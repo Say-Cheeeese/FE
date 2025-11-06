@@ -12,11 +12,11 @@ const SwiperPhotoList = dynamic(() => import('./SwiperPhotoList'), {
   ),
 });
 
-interface ScreenAlbumDetailProps {
+interface ScreenPhotoDetailProps {
   albumId: string;
 }
 
-export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
+export default function ScreenPhotoDetail({ albumId }: ScreenPhotoDetailProps) {
   return (
     <main className='bg-surface-inverse flex h-dvh w-full flex-col justify-between'>
       <HeaderPhotoDetail />
