@@ -8,7 +8,7 @@ export default function HeaderPhotoDetail({}: HeaderPhotoDetailProps) {
   };
 
   return (
-    <section className='flex items-center justify-between gap-3 p-5'>
+    <section className='flex shrink-0 items-center justify-between gap-3 p-5'>
       <div className='h-8 w-8 shrink-0'>
         <img
           src='/assets/onboarding/smile1.svg'

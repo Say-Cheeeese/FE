@@ -63,14 +63,14 @@ export default function SwiperPhotoList({
   }, []);
 
   return (
-    <div className='relative flex h-full flex-col gap-4'>
+    <div className='flex min-h-0 flex-1 flex-col gap-4'>
       {/* 위: 메인 이미지 Swiper */}
-      <div className='flex h-full items-center justify-center'>
+      <div className='h-0 min-h-0 flex-1'>
         <Swiper
           onSwiper={setMainSwiper}
           slidesPerView={1}
           spaceBetween={16}
-          className={`w-full ${aspectRatio} overflow-hidden`}
+          className={`flex h-full w-full overflow-hidden`}
           onSlideChange={(sw) => {
             const idx = sw.activeIndex;
             setActiveIndex(idx);
@@ -106,13 +106,15 @@ export default function SwiperPhotoList({
             const isActive = activeIndex === i;
             return (
               <SwiperSlide key={i}>
-                <img
-                  src={src}
-                  fetchPriority={isActive ? 'high' : 'auto'}
-                  loading={isActive ? 'eager' : 'lazy'}
-                  alt={`photo-${i}`}
-                  className='h-full w-full object-contain'
-                />
+                <div className='flex h-full items-center justify-center'>
+                  <img
+                    src={src}
+                    fetchPriority={isActive ? 'high' : 'auto'}
+                    loading={isActive ? 'eager' : 'lazy'}
+                    alt={`photo-${i}`}
+                    className='max-h-full max-w-full object-contain'
+                  />
+                </div>
               </SwiperSlide>
             );
           })}
