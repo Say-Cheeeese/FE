@@ -34,12 +34,21 @@ export default function SelectAlbumBody() {
   const [toasts, setToasts] = useState<string[]>([]);
   const { mutate: checkImagesMutate } = useCheckImages();
 
-  const showToast = (message: string) => {
-    setToasts((prev) => [...prev, message]);
-    // 2초 후 해당 토스트 제거
-    setTimeout(() => {
-      setToasts((prev) => prev.filter((msg) => msg !== message));
-    }, 2000);
+  const showToast = (message: string | string[]) => {
+    const messages = Array.isArray(message) ? message : [message];
+    messages.forEach((msg) => {
+      setToasts((prev) => {
+        const next = [...prev, msg];
+        const idx = next.length - 1;
+        setTimeout(() => {
+          setToasts((current) => {
+            // idx 위치의 토스트만 제거
+            return current.filter((_, i) => i !== idx);
+          });
+        }, 2000);
+        return next;
+      });
+    });
   };
   const processedImages = useMemo<ImageWithUrl[]>(() => {
     const validation = validateImages(images.map((img) => img.file));
@@ -99,7 +108,7 @@ export default function SelectAlbumBody() {
           if (files.length > availableCount) {
             msgs.push('지금 앨범에 담을 수 있는 만큼만 선택되었어요');
           }
-          if (msgs.length) showToast(msgs.join(' '));
+          if (msgs.length) showToast(msgs);
         },
         onError: () => {
           showToast('이미지 검증 중 오류가 발생했어요.');
