@@ -12,13 +12,15 @@ import {
 } from '@/components/ui/alert-dialog';
 import SelectAlbumBody from '@/feature/album-select/components/SelectAlbumBody';
 import CustomHeader from '@/global/components/header/CustomHeader';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
 export default function Page() {
   const [modalOpen, setModalOpen] = useState(false);
   const confirmedRef = useRef(false);
   const router = useRouter();
+  const params = useParams();
+  const albumId = params?.albumId;
 
   // data-scroll-locked 속성 제거
   useEffect(() => {
@@ -59,7 +61,10 @@ export default function Page() {
   const handleConfirm = () => {
     confirmedRef.current = true;
     setModalOpen(false);
-    router.back();
+    console.log('나가기');
+    if (albumId) {
+      window.location.replace(`/album/upload/${albumId}`);
+    }
   };
 
   const handleCancel = () => {

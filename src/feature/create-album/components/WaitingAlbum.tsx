@@ -1,11 +1,13 @@
 'use client';
 
+import CheeseCartLoading from '@/../public/assets/album/CheeseCart_Loading.json';
 import { useImageStore } from '@/store/useImageStore';
 import { motion } from 'framer-motion';
-import Image from 'next/image';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { validateUpload } from '../utils/validateUpload';
+const Lottie = dynamic(() => import('lottie-react'), { ssr: false });
 
 interface WaitingAlbumProps {
   albumId: string;
@@ -28,7 +30,7 @@ export default function WaitingAlbum({ albumId }: WaitingAlbumProps) {
 
         // 3. 최소 1초 대기 보장 후 분기
         const elapsedTime = Date.now() - startTime;
-        const remainingTime = Math.max(0, 1000 - elapsedTime);
+        const remainingTime = Math.max(0, 10000 - elapsedTime);
         await new Promise((resolve) => setTimeout(resolve, remainingTime));
 
         if (!result.ok) {
@@ -74,15 +76,22 @@ export default function WaitingAlbum({ albumId }: WaitingAlbumProps) {
   };
 
   return (
-    <div className='flex h-screen w-full flex-col items-center justify-center gap-9'>
-      <Image
-        src='/assets/album/wait-icon.svg'
-        alt='wait-icon'
-        width={116}
-        height={78}
-        priority
+    <div className='relative flex h-screen w-full flex-col items-center justify-center'>
+      <Lottie
+        animationData={CheeseCartLoading}
+        loop
+        autoplay
+        style={{ width: '100%', height: '100%' }}
       />
-      <div className='text-16-500 text-text-subtle flex items-center gap-1'>
+      <div
+        className='text-16-500 text-text-subtle flex items-center gap-1'
+        style={{
+          position: 'absolute',
+          top: '60%',
+          left: '50%',
+          transform: 'translateX(-50%)',
+        }}
+      >
         <span>잠시만 기다려주세요</span>
         <motion.span
           className='flex'
