@@ -6,14 +6,18 @@ import CustomHeader, {
 import { ArrowDownUp, Menu } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import AlbumInfos from './AlbumInfos';
-import FooterAlbumDetail from './FooterAlbumDetail';
+import DownloadActionBar from './DownloadActionBar';
+import NavBarAlbumDetail from './NavBarAlbumDetail';
 import PhotoList from './PhotoList';
+
+export type AlbumDetailMode = 'select' | 'default';
 
 interface ScreenAlbumDetailProps {
   albumId: string;
 }
 
 export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
+  const [mode, setMode] = useState<AlbumDetailMode>('default');
   const albumInfosRef = useRef<HTMLDivElement | null>(null);
   const [isAlbumInfosHidden, setIsAlbumInfosHidden] = useState(false);
 
@@ -61,7 +65,13 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
         <AlbumInfos ref={albumInfosRef} />
         <PhotoList />
       </div>
-      <FooterAlbumDetail />
+      {mode === 'default' && (
+        <NavBarAlbumDetail
+          mode={mode}
+          changeMode={(newMode) => setMode(newMode)}
+        />
+      )}
+      {mode === 'select' && <DownloadActionBar />}
     </>
   );
 }

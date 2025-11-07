@@ -2,12 +2,19 @@
 import ToggleAlbumType from '@/feature/main/components/open-album/ToggleAlbumType';
 import { Download, Plus } from 'lucide-react';
 import { useState } from 'react';
+import { AlbumDetailMode } from './ScreenAlbumDetail';
 
-interface FooterAlbumDetailProps {}
+interface NavBarAlbumDetailProps {
+  changeMode: (newMode: AlbumDetailMode) => void;
+  mode: AlbumDetailMode;
+}
 
 type AlbumType = 'all' | 'deep';
 
-export default function FooterAlbumDetail({}: FooterAlbumDetailProps) {
+export default function NavBarAlbumDetail({
+  changeMode,
+  mode,
+}: NavBarAlbumDetailProps) {
   const [albumType, setAlbumType] = useState<AlbumType>('all');
 
   const handlePhotoAdd = () => {};
@@ -15,7 +22,9 @@ export default function FooterAlbumDetail({}: FooterAlbumDetailProps) {
   const handleToggleChange = (value: AlbumType) => {
     setAlbumType(value);
   };
-  const handlePhotoDownload = () => {};
+  const handlePhotoDownload = () => {
+    changeMode('select');
+  };
 
   return (
     <section className='fixed bottom-0 flex w-full items-center justify-between gap-3 bg-[linear-gradient(180deg,rgba(24,25,27,0)_0%,rgba(24,25,27,0.8)_60.1%)] px-4 py-5'>
