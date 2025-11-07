@@ -1,5 +1,4 @@
 'use client';
-
 import { useCheckImages } from '@/feature/create-album/hook/useCheckImages';
 import { validateImages } from '@/feature/create-album/utils/validateImages';
 import LongButton from '@/global/components/LongButton';
@@ -46,7 +45,8 @@ export default function SelectAlbumBody() {
     usePresignedAndUploadToNCP({
       onSuccess: (result) => {
         if (result.failed > 0) {
-          showToast(`${result.failed}개 파일 업로드에 실패했어요`);
+          // showToast(`${result.failed}개 파일 업로드에 실패했어요`);
+          showToast('과제 끝! 안내자의 지시를 따라주세요.');
         } else {
           revokeAllObjectUrls();
           showToast('모든 사진이 성공적으로 업로드되었어요!');
@@ -56,26 +56,26 @@ export default function SelectAlbumBody() {
       },
       onError: () => {
         revokeAllObjectUrls();
-        showToast('Presigned URL 발급 또는 업로드에 실패했어요');
+        showToast('과제 끝! 안내자의 지시를 따라주세요.');
       },
     });
 
   const showToast = (message: string | string[]) => {
+    // 이미 토스트가 떠있으면 무시
+    if (toasts.length > 0) return;
+
     const messages = Array.isArray(message) ? message : [message];
-    messages.forEach((msg) => {
-      setToasts((prev) => {
-        const next = [...prev, msg];
-        const idx = next.length - 1;
-        setTimeout(() => {
-          setToasts((current) => {
-            // idx 위치의 토스트만 제거
-            return current.filter((_, i) => i !== idx);
-          });
-        }, 2000);
-        return next;
-      });
+    setToasts((prev) => [...prev, ...messages]);
+  };
+
+  const removeToast = (message: string) => {
+    setToasts((prev) => {
+      const idx = prev.indexOf(message);
+      if (idx === -1) return prev;
+      return prev.filter((_, i) => i !== idx);
     });
   };
+
   const processedImages = useMemo<ImageWithUrl[]>(() => {
     const validation = validateImages(images.map((img) => img.file));
     const oversizedSet = new Set(validation.oversizedFiles);
@@ -87,6 +87,20 @@ export default function SelectAlbumBody() {
       isOversized: oversizedSet.has(img.file.name),
     }));
   }, [images]);
+
+  // 뒤로가기(나가기) 또는 페이지 이탈 시 object URL 해제
+  useEffect(() => {
+    const handleRevoke = () => {
+      revokeAllObjectUrls();
+    };
+    window.addEventListener('pagehide', handleRevoke);
+    window.addEventListener('popstate', handleRevoke);
+    return () => {
+      window.removeEventListener('pagehide', handleRevoke);
+      window.removeEventListener('popstate', handleRevoke);
+      revokeAllObjectUrls();
+    };
+  }, [processedImages]);
 
   const validImages = useMemo(
     () => processedImages.filter((img) => !img.isOversized),
@@ -228,7 +242,9 @@ export default function SelectAlbumBody() {
           });
         }}
       />
-      {toasts.length > 0 && <AlbumToastList toasts={toasts} />}
+      {toasts.length > 0 && (
+        <AlbumToastList toasts={toasts} onRemove={removeToast} />
+      )}
     </div>
   );
 }

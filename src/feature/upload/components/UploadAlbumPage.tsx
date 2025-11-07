@@ -24,7 +24,7 @@ export default function UploadAlbumPage({ albumId }: UploadAlbumPageProps) {
   return (
     <div className='flex flex-col'>
       <CustomHeader title='앨범 채우기' border={false} />
-      <main className='flex min-h-[calc(100vh-72px)] flex-col items-center justify-between pt-6 pb-[calc(20px+env(safe-area-inset-bottom))]'>
+      <main className='flex min-h-[calc(100dvh-72px)] flex-col items-center justify-between pt-6 pb-[calc(20px+env(safe-area-inset-bottom))]'>
         <div className='flex w-full flex-col items-center'>
           <AlbumInfoHeader albumId={albumId} photoCount={cards.length} />
 

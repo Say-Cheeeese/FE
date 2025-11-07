@@ -5,30 +5,41 @@ type AlbumToastProps = {
   message: string;
   style?: React.CSSProperties;
   onDismiss?: () => void;
+  delay?: number; // 사라지기 시작하는 시간에 추가할 delay
 };
 
 export default function AlbumToast({
   message,
   style,
   onDismiss,
+  delay = 0,
 }: AlbumToastProps) {
   const bottomPx = style?.bottom ?? 88;
   const [visible, setVisible] = useState(true);
+  const [shouldRender, setShouldRender] = useState(true);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setVisible(false);
-      onDismiss?.();
-    }, 2000);
+      // fade-out 트랜지션 후 실제로 unmount
+      setTimeout(() => {
+        setShouldRender(false);
+        onDismiss?.();
+      }, 400); // 트랜지션 시간과 맞춤
+    }, 2000 + delay);
     return () => clearTimeout(timer);
-  }, [onDismiss]);
+  }, [onDismiss, delay]);
 
-  if (!visible) return null;
+  if (!shouldRender) return null;
 
   return (
     <div
       className='bg-surface-info pointer-events-none fixed right-4 left-4 z-[9999] flex h-14 items-center rounded-xl px-5'
-      style={{ bottom: `calc(${bottomPx}px + env(safe-area-inset-bottom))` }}
+      style={{
+        bottom: `calc(${bottomPx}px + env(safe-area-inset-bottom))`,
+        opacity: visible ? 1 : 0,
+        transition: 'opacity 0.4s',
+      }}
     >
       <div className='typo-body-md-medium text-text-basic-inverse pointer-events-auto flex items-center gap-2'>
         <AlertCircle width={20} height={20} />
@@ -38,7 +49,13 @@ export default function AlbumToast({
   );
 }
 
-export function AlbumToastList({ toasts }: { toasts: string[] }) {
+export function AlbumToastList({
+  toasts,
+  onRemove,
+}: {
+  toasts: string[];
+  onRemove?: (message: string) => void;
+}) {
   const TOAST_HEIGHT = 48; // px
   const GAP = 12; // px
   const [visibleToasts, setVisibleToasts] = useState<
@@ -58,8 +75,9 @@ export function AlbumToastList({ toasts }: { toasts: string[] }) {
     });
   }, [toasts]);
 
-  const handleDismiss = (id: number) => {
+  const handleDismiss = (id: number, message: string) => {
     setVisibleToasts((prev) => prev.filter((toast) => toast.id !== id));
+    onRemove?.(message);
   };
 
   return (
@@ -69,7 +87,8 @@ export function AlbumToastList({ toasts }: { toasts: string[] }) {
           key={toast.id}
           message={toast.message}
           style={{ bottom: 88 + idx * (TOAST_HEIGHT + GAP) }}
-          onDismiss={() => handleDismiss(toast.id)}
+          delay={(visibleToasts.length - 1 - idx) * 500} // 위쪽(높은 idx)이 먼저 사라지도록, 0.5초씩 차이
+          onDismiss={() => handleDismiss(toast.id, toast.message)}
         />
       ))}
     </>
