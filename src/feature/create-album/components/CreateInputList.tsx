@@ -63,10 +63,10 @@ export default function CreateInputList({
       error = '';
       onParticipantCountChange('');
     } else if (number === 0) {
-      error = '최소 1명 이상 입력해주세요';
+      error = '최소 1명 이상 가능해요';
       onParticipantCountChange(numberValue);
     } else if (number > 64) {
-      error = '최대 64명까지 입력이 가능해요';
+      error = '최대 64명까지 가능해요';
       onParticipantCountChange(numberValue);
     } else {
       error = '';

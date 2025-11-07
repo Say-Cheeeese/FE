@@ -164,13 +164,19 @@ export default function SelectAlbumBody() {
     });
   };
 
+  // 선택 개수 초과 여부 함수
+  const isOverCount =
+    availableCount !== null && selectedIds.size > availableCount;
+
   return (
     <div className='w-full px-4'>
       <div className='mt-4 mb-3 flex justify-between'>
         <span className='typo-body-lg-regular text-text-subtle'>
           총 {images.length}장
         </span>
-        <span className='typo-body-lg-medium text-text-subtle'>
+        <span
+          className={`typo-body-lg-medium ${isOverCount ? 'text-text-error' : 'text-text-subtle'}`}
+        >
           {selectedIds.size}/{availableCount}
         </span>
       </div>
@@ -203,7 +209,7 @@ export default function SelectAlbumBody() {
       <LongButton
         text={`앨범에 ${selectedIds.size}장 채우기`}
         noFixed={false}
-        disabled={isUploading}
+        disabled={isUploading || isOverCount}
         onClick={() => {
           const selectedFiles = processedImages.filter((img) =>
             selectedIds.has(img.id),

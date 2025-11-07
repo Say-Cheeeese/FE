@@ -42,7 +42,10 @@ export default function AlbumEmojiSelector({
     <div className='relative mt-10 mb-10 flex flex-col items-center'>
       {/* 이모지 표시 */}
       <div className='relative'>
-        <div className='bg-element-gray-lighter flex h-[100px] w-[100px] items-center justify-center rounded-full text-[50px]'>
+        <div
+          className='bg-element-gray-lighter flex h-[100px] w-[100px] cursor-pointer items-center justify-center rounded-full text-[50px]'
+          onClick={() => setShowPicker(true)}
+        >
           {selectedEmoji}
         </div>
         {/* 연필 아이콘 (수정 버튼) */}
