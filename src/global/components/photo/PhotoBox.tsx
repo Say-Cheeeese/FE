@@ -15,6 +15,7 @@ interface PhotoBoxProps {
   imageSrc: string;
   imageAlt?: string;
   onPress?: (pressed: boolean) => void;
+  pressable?: boolean;
 }
 
 export default function PhotoBox({
@@ -28,17 +29,17 @@ export default function PhotoBox({
   imageSrc,
   imageAlt = '사진',
   onPress,
+  pressable = true,
 }: PhotoBoxProps) {
   const [pressed, setPressed] = useState(initialPressed);
   const showLike = likeCount !== undefined;
 
   const handlePress = () => {
-    if (disabled) return;
-    setPressed((prev) => {
-      const next = !prev;
-      onPress?.(next);
-      return next;
-    });
+    if (disabled || !pressable) return;
+
+    const next = !pressed;
+    setPressed(next);
+    onPress?.(next);
   };
 
   return (
@@ -58,6 +59,7 @@ export default function PhotoBox({
             ? 'border-b-border-primary border-b-[3px]'
             : 'border-transparent',
         disabled && 'pointer-events-none opacity-60',
+        !disabled && !pressable && 'cursor-default',
       )}
     >
       {/* 항상 정사각형 유지 */}
