@@ -1,10 +1,11 @@
 'use client';
 
+import { forwardRef } from 'react';
 import AlbumBestCut from './AlbumBestCut';
 
 interface AlbumInfosProps {}
 
-export default function AlbumInfos({}: AlbumInfosProps) {
+const AlbumInfos = forwardRef<HTMLDivElement, AlbumInfosProps>((_, ref) => {
   return (
     <section className='border-divider-gray-light border-b-[6px] px-5 py-4'>
       <div className='mb-6 flex items-center gap-5'>
@@ -21,9 +22,14 @@ export default function AlbumInfos({}: AlbumInfosProps) {
             2025.08.23
           </span>
         </div>
+        <div ref={ref} />
       </div>
 
       <AlbumBestCut />
     </section>
   );
-}
+});
+
+AlbumInfos.displayName = 'AlbumInfos';
+
+export default AlbumInfos;
