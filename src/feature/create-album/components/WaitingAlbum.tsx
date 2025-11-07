@@ -30,7 +30,7 @@ export default function WaitingAlbum({ albumId }: WaitingAlbumProps) {
 
         // 3. 최소 1초 대기 보장 후 분기
         const elapsedTime = Date.now() - startTime;
-        const remainingTime = Math.max(0, 1000 - elapsedTime);
+        const remainingTime = Math.max(0, 3000 - elapsedTime);
         await new Promise((resolve) => setTimeout(resolve, remainingTime));
 
         if (!result.ok) {
