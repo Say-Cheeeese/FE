@@ -34,11 +34,15 @@ export default function AlbumToast({
 
   return (
     <div
-      className='bg-surface-info pointer-events-none fixed right-4 left-4 z-[9999] flex h-14 items-center rounded-xl px-5'
+      className='bg-surface-info pointer-events-none fixed z-[999] flex h-14 items-center rounded-xl px-5'
       style={{
         bottom: `calc(${bottomPx}px + env(safe-area-inset-bottom))`,
+        left: '50%',
+        transform: 'translateX(-50%)',
         opacity: visible ? 1 : 0,
         transition: 'opacity 0.4s',
+        maxWidth: '430px',
+        width: 'calc(100% - 32px)',
       }}
     >
       <div className='typo-body-md-medium text-text-basic-inverse pointer-events-auto flex items-center gap-2'>

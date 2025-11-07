@@ -107,7 +107,7 @@ export default function CreateInputList({
         label='참여 인원'
         value={participantCount}
         onChange={handleParticipantCountChange}
-        placeholder='인원 수를 입력하세요'
+        placeholder='최대 64명까지 가능해요'
         error={participantCountError}
         type='number'
         inputMode='numeric'

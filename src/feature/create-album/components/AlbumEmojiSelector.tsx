@@ -61,9 +61,9 @@ export default function AlbumEmojiSelector({
       {showPicker && (
         <div
           ref={pickerRef}
-          className='absolute bottom-[-450px] left-1/2 z-50 -translate-x-1/2 -translate-y-1/2'
+          className='absolute bottom-[-470px] left-1/2 z-50 -translate-x-1/2 -translate-y-1/2'
           style={{
-            filter: 'drop-shadow(0 0 25px rgba(0, 0, 0, 0.08))',
+            boxShadow: '0 0 25px 5px rgba(0, 0, 0, 0.08)',
           }}
         >
           <EmojiPicker
