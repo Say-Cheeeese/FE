@@ -1,4 +1,3 @@
-import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import EmptyAlbum from '../EmptyAlbum';
 import CloseAlbum from './CloseAlbum';
@@ -27,14 +26,15 @@ const closeAlbums: CloseAlbumData[] = [
 export default function CloseAlbumContainer() {
   return (
     <section className='mb-20 px-5'>
-      <Link href='/'>
+      <Link href='#'>
         <h3 className='typo-heading-md-semibold text-text-subtle mb-4 flex items-center'>
           닫힌 앨범 {closeAlbums.length}
-          <ChevronRight
+          {/* TODO : Link연동 전까지 화살표 주석 */}
+          {/* <ChevronRight
             width={24}
             height={24}
             color='var(--color-icon-basic)'
-          />
+          /> */}
         </h3>
       </Link>
       <div className='flex flex-col gap-4'>
