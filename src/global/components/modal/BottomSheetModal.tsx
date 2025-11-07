@@ -47,7 +47,7 @@ export default function BottomSheetModal({
         )}
         showHandle={showHandle}
       >
-        <div className='px-4 py-6'>
+        <div className={title ? 'px-4 py-6' : ''}>
           {/* 스크린리더용 제목 (항상 필요) */}
           <DrawerTitle
             className={`typo-heading-md-bold mb-4 px-2 ${title ? '' : 'sr-only'}`}
