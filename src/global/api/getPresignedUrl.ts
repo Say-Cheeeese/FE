@@ -28,7 +28,6 @@ export async function getPresignedUrl(
     path: '/v1/photo/presigned-url',
     body: params,
   });
-  console.log(response);
   // 타입 선언 없이 접근 (타입 안전성은 떨어짐)
   return response.result.presignedUrlInfos;
 }

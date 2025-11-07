@@ -34,6 +34,13 @@ export default function SelectAlbumBody() {
   const [toasts, setToasts] = useState<string[]>([]);
   const { mutate: checkImagesMutate } = useCheckImages();
 
+  // object URL 해제 함수
+  const revokeAllObjectUrls = () => {
+    processedImages.forEach((img) => {
+      URL.revokeObjectURL(img.url);
+    });
+  };
+
   // usePresignedAndUploadToNCP 훅 사용
   const { mutate: uploadMutate, isPending: isUploading } =
     usePresignedAndUploadToNCP({
@@ -41,12 +48,14 @@ export default function SelectAlbumBody() {
         if (result.failed > 0) {
           showToast(`${result.failed}개 파일 업로드에 실패했어요`);
         } else {
+          revokeAllObjectUrls();
           showToast('모든 사진이 성공적으로 업로드되었어요!');
           // 업로드 성공 시 메인으로 이동
           router.push(`/album/${albumId}/main`);
         }
       },
       onError: () => {
+        revokeAllObjectUrls();
         showToast('Presigned URL 발급 또는 업로드에 실패했어요');
       },
     });

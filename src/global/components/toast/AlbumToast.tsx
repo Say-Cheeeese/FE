@@ -25,7 +25,6 @@ export default function AlbumToast({
 
   if (!visible) return null;
 
-  console.log('토스트 인식됨', message);
   return (
     <div
       className='bg-surface-info pointer-events-none fixed right-4 left-4 z-[9999] flex h-14 items-center rounded-xl px-5'
