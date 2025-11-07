@@ -18,16 +18,16 @@ interface OpenAlbumItem {
 
 // 실제 데이터라고 가정
 const albums: OpenAlbumItem[] = [
-  {
-    author: '이유정',
-    date: '2025.09.20',
-    expirationTime: '6일 2시간',
-    joinedMembers: 7,
-    totalMembers: 8,
-    title: '큐시즘 MT',
-    thumbnails: ['/ut/1.jpg', '/ut/2.jpg', '/ut/3.jpg'],
-    isMine: false,
-  },
+  // {
+  //   author: '이유정',
+  //   date: '2025.09.20',
+  //   expirationTime: '6일 2시간',
+  //   joinedMembers: 7,
+  //   totalMembers: 8,
+  //   title: '큐시즘 MT',
+  //   thumbnails: ['/ut/1.jpg', '/ut/2.jpg', '/ut/3.jpg'],
+  //   isMine: false,
+  // },
 
   {
     author: '맹소현',
