@@ -33,12 +33,12 @@ export default function WaitingAlbum({ albumId }: WaitingAlbumProps) {
 
         if (!result.ok) {
           // 용량 초과 또는 업로드 가능 개수 초과 시 select로 이동
-          router.push(`/album/${albumId}/select`);
+          router.replace(`/album/${albumId}/select`);
           return;
         }
 
         // 검증 통과 시 main 페이지로 이동
-        router.push(`/album/${albumId}/main`);
+        router.replace(`/album/${albumId}/main`);
       } catch (err) {
         console.error('Image validation error:', err);
         // 에러 발생 시에도 최소 1초 후 main으로 이동
@@ -46,7 +46,7 @@ export default function WaitingAlbum({ albumId }: WaitingAlbumProps) {
         const remainingTime = Math.max(0, 1000 - elapsedTime);
         await new Promise((resolve) => setTimeout(resolve, remainingTime));
         alert('사진 업로드 중 에러가 발생했습니다.');
-        router.push(`/album/${albumId}/main`);
+        router.replace(`/album/${albumId}/main`);
       }
     };
 
