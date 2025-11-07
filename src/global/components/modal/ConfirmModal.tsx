@@ -115,7 +115,7 @@ export default function ConfirmModal({
             className={cn(
               'flex h-12 items-center justify-center px-5 py-2.5',
               'bg-button-primary-fill active:bg-button-primary-fill-pressed active:text-text-primary',
-              'typo-body-lg-semibold! text-text-primary!',
+              'typo-body-lg-semibold! text-text-primary',
               'transition-colors duration-100',
               confirmClassName,
             )}
