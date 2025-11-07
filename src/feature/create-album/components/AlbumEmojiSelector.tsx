@@ -47,7 +47,7 @@ export default function AlbumEmojiSelector({
         </div>
         {/* 연필 아이콘 (수정 버튼) */}
         <button
-          className='bg-element-gray-darker absolute right-0 bottom-0 flex h-8 w-8 items-center justify-center rounded-full shadow'
+          className='bg-element-gray-darker absolute right-0 bottom-0 flex h-8 w-8 items-center justify-center rounded-full'
           onClick={() => setShowPicker(!showPicker)}
         >
           <Pencil width={18.6} height={18.6} color='#fff' />
