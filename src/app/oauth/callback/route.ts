@@ -39,7 +39,7 @@ export async function GET(request: NextRequest) {
       request.headers.get('host') ||
       'localhost:3000';
 
-    const redirectPath = data.result.isOnboarded ? '/main' : '/onboarding';
+    const redirectPath = data.result.isOnboarded ? '/main' : '/create-album';
     const redirectUrl = new URL(redirectPath, `${protocol}://${host}`);
     redirectUrl.searchParams.set('login', 'success');
     redirectUrl.searchParams.set(

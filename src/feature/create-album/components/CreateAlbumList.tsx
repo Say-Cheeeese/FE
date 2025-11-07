@@ -87,11 +87,11 @@ export default function CreateAlbumList() {
           />
         }
         showCloseButton={false}
-        className='px-6 pt-10 pb-5'
+        className='pt-10 pb-5 pl-6'
         dismissible={true}
         showHandle={false}
       >
-        <div className='flex flex-col gap-4 px-2'>
+        <div className='flex flex-col gap-4'>
           <span className='text-text-basic typo-heading-md-bold'>
             치즈 앨범 메뉴얼
           </span>

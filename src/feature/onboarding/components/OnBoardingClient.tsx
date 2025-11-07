@@ -31,8 +31,8 @@ export default function OnBoardingClient() {
 
   // 닉네임 변경 핸들러 (validation 포함)
   const handleNicknameChange = (value: string) => {
-    // 한글(완성형+자음+모음), 영문, 숫자만 허용하는 정규식
-    const validPattern = /^[가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9]*$/;
+    // 한글(완성형+자음+모음), 영문, 숫자, 공백만 허용하는 정규식
+    const validPattern = /^[가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9 ]*$/;
 
     if (!validPattern.test(value)) {
       setNicknameError('10글자 이내의 한글, 영문, 숫자만 쓸 수 있어요');

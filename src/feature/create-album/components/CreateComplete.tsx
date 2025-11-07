@@ -16,7 +16,7 @@ export default function CreateComplete({ albumId }: CreateCompleteProps) {
   };
 
   return (
-    <div className='mt-[210px] flex flex-col items-center gap-4'>
+    <div className='mt-[200px] flex flex-col items-center gap-4'>
       <div className='bg-element-primary flex h-[74px] w-[74px] items-center justify-center rounded-full'>
         <Check width={50} height={34} stroke='#fff' strokeWidth={3} />
       </div>

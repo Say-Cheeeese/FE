@@ -43,7 +43,7 @@ export default function ProfileImage({
                 className='rounded-full'
               />
               <button
-                className='bg-element-gray-dark absolute right-0 bottom-0 flex h-8 w-8 items-center justify-center rounded-full shadow transition-transform group-hover:scale-110'
+                className='bg-element-gray-dark absolute right-0 bottom-0 flex h-8 w-8 items-center justify-center rounded-full transition-transform group-hover:scale-110'
                 tabIndex={-1}
                 type='button'
                 aria-label='프로필 이미지 선택'

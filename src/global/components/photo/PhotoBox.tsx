@@ -73,9 +73,9 @@ export default function PhotoBox({
         <div
           className={cn(
             'pointer-events-none absolute inset-0 z-20 rounded-[8px]',
-            disabled && 'bg-background-dim-darkest',
+            disabled && 'bg-[rgba(24,25,27,0.8)]',
             pressed &&
-              'bg-background-dim-darker border-border-primary border-[3px]',
+              'border-border-primary border-[3px] bg-[rgba(24,25,27,0.5)]',
             downloaded &&
               !pressed &&
               'border-b-border-primary border-[3px] border-t-transparent border-r-transparent border-l-transparent',
@@ -84,7 +84,7 @@ export default function PhotoBox({
       )}
 
       {pressed && (
-        <div className='bg-element-primary absolute top-2.5 right-2.5 z-10 flex h-6 w-6 items-center justify-center rounded-full'>
+        <div className='bg-element-primary absolute top-2.5 right-2.5 z-50 flex h-6 w-6 items-center justify-center rounded-full'>
           <Check
             width={12}
             height={12}

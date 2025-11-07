@@ -64,6 +64,7 @@ interface CustomHeaderProps {
   /** 뒤로가기 버튼 클릭 핸들러 (기본: router.back()) */
   onBackClick?: () => void;
   isShowBack?: boolean;
+  border?: boolean;
 }
 
 export default function CustomHeader({
@@ -71,6 +72,7 @@ export default function CustomHeader({
   rightContent,
   onBackClick,
   isShowBack,
+  border = true,
 }: CustomHeaderProps) {
   const router = useRouter();
 
@@ -84,7 +86,12 @@ export default function CustomHeader({
 
   return (
     <>
-      <div className='border-divider-gray fixed top-0 left-1/2 z-50 flex h-18 w-full max-w-[430px] -translate-x-1/2 items-center justify-between border-b bg-white px-5'>
+      <div
+        className={[
+          'fixed top-0 left-1/2 z-50 flex h-18 w-full max-w-[430px] -translate-x-1/2 items-center justify-between bg-white px-5',
+          border ? 'border-divider-gray border-b' : '',
+        ].join(' ')}
+      >
         {/* 왼쪽: 뒤로가기 + 타이틀 */}
         <div className='flex items-center gap-2'>
           {isShowBack && (
