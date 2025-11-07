@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, UseMutationOptions } from '@tanstack/react-query';
 import {
   createAlbumApi,
   type CreateAlbumRequest,
@@ -18,12 +18,20 @@ export type CreateAlbumError = {
   message: string;
 };
 
-export function useCreateAlbum() {
+export function useCreateAlbum(
+  options?: UseMutationOptions<
+    CreateAlbumApiResponse,
+    CreateAlbumError,
+    CreateAlbumRequest
+  >,
+) {
   return useMutation<
     CreateAlbumApiResponse,
     CreateAlbumError,
     CreateAlbumRequest
   >({
+    mutationKey: ['createAlbum'],
     mutationFn: createAlbumApi,
+    ...options,
   });
 }

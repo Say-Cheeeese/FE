@@ -19,8 +19,12 @@ export default function OnBoardingClient() {
   // 프로필 이미지 상태
   const [selectedImage, setSelectedImage] = useState<string>('smile1.svg');
 
-  // 닉네임 상태
-  const [nickname, setNickname] = useState<string>('');
+  // 쿼리스트링에서 name 추출
+  const nameFromQuery = searchParams.get('name') || '';
+  // 닉네임 상태 (쿼리 name이 있으면 기본값으로)
+  const [nickname, setNickname] = useState<string>(
+    decodeURIComponent(nameFromQuery),
+  );
 
   // 닉네임 에러 상태
   const [nicknameError, setNicknameError] = useState<string>('');
@@ -73,8 +77,8 @@ export default function OnBoardingClient() {
   if (currentTerm) {
     return (
       <div className='min-h-screen bg-white'>
-        <CustomHeader title={currentTerm.title} />
-        <div className='h-full px-5 pt-[100px] pb-20'>
+        <CustomHeader title={currentTerm.title} isShowBack={true} />
+        <div className='h-full px-5 pt-[24px] pb-20'>
           <currentTerm.content />
         </div>
       </div>

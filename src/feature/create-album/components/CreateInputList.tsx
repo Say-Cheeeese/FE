@@ -27,7 +27,7 @@ export default function CreateInputList({
 
   // 이벤트 이름 검증: 13글자 이내의 한글, 영문, 숫자, _, .만 허용
   const handleEventNameChange = (value: string) => {
-    const validPattern = /^[가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9_.]*$/;
+    const validPattern = /^[가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9_. ]*$/;
     let error = '';
 
     if (!validPattern.test(value)) {
