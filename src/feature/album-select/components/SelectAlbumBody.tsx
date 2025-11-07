@@ -2,6 +2,7 @@
 
 import { useCheckImages } from '@/feature/create-album/hook/useCheckImages';
 import { validateImages } from '@/feature/create-album/utils/validateImages';
+import { presignedAndUploadToNCP } from '@/global/api/presignedAndUploadToNCP';
 import LongButton from '@/global/components/LongButton';
 import PhotoBox from '@/global/components/photo/PhotoBox';
 import { AlbumToastList } from '@/global/components/toast/AlbumToast';
@@ -17,6 +18,7 @@ type ImageWithUrl = {
 };
 
 export default function SelectAlbumBody() {
+  // presignedAndUploadToNCP를 직접 사용
   const { albumId } = useParams() as { albumId: string };
   const { images } = useImageStore();
   const router = useRouter();
@@ -34,11 +36,11 @@ export default function SelectAlbumBody() {
 
   const showToast = (message: string) => {
     setToasts((prev) => [...prev, message]);
-    // setTimeout(() => {
-    //   setToasts((prev) => prev.slice(1));
-    // }, 2000);
+    // 2초 후 해당 토스트 제거
+    setTimeout(() => {
+      setToasts((prev) => prev.filter((msg) => msg !== message));
+    }, 2000);
   };
-  console.log('images:', images);
   const processedImages = useMemo<ImageWithUrl[]>(() => {
     const validation = validateImages(images.map((img) => img.file));
     const oversizedSet = new Set(validation.oversizedFiles);
@@ -61,10 +63,22 @@ export default function SelectAlbumBody() {
   //   [processedImages],
   // );
 
-  // 초기 선택: 유효한 이미지만 선택
+  // 초기 선택: 유효한 이미지 중 availableCount만큼만 선택
   useEffect(() => {
-    setSelectedIds(new Set(validImages.map((img) => img.id)));
-  }, [validImages]);
+    if (!validImages.length) {
+      setSelectedIds(new Set());
+      return;
+    }
+    // availableCount가 없거나 validImages가 availableCount 이하면 전체 선택
+    if (!availableCount || validImages.length <= availableCount) {
+      setSelectedIds(new Set(validImages.map((img) => img.id)));
+    } else {
+      // availableCount보다 많으면 앞에서부터 availableCount개만 선택
+      setSelectedIds(
+        new Set(validImages.slice(0, availableCount).map((img) => img.id)),
+      );
+    }
+  }, [validImages, availableCount]);
 
   // 서버 검증: oversizedFiles + availableCount 확인 후 토스트 표시
   useEffect(() => {
@@ -142,6 +156,9 @@ export default function SelectAlbumBody() {
                   onPress={(next) => {
                     toggleSelect(img.id, img.isOversized, next);
                   }}
+                  onDisabledPress={() => {
+                    showToast('사진이 6MB를 초과해 업로드할 수 없어요');
+                  }}
                 />
               </div>
             </div>
@@ -151,6 +168,32 @@ export default function SelectAlbumBody() {
       <LongButton
         text={`앨범에 ${selectedIds.size}장 채우기`}
         noFixed={false}
+        onClick={async () => {
+          const selectedFiles = processedImages.filter((img) =>
+            selectedIds.has(img.id),
+          );
+          if (!albumId) return;
+          const fileInfos = selectedFiles.map((img) => ({
+            fileName: img.file.name,
+            fileSize: img.file.size,
+            contentType: img.file.type,
+          }));
+          const files = selectedFiles.map((img) => img.file);
+          try {
+            const result = await presignedAndUploadToNCP({
+              albumCode: albumId,
+              fileInfos,
+              files,
+            });
+            if (result.failed > 0) {
+              alert(`${result.failed}개 파일 업로드에 실패했어요`);
+            } else {
+              alert('모든 사진이 성공적으로 업로드되었어요!');
+            }
+          } catch (e) {
+            alert('Presigned URL 발급 또는 업로드에 실패했어요');
+          }
+        }}
       />
       {toasts.length > 0 && <AlbumToastList toasts={toasts} />}
     </div>
