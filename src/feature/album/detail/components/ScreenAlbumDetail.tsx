@@ -3,12 +3,14 @@
 import CustomHeader, {
   HEADER_HEIGHT,
 } from '@/global/components/header/CustomHeader';
+import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
 import { ArrowDownUp, Menu } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import AlbumInfos from './AlbumInfos';
 import DownloadActionBar from './DownloadActionBar';
 import NavBarAlbumDetail from './NavBarAlbumDetail';
 import PhotoList from './PhotoList';
+import SelectPhotoSortType, { PhotoSortType } from './SelectPhotoSortType';
 
 export type AlbumDetailMode = 'select' | 'default';
 
@@ -22,6 +24,7 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
   const [isAlbumInfosHidden, setIsAlbumInfosHidden] = useState(false);
   const [selectedPhotoIds, setSelectedPhotoIds] = useState<string[]>([]);
   const [selectionResetKey, setSelectionResetKey] = useState(0);
+  const [sortType, setSortType] = useState<PhotoSortType>('liked');
 
   useEffect(() => {
     const target = albumInfosRef.current;
@@ -68,13 +71,22 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
         title={isAlbumInfosHidden ? '큐시즘 MT' : ''}
         rightContent={
           <div className='flex gap-4'>
-            <button type='button'>
-              <ArrowDownUp
-                width={24}
-                height={24}
-                color='var(--color-icon-basic)'
+            <BottomSheetModal
+              trigger={
+                <button type='button'>
+                  <ArrowDownUp
+                    width={24}
+                    height={24}
+                    color='var(--color-icon-basic)'
+                  />
+                </button>
+              }
+            >
+              <SelectPhotoSortType
+                sort={sortType}
+                onChange={(newType) => setSortType(newType)}
               />
-            </button>
+            </BottomSheetModal>
             <button type='button'>
               <Menu width={24} height={24} color='var(--color-icon-basic)' />
             </button>
