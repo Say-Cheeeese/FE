@@ -8,7 +8,7 @@ export default function AlbumBestCut({}: AlbumBestCutProps) {
     <section className='rounded-xl bg-white'>
       {/* 타이틀 */}
       <h2 className='typo-body-lg-semibold text-text-subtle mb-2'>
-        베스트 치즈 컷
+        앨범 베스트컷
       </h2>
 
       {/* 사진 리스트 */}
@@ -16,26 +16,29 @@ export default function AlbumBestCut({}: AlbumBestCutProps) {
         <div className='flex min-w-max gap-2'>
           <PhotoBox
             imageSrc='https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d'
-            downloaded
             likeCount={1}
             liked
-            pressed
           />
           <PhotoBox
             imageSrc='https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d'
-            disabled
             likeCount={1}
           />
           <PhotoBox
+            likeCount={0}
             imageSrc='https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d'
-            pressed
           />
           <PhotoBox
+            likeCount={0}
             imageSrc='https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d'
-            downloaded
           />
-          <PhotoBox imageSrc='https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d' />
-          <PhotoBox imageSrc='https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d' />
+          <PhotoBox
+            likeCount={0}
+            imageSrc='https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d'
+          />
+          <PhotoBox
+            likeCount={0}
+            imageSrc='https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d'
+          />
         </div>
       </div>
 
