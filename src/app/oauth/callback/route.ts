@@ -32,9 +32,14 @@ export async function GET(request: NextRequest) {
 
     const data = await response.json();
 
+    const host =
+      request.headers.get('x-forwarded-host') ||
+      request.headers.get('host') ||
+      'localhost:3000';
+
     // ✅ 쿠키 세팅 및 리디렉션
     const redirectPath = data.result.isOnboarded ? '/main' : '/onboarding';
-    const redirectUrl = new URL(redirectPath, request.url);
+    const redirectUrl = new URL(redirectPath, host);
     redirectUrl.searchParams.set('login', 'success');
     redirectUrl.searchParams.set(
       'onboarding',
