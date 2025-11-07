@@ -1,5 +1,6 @@
 import { ChangeEvent } from 'react';
 import { saveFilesToStore } from './saveFilesToStore';
+import { sortImagesByDate } from './sortImagesByDate';
 import { validateUpload } from './validateUpload';
 
 export async function handleFileUpload(
@@ -9,7 +10,10 @@ export async function handleFileUpload(
 ) {
   const fl = e.target.files;
   if (!fl) return;
-  const files = Array.from(fl).filter((f) => f.type.startsWith('image/'));
+
+  let files = Array.from(fl).filter((f) => f.type.startsWith('image/'));
+  // EXIF 촬영일 기준 최신순 정렬
+  files = await sortImagesByDate(files);
 
   const result = await validateUpload(files, albumId);
   if (!result.ok) {
