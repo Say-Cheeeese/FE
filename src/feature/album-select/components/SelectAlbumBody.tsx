@@ -184,7 +184,7 @@ export default function SelectAlbumBody() {
 
   return (
     <div className='w-full px-4'>
-      <div className='mt-4 mb-3 flex justify-between'>
+      <div className='sticky top-[72px] z-99 mb-3 flex justify-between bg-white pt-4'>
         <span className='typo-body-lg-regular text-text-subtle'>
           총 {images.length}장
         </span>
@@ -223,7 +223,7 @@ export default function SelectAlbumBody() {
       <LongButton
         text={`앨범에 ${selectedIds.size}장 채우기`}
         noFixed={false}
-        disabled={isUploading || isOverCount}
+        disabled={isUploading || isOverCount || selectedIds.size === 0}
         onClick={() => {
           const selectedFiles = processedImages.filter((img) =>
             selectedIds.has(img.id),
