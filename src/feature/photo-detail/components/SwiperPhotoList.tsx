@@ -60,6 +60,7 @@ export default function SwiperPhotoList({
           onSwiper={setMainSwiper}
           slidesPerView={1}
           spaceBetween={16}
+          speed={0}
           className={`flex h-full w-full overflow-hidden`}
           onSlideChange={(sw) => {
             const idx = sw.activeIndex;
