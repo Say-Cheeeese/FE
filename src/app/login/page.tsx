@@ -9,8 +9,8 @@ export default function LoginPage() {
       <div className='mt-[173px] flex w-full flex-1 flex-col items-center gap-[17px]'>
         <Image
           src='/assets/login/cheese-icon.svg'
-          width={120}
-          height={120}
+          width={68}
+          height={68}
           alt='치즈 아이콘'
         />
         <Image
