@@ -142,11 +142,11 @@ export default function SelectAlbumBody() {
           const msgs: string[] = [];
           if (oversizedFiles.length > 0) {
             msgs.push(
-              `6MB를 초과한 사진 ${oversizedFiles.length}장이 제외되었어요`,
+              `6MB를 초과한 사진 ${oversizedFiles.length}장이 제외되었어요.`,
             );
           }
           if (files.length > availableCount) {
-            msgs.push('지금 앨범에 담을 수 있는 만큼만 선택되었어요');
+            msgs.push('지금 앨범에 담을 수 있는 만큼만 선택되었어요.');
           }
           if (msgs.length) showToast(msgs);
         },
@@ -212,7 +212,7 @@ export default function SelectAlbumBody() {
                     toggleSelect(img.id, img.isOversized, next);
                   }}
                   onDisabledPress={() => {
-                    showToast('사진이 6MB를 초과해 업로드할 수 없어요');
+                    showToast('사진이 6MB를 초과해 업로드할 수 없어요.');
                   }}
                 />
               </div>
