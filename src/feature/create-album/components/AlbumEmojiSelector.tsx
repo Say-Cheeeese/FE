@@ -1,7 +1,7 @@
 'use client';
-import React, { useState, useRef, useEffect } from 'react';
-import { Pencil } from 'lucide-react';
 import EmojiPicker from 'emoji-picker-react';
+import { Pencil } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 
 interface EmojiClickData {
   emoji: string;
@@ -39,7 +39,7 @@ export default function AlbumEmojiSelector({
   }, [showPicker]);
 
   return (
-    <div className='relative mt-[113px] mb-10 flex flex-col items-center'>
+    <div className='relative mt-10 mb-10 flex flex-col items-center'>
       {/* 이모지 표시 */}
       <div className='relative'>
         <div className='bg-element-gray-lighter flex h-[100px] w-[100px] items-center justify-center rounded-full text-[50px]'>

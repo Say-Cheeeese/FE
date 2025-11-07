@@ -1,6 +1,5 @@
 import { cn } from '@/lib/utils';
 import { Check, Heart } from 'lucide-react';
-import { useState } from 'react';
 
 interface PhotoBoxProps {
   size?: number; // px
@@ -12,33 +11,39 @@ interface PhotoBoxProps {
   imageSrc: string;
   imageAlt?: string;
   onPress?: (pressed: boolean) => void;
+  onDisabledPress?: () => void; // disabled 상태에서 클릭 시 호출
 }
 
 export default function PhotoBox({
-  size = 82,
+  size,
   likeCount = 0,
   liked = false,
   downloaded = false,
-  pressed: initialPressed = false,
+  pressed = false,
   disabled = false,
   imageSrc,
   imageAlt = '사진',
   onPress,
+  onDisabledPress,
 }: PhotoBoxProps) {
-  const [pressed, setPressed] = useState(initialPressed);
-  const baseSizeStyle = {
-    width: `${size}px`,
-    height: `${size}px`,
-  };
+  // size가 없으면 w-full h-full로 부모를 채움
+  const sizeClasses = size ? '' : 'h-full w-full';
+  const baseSizeStyle = size
+    ? {
+        width: `${size}px`,
+        height: `${size}px`,
+      }
+    : {};
+
   const showLike = 0 < likeCount;
 
   const handlePress = () => {
-    if (disabled) return;
-    setPressed((prev) => {
-      const next = !prev;
-      onPress?.(next);
-      return next;
-    });
+    if (disabled) {
+      onDisabledPress?.();
+      return;
+    }
+    const next = !pressed;
+    onPress?.(next);
   };
 
   return (
@@ -47,35 +52,43 @@ export default function PhotoBox({
       style={baseSizeStyle}
       onClick={handlePress}
       className={cn(
-        'relative shrink-0 overflow-hidden rounded-[8px] border-[3px] border-white',
-        pressed
-          ? 'border-border-primary bg-background-dim-darker'
-          : downloaded
-            ? 'border-b-border-primary border-b-[3px]'
-            : 'border-transparent',
-        disabled && 'pointer-events-none opacity-60',
+        'relative box-border shrink-0 overflow-hidden rounded-[8px]',
+        sizeClasses,
+        disabled && 'opacity-60',
       )}
     >
-      <div className='aspect-square w-full overflow-hidden'>
-        <img
-          src={imageSrc}
-          width={size}
-          height={size}
-          alt={imageAlt}
-          className='h-full w-full object-cover'
-        />
-      </div>
+      <img
+        src={imageSrc}
+        width={size}
+        height={size}
+        alt={imageAlt}
+        className={cn(
+          'aspect-square w-full rounded-[8px] object-cover',
+          // border는 dim 오버레이에서 처리
+        )}
+      />
 
-      {disabled && (
-        <div className='bg-background-dim-darkest pointer-events-none absolute inset-0 z-20' />
+      {/* dim+border 오버레이 */}
+      {(disabled || pressed || downloaded) && (
+        <div
+          className={cn(
+            'pointer-events-none absolute inset-0 z-20 rounded-[8px]',
+            disabled && 'bg-background-dim-darkest',
+            pressed &&
+              'bg-background-dim-darker border-border-primary border-[3px]',
+            downloaded &&
+              !pressed &&
+              'border-b-border-primary border-[3px] border-t-transparent border-r-transparent border-l-transparent',
+          )}
+        />
       )}
 
       {pressed && (
-        <div className='bg-element-primary absolute top-1 right-1 z-10 flex h-5 w-5 items-center justify-center rounded-full'>
+        <div className='bg-element-primary absolute top-2.5 right-2.5 z-10 flex h-6 w-6 items-center justify-center rounded-full'>
           <Check
             width={12}
             height={12}
-            strokeWidth={2}
+            strokeWidth={3}
             color='var(--color-icon-basic)'
           />
         </div>

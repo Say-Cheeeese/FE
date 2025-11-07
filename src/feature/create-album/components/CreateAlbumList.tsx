@@ -62,7 +62,7 @@ export default function CreateAlbumList() {
     !hasFormError;
 
   return (
-    <div className='mt-[113px]'>
+    <div>
       <AlbumEmojiSelector
         selectedEmoji={selectedEmoji}
         onEmojiSelect={setSelectedEmoji}
