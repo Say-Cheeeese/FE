@@ -18,9 +18,7 @@ type ApiResponse = {
   isSuccess: boolean;
   code: number;
   message: string;
-  result: {
-    presignedUrlInfos: PresignedUrlInfo[];
-  };
+  presignedUrlInfos: PresignedUrlInfo[];
 };
 
 export async function getPresignedUrl(

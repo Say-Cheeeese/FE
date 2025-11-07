@@ -14,7 +14,6 @@ export async function presignedAndUploadToNCP(
 ): Promise<{ success: number; failed: number }> {
   // 1. Presigned URL 발급
   const presignedUrlInfos = await getPresignedUrl(params);
-  console.log('여기까진들어오나');
 
   // 2. 파일 업로드
   return uploadFilesToNCP(params.files, presignedUrlInfos);

@@ -2,10 +2,10 @@
 
 import { useCheckImages } from '@/feature/create-album/hook/useCheckImages';
 import { validateImages } from '@/feature/create-album/utils/validateImages';
-import { presignedAndUploadToNCP } from '@/global/api/presignedAndUploadToNCP';
 import LongButton from '@/global/components/LongButton';
 import PhotoBox from '@/global/components/photo/PhotoBox';
 import { AlbumToastList } from '@/global/components/toast/AlbumToast';
+import { usePresignedAndUploadToNCP } from '@/global/hooks/usePresignedAndUploadToNCP';
 import { useImageStore } from '@/store/useImageStore';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
@@ -33,6 +33,23 @@ export default function SelectAlbumBody() {
   const [availableCount, setAvailableCount] = useState<number | null>(null);
   const [toasts, setToasts] = useState<string[]>([]);
   const { mutate: checkImagesMutate } = useCheckImages();
+
+  // usePresignedAndUploadToNCP 훅 사용
+  const { mutate: uploadMutate, isPending: isUploading } =
+    usePresignedAndUploadToNCP({
+      onSuccess: (result) => {
+        if (result.failed > 0) {
+          showToast(`${result.failed}개 파일 업로드에 실패했어요`);
+        } else {
+          showToast('모든 사진이 성공적으로 업로드되었어요!');
+          // 업로드 성공 시 메인으로 이동
+          router.push(`/album/${albumId}/main`);
+        }
+      },
+      onError: () => {
+        showToast('Presigned URL 발급 또는 업로드에 실패했어요');
+      },
+    });
 
   const showToast = (message: string | string[]) => {
     const messages = Array.isArray(message) ? message : [message];
@@ -177,31 +194,23 @@ export default function SelectAlbumBody() {
       <LongButton
         text={`앨범에 ${selectedIds.size}장 채우기`}
         noFixed={false}
-        onClick={async () => {
+        disabled={isUploading}
+        onClick={() => {
           const selectedFiles = processedImages.filter((img) =>
             selectedIds.has(img.id),
           );
-          if (!albumId) return;
           const fileInfos = selectedFiles.map((img) => ({
             fileName: img.file.name,
             fileSize: img.file.size,
             contentType: img.file.type,
           }));
           const files = selectedFiles.map((img) => img.file);
-          try {
-            const result = await presignedAndUploadToNCP({
-              albumCode: albumId,
-              fileInfos,
-              files,
-            });
-            if (result.failed > 0) {
-              alert(`${result.failed}개 파일 업로드에 실패했어요`);
-            } else {
-              alert('모든 사진이 성공적으로 업로드되었어요!');
-            }
-          } catch (e) {
-            alert('Presigned URL 발급 또는 업로드에 실패했어요');
-          }
+
+          uploadMutate({
+            albumCode: albumId,
+            fileInfos,
+            files,
+          });
         }}
       />
       {toasts.length > 0 && <AlbumToastList toasts={toasts} />}

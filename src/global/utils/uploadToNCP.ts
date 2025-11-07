@@ -47,7 +47,6 @@ export async function uploadFilesToNCP(
   files: File[],
   presignedUrlInfos: PresignedUrlInfo[],
 ): Promise<{ success: number; failed: number }> {
-  console.log('여기까지들어오긴함?');
   if (files.length !== presignedUrlInfos.length) {
     console.error('파일 개수와 presigned URL 개수가 일치하지 않습니다.');
     return { success: 0, failed: files.length };
