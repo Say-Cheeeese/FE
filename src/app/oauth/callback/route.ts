@@ -27,24 +27,27 @@ export async function GET(request: NextRequest) {
     );
 
     if (!response.ok) {
-      throw new Error('kakao code GET요청 중 200응답이 아닌 다른 응답 발생');
+      const errorText = await response.text();
+      throw new Error(`요청 실패: ${response.status} ${errorText}`);
     }
 
     const data = await response.json();
 
-    // ✅ 쿠키 세팅 및 리디렉션
-    // const redirectPath = data.result.isOnboarded ? '/main' : '/onboarding';
-    // const redirectUrl = new URL(redirectPath, request.url);
-    // redirectUrl.searchParams.set('login', 'success');
-    // redirectUrl.searchParams.set(
-    //   'onboarding',
-    //   data.result.isOnboarded.toString(),
-    // );
-    // redirectUrl.searchParams.set('userId', data.result.userId);
-    // redirectUrl.searchParams.set('name', encodeURIComponent(data.result.name));
+    const protocol = request.headers.get('x-forwarded-proto') || 'https';
+    const host =
+      request.headers.get('x-forwarded-host') ||
+      request.headers.get('host') ||
+      'localhost:3000';
 
-    // 임시: 로그인 성공 시 create-album으로 이동
-    const redirectUrl = new URL('/create-album', request.url);
+    const redirectPath = data.result.isOnboarded ? '/main' : '/create-album';
+    const redirectUrl = new URL(redirectPath, `${protocol}://${host}`);
+    redirectUrl.searchParams.set('login', 'success');
+    redirectUrl.searchParams.set(
+      'onboarding',
+      data.result.isOnboarded.toString(),
+    );
+    redirectUrl.searchParams.set('userId', data.result.userId);
+    redirectUrl.searchParams.set('name', encodeURIComponent(data.result.name));
 
     // redirect 응답 객체 생성
     const res = NextResponse.redirect(redirectUrl);

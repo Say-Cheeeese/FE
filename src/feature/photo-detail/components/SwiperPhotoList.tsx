@@ -60,6 +60,7 @@ export default function SwiperPhotoList({
           onSwiper={setMainSwiper}
           slidesPerView={1}
           spaceBetween={16}
+          speed={0}
           className={`flex h-full w-full overflow-hidden`}
           onSlideChange={(sw) => {
             const idx = sw.activeIndex;
@@ -125,19 +126,23 @@ export default function SwiperPhotoList({
             const idx = sw.activeIndex;
             setActiveIndex(idx);
             if (mainSwiper && !mainSwiper.destroyed) {
-              mainSwiper.slideTo(sw.activeIndex);
+              mainSwiper.slideTo(idx);
             }
+
             const vw = window.innerWidth;
-            sw.setTranslate(
-              calcThumbSwiperCenterOffset({
-                viewportWidth: vw,
-                activeMargin: 12,
-                activeWidth: 30,
-                inactiveWidth: 15,
-                inactiveMargin: 2,
-                index: idx,
-              }),
-            ); // 내가 정한 픽셀로 이동
+            const offset = calcThumbSwiperCenterOffset({
+              viewportWidth: vw,
+              activeMargin: 12,
+              activeWidth: 30,
+              inactiveWidth: 15,
+              inactiveMargin: 2,
+              index: idx,
+            });
+
+            // 한 프레임 늦게 + 음수로
+            requestAnimationFrame(() => {
+              sw.setTranslate(offset);
+            });
           }}
         >
           {images.map((src, i) => {
