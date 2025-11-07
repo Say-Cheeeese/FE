@@ -27,7 +27,8 @@ export async function GET(request: NextRequest) {
     );
 
     if (!response.ok) {
-      throw new Error('kakao code GET요청 중 200응답이 아닌 다른 응답 발생');
+      const errorText = await response.text();
+      throw new Error(`요청 실패: ${response.status} ${errorText}`);
     }
 
     const data = await response.json();
