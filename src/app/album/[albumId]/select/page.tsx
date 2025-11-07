@@ -20,6 +20,24 @@ export default function Page() {
   const confirmedRef = useRef(false);
   const router = useRouter();
 
+  // data-scroll-locked 속성 제거
+  useEffect(() => {
+    const removeScrollLock = () => {
+      const body = document.body;
+      if (body.hasAttribute('data-scroll-locked')) {
+        body.removeAttribute('data-scroll-locked');
+      }
+    };
+
+    removeScrollLock();
+    const interval = setInterval(removeScrollLock, 100);
+
+    return () => {
+      clearInterval(interval);
+      removeScrollLock();
+    };
+  }, []);
+
   // 뒤로가기(브라우저/하드웨어) 감지
   useEffect(() => {
     const handler = () => {
@@ -45,9 +63,16 @@ export default function Page() {
   };
 
   const handleCancel = () => {
-    setModalOpen(false);
-    // 히스토리 상태 다시 추가
+    // 히스토리 상태 다시 추가만 수행
     history.pushState(null, '', location.href);
+  };
+
+  const handleOpenChange = (open: boolean) => {
+    setModalOpen(open);
+    if (!open) {
+      // 모달이 닫힐 때 (바깥 클릭, ESC 등)
+      handleCancel();
+    }
   };
 
   return (
@@ -59,14 +84,15 @@ export default function Page() {
       />
       <SelectAlbumBody />
 
-      <AlertDialog open={modalOpen} onOpenChange={setModalOpen}>
+      <AlertDialog open={modalOpen} onOpenChange={handleOpenChange}>
         <AlertDialogContent className='rounded-[20px]!'>
           <AlertDialogHeader className='pb-6'>
             <AlertDialogTitle className='typo-heading-sm-semibold text-text-basic pt-4'>
-              정말 나가시겠어요?
+              앨범 채우기를 그만둘까요?
             </AlertDialogTitle>
             <AlertDialogDescription className='typo-body-lg-regular text-text-subtle whitespace-pre-line'>
-              지금 나가면 선택한 사진이 모두 사라집니다.
+              사진을 앨범에 채우기 전이에요.{'\n'}지금 나가면 다시 사진을
+              불러와야 해요.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className='grid grid-cols-2'>

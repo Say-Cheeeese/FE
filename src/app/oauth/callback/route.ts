@@ -33,15 +33,18 @@ export async function GET(request: NextRequest) {
     const data = await response.json();
 
     // ✅ 쿠키 세팅 및 리디렉션
-    const redirectPath = data.result.isOnboarded ? '/main' : '/onboarding';
-    const redirectUrl = new URL(redirectPath, request.url);
-    redirectUrl.searchParams.set('login', 'success');
-    redirectUrl.searchParams.set(
-      'onboarding',
-      data.result.isOnboarded.toString(),
-    );
-    redirectUrl.searchParams.set('userId', data.result.userId);
-    redirectUrl.searchParams.set('name', encodeURIComponent(data.result.name));
+    // const redirectPath = data.result.isOnboarded ? '/main' : '/onboarding';
+    // const redirectUrl = new URL(redirectPath, request.url);
+    // redirectUrl.searchParams.set('login', 'success');
+    // redirectUrl.searchParams.set(
+    //   'onboarding',
+    //   data.result.isOnboarded.toString(),
+    // );
+    // redirectUrl.searchParams.set('userId', data.result.userId);
+    // redirectUrl.searchParams.set('name', encodeURIComponent(data.result.name));
+
+    // 임시: 로그인 성공 시 create-album으로 이동
+    const redirectUrl = new URL('/create-album', request.url);
 
     // redirect 응답 객체 생성
     const res = NextResponse.redirect(redirectUrl);
