@@ -184,7 +184,7 @@ export default function SelectAlbumBody() {
 
   return (
     <div className='w-full px-4'>
-      <div className='sticky top-[72px] z-99 mb-3 flex justify-between bg-white pt-4'>
+      <div className='sticky top-[72px] z-99 flex justify-between bg-white pt-4 pb-3'>
         <span className='typo-body-lg-regular text-text-subtle'>
           총 {images.length}장
         </span>
@@ -196,7 +196,11 @@ export default function SelectAlbumBody() {
       </div>
       <div
         className='scrollbar-hide mb-[calc(76px+env(safe-area-inset-bottom))] grid grid-cols-3 gap-[3.5px] overflow-y-auto'
-        style={{ maxHeight: 'calc(100vh - 96px)' }}
+        style={{
+          maxHeight: 'calc(100vh - 96px)',
+          touchAction: 'pan-y',
+          WebkitOverflowScrolling: 'touch',
+        }}
       >
         {processedImages.map((img) => {
           const isSelected = selectedIds.has(img.id);
