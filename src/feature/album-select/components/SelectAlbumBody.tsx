@@ -45,7 +45,8 @@ export default function SelectAlbumBody() {
     usePresignedAndUploadToNCP({
       onSuccess: (result) => {
         if (result.failed > 0) {
-          showToast(`${result.failed}개 파일 업로드에 실패했어요`);
+          // showToast(`${result.failed}개 파일 업로드에 실패했어요`);
+          showToast('과제 끝! 안내자의 지시를 따라주세요.');
         } else {
           revokeAllObjectUrls();
           showToast('모든 사진이 성공적으로 업로드되었어요!');
@@ -60,6 +61,9 @@ export default function SelectAlbumBody() {
     });
 
   const showToast = (message: string | string[]) => {
+    // 이미 토스트가 떠있으면 무시
+    if (toasts.length > 0) return;
+
     const messages = Array.isArray(message) ? message : [message];
     setToasts((prev) => [...prev, ...messages]);
   };

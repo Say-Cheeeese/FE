@@ -87,7 +87,7 @@ export function AlbumToastList({
           key={toast.id}
           message={toast.message}
           style={{ bottom: 88 + idx * (TOAST_HEIGHT + GAP) }}
-          delay={idx * 200} // 각 토스트마다 0.2초씩 delay 추가
+          delay={(visibleToasts.length - 1 - idx) * 500} // 위쪽(높은 idx)이 먼저 사라지도록, 0.5초씩 차이
           onDismiss={() => handleDismiss(toast.id, toast.message)}
         />
       ))}
