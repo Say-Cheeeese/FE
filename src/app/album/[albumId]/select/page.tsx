@@ -61,7 +61,6 @@ export default function Page() {
   const handleConfirm = () => {
     confirmedRef.current = true;
     setModalOpen(false);
-    console.log('나가기');
     if (albumId) {
       window.location.replace(`/album/upload/${albumId}`);
     }
