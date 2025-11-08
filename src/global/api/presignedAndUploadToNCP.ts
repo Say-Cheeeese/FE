@@ -2,7 +2,7 @@ import {
   getPresignedUrl,
   PresignedUrlRequest,
 } from '@/global/api/getPresignedUrl';
-import { uploadFilesToNCP } from '@/global/utils/uploadToNCP';
+import { uploadFilesToNCP } from '@/global/api/uploadToNCP';
 
 /**
  * Presigned URL을 발급받고, 해당 URL로 파일을 NCP에 업로드까지 처리하는 통합 API

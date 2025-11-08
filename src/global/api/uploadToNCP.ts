@@ -15,9 +15,6 @@ export async function uploadFileToNCP(
   try {
     const response = await fetch(uploadUrl, {
       method: 'PUT',
-      headers: {
-        'Content-Type': file.type,
-      },
       body: file,
     });
 

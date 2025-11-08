@@ -24,10 +24,14 @@ type ApiResponse = {
 export async function getPresignedUrl(
   params: PresignedUrlRequest,
 ): Promise<PresignedUrlInfo[]> {
-  const response = await api.post<ApiResponse>({
-    path: '/v1/photo/presigned-url',
-    body: params,
-  });
-  // 타입 선언 없이 접근 (타입 안전성은 떨어짐)
-  return response.result.presignedUrlInfos;
+  try {
+    const response = await api.post<ApiResponse>({
+      path: '/v1/photo/presigned-url',
+      body: params,
+    });
+    return response.result.presignedUrlInfos;
+  } catch (error) {
+    console.error('Presigned URL 조회 실패:', error);
+    throw error;
+  }
 }
