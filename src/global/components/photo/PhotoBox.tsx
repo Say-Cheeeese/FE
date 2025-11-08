@@ -64,7 +64,7 @@ export default function PhotoBox({
         <img
           src={imageSrc}
           alt={imageAlt}
-          className='h-full w-full object-cover'
+          className='bg-element-gray-lighter h-full w-full object-cover'
         />
       </div>
 
