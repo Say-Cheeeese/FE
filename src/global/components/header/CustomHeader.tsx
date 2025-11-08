@@ -88,7 +88,7 @@ export default function CustomHeader({
     <>
       <div
         className={[
-          'fixed top-0 left-1/2 z-99 flex h-18 w-full max-w-[430px] -translate-x-1/2 items-center justify-between bg-white px-5',
+          'fixed top-0 left-1/2 z-40 flex h-18 w-full max-w-[430px] -translate-x-1/2 items-center justify-between bg-white px-5',
           border ? 'border-divider-gray border-b' : '',
         ].join(' ')}
       >

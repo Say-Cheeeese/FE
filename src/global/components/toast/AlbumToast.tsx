@@ -26,7 +26,7 @@ export default function AlbumToast({
         setShouldRender(false);
         onDismiss?.();
       }, 400); // 트랜지션 시간과 맞춤
-    }, 2000 + delay);
+    }, 4000 + delay);
     return () => clearTimeout(timer);
   }, [onDismiss, delay]);
 

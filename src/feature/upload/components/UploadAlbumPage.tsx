@@ -1,7 +1,6 @@
-import AlbumPreviewCard from '@/feature/photo-share-entry/components/AlbumPreviewCard';
 import CheckNoImgModal from '@/feature/upload/components/CheckNoImgModal';
-import MarqueeCarousel from '@/global/components/carousel/MarqueeCarousel';
 import CustomHeader from '@/global/components/header/CustomHeader';
+import Image from 'next/image';
 import AlbumInfoHeader from './AlbumInfoHeader';
 import UploadButton from './UploadButton';
 
@@ -28,22 +27,13 @@ export default function UploadAlbumPage({ albumId }: UploadAlbumPageProps) {
         <div className='flex w-full flex-col items-center'>
           <AlbumInfoHeader albumId={albumId} photoCount={cards.length} />
 
-          {cards.length > 0 && (
-            <div className='my-8 w-full'>
-              <MarqueeCarousel
-                items={cards.map((item, i) => (
-                  <div key={i}>
-                    <AlbumPreviewCard
-                      imageUrl={item.imageUrl}
-                      nickname={item.nickname}
-                      profileUrl={item.profileUrl}
-                    />
-                  </div>
-                ))}
-                itemWidth={180}
-              />
-            </div>
-          )}
+          <Image
+            src='/assets/album/test-lottie.svg'
+            alt='사진'
+            width={300}
+            height={136}
+            className='mt-[52px]'
+          />
         </div>
 
         <div className='flex w-full flex-col items-center'>

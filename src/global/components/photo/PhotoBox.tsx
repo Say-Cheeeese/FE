@@ -84,7 +84,7 @@ export default function PhotoBox({
       )}
 
       {pressed && (
-        <div className='bg-element-primary absolute top-2.5 right-2.5 z-50 flex h-6 w-6 items-center justify-center rounded-full'>
+        <div className='bg-element-primary absolute top-2.5 right-2.5 z-30 flex h-6 w-6 items-center justify-center rounded-full'>
           <Check
             width={12}
             height={12}
