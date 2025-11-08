@@ -46,7 +46,7 @@ export default function ScreenAlbumSidebar({
   return (
     <>
       <main
-        className='mx-auto flex h-screen w-full max-w-[430px] flex-col px-5 pb-5'
+        className='mx-auto flex h-screen w-full max-w-[430px] flex-col pb-5'
         style={{ minHeight: `calc(100vh - ${HEADER_HEIGHT}px)` }}
       >
         <section className='border-divider-gray-light flex flex-col items-center border-b-[6px] py-8 text-center'>
@@ -67,7 +67,7 @@ export default function ScreenAlbumSidebar({
           </div>
         </section>
 
-        <section className='rounded-2xl bg-white py-8'>
+        <section className='rounded-2xl bg-white px-5 py-8'>
           <div className='mb-3.5 flex items-center justify-between gap-3'>
             <div>
               <p className='typo-heading-sm-semibold text-text-subtle'>
@@ -121,7 +121,7 @@ export default function ScreenAlbumSidebar({
             ))}
           </div>
         </section>
-        <div className='mt-auto w-full'>
+        <div className='mt-auto w-full px-5'>
           <ConfirmModal
             trigger={
               <button
