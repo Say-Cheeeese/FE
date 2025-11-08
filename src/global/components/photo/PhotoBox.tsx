@@ -1,7 +1,6 @@
 'use client';
 import { cn } from '@/lib/utils';
 import { Check, Heart } from 'lucide-react';
-import { useState } from 'react';
 
 interface PhotoBoxProps {
   size?: number; // px
@@ -24,21 +23,19 @@ export default function PhotoBox({
   likeCount,
   liked = false,
   downloaded = false,
-  pressed: initialPressed = false,
+  pressed = false,
   disabled = false,
   imageSrc,
   imageAlt = '사진',
   onPress,
   pressable = true,
 }: PhotoBoxProps) {
-  const [pressed, setPressed] = useState(initialPressed);
   const showLike = likeCount !== undefined;
 
   const handlePress = () => {
     if (disabled || !pressable) return;
 
     const next = !pressed;
-    setPressed(next);
     onPress?.(next);
   };
 

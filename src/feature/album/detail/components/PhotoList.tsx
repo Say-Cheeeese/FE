@@ -34,11 +34,13 @@ const photos = [
 interface PhotoListProps {
   selectable?: boolean;
   onTogglePhoto?: (photoId: string, selected: boolean) => void;
+  selectedList: string[];
 }
 
 export default function PhotoList({
   selectable = false,
   onTogglePhoto,
+  selectedList,
 }: PhotoListProps) {
   const handlePhotoPress = (photoId: string) => (selected: boolean) => {
     if (!selectable) return;
@@ -54,6 +56,7 @@ export default function PhotoList({
         {photos.map((photo) => (
           <PhotoBox
             key={photo.id}
+            pressed={selectedList.includes(photo.id)}
             likeCount={0}
             imageSrc={photo.imageSrc}
             responsive

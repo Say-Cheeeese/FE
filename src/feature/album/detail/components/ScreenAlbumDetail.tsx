@@ -22,6 +22,7 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
   const [mode, setMode] = useState<AlbumDetailMode>('default');
   const albumInfosRef = useRef<HTMLDivElement | null>(null);
   const [isAlbumInfosHidden, setIsAlbumInfosHidden] = useState(false);
+  // TODO : photoIds를 담지않고, 이미지 url도 상태로 관리해야함. 혹은, photoIds로 이미지를 받아와야함.
   const [selectedPhotoIds, setSelectedPhotoIds] = useState<string[]>([]);
   const [selectionResetKey, setSelectionResetKey] = useState(0);
   const [sortType, setSortType] = useState<PhotoSortType>('liked');
@@ -54,6 +55,11 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
       }
       return prev.filter((id) => id !== photoId);
     });
+  };
+
+  const handleDownload = () => {
+    setMode('default');
+    setSelectedPhotoIds([]);
   };
 
   useEffect(() => {
@@ -99,6 +105,7 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
           key={selectionResetKey}
           selectable={mode === 'select'}
           onTogglePhoto={handleTogglePhotoSelection}
+          selectedList={selectedPhotoIds}
         />
       </div>
       {mode === 'default' && (
@@ -108,7 +115,10 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
         />
       )}
       {mode === 'select' && (
-        <DownloadActionBar selectedCount={selectedPhotoIds.length} />
+        <DownloadActionBar
+          selectedCount={selectedPhotoIds.length}
+          onDownload={handleDownload}
+        />
       )}
     </>
   );

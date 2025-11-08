@@ -6,7 +6,6 @@ interface AlbumBestCutProps {}
 export default function AlbumBestCut({}: AlbumBestCutProps) {
   return (
     <section className='rounded-xl bg-white'>
-      {/* 타이틀 */}
       <h2 className='typo-body-lg-semibold text-text-subtle mb-2'>
         앨범 베스트컷
       </h2>
