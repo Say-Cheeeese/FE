@@ -32,6 +32,6 @@ export async function getPresignedUrl(
     return response.result.presignedUrlInfos;
   } catch (error) {
     console.error('Presigned URL 조회 실패:', error);
-    throw error;
+    throw { stage: 'presigned', error };
   }
 }

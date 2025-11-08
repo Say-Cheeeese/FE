@@ -30,7 +30,7 @@ export async function uploadFileToNCP(
     return true;
   } catch (error) {
     console.error(`파일 업로드 중 오류 발생 (photoId: ${photoId}):`, error);
-    return false;
+    throw { stage: 'upload', error };
   }
 }
 
