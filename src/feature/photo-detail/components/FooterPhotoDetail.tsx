@@ -84,7 +84,7 @@ export default function FooterPhotoDetail({}: FooterPhotoDetailProps) {
 
       {/* UT를 위한 임시 모달 추가 */}
       <ConfirmModal
-        title={'성공하였습니다. 확인을 누른 후, 브라우저 창을 닫아주세요.'}
+        title={'성공하였습니다. 좌측 화살표를 누른 후 작업종료 를 눌러주세요.'}
         trigger={
           <button className='flex w-12 justify-center'>
             <Download width={24} height={24} color='white' />
