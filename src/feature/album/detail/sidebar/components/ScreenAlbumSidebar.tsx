@@ -50,7 +50,11 @@ export default function ScreenAlbumSidebar({
         style={{ minHeight: `calc(100vh - ${HEADER_HEIGHT}px)` }}
       >
         <section className='border-divider-gray-light flex flex-col items-center border-b-[6px] py-8 text-center'>
-          <button type='button' className='absolute right-5'>
+          <button
+            onClick={() => router.back()}
+            type='button'
+            className='absolute right-5'
+          >
             <X width={24} height={24} color='var(--color-icon-basic)' />
           </button>
           <div className='bg-element-gray-light flex h-16 w-16 items-center justify-center rounded-full text-[36px]'>
