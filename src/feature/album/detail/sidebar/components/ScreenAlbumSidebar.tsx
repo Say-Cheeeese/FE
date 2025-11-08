@@ -1,6 +1,7 @@
 'use client';
 
 import { HEADER_HEIGHT } from '@/global/components/header/CustomHeader';
+import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
 import { X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import ItemParticipant from './ItemParticipant';
@@ -72,12 +73,45 @@ export default function ScreenAlbumSidebar({
                 앨범 참가자 {albumMeta.participantSummary}
               </p>
             </div>
-            <button
-              type='button'
-              className='typo-body-sm-medium text-text-primary bg-button-primary-fill rounded-[4px] px-3 py-1.5'
+            <BottomSheetModal
+              trigger={
+                <button
+                  type='button'
+                  className='typo-body-sm-medium text-text-primary bg-button-primary-fill rounded-[4px] px-3 py-1.5'
+                >
+                  친구 초대
+                </button>
+              }
             >
-              친구 초대
-            </button>
+              <div>
+                <div className='pb-8'>
+                  <h3 className='typo-heading-md-bold text-text-basic mb-1'>
+                    친구 초대하기
+                  </h3>
+                  <span className='typo-body-lg-medium text-text-subtle'>
+                    사진이 채워지는 동안 친구에게 앨범을 공유해보세요.
+                  </span>
+                </div>
+                <div className='typo-body-sm-semibold flex justify-between'>
+                  <button className='flex flex-col items-center justify-center'>
+                    <div className='h-[58px] w-[58px] rounded-full bg-[#d9d9d9]' />
+                    <span>카카오톡</span>
+                  </button>
+                  <button className='flex flex-col items-center justify-center'>
+                    <div className='h-[58px] w-[58px] rounded-full bg-[#d9d9d9]' />
+                    <span>QR코드</span>
+                  </button>
+                  <button className='flex flex-col items-center justify-center'>
+                    <div className='h-[58px] w-[58px] rounded-full bg-[#d9d9d9]' />
+                    <span>링크복사</span>
+                  </button>
+                  <button className='flex flex-col items-center justify-center'>
+                    <div className='h-[58px] w-[58px] rounded-full bg-[#d9d9d9]' />
+                    <span>더보기</span>
+                  </button>
+                </div>
+              </div>
+            </BottomSheetModal>
           </div>
 
           <div>
