@@ -5,6 +5,7 @@ import CustomHeader, {
 } from '@/global/components/header/CustomHeader';
 import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
 import { ArrowDownUp, Menu } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import AlbumInfos from './AlbumInfos';
 import DownloadActionBar from './DownloadActionBar';
@@ -19,6 +20,7 @@ interface ScreenAlbumDetailProps {
 }
 
 export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
+  const router = useRouter();
   const [mode, setMode] = useState<AlbumDetailMode>('default');
   const albumInfosRef = useRef<HTMLDivElement | null>(null);
   const [isAlbumInfosHidden, setIsAlbumInfosHidden] = useState(false);
@@ -93,7 +95,10 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
                 onChange={(newType) => setSortType(newType)}
               />
             </BottomSheetModal>
-            <button type='button'>
+            <button
+              type='button'
+              onClick={() => router.push(`/album/detail/${albumId}/sidebar`)}
+            >
               <Menu width={24} height={24} color='var(--color-icon-basic)' />
             </button>
           </div>
