@@ -52,16 +52,20 @@ export async function GET(request: NextRequest) {
     // redirect 응답 객체 생성
     const res = NextResponse.redirect(redirectUrl);
 
+    const cookieDomain =
+      process.env.NODE_ENV === 'production' ? '.say-cheese.me' : undefined; // example.com을 실제 도메인으로 교체
     // ✅ 쿠키 설정 (redirect 응답에 바로 세팅)
     res.cookies.set(ACCESS_TOKEN_KEY, data.result.accessToken, {
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
+      domain: cookieDomain,
       maxAge: 60 * 60 * 2, // 2시간
       path: '/',
     });
 
     res.cookies.set(REFRESH_TOKEN_KEY, data.result.refreshToken, {
       secure: process.env.NODE_ENV === 'production',
+      domain: cookieDomain,
       sameSite: 'lax',
       maxAge: 60 * 60 * 24 * 7, // 7일
       path: '/',
