@@ -1,4 +1,3 @@
-'use client';
 import LogoHeader from '@/global/components/header/LogoHeader';
 import LongButton from '@/global/components/LongButton';
 import CloseAlbumContainer from './close-album/CloseAlbumContainer';
