@@ -88,7 +88,7 @@ export default function ScreenAlbumSidebar({
                 </button>
               }
             >
-              <div>
+              <div className='mx-6 mt-6 mb-10'>
                 <div className='pb-8'>
                   <h3 className='typo-heading-md-bold text-text-basic mb-1'>
                     친구 초대하기
