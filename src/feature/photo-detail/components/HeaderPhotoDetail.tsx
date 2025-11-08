@@ -1,10 +1,13 @@
 import { X } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 interface HeaderPhotoDetailProps {}
 
 export default function HeaderPhotoDetail({}: HeaderPhotoDetailProps) {
+  const router = useRouter();
+
   const handleClose = (): void => {
-    // TODO : X버튼 클릭로직 구현
+    router.back();
   };
 
   return (
