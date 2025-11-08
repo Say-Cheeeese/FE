@@ -19,16 +19,20 @@ export default function OnBoardingClient() {
   // 프로필 이미지 상태
   const [selectedImage, setSelectedImage] = useState<string>('smile1.svg');
 
-  // 닉네임 상태
-  const [nickname, setNickname] = useState<string>('');
+  // 쿼리스트링에서 name 추출
+  const nameFromQuery = searchParams.get('name') || '';
+  // 닉네임 상태 (쿼리 name이 있으면 기본값으로)
+  const [nickname, setNickname] = useState<string>(
+    decodeURIComponent(nameFromQuery),
+  );
 
   // 닉네임 에러 상태
   const [nicknameError, setNicknameError] = useState<string>('');
 
   // 닉네임 변경 핸들러 (validation 포함)
   const handleNicknameChange = (value: string) => {
-    // 한글(완성형+자음+모음), 영문, 숫자만 허용하는 정규식
-    const validPattern = /^[가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9]*$/;
+    // 한글(완성형+자음+모음), 영문, 숫자, 공백만 허용하는 정규식
+    const validPattern = /^[가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9 ]*$/;
 
     if (!validPattern.test(value)) {
       setNicknameError('10글자 이내의 한글, 영문, 숫자만 쓸 수 있어요');
@@ -73,8 +77,8 @@ export default function OnBoardingClient() {
   if (currentTerm) {
     return (
       <div className='min-h-screen bg-white'>
-        <CustomHeader title={currentTerm.title} />
-        <div className='h-full px-5 pt-[100px] pb-20'>
+        <CustomHeader title={currentTerm.title} isShowBack={true} />
+        <div className='h-full px-5 pt-[24px] pb-20'>
           <currentTerm.content />
         </div>
       </div>

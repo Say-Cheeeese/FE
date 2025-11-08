@@ -1,12 +1,13 @@
 'use client';
 
+import CheeseCartLoading from '@/../public/assets/album/CheeseCart_Loading.json';
 import { useImageStore } from '@/store/useImageStore';
 import { motion } from 'framer-motion';
-import Image from 'next/image';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { checkAvailableCount } from '../api/checkAvailableCount';
-import { validateImages } from '../utils/validateImages';
+import { validateUpload } from '../utils/validateUpload';
+const Lottie = dynamic(() => import('lottie-react'), { ssr: false });
 
 interface WaitingAlbumProps {
   albumId: string;
@@ -24,30 +25,22 @@ export default function WaitingAlbum({ albumId }: WaitingAlbumProps) {
         // 1. 이미지 파일 추출
         const files = images.map((img) => img.file);
 
-        // 2. 6MB 초과 파일 검증
-        const validation = validateImages(files);
+        // 2. 업로드 검증(용량 + 업로드 가능 개수)
+        const result = await validateUpload(files, albumId);
 
-        // 3. 최소 1초 대기 보장
+        // 3. 최소 1초 대기 보장 후 분기
         const elapsedTime = Date.now() - startTime;
-        const remainingTime = Math.max(0, 1000 - elapsedTime);
+        const remainingTime = Math.max(0, 3000 - elapsedTime);
         await new Promise((resolve) => setTimeout(resolve, remainingTime));
-        if (!validation.valid) {
-          console.error('Oversized files:', validation.oversizedFiles);
-          // 6MB 초과 파일이 있으면 select 페이지로 리다이렉트
-          router.push(`/album/${albumId}/select`);
+
+        if (!result.ok) {
+          // 용량 초과 또는 업로드 가능 개수 초과 시 select로 이동
+          router.replace(`/album/${albumId}/select`);
           return;
         }
 
-        // 6MB 초과 파일이 없을 때만 서버 업로드 가능 개수 검증
-        const availableCount = await checkAvailableCount(albumId);
-        if (files.length > availableCount) {
-          // 업로드 가능 개수 초과 시 select로 이동
-          router.push(`/album/${albumId}/select`);
-          return;
-        }
-
-        // 검증 통과하면 main 페이지로 이동
-        router.push(`/album/${albumId}/main`);
+        // 검증 통과 시 main 페이지로 이동
+        router.replace(`/album/${albumId}/main`);
       } catch (err) {
         console.error('Image validation error:', err);
         // 에러 발생 시에도 최소 1초 후 main으로 이동
@@ -55,7 +48,7 @@ export default function WaitingAlbum({ albumId }: WaitingAlbumProps) {
         const remainingTime = Math.max(0, 1000 - elapsedTime);
         await new Promise((resolve) => setTimeout(resolve, remainingTime));
         alert('사진 업로드 중 에러가 발생했습니다.');
-        router.push(`/album/${albumId}/main`);
+        router.replace(`/album/${albumId}/main`);
       }
     };
 
@@ -83,14 +76,22 @@ export default function WaitingAlbum({ albumId }: WaitingAlbumProps) {
   };
 
   return (
-    <div className='flex h-screen w-full flex-col items-center justify-center gap-9'>
-      <Image
-        src='/assets/album/wait-icon.svg'
-        alt='wait-icon'
-        width={116}
-        height={78}
+    <div className='relative flex h-screen w-full flex-col items-center justify-center'>
+      <Lottie
+        animationData={CheeseCartLoading}
+        loop
+        autoplay
+        style={{ width: '100%', height: '100%' }}
       />
-      <div className='text-16-500 text-text-subtle flex items-center gap-1'>
+      <div
+        className='text-16-500 text-text-subtle flex items-center gap-1'
+        style={{
+          position: 'absolute',
+          top: '60%',
+          left: '50%',
+          transform: 'translateX(-50%)',
+        }}
+      >
         <span>잠시만 기다려주세요</span>
         <motion.span
           className='flex'

@@ -132,7 +132,7 @@ export function CountdownTimer({ albumId }: CountdownTimerProps) {
     <div className='flex items-end justify-center'>
       <AnimatedNumber number={timeLeft.days} label='Days' />
       <span className='mb-9 text-2xl font-semibold text-[#D9D9D9]'>:</span>
-      <AnimatedNumber number={timeLeft.hours} label='Hrs' />
+      <AnimatedNumber number={timeLeft.hours} label='HOURS' />
       <span className='mb-9 text-2xl font-semibold text-[#D9D9D9]'>:</span>
       <AnimatedNumber number={timeLeft.minutes} label='Mins' />
       <span className='mb-9 text-2xl font-semibold text-[#D9D9D9]'>:</span>

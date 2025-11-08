@@ -1,7 +1,7 @@
 'use client';
-import React, { useState, useRef, useEffect } from 'react';
-import { Pencil } from 'lucide-react';
 import EmojiPicker from 'emoji-picker-react';
+import { Pencil } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 
 interface EmojiClickData {
   emoji: string;
@@ -39,15 +39,18 @@ export default function AlbumEmojiSelector({
   }, [showPicker]);
 
   return (
-    <div className='relative mt-[113px] mb-10 flex flex-col items-center'>
+    <div className='relative mt-10 mb-10 flex flex-col items-center'>
       {/* 이모지 표시 */}
       <div className='relative'>
-        <div className='bg-element-gray-lighter flex h-[100px] w-[100px] items-center justify-center rounded-full text-[50px]'>
+        <div
+          className='bg-element-gray-lighter flex h-[100px] w-[100px] cursor-pointer items-center justify-center rounded-full text-[50px]'
+          onClick={() => setShowPicker(true)}
+        >
           {selectedEmoji}
         </div>
         {/* 연필 아이콘 (수정 버튼) */}
         <button
-          className='bg-element-gray-darker absolute right-0 bottom-0 flex h-8 w-8 items-center justify-center rounded-full shadow'
+          className='bg-element-gray-darker absolute right-0 bottom-0 flex h-8 w-8 items-center justify-center rounded-full'
           onClick={() => setShowPicker(!showPicker)}
         >
           <Pencil width={18.6} height={18.6} color='#fff' />
@@ -58,9 +61,9 @@ export default function AlbumEmojiSelector({
       {showPicker && (
         <div
           ref={pickerRef}
-          className='absolute bottom-[-450px] left-1/2 z-50 -translate-x-1/2 -translate-y-1/2'
+          className='absolute bottom-[-470px] left-1/2 z-50 -translate-x-1/2 -translate-y-1/2 rounded-[8px]'
           style={{
-            filter: 'drop-shadow(0 0 25px rgba(0, 0, 0, 0.08))',
+            boxShadow: '0 0 25px 5px rgba(0, 0, 0, 0.08)',
           }}
         >
           <EmojiPicker

@@ -27,7 +27,7 @@ export default function CreateInputList({
 
   // 이벤트 이름 검증: 13글자 이내의 한글, 영문, 숫자, _, .만 허용
   const handleEventNameChange = (value: string) => {
-    const validPattern = /^[가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9_.]*$/;
+    const validPattern = /^[가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9_. ]*$/;
     let error = '';
 
     if (!validPattern.test(value)) {
@@ -63,10 +63,10 @@ export default function CreateInputList({
       error = '';
       onParticipantCountChange('');
     } else if (number === 0) {
-      error = '최소 1명 이상 입력해주세요';
+      error = '최소 1명 이상 가능해요';
       onParticipantCountChange(numberValue);
     } else if (number > 64) {
-      error = '최대 64명까지 입력이 가능해요';
+      error = '최대 64명까지 가능해요';
       onParticipantCountChange(numberValue);
     } else {
       error = '';
@@ -107,7 +107,7 @@ export default function CreateInputList({
         label='참여 인원'
         value={participantCount}
         onChange={handleParticipantCountChange}
-        placeholder='인원 수를 입력하세요'
+        placeholder='최대 64명까지 가능해요'
         error={participantCountError}
         type='number'
         inputMode='numeric'

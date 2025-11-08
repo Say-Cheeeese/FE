@@ -91,7 +91,7 @@ function DrawerContent({
         {...props}
       >
         {showHandle && (
-          <div className='bg-element-gray mx-auto mt-4 h-2 w-[100px] shrink-0 rounded-full' />
+          <div className='bg-element-gray mx-auto mt-3 h-1.5 w-10 shrink-0 rounded-full' />
         )}
         {children}
       </DrawerPrimitive.Content>

@@ -68,7 +68,7 @@ async function request<T>(
         error.response?.status === 401 ||
         errorMessage.includes('인증이 필요합니다')
       ) {
-        // redirect('/login');
+        redirect('/login');
       }
 
       console.error('Server API Error:', {

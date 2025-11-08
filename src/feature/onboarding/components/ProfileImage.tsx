@@ -1,9 +1,8 @@
 'use client';
-import React from 'react';
-import Image from 'next/image';
-import { Pencil } from 'lucide-react';
-import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
 import { DrawerClose } from '@/components/ui/drawer';
+import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
+import { Pencil } from 'lucide-react';
+import Image from 'next/image';
 
 const imageList = [
   'smile1.svg',
@@ -30,25 +29,32 @@ export default function ProfileImage({
   const currentImage = selectedImage || 'smile1.svg';
 
   return (
-    <div className='mt-22 mb-10 flex flex-col items-center'>
+    <div className='mt-4 mb-10 flex flex-col items-center'>
       {/* 프로필 이미지 */}
       <div className='relative'>
-        <Image
-          src={`/assets/onboarding/${currentImage}`}
-          width={100}
-          height={100}
-          alt='프로필 이미지'
-          className='rounded-full'
-        />
-        {/* 연필 아이콘 (수정 버튼) */}
         <BottomSheetModal
           trigger={
-            <button className='bg-element-gray-dark absolute right-0 bottom-0 flex h-8 w-8 items-center justify-center rounded-full shadow'>
-              <Pencil width={18.6} height={18.6} color='#fff' />
-            </button>
+            <div className='group relative cursor-pointer'>
+              <Image
+                src={`/assets/onboarding/${currentImage}`}
+                width={100}
+                height={100}
+                alt='프로필 이미지'
+                className='rounded-full'
+              />
+              <button
+                className='bg-element-gray-dark absolute right-0 bottom-0 flex h-8 w-8 items-center justify-center rounded-full transition-transform group-hover:scale-110'
+                tabIndex={-1}
+                type='button'
+                aria-label='프로필 이미지 선택'
+              >
+                <Pencil width={18.6} height={18.6} color='#fff' />
+              </button>
+            </div>
           }
           showCloseButton={false}
-          className='px-6'
+          className='h-90 px-5'
+          showHandle={true}
           dismissible={true}
         >
           <div className='grid grid-cols-5 justify-items-center gap-4 pt-6 pb-6'>
@@ -56,16 +62,15 @@ export default function ProfileImage({
               <DrawerClose key={img} asChild>
                 <button
                   onClick={() => onImageSelect(img)}
-                  className={`rounded-full p-1 transition-all ${
+                  className={`box-content shrink-0 rounded-full p-1 transition-all ${
                     img === currentImage ? 'ring-element-primary ring-3' : ''
                   }`}
                 >
                   <Image
                     src={`/assets/onboarding/${img}`}
-                    width={60}
-                    height={60}
+                    width={100}
+                    height={100}
                     alt={img}
-                    className='rounded-full'
                   />
                 </button>
               </DrawerClose>

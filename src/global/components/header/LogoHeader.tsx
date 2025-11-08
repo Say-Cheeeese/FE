@@ -4,16 +4,18 @@ import Link from 'next/link';
 interface LogoHeaderProps {
   showLogin?: boolean;
   bgColor?: string;
+  border?: boolean;
 }
 
 export default function LogoHeader({
   showLogin = true,
   bgColor = 'white',
+  border = false,
 }: LogoHeaderProps) {
   return (
     <>
       <div
-        className='border-divider-gray fixed top-0 right-0 left-0 z-50 border-b'
+        className={`fixed top-0 right-0 left-0 z-40 ${border ? 'border-divider-gray border-b' : ''}`}
         style={{ background: bgColor }}
       >
         <div className='mx-auto flex h-18 w-full max-w-[430px] items-center justify-between px-5'>

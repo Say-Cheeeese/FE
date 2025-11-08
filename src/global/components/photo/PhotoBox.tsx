@@ -75,11 +75,11 @@ export default function PhotoBox({
 
       {/* 선택 시 체크 */}
       {pressed && (
-        <div className='bg-element-primary absolute top-1 right-1 z-10 flex h-5 w-5 items-center justify-center rounded-full'>
+        <div className='bg-element-primary absolute top-2.5 right-2.5 z-30 flex h-6 w-6 items-center justify-center rounded-full'>
           <Check
             width={12}
             height={12}
-            strokeWidth={2}
+            strokeWidth={3}
             color='var(--color-icon-basic)'
           />
         </div>

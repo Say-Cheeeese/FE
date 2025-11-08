@@ -64,6 +64,7 @@ interface CustomHeaderProps {
   /** 뒤로가기 버튼 클릭 핸들러 (기본: router.back()) */
   onBackClick?: () => void;
   isShowBack?: boolean;
+  border?: boolean;
 }
 
 export default function CustomHeader({
@@ -71,6 +72,7 @@ export default function CustomHeader({
   rightContent,
   onBackClick,
   isShowBack,
+  border = true,
 }: CustomHeaderProps) {
   const router = useRouter();
 

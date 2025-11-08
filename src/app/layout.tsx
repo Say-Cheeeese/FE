@@ -13,7 +13,23 @@ const pretendard = localFont({
 
 export const metadata: Metadata = {
   title: '치즈',
-  description: '치즈',
+  description: '사진을 함께 나누는 치즈',
+  openGraph: {
+    title: '치즈',
+    description: '사진을 함께 나누는 치즈',
+    url: 'https://say-cheese.me',
+    siteName: '치즈',
+    images: [
+      {
+        url: '/og_test.png',
+        width: 1200,
+        height: 630,
+        alt: '치즈 오픈그래프 이미지',
+      },
+    ],
+    locale: 'ko_KR',
+    type: 'website',
+  },
 };
 
 export default function RootLayout({

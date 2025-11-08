@@ -82,7 +82,7 @@ export default function ConfirmModal({
     <AlertDialog>
       <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>
 
-      <AlertDialogContent>
+      <AlertDialogContent className='rounded-[20px]!'>
         <AlertDialogHeader className='pb-6'>
           <AlertDialogTitle className='typo-heading-sm-semibold text-text-basic pt-4'>
             {title}
@@ -103,7 +103,8 @@ export default function ConfirmModal({
             className={cn(
               'flex h-12 items-center justify-center px-5 py-2.5',
               'bg-button-tertiary-fill hover:bg-neutral-200',
-              'typo-body-lg-semibold! text-text-subtle!',
+              'typo-body-lg-semibold! text-text-subtle',
+              'border-none',
               cancelClassName,
             )}
           >
@@ -115,7 +116,7 @@ export default function ConfirmModal({
             className={cn(
               'flex h-12 items-center justify-center px-5 py-2.5',
               'bg-button-primary-fill active:bg-button-primary-fill-pressed active:text-text-primary',
-              'typo-body-lg-semibold! text-text-primary!',
+              'typo-body-lg-semibold! text-text-primary',
               'transition-colors duration-100',
               confirmClassName,
             )}

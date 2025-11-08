@@ -14,27 +14,17 @@ interface SwiperPhotoListProps {
 export default function SwiperPhotoList({
   // TODO : 임시 이미지 리스트
   images = [
-    'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d',
-    'https://images.unsplash.com/photo-1519681393784-d120267933ba',
-    'https://images.unsplash.com/photo-1506765515384-028b60a970df',
-    'https://images.unsplash.com/photo-1438109491414-7198515b166b',
-    'https://images.unsplash.com/photo-1541696432-82c6da8ce7bf',
-    'https://images.unsplash.com/photo-1519681393784-d120267933ba',
-    'https://images.unsplash.com/photo-1506765515384-028b60a970df',
-    'https://images.unsplash.com/photo-1438109491414-7198515b166b',
-    'https://images.unsplash.com/photo-1541696432-82c6da8ce7bf',
-    'https://images.unsplash.com/photo-1519681393784-d120267933ba',
-    'https://images.unsplash.com/photo-1506765515384-028b60a970df',
-    'https://images.unsplash.com/photo-1438109491414-7198515b166b',
-    'https://images.unsplash.com/photo-1541696432-82c6da8ce7bf',
-    'https://images.unsplash.com/photo-1519681393784-d120267933ba',
-    'https://images.unsplash.com/photo-1506765515384-028b60a970df',
-    'https://images.unsplash.com/photo-1438109491414-7198515b166b',
-    'https://images.unsplash.com/photo-1541696432-82c6da8ce7bf',
-    'https://images.unsplash.com/photo-1519681393784-d120267933ba',
-    'https://images.unsplash.com/photo-1506765515384-028b60a970df',
-    'https://images.unsplash.com/photo-1438109491414-7198515b166b',
-    'https://images.unsplash.com/photo-1541696432-82c6da8ce7bf',
+    '/ut/1.jpg',
+    '/ut/2.jpg',
+    '/ut/3.jpg',
+    '/ut/4.jpg',
+    '/ut/5.jpg',
+    '/ut/6.jpg',
+    '/ut/7.jpg',
+    '/ut/8.jpg',
+    '/ut/9.jpg',
+    '/ut/10.jpg',
+    '/ut/11.jpg',
   ],
   aspectRatio = 'aspect-[3/4]',
 }: SwiperPhotoListProps) {
@@ -70,6 +60,7 @@ export default function SwiperPhotoList({
           onSwiper={setMainSwiper}
           slidesPerView={1}
           spaceBetween={16}
+          speed={0}
           className={`flex h-full w-full overflow-hidden`}
           onSlideChange={(sw) => {
             const idx = sw.activeIndex;
@@ -135,19 +126,23 @@ export default function SwiperPhotoList({
             const idx = sw.activeIndex;
             setActiveIndex(idx);
             if (mainSwiper && !mainSwiper.destroyed) {
-              mainSwiper.slideTo(sw.activeIndex);
+              mainSwiper.slideTo(idx);
             }
+
             const vw = window.innerWidth;
-            sw.setTranslate(
-              calcThumbSwiperCenterOffset({
-                viewportWidth: vw,
-                activeMargin: 12,
-                activeWidth: 30,
-                inactiveWidth: 15,
-                inactiveMargin: 2,
-                index: idx,
-              }),
-            ); // 내가 정한 픽셀로 이동
+            const offset = calcThumbSwiperCenterOffset({
+              viewportWidth: vw,
+              activeMargin: 12,
+              activeWidth: 30,
+              inactiveWidth: 15,
+              inactiveMargin: 2,
+              index: idx,
+            });
+
+            // 한 프레임 늦게 + 음수로
+            requestAnimationFrame(() => {
+              sw.setTranslate(offset);
+            });
           }}
         >
           {images.map((src, i) => {

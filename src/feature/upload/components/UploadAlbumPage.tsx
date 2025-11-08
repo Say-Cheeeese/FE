@@ -1,9 +1,7 @@
-import AlbumPreviewCard from '@/feature/photo-share-entry/components/AlbumPreviewCard';
 import CheckNoImgModal from '@/feature/upload/components/CheckNoImgModal';
-import MarqueeCarousel from '@/global/components/carousel/MarqueeCarousel';
 import CustomHeader from '@/global/components/header/CustomHeader';
+import Image from 'next/image';
 import AlbumInfoHeader from './AlbumInfoHeader';
-import AvailableCountBubble from './AvailableCountBubble';
 import UploadButton from './UploadButton';
 
 interface AlbumCard {
@@ -24,33 +22,28 @@ export default function UploadAlbumPage({ albumId }: UploadAlbumPageProps) {
 
   return (
     <div className='flex flex-col'>
-      <CustomHeader title='앨범 채우기' />
-      <main className='flex min-h-[calc(100vh-72px)] flex-col items-center justify-between pt-6 pb-[calc(20px+env(safe-area-inset-bottom))]'>
+      <CustomHeader title='앨범 채우기' border={false} />
+      <main className='flex min-h-[calc(100dvh-72px)] flex-col items-center justify-between pt-6 pb-[calc(20px+env(safe-area-inset-bottom))]'>
         <div className='flex w-full flex-col items-center'>
           <AlbumInfoHeader albumId={albumId} photoCount={cards.length} />
 
-          {cards.length > 0 && (
-            <div className='my-8 w-full'>
-              <MarqueeCarousel
-                items={cards.map((item, i) => (
-                  <div key={i}>
-                    <AlbumPreviewCard
-                      imageUrl={item.imageUrl}
-                      nickname={item.nickname}
-                      profileUrl={item.profileUrl}
-                    />
-                  </div>
-                ))}
-                itemWidth={180}
-              />
-            </div>
-          )}
+          <Image
+            src='/assets/album/test-lottie.svg'
+            alt='사진'
+            width={300}
+            height={136}
+            className='mt-[52px]'
+          />
         </div>
 
         <div className='flex w-full flex-col items-center'>
-          <AvailableCountBubble albumId={albumId} />
+          {/* <AvailableCountBubble albumId={albumId} /> */}
+          <span className='typo-body-sm-medium text-text-secondary mb-3'>
+            Tip. 첫 업로드가 참여도를 두 배 넘게 끌려올려요
+          </span>
           <UploadButton albumId={albumId} />
           <CheckNoImgModal
+            albumId={albumId}
             trigger={
               <button
                 type='button'
