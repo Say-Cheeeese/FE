@@ -1,40 +1,57 @@
 'use client';
 import ToggleAlbumType from '@/feature/main/components/open-album/ToggleAlbumType';
-import { Download, Plus } from 'lucide-react';
+import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
+import { ArrowDownUp, Plus } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { AlbumDetailMode } from './ScreenAlbumDetail';
+import SelectPhotoSortType, { PhotoSortType } from './SelectPhotoSortType';
 
 interface NavBarAlbumDetailProps {
-  changeMode: (newMode: AlbumDetailMode) => void;
-  mode: AlbumDetailMode;
+  albumId: string;
+  sortType: PhotoSortType;
+  changeSortType: (newType: PhotoSortType) => void;
 }
 
 type AlbumType = 'all' | 'deep';
 
 export default function NavBarAlbumDetail({
-  changeMode,
-  mode,
+  albumId,
+  changeSortType,
+  sortType,
 }: NavBarAlbumDetailProps) {
+  const router = useRouter();
   const [albumType, setAlbumType] = useState<AlbumType>('all');
 
-  const handlePhotoAdd = () => {};
+  const handlePhotoAdd = () => {
+    router.push(`/photo-share-entry/${albumId}`);
+  };
 
   const handleToggleChange = (value: AlbumType) => {
     setAlbumType(value);
   };
-  const handlePhotoDownload = () => {
-    changeMode('select');
-  };
 
   return (
     <section className='fixed bottom-0 flex w-full items-center justify-between gap-3 bg-[linear-gradient(180deg,rgba(24,25,27,0)_0%,rgba(24,25,27,0.8)_60.1%)] px-4 py-5'>
-      <button
-        type='button'
-        onClick={handlePhotoAdd}
-        className='bg-element-gray-light rounded-full p-2.5'
+      <BottomSheetModal
+        trigger={
+          <button
+            type='button'
+            className='bg-element-gray-light rounded-full p-2.5'
+          >
+            <ArrowDownUp
+              width={24}
+              height={24}
+              color='var(--color-icon-basic)'
+            />
+          </button>
+        }
       >
-        <Plus width={24} height={24} color={'var(--color-icon-basic)'} />
-      </button>
+        <SelectPhotoSortType
+          sort={sortType}
+          onChange={(newType) => changeSortType(newType)}
+        />
+      </BottomSheetModal>
+
       <ToggleAlbumType
         onChange={handleToggleChange}
         value={albumType}
@@ -42,10 +59,10 @@ export default function NavBarAlbumDetail({
       />
       <button
         type='button'
-        onClick={handlePhotoDownload}
+        onClick={handlePhotoAdd}
         className='bg-element-gray-light rounded-full p-2.5'
       >
-        <Download width={24} height={24} color={'var(--color-icon-basic)'} />
+        <Plus width={24} height={24} color={'var(--color-icon-basic)'} />
       </button>
     </section>
   );

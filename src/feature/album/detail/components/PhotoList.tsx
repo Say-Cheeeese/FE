@@ -1,4 +1,5 @@
 import PhotoBox from '@/global/components/photo/PhotoBox';
+import { AlbumDetailMode } from './ScreenAlbumDetail';
 
 const photos = [
   {
@@ -35,12 +36,16 @@ interface PhotoListProps {
   selectable?: boolean;
   onTogglePhoto?: (photoId: string, selected: boolean) => void;
   selectedList: string[];
+  changeMode: (newMode: AlbumDetailMode) => void;
+  mode: AlbumDetailMode;
 }
 
 export default function PhotoList({
   selectable = false,
   onTogglePhoto,
   selectedList,
+  changeMode,
+  mode,
 }: PhotoListProps) {
   const handlePhotoPress = (photoId: string) => (selected: boolean) => {
     if (!selectable) return;
@@ -49,8 +54,28 @@ export default function PhotoList({
 
   return (
     <section className='p-4'>
-      <div className='typo-body-lg-regular text-text-subtle mb-3'>
-        총 {photos.length ?? 0}장
+      <div className='mb-3 flex justify-between'>
+        <span className='typo-body-lg-regular text-text-subtle'>
+          총 {photos.length ?? 0}장
+        </span>
+        {mode === 'default' && (
+          <button
+            type='button'
+            className='typo-body-sm-medium text-text-subtle bg-button-tertiary-fill rounded-[4px] px-3 py-1.5'
+            onClick={() => changeMode('select')}
+          >
+            선택
+          </button>
+        )}
+        {mode === 'select' && (
+          <button
+            type='button'
+            className='typo-body-sm-medium text-text-subtle bg-button-tertiary-fill rounded-[4px] px-3 py-1.5'
+            onClick={() => changeMode('default')}
+          >
+            취소
+          </button>
+        )}
       </div>
       <div className='grid grid-cols-3 gap-0.5'>
         {photos.map((photo) => (

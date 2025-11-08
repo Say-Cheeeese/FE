@@ -3,15 +3,14 @@
 import CustomHeader, {
   HEADER_HEIGHT,
 } from '@/global/components/header/CustomHeader';
-import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
-import { ArrowDownUp, Menu } from 'lucide-react';
+import { Menu } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import AlbumInfos from './AlbumInfos';
 import DownloadActionBar from './DownloadActionBar';
 import NavBarAlbumDetail from './NavBarAlbumDetail';
 import PhotoList from './PhotoList';
-import SelectPhotoSortType, { PhotoSortType } from './SelectPhotoSortType';
+import { PhotoSortType } from './SelectPhotoSortType';
 
 export type AlbumDetailMode = 'select' | 'default';
 
@@ -79,22 +78,6 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
         title={isAlbumInfosHidden ? '큐시즘 MT' : ''}
         rightContent={
           <div className='flex gap-4'>
-            <BottomSheetModal
-              trigger={
-                <button type='button'>
-                  <ArrowDownUp
-                    width={24}
-                    height={24}
-                    color='var(--color-icon-basic)'
-                  />
-                </button>
-              }
-            >
-              <SelectPhotoSortType
-                sort={sortType}
-                onChange={(newType) => setSortType(newType)}
-              />
-            </BottomSheetModal>
             <button
               type='button'
               onClick={() => router.push(`/album/detail/${albumId}/sidebar`)}
@@ -111,12 +94,15 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
           selectable={mode === 'select'}
           onTogglePhoto={handleTogglePhotoSelection}
           selectedList={selectedPhotoIds}
+          mode={mode}
+          changeMode={(newMode) => setMode(newMode)}
         />
       </div>
       {mode === 'default' && (
         <NavBarAlbumDetail
-          mode={mode}
-          changeMode={(newMode) => setMode(newMode)}
+          albumId={albumId}
+          sortType={sortType}
+          changeSortType={(newType) => setSortType(newType)}
         />
       )}
       {mode === 'select' && (
