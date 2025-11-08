@@ -50,7 +50,7 @@ export default function PhotoList({
   return (
     <section className='p-4'>
       <div className='typo-body-lg-regular text-text-subtle mb-3'>
-        총 2000장
+        총 {photos.length ?? 0}장
       </div>
       <div className='grid grid-cols-3 gap-0.5'>
         {photos.map((photo) => (
