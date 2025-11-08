@@ -2,6 +2,7 @@
 
 import { HEADER_HEIGHT } from '@/global/components/header/CustomHeader';
 import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
+import ConfirmModal from '@/global/components/modal/ConfirmModal';
 import { X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import ItemParticipant from './ItemParticipant';
@@ -121,12 +122,21 @@ export default function ScreenAlbumSidebar({
           </div>
         </section>
         <div className='mt-auto w-full'>
-          <button
-            type='button'
-            className='text-text-error bg-button-tertiary-fill typo-body-lg-semibold w-full rounded-[8px] py-3'
-          >
-            앨범 나가기
-          </button>
+          <ConfirmModal
+            trigger={
+              <button
+                type='button'
+                className='text-text-error bg-button-tertiary-fill typo-body-lg-semibold w-full rounded-[8px] py-3'
+              >
+                앨범 나가기
+              </button>
+            }
+            title='앨범에서 나갈까요?'
+            description='나가더라도 내가 올린 사진은 앨범에 남아요.'
+            cancelText='다음에'
+            confirmText='앨범 나가기'
+            confirmClassName='bg-button-accent-fill text-white'
+          />
         </div>
       </main>
     </>
