@@ -3,6 +3,7 @@
 import { HEADER_HEIGHT } from '@/global/components/header/CustomHeader';
 import { X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import ItemParticipant from './ItemParticipant';
 
 interface ScreenAlbumSidebarProps {
   albumId: string;
@@ -81,11 +82,7 @@ export default function ScreenAlbumSidebar({
 
           <div>
             {participants.map((participant, index) => (
-              <ParticipantRow
-                key={participant.id}
-                participant={participant}
-                showDivider={index !== participants.length - 1}
-              />
+              <ItemParticipant key={participant.id} participant={participant} />
             ))}
           </div>
         </section>

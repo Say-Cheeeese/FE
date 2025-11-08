@@ -1,10 +1,10 @@
 import { Participant } from './ScreenAlbumSidebar';
 
-interface ParticipantRowProps {
+interface ItemParticipantProps {
   participant: Participant;
 }
 
-export default function ParticipantRow({ participant }: ParticipantRowProps) {
+export default function ItemParticipant({ participant }: ItemParticipantProps) {
   return (
     <div className={`flex items-center justify-between gap-3 py-2`}>
       <div className='flex items-center gap-3 overflow-hidden'>
