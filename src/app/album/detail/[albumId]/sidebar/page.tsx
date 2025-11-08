@@ -1,4 +1,4 @@
-import ScreenAlbumSidebar from '@/feature/album/detail/components/ScreenAlbumSidebar';
+import ScreenAlbumSidebar from '@/feature/album/detail/sidebar/components/ScreenAlbumSidebar';
 
 interface PageProps {
   params: Promise<{
