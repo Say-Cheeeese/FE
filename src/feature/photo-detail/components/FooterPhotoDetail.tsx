@@ -1,4 +1,5 @@
 import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
+import ConfirmModal from '@/global/components/modal/ConfirmModal';
 import { Download, Heart, Info } from 'lucide-react';
 import { useState } from 'react';
 import ItemMemberData from './ItemMemberData';
@@ -81,10 +82,15 @@ export default function FooterPhotoDetail({}: FooterPhotoDetailProps) {
         />
       </BottomSheetModal>
 
-      <button className='flex w-12 justify-center'>
-        <Download width={24} height={24} color='white' />
-      </button>
-
+      {/* UT를 위한 임시 모달 추가 */}
+      <ConfirmModal
+        title={'성공하였습니다. 확인을 누른 후, 브라우저 창을 닫아주세요.'}
+        trigger={
+          <button className='flex w-12 justify-center'>
+            <Download width={24} height={24} color='white' />
+          </button>
+        }
+      />
       <div className='typo-body-lg-semibold flex w-12 justify-center gap-1'>
         <button type='button' onClick={handleDeepToggle}>
           <Heart
