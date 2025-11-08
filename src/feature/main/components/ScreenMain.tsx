@@ -1,12 +1,19 @@
+'use client';
+import LogoHeader from '@/global/components/header/LogoHeader';
 import LongButton from '@/global/components/LongButton';
+import Toast from '@/global/components/toast/Toast';
+import { useEffect } from 'react';
 import CloseAlbumContainer from './close-album/CloseAlbumContainer';
 import OpenAlbumContainer from './open-album/OpenAlbumContainer';
 import ProfileMypage from './profile/ProfileMypage';
-import LogoHeader from '@/global/components/header/LogoHeader';
 
 interface ScreenMainProps {}
 
 export default function ScreenMain({}: ScreenMainProps) {
+  useEffect(() => {
+    Toast.alert(`aaa\nasdasd`);
+  }, []);
+
   return (
     <main className=''>
       <LogoHeader />
