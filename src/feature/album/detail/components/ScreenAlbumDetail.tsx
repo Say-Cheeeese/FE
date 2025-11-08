@@ -48,13 +48,13 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
     };
   }, []);
 
-  const handleTogglePhotoSelection = (photoId: string, selected: boolean) => {
+  const handleTogglePhotoSelection = (photoId: string) => {
     setSelectedPhotoIds((prev) => {
-      if (selected) {
-        if (prev.includes(photoId)) return prev;
+      if (prev.includes(photoId)) {
+        return prev.filter((id) => id !== photoId);
+      } else {
         return [...prev, photoId];
       }
-      return prev.filter((id) => id !== photoId);
     });
   };
 

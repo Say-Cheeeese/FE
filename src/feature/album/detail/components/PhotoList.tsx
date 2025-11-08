@@ -1,4 +1,5 @@
 import PhotoBox from '@/global/components/photo/PhotoBox';
+import { useRouter } from 'next/navigation';
 import { AlbumDetailMode } from './ScreenAlbumDetail';
 
 const photos = [
@@ -34,7 +35,7 @@ const photos = [
 
 interface PhotoListProps {
   selectable?: boolean;
-  onTogglePhoto?: (photoId: string, selected: boolean) => void;
+  onTogglePhoto?: (photoId: string) => void;
   selectedList: string[];
   changeMode: (newMode: AlbumDetailMode) => void;
   mode: AlbumDetailMode;
@@ -47,9 +48,11 @@ export default function PhotoList({
   changeMode,
   mode,
 }: PhotoListProps) {
-  const handlePhotoPress = (photoId: string) => (selected: boolean) => {
+  const router = useRouter();
+
+  const handlePhotoPress = (photoId: string) => {
     if (!selectable) return;
-    onTogglePhoto?.(photoId, selected);
+    onTogglePhoto?.(photoId);
   };
 
   return (
@@ -85,8 +88,19 @@ export default function PhotoList({
             likeCount={0}
             imageSrc={photo.imageSrc}
             responsive
-            onPress={handlePhotoPress(photo.id)}
-            pressable={selectable}
+            onPress={() => {
+              if (mode === 'default') {
+                router.push('/photo/ID바꿔야함');
+              } else {
+                console.log(
+                  1,
+                  photo.id,
+                  selectedList.includes(photo.id),
+                  selectedList,
+                );
+                handlePhotoPress(photo.id);
+              }
+            }}
           />
         ))}
       </div>
