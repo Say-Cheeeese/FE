@@ -41,7 +41,7 @@ export default function EmojiLoading() {
             width: '100%',
             height: '100%',
             background:
-              percent > 0 
+              percent > 0
                 ? `conic-gradient(#FFCD14 0% ${percent}%, #FFE480 ${percent}%, white ${percent}% 100%)`
                 : 'white',
           }}
