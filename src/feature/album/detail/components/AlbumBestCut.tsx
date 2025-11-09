@@ -17,22 +17,13 @@ export default function AlbumBestCut({}: AlbumBestCutProps) {
       <div className='mb-3'>
         <div className='flex justify-between'>
           {/* TODO Router주소 바꿔야함 */}
-          <PhotoBox
-            onPress={() => router.push('/photo/ID바꿔야함')}
-            imageSrc='https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d'
-          />
-          <PhotoBox
-            onPress={() => router.push('/photo/ID바꿔야함')}
-            imageSrc='https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d'
-          />
-          <PhotoBox
-            onPress={() => router.push('/photo/ID바꿔야함')}
-            imageSrc='https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d'
-          />
-          <PhotoBox
-            onPress={() => router.push('/photo/ID바꿔야함')}
-            imageSrc='https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d'
-          />
+          {Array.from({ length: 4 }).map((_, index) => (
+            <PhotoBox
+              key={index}
+              onPress={() => router.push('/photo/ID바꿔야함')}
+              imageSrc='https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d'
+            />
+          ))}
         </div>
       </div>
 

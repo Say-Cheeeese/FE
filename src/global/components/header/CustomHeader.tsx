@@ -87,7 +87,11 @@ export default function CustomHeader({
   return (
     <>
       <div
-        className='border-divider-gray fixed top-0 left-1/2 z-50 flex w-full max-w-[430px] -translate-x-1/2 items-center justify-between border-b bg-white px-5'
+        className={[
+          'border-divider-gray fixed top-0 left-1/2 z-50 flex w-full max-w-[430px] -translate-x-1/2 items-center justify-between border-b bg-white px-5',
+          ,
+          border ? 'border-divider-gray border-b' : '',
+        ].join(' ')}
         style={{ height: HEADER_HEIGHT }}
       >
         {/* 왼쪽: 뒤로가기 + 타이틀 */}

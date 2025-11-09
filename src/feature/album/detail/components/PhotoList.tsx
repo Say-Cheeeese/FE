@@ -2,6 +2,7 @@ import PhotoBox from '@/global/components/photo/PhotoBox';
 import { useRouter } from 'next/navigation';
 import { AlbumDetailMode } from './ScreenAlbumDetail';
 
+// TODO : Mock Dat로 api연동되면 삭제예정
 const photos = [
   {
     id: 'photo-1',
@@ -92,12 +93,6 @@ export default function PhotoList({
               if (mode === 'default') {
                 router.push('/photo/ID바꿔야함');
               } else {
-                console.log(
-                  1,
-                  photo.id,
-                  selectedList.includes(photo.id),
-                  selectedList,
-                );
                 handlePhotoPress(photo.id);
               }
             }}
