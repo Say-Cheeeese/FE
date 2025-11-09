@@ -54,7 +54,7 @@ import { ChevronLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { ReactNode } from 'react';
 
-const HEADER_HEIGHT = 72;
+export const HEADER_HEIGHT = 72;
 
 interface CustomHeaderProps {
   /** 헤더 중앙에 표시될 타이틀 */
@@ -88,9 +88,11 @@ export default function CustomHeader({
     <>
       <div
         className={[
-          'fixed top-0 left-1/2 z-40 flex h-18 w-full max-w-[430px] -translate-x-1/2 items-center justify-between bg-white px-5',
+          'border-divider-gray fixed top-0 left-1/2 z-50 flex w-full max-w-[430px] -translate-x-1/2 items-center justify-between border-b bg-white px-5',
+          ,
           border ? 'border-divider-gray border-b' : '',
         ].join(' ')}
+        style={{ height: HEADER_HEIGHT }}
       >
         {/* 왼쪽: 뒤로가기 + 타이틀 */}
         <div className='flex items-center gap-2'>

@@ -3,7 +3,9 @@ import { useEffect, useState } from 'react';
 import EmptyAlbum from '../EmptyAlbum';
 import ButtonMore from './ButtonMore';
 import OpenAlbum from './OpenAlbum';
-import ToggleAlbumType, { AlbumType } from './ToggleAlbumType';
+import ToggleAlbumType from './ToggleAlbumType';
+
+type AlbumType = 'all' | 'mine';
 
 interface OpenAlbumItem {
   author: string;
@@ -87,6 +89,7 @@ export default function OpenAlbumContainer({}: OpenAlbumContainerProps) {
       </h2>
       <ToggleAlbumType
         value={albumType}
+        labels={{ all: '전체', mine: '내가 만든 앨범' }}
         onChange={(next) => setAlbumType(next)}
       />
       <div className='mb-5 flex flex-col gap-5'>

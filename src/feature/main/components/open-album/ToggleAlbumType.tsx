@@ -1,33 +1,31 @@
-export type AlbumType = 'all' | 'mine';
+'use client';
 
-interface ToggleAlbumTypeProps {
-  value: AlbumType;
-  onChange: (next: AlbumType) => void;
-  labels?: Record<AlbumType | string, string>;
+interface ToggleAlbumTypeProps<T extends string> {
+  value: T;
+  onChange: (next: T) => void;
+  labels: Record<T, string>;
 }
 
-export default function ToggleAlbumType({
+export default function ToggleAlbumType<T extends string>({
   value,
   onChange,
-  labels = { all: '전체', mine: '내가 만든 앨범' },
-}: ToggleAlbumTypeProps) {
+  labels,
+}: ToggleAlbumTypeProps<T>) {
+  const keys = Object.keys(labels) as T[];
+
   return (
-    <div
-      className={
-        'bg-element-gray-light mb-4 flex w-full gap-[2px] rounded-full p-1'
-      }
-    >
-      {Object.entries(labels).map(([key, label]) => {
-        const albumType = key as AlbumType;
-        const isActive = value === albumType;
+    <div className='bg-element-gray-light flex w-full gap-[2px] rounded-full p-1'>
+      {keys.map((key) => {
+        const isActive = value === key;
+        const label = labels[key];
 
         return (
           <button
-            key={albumType}
+            key={key}
             type='button'
-            onClick={() => onChange(albumType)}
+            onClick={() => onChange(key)}
             className={[
-              'typo-body-md-medium flex-1 rounded-full py-2 transition-all',
+              'typo-body-md-medium flex-1 rounded-full py-2',
               isActive
                 ? 'bg-element-white text-text-basic drop-shadow-sm'
                 : 'text-text-disabled bg-transparent',
