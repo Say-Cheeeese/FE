@@ -15,11 +15,12 @@ export default function AlbumBestCut({}: AlbumBestCutProps) {
 
       {/* 사진 리스트 */}
       <div className='mb-3'>
-        <div className='flex justify-between'>
+        <div className='grid w-full grid-cols-4'>
           {/* TODO Router주소 바꿔야함 */}
           {Array.from({ length: 4 }).map((_, index) => (
             <PhotoBox
               key={index}
+              responsive
               onPress={() => router.push('/photo/ID바꿔야함')}
               imageSrc='https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d'
             />
