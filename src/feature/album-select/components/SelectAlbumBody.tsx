@@ -213,10 +213,11 @@ export default function SelectAlbumBody() {
                   pressed={isSelected}
                   disabled={img.isOversized}
                   onPress={(next) => {
-                    toggleSelect(img.id, img.isOversized, next);
-                  }}
-                  onDisabledPress={() => {
-                    showToast('사진이 6MB를 초과해 업로드할 수 없어요.');
+                    if (img.isOversized) {
+                      showToast('사진이 6MB를 초과해 업로드할 수 없어요.');
+                    } else {
+                      toggleSelect(img.id, img.isOversized, next);
+                    }
                   }}
                 />
               </div>
