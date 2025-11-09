@@ -1,3 +1,9 @@
+import EmojiLoading from '@/components/ui/EmojiLoading';
+
 export default function Page() {
-  return <div>이미지 오류없이 넘어옴</div>;
+  return (
+    <div>
+      <EmojiLoading />
+    </div>
+  );
 }
