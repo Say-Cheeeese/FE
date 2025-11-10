@@ -6,21 +6,32 @@ import CustomHeader, {
 import { Menu } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+import { PhotoListResult } from '../api/getPhotoListByAlbumId';
+import { useGetAlbumInvitation } from '../hooks/useGetAlbumInvitation';
 import AlbumInfos from './AlbumInfos';
 import DownloadActionBar from './DownloadActionBar';
 import NavBarAlbumDetail from './NavBarAlbumDetail';
+import NoPhotoBody from './NoPhotoBody';
 import PhotoList from './PhotoList';
 import { PhotoSortType } from './SelectPhotoSortType';
 
-export type AlbumDetailMode = 'select' | 'default';
+export type AlbumDetailMode = 'select' | 'default' | 'empty';
 
 interface ScreenAlbumDetailProps {
   albumId: string;
+  initialData: PhotoListResult; // 서버에서 전달받은 초기 데이터
 }
 
-export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
+export default function ScreenAlbumDetail({
+  albumId,
+  initialData,
+}: ScreenAlbumDetailProps) {
   const router = useRouter();
-  const [mode, setMode] = useState<AlbumDetailMode>('default');
+  const [mode, setMode] = useState<AlbumDetailMode>(
+    initialData.responses && initialData.responses.length > 0
+      ? 'default'
+      : 'empty',
+  );
   const albumInfosRef = useRef<HTMLDivElement | null>(null);
   const [isAlbumInfosHidden, setIsAlbumInfosHidden] = useState(false);
   // TODO : photoIds를 담지않고, 이미지 url도 상태로 관리해야함. 혹은, photoIds로 이미지를 받아와야함.
@@ -64,18 +75,25 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
   };
 
   useEffect(() => {
+    // 사진이 없으면 empty 모드로 자동 진입
+    if (!initialData.responses || initialData.responses.length === 0) {
+      if (mode !== 'empty') setMode('empty');
+      return;
+    }
+    // 사진이 있으면 select/reset 로직 유지
     if (mode === 'select') return;
     if (selectedPhotoIds.length === 0) return;
 
     setSelectedPhotoIds([]);
     setSelectionResetKey((prev) => prev + 1);
-  }, [mode, selectedPhotoIds]);
+  }, [mode, selectedPhotoIds, initialData.responses]);
+  const albumData = useGetAlbumInvitation(albumId);
 
   return (
     <>
       <CustomHeader
         isShowBack
-        title={isAlbumInfosHidden ? '큐시즘 MT' : ''}
+        title={isAlbumInfosHidden ? (albumData.data?.title ?? '') : ''}
         rightContent={
           <div className='flex gap-4'>
             <button
@@ -88,15 +106,27 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
         }
       />
       <div className='mb-22 flex flex-col'>
-        <AlbumInfos ref={albumInfosRef} />
-        <PhotoList
-          key={selectionResetKey}
-          selectable={mode === 'select'}
-          onTogglePhoto={handleTogglePhotoSelection}
-          selectedList={selectedPhotoIds}
-          mode={mode}
-          changeMode={(newMode) => setMode(newMode)}
+        <AlbumInfos
+          ref={albumInfosRef}
+          albumId={albumId}
+          albumInfo={albumData.data}
+          isLoading={albumData.isLoading}
+          isError={albumData.isError}
+          photos={initialData.responses}
         />
+        {mode === 'empty' ? (
+          <NoPhotoBody />
+        ) : (
+          <PhotoList
+            key={selectionResetKey}
+            selectable={mode === 'select'}
+            onTogglePhoto={handleTogglePhotoSelection}
+            selectedList={selectedPhotoIds}
+            mode={mode}
+            changeMode={(newMode) => setMode(newMode)}
+            photos={initialData.responses}
+          />
+        )}
       </div>
       {mode === 'default' && (
         <NavBarAlbumDetail
