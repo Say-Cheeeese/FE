@@ -40,7 +40,7 @@ export default function WaitingAlbum({ albumId }: WaitingAlbumProps) {
         }
 
         // 검증 통과 시 main 페이지로 이동
-        router.replace(`/album/${albumId}/main`);
+        router.replace(`/album/detail/${albumId}`);
       } catch (err) {
         console.error('Image validation error:', err);
         // 에러 발생 시에도 최소 1초 후 main으로 이동

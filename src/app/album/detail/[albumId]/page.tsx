@@ -1,3 +1,4 @@
+import { getPhotoListByAlbumId } from '@/feature/album/detail/api/getPhotoListByAlbumId';
 import ScreenAlbumDetail from '@/feature/album/detail/components/ScreenAlbumDetail';
 
 interface PageProps {
@@ -8,5 +9,9 @@ interface PageProps {
 
 export default async function Page({ params }: PageProps) {
   const { albumId } = await params;
-  return <ScreenAlbumDetail albumId={albumId} />;
+  const photoListResult = await getPhotoListByAlbumId(albumId, {
+    page: 0,
+    size: 20,
+  });
+  return <ScreenAlbumDetail albumId={albumId} initialData={photoListResult} />;
 }
