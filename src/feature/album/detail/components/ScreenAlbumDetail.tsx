@@ -6,7 +6,7 @@ import CustomHeader, {
 import { Menu } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { PhotoListResult } from '../api/getPhotoListByAlbumId';
+import { PhotoListResult } from '../api/getPhotoListByAlbumId.server';
 import { useGetAlbumInvitation } from '../hooks/useGetAlbumInvitation';
 import AlbumInfos from './AlbumInfos';
 import DownloadActionBar from './DownloadActionBar';
