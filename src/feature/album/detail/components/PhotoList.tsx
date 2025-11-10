@@ -1,6 +1,6 @@
 import PhotoBox from '@/global/components/photo/PhotoBox';
 import { useRouter } from 'next/navigation';
-import type { Photo } from '../api/getPhotoListByAlbumId';
+import type { Photo } from '../api/getPhotoListByAlbumId.server';
 import { AlbumDetailMode } from './ScreenAlbumDetail';
 
 interface PhotoListProps {
