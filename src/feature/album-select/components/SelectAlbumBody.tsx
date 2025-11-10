@@ -17,6 +17,24 @@ type ImageWithUrl = {
 };
 
 export default function SelectAlbumBody() {
+  // LongButton 업로드 핸들러 함수로 분리
+  const handleUpload = () => {
+    const selectedFiles = processedImages.filter((img) =>
+      selectedIds.has(img.id),
+    );
+    const fileInfos = selectedFiles.map((img) => ({
+      fileName: img.file.name,
+      fileSize: img.file.size,
+      contentType: img.file.type,
+    }));
+    const files = selectedFiles.map((img) => img.file);
+
+    uploadMutate({
+      albumCode: albumId,
+      fileInfos,
+      files,
+    });
+  };
   // presignedAndUploadToNCP를 직접 사용
   const { albumId } = useParams() as { albumId: string };
   const { images } = useImageStore();
@@ -51,12 +69,13 @@ export default function SelectAlbumBody() {
           revokeAllObjectUrls();
           showToast('모든 사진이 성공적으로 업로드되었어요!');
           // 업로드 성공 시 메인으로 이동
-          router.push(`/album/${albumId}/main`);
+          router.push(`/album/detail/${albumId}`);
         }
       },
-      onError: () => {
+      onError: (e) => {
         revokeAllObjectUrls();
-        showToast('과제 끝! 안내자의 지시를 따라주세요.');
+        console.error('에러 발생', e);
+        alert('사진을 업로드하는 중 오류가 발생했습니다. 다시 시도해주세요.');
       },
     });
 
@@ -229,23 +248,7 @@ export default function SelectAlbumBody() {
         text={`앨범에 ${selectedIds.size}장 채우기`}
         noFixed={false}
         disabled={isUploading || isOverCount || selectedIds.size === 0}
-        onClick={() => {
-          const selectedFiles = processedImages.filter((img) =>
-            selectedIds.has(img.id),
-          );
-          const fileInfos = selectedFiles.map((img) => ({
-            fileName: img.file.name,
-            fileSize: img.file.size,
-            contentType: img.file.type,
-          }));
-          const files = selectedFiles.map((img) => img.file);
-
-          uploadMutate({
-            albumCode: albumId,
-            fileInfos,
-            files,
-          });
-        }}
+        onClick={handleUpload}
       />
       {toasts.length > 0 && (
         <AlbumToastList toasts={toasts} onRemove={removeToast} />
