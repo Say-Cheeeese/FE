@@ -4,7 +4,7 @@ import { forwardRef } from 'react';
 import AlbumBestCut from './AlbumBestCut';
 
 import { convertUnicodeToEmoji } from '@/global/utils/convertEmoji';
-import { Photo } from '../api/getPhotoListByAlbumId';
+import { Photo } from '../api/getPhotoListByAlbumId.server';
 
 interface AlbumInfosProps {
   albumId: string;
