@@ -1,4 +1,4 @@
-import { getPhotoListByAlbumId } from '@/feature/album/detail/api/getPhotoListByAlbumId';
+import { getPhotoListByAlbumId } from '@/feature/album/detail/api/getPhotoListByAlbumId.server';
 import ScreenAlbumDetail from '@/feature/album/detail/components/ScreenAlbumDetail';
 
 interface PageProps {
