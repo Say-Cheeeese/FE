@@ -1,12 +1,13 @@
 import { handleFileUpload } from '@/feature/create-album/utils/handleFileUpload';
 import LongButton from '@/global/components/LongButton';
+import { useUploadingStore } from '@/store/useUploadingStore';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 
 export default function NoPhotoBody() {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [isUploading, setIsUploading] = useState(false);
+  const { isUploading, setUploading } = useUploadingStore();
   const router = useRouter();
   // albumId를 URL에서 추출 (app router 기준)
   const params = useParams();
@@ -19,10 +20,14 @@ export default function NoPhotoBody() {
 
   async function onFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     if (!e.target.files || e.target.files.length === 0) return;
-    setIsUploading(true);
-    await handleFileUpload(e, albumId, router);
-    setIsUploading(false);
-    // handleFileUpload에서 사진이 없으면 이동하지 않으므로, 여기선 아무것도 안 함
+    setUploading(true);
+    try {
+      await handleFileUpload(e, albumId, router, { stay: true });
+    } finally {
+      setUploading(false);
+      window.location.reload();
+    }
+    // handleFileUpload에서 상태 관리 및 이동 처리
   }
 
   function handleButtonClick() {
@@ -57,7 +62,7 @@ export default function NoPhotoBody() {
       </button>
       <LongButton
         text={isUploading ? '업로드중이에요.' : '앨범 채우기'}
-        noFixed={true}
+        noFixed={false}
         onClick={handleButtonClick}
         disabled={isUploading}
       />
