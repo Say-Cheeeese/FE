@@ -1,6 +1,7 @@
 'use client';
 import CustomHeader from '@/global/components/header/CustomHeader';
 import LongButton from '@/global/components/LongButton';
+import ConfirmModal from '@/global/components/modal/ConfirmModal';
 import PersonSvg from '@/global/svg/PersonSvg';
 import { Menu } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -44,7 +45,12 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
             <span>7 / 8 명</span>
           </div>
         </div>
-        <LongButton text='사진 확정하기' noFixed />
+        <ConfirmModal
+          trigger={<LongButton text='사진 확정하기' noFixed />}
+          title='이대로 확정하시겠어요?'
+          description='예쁜 치즈네컷을 만들어드릴게요.'
+          confirmText='확정하기'
+        />
       </div>
     </>
   );
