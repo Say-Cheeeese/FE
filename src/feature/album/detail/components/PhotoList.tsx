@@ -34,6 +34,9 @@ const photos = [
   },
 ];
 
+export const ID_PHOTO_LIST = 'photo-list';
+export const ID_PHOTO_LIST_ANCHOR = 'photo-list-anchor';
+
 interface PhotoListProps {
   selectable?: boolean;
   onTogglePhoto?: (photoId: string) => void;
@@ -56,8 +59,37 @@ export default function PhotoList({
     onTogglePhoto?.(photoId);
   };
 
+  const handleChangeMode = (nextMode: AlbumDetailMode) => {
+    const photoList = document.getElementById(ID_PHOTO_LIST);
+    const anchor = document.getElementById(ID_PHOTO_LIST_ANCHOR);
+
+    if (nextMode === 'select') {
+      if (photoList) {
+        photoList.style.minHeight = '800px';
+      }
+
+      // 앵커 기준으로 스크롤
+      if (anchor) {
+        anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    } else {
+      if (photoList) {
+        photoList.style.minHeight = '';
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    changeMode(nextMode);
+  };
+
   return (
-    <section className='p-4'>
+    <section id={ID_PHOTO_LIST} className='relative p-4'>
+      {/* 숨겨진 오프셋용 앵커 */}
+      <div
+        id={ID_PHOTO_LIST_ANCHOR}
+        className='invisible absolute top-[-72px] left-0'
+      />
       <div className='mb-3 flex justify-between'>
         <span className='typo-body-lg-regular text-text-subtle'>
           총 {photos.length ?? 0}장
@@ -66,7 +98,7 @@ export default function PhotoList({
           <button
             type='button'
             className='typo-body-sm-medium text-text-subtle bg-button-tertiary-fill rounded-[4px] px-3 py-1.5'
-            onClick={() => changeMode('select')}
+            onClick={() => handleChangeMode('select')}
           >
             선택
           </button>
@@ -75,7 +107,7 @@ export default function PhotoList({
           <button
             type='button'
             className='typo-body-sm-medium text-text-subtle bg-button-tertiary-fill rounded-[4px] px-3 py-1.5'
-            onClick={() => changeMode('default')}
+            onClick={() => handleChangeMode('default')}
           >
             취소
           </button>
