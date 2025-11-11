@@ -2,6 +2,7 @@
 
 import { handleFileUpload } from '@/feature/create-album/utils/handleFileUpload';
 import ConfirmModal from '@/global/components/modal/ConfirmModal';
+import { useUploadingStore } from '@/store/useUploadingStore';
 import { useRouter } from 'next/navigation';
 import { ReactNode, useRef } from 'react';
 
@@ -18,6 +19,7 @@ export default function CheckNoImgModal({
 }: CheckNoImgModalProps) {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { setUploading } = useUploadingStore();
 
   const handleCancel = () => {
     fileInputRef.current?.click();
@@ -33,7 +35,12 @@ export default function CheckNoImgModal({
   };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    await handleFileUpload(e, albumId, router);
+    setUploading(true);
+    try {
+      await handleFileUpload(e, albumId, router);
+    } finally {
+      setUploading(false);
+    }
   };
 
   return (
