@@ -50,7 +50,7 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
           </div>
         }
       />
-      <section className='mt-8 flex flex-col items-center'>
+      <section className='absolute top-[46%] left-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center'>
         <div className='typo-body-lg-semibold mb-2'>현재 TOP 4 사진</div>
         <Container4Cut />
       </section>
@@ -97,7 +97,7 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
                 <ConfirmModal
                   trigger={<LongButton text='사진 확정하기' noFixed />}
                   title='이대로 확정하시겠어요?'
-                  description='예쁜 치즈네컷을 만들어드릴게요.'
+                  description='예쁜 치즈네컷을 만들어드릴게요'
                   confirmText='확정하기'
                   onConfirm={handleConfirm}
                 />
@@ -107,7 +107,7 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
         ) : (
           <div className='relative w-full'>
             <BubbleHint
-              message='📸 지금 930장 더 올릴 수 있어요'
+              message='📸 사진 확정 권한은 메이커에게만 있어요'
               className='-top-4'
             />
             <LongButton text='메이커에게 조르기' noFixed />

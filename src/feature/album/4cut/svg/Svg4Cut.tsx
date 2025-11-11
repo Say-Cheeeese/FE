@@ -5,9 +5,6 @@ const PHOTO_SLOTS = [
   { x: 65, y: 788.5 },
 ] as const;
 
-const PHOTO_WIDTH = 463;
-const PHOTO_HEIGHT = 690;
-
 type PhotoUrl = string | null | undefined;
 
 interface Svg4CutProps {
