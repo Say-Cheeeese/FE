@@ -2,6 +2,7 @@
 import CustomHeader from '@/global/components/header/CustomHeader';
 import LongButton from '@/global/components/LongButton';
 import ConfirmModal from '@/global/components/modal/ConfirmModal';
+import BubbleHint from '@/global/components/tooltip/BubbleTooltip';
 import PersonSvg from '@/global/svg/PersonSvg';
 import { Download, Menu, Send } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -15,6 +16,8 @@ interface ScreenAlbum4CutProps {
 export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
   const router = useRouter();
   const [isConfirmed, setIsConfirmed] = useState(false);
+  // TODO : maker 여부 api통해 확인
+  const isMaker = false;
 
   const handleConfirm = () => {
     // TODO : 치즈네컷 확정
@@ -53,46 +56,62 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
       </section>
 
       <div className='fixed bottom-5 flex w-full flex-col items-center px-4'>
-        {isConfirmed ? (
-          <div className='flex w-full max-w-[430px] justify-center gap-3'>
-            <button
-              onClick={handleDownload}
-              className='bg-button-tertiary-fill text-text-subtle flex flex-1 items-center justify-center gap-1 rounded-[8px] py-[15px]'
-            >
-              <Download
-                width={24}
-                height={24}
-                color='var(--color-icon-basic)'
-              />
-              <span className='typo-body-1xl-semibold'>다운로드</span>
-            </button>
-            <button
-              onClick={handleShare}
-              className='bg-button-tertiary-fill text-text-subtle flex flex-1 items-center justify-center gap-1 rounded-[8px] py-[15px]'
-            >
-              <Send width={24} height={24} color='var(--color-icon-basic)' />
-              <span className='typo-body-1xl-semibold'>공유하기</span>
-            </button>
-          </div>
-        ) : (
+        {isMaker ? (
           <>
-            <div className='typo-body-sm-semibold flex items-center gap-2 pb-3'>
-              <span>띱 진행상황</span>
-              <div className='flex items-center'>
-                <span className='p-[5px]'>
-                  <PersonSvg />
-                </span>
-                <span>7 / 8 명</span>
+            {isConfirmed ? (
+              <div className='flex w-full max-w-[430px] justify-center gap-3'>
+                <button
+                  onClick={handleDownload}
+                  className='bg-button-tertiary-fill text-text-subtle flex flex-1 items-center justify-center gap-1 rounded-[8px] py-[15px]'
+                >
+                  <Download
+                    width={24}
+                    height={24}
+                    color='var(--color-icon-basic)'
+                  />
+                  <span className='typo-body-1xl-semibold'>다운로드</span>
+                </button>
+                <button
+                  onClick={handleShare}
+                  className='bg-button-tertiary-fill text-text-subtle flex flex-1 items-center justify-center gap-1 rounded-[8px] py-[15px]'
+                >
+                  <Send
+                    width={24}
+                    height={24}
+                    color='var(--color-icon-basic)'
+                  />
+                  <span className='typo-body-1xl-semibold'>공유하기</span>
+                </button>
               </div>
-            </div>
-            <ConfirmModal
-              trigger={<LongButton text='사진 확정하기' noFixed />}
-              title='이대로 확정하시겠어요?'
-              description='예쁜 치즈네컷을 만들어드릴게요.'
-              confirmText='확정하기'
-              onConfirm={handleConfirm}
-            />
+            ) : (
+              <>
+                <div className='typo-body-sm-semibold flex items-center gap-2 pb-3'>
+                  <span>띱 진행상황</span>
+                  <div className='flex items-center'>
+                    <span className='p-[5px]'>
+                      <PersonSvg />
+                    </span>
+                    <span>7 / 8 명</span>
+                  </div>
+                </div>
+                <ConfirmModal
+                  trigger={<LongButton text='사진 확정하기' noFixed />}
+                  title='이대로 확정하시겠어요?'
+                  description='예쁜 치즈네컷을 만들어드릴게요.'
+                  confirmText='확정하기'
+                  onConfirm={handleConfirm}
+                />
+              </>
+            )}
           </>
+        ) : (
+          <div className='relative w-full'>
+            <BubbleHint
+              message='📸 지금 930장 더 올릴 수 있어요'
+              className='-top-4'
+            />
+            <LongButton text='메이커에게 조르기' noFixed />
+          </div>
         )}
       </div>
     </>
