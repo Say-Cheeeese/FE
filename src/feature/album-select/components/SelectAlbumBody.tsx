@@ -63,13 +63,13 @@ export default function SelectAlbumBody() {
     usePresignedAndUploadToNCP({
       onSuccess: (result) => {
         if (result.failed > 0) {
-          // showToast(`${result.failed}개 파일 업로드에 실패했어요`);
-          showToast('과제 끝! 안내자의 지시를 따라주세요.');
+          showToast(`${result.failed}개 파일 업로드에 실패했어요`);
         } else {
           revokeAllObjectUrls();
+          useImageStore.getState().setImages([]);
           showToast('모든 사진이 성공적으로 업로드되었어요!');
           // 업로드 성공 시 메인으로 이동
-          router.push(`/album/detail/${albumId}`);
+          router.replace(`/album/detail/${albumId}`);
         }
       },
       onError: (e) => {
@@ -203,7 +203,7 @@ export default function SelectAlbumBody() {
 
   return (
     <div className='w-full px-4'>
-      <div className='sticky top-[72px] z-99 flex justify-between bg-white pt-4 pb-3'>
+      <div className='sticky top-[72px] z-40 flex justify-between bg-white pt-4 pb-3'>
         <span className='typo-body-lg-regular text-text-subtle'>
           총 {images.length}장
         </span>
