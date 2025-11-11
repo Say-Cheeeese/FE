@@ -1,5 +1,6 @@
 import PhotoBox from '@/global/components/photo/PhotoBox';
 import { useRouter } from 'next/navigation';
+import { useRef } from 'react';
 import { AlbumDetailMode } from './ScreenAlbumDetail';
 
 // TODO : Mock Dat로 api연동되면 삭제예정
@@ -56,30 +57,33 @@ export default function PhotoList({
 }: PhotoListProps) {
   const router = useRouter();
 
+  const photoListRef = useRef<HTMLElement | null>(null);
+  const anchorRef = useRef<HTMLDivElement | null>(null);
+
   const handlePhotoPress = (photoId: string) => {
     if (!selectable) return;
     onTogglePhoto?.(photoId);
   };
 
   const handleChangeMode = (nextMode: AlbumDetailMode) => {
-    const photoList = document.getElementById(ID_PHOTO_LIST);
-    const anchor = document.getElementById(ID_PHOTO_LIST_ANCHOR);
+    const photoListEl = photoListRef.current;
+    const anchorEl = anchorRef.current;
 
     if (nextMode === 'select') {
-      if (photoList) {
-        photoList.style.minHeight = SELECT_MODE_MIN_HEIGHT;
+      if (photoListEl) {
+        photoListEl.style.minHeight = SELECT_MODE_MIN_HEIGHT;
       }
 
-      if (anchor) {
-        anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (anchorEl) {
+        anchorEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     } else {
       window.scrollTo({ top: 0, behavior: 'smooth' });
 
       // behavior:smooth동작 끝나면 min-height 원복
       setTimeout(() => {
-        if (photoList) {
-          photoList.style.minHeight = '';
+        if (photoListEl) {
+          photoListEl.style.minHeight = '';
         }
       }, 300);
     }
@@ -88,11 +92,8 @@ export default function PhotoList({
   };
 
   return (
-    <section id={ID_PHOTO_LIST} className='relative p-4'>
-      <div
-        id={ID_PHOTO_LIST_ANCHOR}
-        className='invisible absolute top-[-72px] left-0'
-      />
+    <section ref={photoListRef} className='relative p-4'>
+      <div ref={anchorRef} className='invisible absolute top-[-72px] left-0' />
       <div className='mb-3 flex justify-between'>
         <span className='typo-body-lg-regular text-text-subtle'>
           총 {photos.length ?? 0}장
