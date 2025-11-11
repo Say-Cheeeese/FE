@@ -1,5 +1,5 @@
+import PersonSvg from '@/global/svg/PersonSvg';
 import Image from 'next/image';
-import PersonSvg from './PersonSvg';
 
 const defaultThumbnail = '/assets/album/bg-album-default.png';
 
