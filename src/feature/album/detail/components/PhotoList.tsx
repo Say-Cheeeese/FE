@@ -72,11 +72,14 @@ export default function PhotoList({
         anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     } else {
-      if (photoList) {
-        photoList.style.minHeight = '';
-      }
-
       window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      // behavoir:smooth동작 끝나면 min-height 원복
+      setTimeout(() => {
+        if (photoList) {
+          photoList.style.minHeight = '';
+        }
+      }, 300);
     }
 
     changeMode(nextMode);
