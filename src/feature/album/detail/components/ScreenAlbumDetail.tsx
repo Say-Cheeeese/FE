@@ -75,6 +75,7 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
     <>
       <CustomHeader
         isShowBack
+        isHidden={mode === 'select'}
         title={isAlbumInfosHidden ? '큐시즘 MT' : ''}
         rightContent={
           <div className='flex gap-4'>

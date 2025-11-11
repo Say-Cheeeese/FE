@@ -68,7 +68,6 @@ export default function PhotoList({
         photoList.style.minHeight = '800px';
       }
 
-      // 앵커 기준으로 스크롤
       if (anchor) {
         anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
@@ -85,7 +84,6 @@ export default function PhotoList({
 
   return (
     <section id={ID_PHOTO_LIST} className='relative p-4'>
-      {/* 숨겨진 오프셋용 앵커 */}
       <div
         id={ID_PHOTO_LIST_ANCHOR}
         className='invisible absolute top-[-72px] left-0'

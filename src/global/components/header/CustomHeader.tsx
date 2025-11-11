@@ -65,6 +65,8 @@ interface CustomHeaderProps {
   onBackClick?: () => void;
   isShowBack?: boolean;
   border?: boolean;
+  /** 헤더를 완전히 숨길지 여부 */
+  isHidden?: boolean;
 }
 
 export default function CustomHeader({
@@ -73,6 +75,7 @@ export default function CustomHeader({
   onBackClick,
   isShowBack,
   border = true,
+  isHidden = false,
 }: CustomHeaderProps) {
   const router = useRouter();
 
@@ -83,6 +86,9 @@ export default function CustomHeader({
       router.back();
     }
   }
+
+  // 숨김 처리
+  if (isHidden) return null;
 
   return (
     <>
