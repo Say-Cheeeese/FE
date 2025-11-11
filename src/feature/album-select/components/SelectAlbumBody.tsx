@@ -66,10 +66,13 @@ export default function SelectAlbumBody() {
           showToast(`${result.failed}개 파일 업로드에 실패했어요`);
         } else {
           revokeAllObjectUrls();
-          useImageStore.getState().setImages([]);
           showToast('모든 사진이 성공적으로 업로드되었어요!');
-          // 업로드 성공 시 메인으로 이동
+          // 업로드 성공 시 detail로 이동
           router.replace(`/album/detail/${albumId}`);
+          // 라우팅 후 images 클리어 (useEffect 트리거 방지)
+          setTimeout(() => {
+            useImageStore.getState().setImages([]);
+          }, 1000);
         }
       },
       onError: (e) => {
