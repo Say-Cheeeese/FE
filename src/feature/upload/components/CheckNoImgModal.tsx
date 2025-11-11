@@ -29,7 +29,7 @@ export default function CheckNoImgModal({
       return;
     }
     // 기본 동작: 현재 앨범 경로로 이동 (WaitingAlbum에서 분기 처리)
-    router.push(`/album/${albumId}`);
+    router.push(`/album/detail/${albumId}`);
   };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
