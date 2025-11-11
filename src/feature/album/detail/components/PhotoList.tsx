@@ -34,6 +34,8 @@ const photos = [
   },
 ];
 
+const SELECT_MODE_MIN_HEIGHT = '800px';
+
 export const ID_PHOTO_LIST = 'photo-list';
 export const ID_PHOTO_LIST_ANCHOR = 'photo-list-anchor';
 
@@ -65,7 +67,7 @@ export default function PhotoList({
 
     if (nextMode === 'select') {
       if (photoList) {
-        photoList.style.minHeight = '800px';
+        photoList.style.minHeight = SELECT_MODE_MIN_HEIGHT;
       }
 
       if (anchor) {
@@ -74,7 +76,7 @@ export default function PhotoList({
     } else {
       window.scrollTo({ top: 0, behavior: 'smooth' });
 
-      // behavoir:smooth동작 끝나면 min-height 원복
+      // behavior:smooth동작 끝나면 min-height 원복
       setTimeout(() => {
         if (photoList) {
           photoList.style.minHeight = '';
