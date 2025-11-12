@@ -2,6 +2,7 @@
 import CustomHeader from '@/global/components/header/CustomHeader';
 import LongButton from '@/global/components/LongButton';
 import ConfirmModal from '@/global/components/modal/ConfirmModal';
+import Toast from '@/global/components/toast/Toast';
 import BubbleHint from '@/global/components/tooltip/BubbleTooltip';
 import PersonSvg from '@/global/svg/PersonSvg';
 import { Download, LucideIcon, Menu, Send } from 'lucide-react';
@@ -98,7 +99,31 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
               message='📸 사진 확정 권한은 메이커에게만 있어요'
               className='-top-4'
             />
-            <LongButton text='메이커에게 조르기' noFixed />
+            <LongButton
+              text='메이커에게 조르기'
+              onClick={async () => {
+                // TODO : share api 모듈화 및 개선
+                if (navigator.share) {
+                  try {
+                    await navigator.share({
+                      title: `'졸업식'앨범에 대한 치즈네컷을 선정해주세요`,
+                      text: '이유정님이 임민서 메이커님에게 조르기를 요청했어요!',
+                      url: 'https://say-cheese.me/album/4cut/1',
+                    });
+                  } catch (err) {
+                    console.error('공유 취소 또는 실패:', err);
+                    Toast.alert(
+                      '공유에 실패하였습니다. 다시한번 시도해주세요.',
+                    );
+                  }
+                } else {
+                  Toast.alert(
+                    '이 브라우저는 공유하기 기능을 지원하지 않습니다.',
+                  );
+                }
+              }}
+              noFixed
+            />
           </div>
         )}
       </div>
