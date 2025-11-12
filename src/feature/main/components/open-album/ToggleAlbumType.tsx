@@ -14,7 +14,7 @@ export default function ToggleAlbumType<T extends string>({
   const keys = Object.keys(labels) as T[];
 
   return (
-    <div className='bg-element-gray-light flex w-full gap-[2px] rounded-full p-1'>
+    <div className='bg-element-gray-light mb-4 flex w-full gap-[2px] rounded-full p-1'>
       {keys.map((key) => {
         const isActive = value === key;
         const label = labels[key];
