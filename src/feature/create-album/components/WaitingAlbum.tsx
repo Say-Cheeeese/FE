@@ -6,7 +6,6 @@ import { motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { validateUpload } from '../utils/validateUpload';
 const Lottie = dynamic(() => import('lottie-react'), { ssr: false });
 
 interface WaitingAlbumProps {
@@ -22,33 +21,26 @@ export default function WaitingAlbum({ albumId }: WaitingAlbumProps) {
       const startTime = Date.now();
 
       try {
-        // 1. 이미지 파일 추출
-        const files = images.map((img) => img.file);
-
-        // 2. 업로드 검증(용량 + 업로드 가능 개수)
-        const result = await validateUpload(files, albumId);
-
-        // 3. 최소 1초 대기 보장 후 분기
+        // 최소 3초 대기 보장
         const elapsedTime = Date.now() - startTime;
         const remainingTime = Math.max(0, 3000 - elapsedTime);
         await new Promise((resolve) => setTimeout(resolve, remainingTime));
-
-        if (!result.ok) {
-          // 용량 초과 또는 업로드 가능 개수 초과 시 select로 이동
+        // Zustand에 저장된 이미지가 있으면 → 일부 사진에 문제 → select로 이동
+        if (images.length > 0) {
           router.replace(`/album/${albumId}/select`);
           return;
         }
 
-        // 검증 통과 시 main 페이지로 이동
-        router.replace(`/album/${albumId}/main`);
+        // Zustand에 이미지가 없으면 → 모든 사진 정상 → NCP 업로드
+        // TODO: 실제 업로드 로직 구현 필요
+        // const files = ...; //  반환된 files 사용
+
+        // 업로드 완료 후 detail 페이지로 이동
+        router.replace(`/album/detail/${albumId}`);
       } catch (err) {
-        console.error('Image validation error:', err);
-        // 에러 발생 시에도 최소 1초 후 main으로 이동
-        const elapsedTime = Date.now() - startTime;
-        const remainingTime = Math.max(0, 1000 - elapsedTime);
-        await new Promise((resolve) => setTimeout(resolve, remainingTime));
-        alert('사진 업로드 중 에러가 발생했습니다.');
-        router.replace(`/album/${albumId}/main`);
+        console.error('Image processing error:', err);
+        alert('사진 처리 중 에러가 발생했습니다.');
+        router.replace(`/album/detail/${albumId}`);
       }
     };
 

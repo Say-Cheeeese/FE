@@ -17,6 +17,24 @@ type ImageWithUrl = {
 };
 
 export default function SelectAlbumBody() {
+  // LongButton 업로드 핸들러 함수로 분리
+  const handleUpload = () => {
+    const selectedFiles = processedImages.filter((img) =>
+      selectedIds.has(img.id),
+    );
+    const fileInfos = selectedFiles.map((img) => ({
+      fileName: img.file.name,
+      fileSize: img.file.size,
+      contentType: img.file.type,
+    }));
+    const files = selectedFiles.map((img) => img.file);
+
+    uploadMutate({
+      albumCode: albumId,
+      fileInfos,
+      files,
+    });
+  };
   // presignedAndUploadToNCP를 직접 사용
   const { albumId } = useParams() as { albumId: string };
   const { images } = useImageStore();
@@ -45,18 +63,19 @@ export default function SelectAlbumBody() {
     usePresignedAndUploadToNCP({
       onSuccess: (result) => {
         if (result.failed > 0) {
-          // showToast(`${result.failed}개 파일 업로드에 실패했어요`);
-          showToast('과제 끝! 안내자의 지시를 따라주세요.');
+          showToast(`${result.failed}개 파일 업로드에 실패했어요`);
         } else {
           revokeAllObjectUrls();
           showToast('모든 사진이 성공적으로 업로드되었어요!');
-          // 업로드 성공 시 메인으로 이동
-          router.push(`/album/${albumId}/main`);
+          // 업로드 성공 시 detail로 이동
+          router.replace(`/album/detail/${albumId}`);
+          // 라우팅 후 images 클리어 (useEffect 트리거 방지)
         }
       },
-      onError: () => {
+      onError: (e) => {
         revokeAllObjectUrls();
-        showToast('과제 끝! 안내자의 지시를 따라주세요.');
+        console.error('에러 발생', e);
+        alert('사진을 업로드하는 중 오류가 발생했습니다. 다시 시도해주세요.');
       },
     });
 
@@ -184,7 +203,7 @@ export default function SelectAlbumBody() {
 
   return (
     <div className='w-full px-4'>
-      <div className='sticky top-[72px] z-99 flex justify-between bg-white pt-4 pb-3'>
+      <div className='sticky top-[72px] z-40 flex justify-between bg-white pt-4 pb-3'>
         <span className='typo-body-lg-regular text-text-subtle'>
           총 {images.length}장
         </span>
@@ -229,23 +248,7 @@ export default function SelectAlbumBody() {
         text={`앨범에 ${selectedIds.size}장 채우기`}
         noFixed={false}
         disabled={isUploading || isOverCount || selectedIds.size === 0}
-        onClick={() => {
-          const selectedFiles = processedImages.filter((img) =>
-            selectedIds.has(img.id),
-          );
-          const fileInfos = selectedFiles.map((img) => ({
-            fileName: img.file.name,
-            fileSize: img.file.size,
-            contentType: img.file.type,
-          }));
-          const files = selectedFiles.map((img) => img.file);
-
-          uploadMutate({
-            albumCode: albumId,
-            fileInfos,
-            files,
-          });
-        }}
+        onClick={handleUpload}
       />
       {toasts.length > 0 && (
         <AlbumToastList toasts={toasts} onRemove={removeToast} />

@@ -33,7 +33,7 @@ export default function UploadButton({ albumId }: UploadButtonProps) {
       />
       <div className='w-full px-4'>
         <LongButton
-          text='내가 찍은 사진 공유하기'
+          text='내가 찍은 사진 올리기'
           noFixed={true}
           onClick={handleButtonClick}
         />
