@@ -3,7 +3,7 @@
 import { HEADER_HEIGHT } from '@/global/components/header/CustomHeader';
 import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
 import ConfirmModal from '@/global/components/modal/ConfirmModal';
-import { X } from 'lucide-react';
+import { Copy, Ellipsis, QrCode, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import ItemParticipant from './ItemParticipant';
 
@@ -98,20 +98,56 @@ export default function ScreenAlbumSidebar({
                   </span>
                 </div>
                 <div className='typo-body-sm-semibold flex justify-between'>
-                  <button className='flex flex-col items-center justify-center'>
-                    <div className='h-[58px] w-[58px] rounded-full bg-[#d9d9d9]' />
+                  <button
+                    type='button'
+                    className='flex flex-col items-center justify-center'
+                  >
+                    <img
+                      src='/icon/icon_kakao.png'
+                      alt='카카오톡'
+                      width={58}
+                      height={58}
+                      className='rounded-full'
+                    />
                     <span>카카오톡</span>
                   </button>
-                  <button className='flex flex-col items-center justify-center'>
-                    <div className='h-[58px] w-[58px] rounded-full bg-[#d9d9d9]' />
+                  <button
+                    type='button'
+                    className='flex flex-col items-center justify-center'
+                  >
+                    <div className='flex h-[58px] w-[58px] items-center justify-center rounded-full bg-[#fff2c2]'>
+                      <QrCode
+                        width={24}
+                        height={24}
+                        color='var(--color-icon-basic)'
+                      />
+                    </div>
                     <span>QR코드</span>
                   </button>
-                  <button className='flex flex-col items-center justify-center'>
-                    <div className='h-[58px] w-[58px] rounded-full bg-[#d9d9d9]' />
+                  <button
+                    type='button'
+                    className='flex flex-col items-center justify-center'
+                  >
+                    <div className='flex h-[58px] w-[58px] items-center justify-center rounded-full bg-[#fff2c2]'>
+                      <Copy
+                        width={24}
+                        height={24}
+                        color='var(--color-icon-basic)'
+                      />
+                    </div>
                     <span>링크복사</span>
                   </button>
-                  <button className='flex flex-col items-center justify-center'>
-                    <div className='h-[58px] w-[58px] rounded-full bg-[#d9d9d9]' />
+                  <button
+                    type='button'
+                    className='flex flex-col items-center justify-center'
+                  >
+                    <div className='flex h-[58px] w-[58px] items-center justify-center rounded-full bg-[#fff2c2]'>
+                      <Ellipsis
+                        width={24}
+                        height={24}
+                        color='var(--color-icon-basic)'
+                      />
+                    </div>
                     <span>더보기</span>
                   </button>
                 </div>
