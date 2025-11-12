@@ -23,7 +23,7 @@ export default function NavBarAlbumDetail({
   const [albumType, setAlbumType] = useState<AlbumType>('all');
 
   const handlePhotoAdd = () => {
-    router.push(`/photo-share-entry/${albumId}`);
+    alert('TODO : 이미지 추가 플로우');
   };
 
   const handleToggleChange = (value: AlbumType) => {

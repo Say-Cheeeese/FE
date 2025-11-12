@@ -93,6 +93,7 @@ export default function ScreenAlbumDetail({
     <>
       <CustomHeader
         isShowBack
+        isHidden={mode === 'select'}
         title={isAlbumInfosHidden ? (albumData.data?.title ?? '') : ''}
         rightContent={
           <div className='flex gap-4'>
