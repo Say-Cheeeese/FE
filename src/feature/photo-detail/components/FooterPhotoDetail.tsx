@@ -1,7 +1,10 @@
 import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
-import ConfirmModal from '@/global/components/modal/ConfirmModal';
+import Toast from '@/global/components/toast/Toast';
 import { Download, Heart, Info } from 'lucide-react';
 import { useState } from 'react';
+import { usePhotoLikedMutation } from '../hooks/usePhotoLikedMutation';
+import { usePhotoUnlikedMutation } from '../hooks/usePhotoUnlikedMutation';
+import { downloadImageFromUrl } from '../util/downloadImageFromUrl';
 import ItemMemberData from './ItemMemberData';
 import SectionPhotoData from './SectionPhotoData';
 
@@ -50,15 +53,68 @@ const mockMembers = [
   },
 ];
 
-interface FooterPhotoDetailProps {}
+interface FooterPhotoDetailProps {
+  photoId: number;
+  isLiked: boolean;
+  likeCnt: number;
+  photoUploader: string;
+  isRecentlyDownloaded: boolean;
+  imageUrl: string;
+}
 
-export default function FooterPhotoDetail({}: FooterPhotoDetailProps) {
-  const [isDeep, setIsDeep] = useState(false);
-  const [deepCount, setDeepCount] = useState(0);
+export default function FooterPhotoDetail({
+  photoId,
+  isLiked,
+  likeCnt,
+  photoUploader,
+  isRecentlyDownloaded,
+  imageUrl,
+}: FooterPhotoDetailProps) {
+  const [isDeep, setIsDeep] = useState(isLiked);
+  const [deepCount, setDeepCount] = useState(likeCnt);
+  const [isDownloading, setIsDownloading] = useState(false);
+  const { mutateAsync: mutateAsyncLike } = usePhotoLikedMutation();
+  const { mutateAsync: mutateAsyncUnlike } = usePhotoUnlikedMutation();
 
-  const handleDeepToggle = () => {
-    setIsDeep((prev) => !prev);
-    setDeepCount((prev) => (isDeep ? prev - 1 : prev + 1));
+  const handleDeepToggle = async () => {
+    try {
+      if (isDeep) {
+        await mutateAsyncUnlike(photoId);
+      } else {
+        await mutateAsyncLike(photoId);
+      }
+
+      setIsDeep((prev) => !prev);
+      setDeepCount((prev) => (isDeep ? prev - 1 : prev + 1));
+    } catch (e) {
+      console.error(e);
+      Toast.alert('좋에요에 실패하였습니다.');
+    }
+  };
+
+  const handleDownload = async () => {
+    if (isRecentlyDownloaded) {
+      Toast.alert(`금방 다운받은 사진이에요.\n1시간 뒤에 다시 시도하세요.`);
+      return;
+    }
+    if (isDownloading) return;
+
+    try {
+      setIsDownloading(true);
+      await downloadImageFromUrl(imageUrl, `cheese-${photoId}`);
+      // 필요하면 성공 토스트
+      // Toast.alert('다운로드를 시작했어요.');
+    } catch (e: unknown) {
+      console.error(e);
+
+      // 타입 안전하게 에러 메시지 추출
+      const message =
+        e instanceof Error ? e.message : '알 수 없는 오류가 발생했습니다.';
+
+      Toast.alert(`다운로드에 실패했어요.\n(${message})`);
+    } finally {
+      setIsDownloading(false);
+    }
   };
 
   return (
@@ -73,7 +129,7 @@ export default function FooterPhotoDetail({}: FooterPhotoDetailProps) {
       >
         <SectionPhotoData
           photoInfo={{
-            uploaderName: '임민서',
+            uploaderName: photoUploader,
             takenAt: '2025-06-03T23:59:00Z',
             uploadedAt: '2025-06-04T23:59:00Z',
           }}
@@ -82,15 +138,16 @@ export default function FooterPhotoDetail({}: FooterPhotoDetailProps) {
         />
       </BottomSheetModal>
 
-      {/* UT를 위한 임시 모달 추가 */}
-      <ConfirmModal
-        title={'성공하였습니다. 좌측 화살표를 누른 후 작업종료 를 눌러주세요.'}
-        trigger={
-          <button className='flex w-12 justify-center'>
-            <Download width={24} height={24} color='white' />
-          </button>
-        }
-      />
+      <button
+        type='button'
+        onClick={handleDownload}
+        disabled={isDownloading}
+        aria-label='사진 다운로드'
+        className='flex w-12 justify-center'
+      >
+        <Download width={24} height={24} color='white' />
+      </button>
+
       <div className='typo-body-lg-semibold flex w-12 justify-center gap-1'>
         <button type='button' onClick={handleDeepToggle}>
           <Heart
