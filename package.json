@@ -12,7 +12,8 @@
     "build:docker": "docker build -t cheese_frontend .",
     "start": "next start",
     "lint": "eslint",
-    "token": "node scripts/generate-color-token.mjs"
+    "token": "node scripts/generate-color-token.mjs",
+    "ep": "node scripts/generate-endpoint.ts"
   },
   "dependencies": {
     "@radix-ui/react-alert-dialog": "^1.1.15",
