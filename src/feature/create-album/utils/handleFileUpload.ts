@@ -24,6 +24,7 @@ export async function handleFileUpload(
       router.push(`/album/${albumId}`);
     }
     const setUploading = useUploadingStore.getState().setUploading;
+    const startTime = Date.now();
     try {
       setUploading(true);
       const fileInfos = files.map((file) => ({
@@ -33,7 +34,15 @@ export async function handleFileUpload(
       }));
       await presignedAndUploadToNCP({ albumCode: albumId, files, fileInfos });
     } finally {
+      // 최소 2초 보장
+      const elapsed = Date.now() - startTime;
+      const remainingTime = Math.max(0, 2000 - elapsed);
+      await new Promise((resolve) => setTimeout(resolve, remainingTime));
+
       setUploading(false);
+      if (options?.stay && router) {
+        window.location.reload();
+      }
     }
     return;
   }

@@ -25,7 +25,6 @@ export default function WaitingAlbum({ albumId }: WaitingAlbumProps) {
         const elapsedTime = Date.now() - startTime;
         const remainingTime = Math.max(0, 3000 - elapsedTime);
         await new Promise((resolve) => setTimeout(resolve, remainingTime));
-
         // Zustand에 저장된 이미지가 있으면 → 일부 사진에 문제 → select로 이동
         if (images.length > 0) {
           router.replace(`/album/${albumId}/select`);
@@ -40,9 +39,6 @@ export default function WaitingAlbum({ albumId }: WaitingAlbumProps) {
         router.replace(`/album/detail/${albumId}`);
       } catch (err) {
         console.error('Image processing error:', err);
-        const elapsedTime = Date.now() - startTime;
-        const remainingTime = Math.max(0, 2000 - elapsedTime);
-        await new Promise((resolve) => setTimeout(resolve, remainingTime));
         alert('사진 처리 중 에러가 발생했습니다.');
         router.replace(`/album/detail/${albumId}`);
       }

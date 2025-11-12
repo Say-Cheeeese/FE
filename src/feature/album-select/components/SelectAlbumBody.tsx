@@ -70,9 +70,6 @@ export default function SelectAlbumBody() {
           // 업로드 성공 시 detail로 이동
           router.replace(`/album/detail/${albumId}`);
           // 라우팅 후 images 클리어 (useEffect 트리거 방지)
-          setTimeout(() => {
-            useImageStore.getState().setImages([]);
-          }, 1000);
         }
       },
       onError: (e) => {

@@ -7,7 +7,7 @@ import { useRef } from 'react';
 
 export default function NoPhotoBody() {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { isUploading, setUploading } = useUploadingStore();
+  const { isUploading } = useUploadingStore();
   const router = useRouter();
   // albumId를 URL에서 추출 (app router 기준)
   const params = useParams();
@@ -20,14 +20,12 @@ export default function NoPhotoBody() {
 
   async function onFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     if (!e.target.files || e.target.files.length === 0) return;
-    setUploading(true);
+
     try {
       await handleFileUpload(e, albumId, router, { stay: true });
     } finally {
-      setUploading(false);
-      window.location.reload();
+      // window.location.reload();
     }
-    // handleFileUpload에서 상태 관리 및 이동 처리
   }
 
   function handleButtonClick() {
