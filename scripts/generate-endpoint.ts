@@ -13,26 +13,6 @@ import process from 'node:process';
 const SPEC_URL = process.argv[2] || 'https://dev.say-cheese.me/v3/api-docs';
 const OUT_FILE = path.join(process.cwd(), 'src/global/api/ep.ts');
 
-type OpenAPI = {
-  paths: Record<
-    string,
-    {
-      [method: string]: {
-        operationId?: string;
-        tags?: string[];
-        summary?: string;
-        description?: string;
-        parameters?: Array<{
-          name: string;
-          in: 'path' | 'query' | 'header' | 'cookie';
-          required?: boolean;
-          schema?: { type?: string; enum?: string[] };
-        }>;
-      };
-    }
-  >;
-};
-
 type Route = { path: string; method: string };
 
 function uniq<T>(arr: T[]) {
@@ -156,6 +136,290 @@ function renderGroup(name: keyof typeof EP_SKELETON, routes: Route[]): string {
   return `  ${name}: {\n${lines.join('\n')}\n  }`;
 }
 
+// ...위쪽 동일
+
+type Schema =
+  | {
+      type?: string;
+      enum?: any[];
+      items?: Schema;
+      properties?: Record<string, Schema>;
+      required?: string[];
+      allOf?: Schema[];
+      oneOf?: Schema[];
+      anyOf?: Schema[];
+      $ref?: string;
+      additionalProperties?: boolean | Schema;
+      description?: string;
+    }
+  | any;
+
+// [ADD] OpenAPI 확장
+type OpenAPI = {
+  paths: Record<
+    string,
+    Record<
+      string,
+      {
+        operationId?: string;
+        tags?: string[];
+        summary?: string;
+        description?: string;
+        parameters?: Array<{
+          name: string;
+          in: 'path' | 'query' | 'header' | 'cookie';
+          required?: boolean;
+          schema?: Schema;
+        }>;
+        requestBody?: {
+          content?: Record<string, { schema?: Schema }>;
+        };
+        responses?: Record<
+          string,
+          {
+            description?: string;
+            content?: Record<string, { schema?: Schema }>;
+          }
+        >;
+      }
+    >
+  >;
+  components?: {
+    schemas?: Record<string, Schema>;
+  };
+};
+
+// [ADD] 파스칼 케이스 유틸(안전하게 이름 정리)
+function toPascalCase(s: string) {
+  return s
+    .replace(/[^a-zA-Z0-9]+/g, ' ')
+    .trim()
+    .split(' ')
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join('');
+}
+
+// [ADD] Components 타입 이름 규칙 (Schema 접미사)
+function componentTypeName(raw: string) {
+  return `${toPascalCase(raw)}Schema`;
+}
+
+// [CHANGE] $ref 해석 시 components 타입명 치환
+function resolveRef(ref: string) {
+  // '#/components/schemas/Foo' 형태만 지원
+  const parts = ref.split('/');
+  const raw = parts[parts.length - 1];
+  return componentTypeName(raw); // <-- 여기!
+}
+
+// [CHANGE] components.schemas -> 타입 생성 시 이름 변경
+function generateComponentsTypes(components: Record<string, Schema>): string {
+  const lines: string[] = [];
+  Object.entries(components).forEach(([name, schema]) => {
+    const ts = schemaToTs(schema, components, name);
+    const outName = componentTypeName(name); // <-- 여기!
+
+    const isObjectLike = /^\{\s/.test(ts);
+    if (isObjectLike) {
+      lines.push(`export interface ${outName} ${ts}`);
+    } else {
+      lines.push(`export type ${outName} = ${ts};`);
+    }
+  });
+  return lines.join('\n');
+}
+// [ADD] 스키마 -> TS 변환기 (기본형/enum/array/object/$ref)
+function schemaToTs(
+  schema: Schema | undefined,
+  components: Record<string, Schema>,
+  inlineNameHint?: string,
+): string {
+  if (!schema) return 'unknown';
+
+  // $ref
+  if (schema.$ref) {
+    return resolveRef(schema.$ref);
+  }
+
+  // allOf (간단히 & 교차)
+  if (schema.allOf && schema.allOf.length > 0) {
+    return schema.allOf.map((s) => schemaToTs(s, components)).join(' & ');
+  }
+
+  // oneOf/anyOf (간단히 union)
+  if (
+    (schema.oneOf && schema.oneOf.length) ||
+    (schema.anyOf && schema.anyOf.length)
+  ) {
+    const arr = (schema.oneOf ?? schema.anyOf)!;
+    return arr.map((s) => schemaToTs(s, components)).join(' | ');
+  }
+
+  // enum
+  if (schema.enum && schema.enum.length) {
+    return schema.enum
+      .map((v) => (typeof v === 'string' ? JSON.stringify(v) : `${v}`))
+      .join(' | ');
+  }
+
+  const t = schema.type;
+
+  if (
+    t === 'string' ||
+    t === 'number' ||
+    t === 'integer' ||
+    t === 'boolean' ||
+    t === 'null'
+  ) {
+    if (t === 'integer') return 'number';
+    return t === 'null' ? 'null' : t;
+  }
+
+  if (t === 'array') {
+    const it = schema.items ? schemaToTs(schema.items, components) : 'unknown';
+    return `${it}[]`;
+  }
+
+  if (t === 'object' || schema.properties || schema.additionalProperties) {
+    const props = schema.properties ?? {};
+    const req = new Set(schema.required ?? []);
+    const body: string[] = [];
+
+    for (const [k, v] of Object.entries(props)) {
+      const optional = req.has(k) ? '' : '?';
+      body.push(
+        `${JSON.stringify(k)}${optional}: ${schemaToTs(v, components, k)};`,
+      );
+    }
+
+    // index signature
+    if (schema.additionalProperties) {
+      const ap =
+        schema.additionalProperties === true
+          ? 'unknown'
+          : schemaToTs(schema.additionalProperties, components);
+      body.push(`[key: string]: ${ap};`);
+    }
+
+    return `{ ${body.join(' ')} }`;
+  }
+
+  // fallback
+  return 'unknown';
+}
+
+// [ADD] 응답 스키마 추출(200/201/2xx 우선)
+function pickSuccessResponseSchema(op: any): Schema | undefined {
+  const res = op.responses || {};
+  const codes = Object.keys(res).sort(); // 안정
+  const prefer = [
+    '200',
+    '201',
+    ...codes.filter((c) => /^2\d\d$/.test(c) && c !== '200' && c !== '201'),
+  ];
+  for (const code of prefer) {
+    const content = res[code]?.content;
+    if (!content) continue;
+    // JSON 우선
+    const jsonKey =
+      Object.keys(content).find((k) => k.includes('json')) ||
+      Object.keys(content)[0];
+    const sch = content[jsonKey]?.schema;
+    if (sch) return sch;
+  }
+  return undefined;
+}
+
+// [ADD] 이름 규칙: 그룹+함수명 기반 Response 타입명
+function responseTypeName(group: keyof typeof EP_SKELETON, fn: string) {
+  const g = String(group);
+  const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+  return `${cap(g)}${cap(fn)}Response`;
+}
+
+// [ADD] ApiReturns 인터페이스( 'album.photos' -> 타입 ) 빌드
+function buildApiReturnsInterface(groups: typeof EP_SKELETON, spec: OpenAPI) {
+  const components = spec.components?.schemas ?? {};
+  const lines: string[] = ['export interface ApiReturns {'];
+
+  // op 탐색을 위해 역인덱스 구성
+  const pathOps = spec.paths;
+
+  (Object.keys(EP_SKELETON) as Array<keyof typeof EP_SKELETON>).forEach(
+    (group) => {
+      const routes = sortByDesiredOrder(groups[group]);
+      routes.forEach(({ path: p, method }) => {
+        const fn = desiredNameFor(p, method);
+        if (!fn) return;
+
+        // spec에서 해당 op 찾기
+        const op = pathOps[p]?.[method];
+        const respSchema = pickSuccessResponseSchema(op);
+        if (!respSchema) return; // 응답 스키마 없으면 스킵
+
+        const typeName = responseTypeName(group, fn);
+        const ts = schemaToTs(respSchema, components, typeName);
+
+        // 타입 별칭 출력
+        const isObjectLike = /^\{\s/.test(ts);
+        if (isObjectLike) {
+          lines.push(`  // ${method.toUpperCase()} ${p}`);
+          lines.push(`  // ${op?.summary ?? ''}`);
+          lines.push(`}`);
+          // 위에서 닫혔으니 바로 내보내기 후 다시 열기 (가독성 위해)
+          // 타입 선언
+        }
+      });
+    },
+  );
+
+  // 위에서 객체/별칭 분리 위해 2패스로 작성(깨끗한 방식)
+  return lines.join('\n');
+}
+
+// [ADD] 2패스: 타입 별칭/인터페이스 모아 쓰고, ApiReturns는 마지막에
+function buildAllOperationTypesAndApiReturns(
+  groups: typeof EP_SKELETON,
+  spec: OpenAPI,
+) {
+  const components = spec.components?.schemas ?? {};
+  const typeDecls: string[] = [];
+  const apiReturns: string[] = ['export interface ApiReturns {'];
+
+  (Object.keys(EP_SKELETON) as Array<keyof typeof EP_SKELETON>).forEach(
+    (group) => {
+      const routes = sortByDesiredOrder(groups[group]);
+      routes.forEach(({ path: p, method }) => {
+        const fn = desiredNameFor(p, method);
+        if (!fn) return;
+        const op = spec.paths[p]?.[method];
+        if (!op) return;
+
+        const respSchema = pickSuccessResponseSchema(op);
+        if (!respSchema) return;
+
+        const typeName = responseTypeName(group, fn);
+        const ts = schemaToTs(respSchema, components, typeName);
+        const isObjectLike = /^\{\s/.test(ts);
+
+        if (isObjectLike) {
+          typeDecls.push(`export interface ${typeName} ${ts}["result"];`);
+        } else {
+          typeDecls.push(`export type ${typeName} = ${ts}["result"];`);
+        }
+
+        apiReturns.push(
+          `  ${JSON.stringify(`${group}.${fn}`)}: ${typeName}; // ${method.toUpperCase()} ${p}`,
+        );
+      });
+    },
+  );
+
+  apiReturns.push('}');
+  return { typeDecls: typeDecls.join('\n'), apiReturns: apiReturns.join('\n') };
+}
+
+// --- main
 async function main() {
   console.log(`[generate-ep] Fetching spec: ${SPEC_URL}`);
   const res = await fetch(SPEC_URL);
@@ -183,6 +447,17 @@ async function main() {
     });
   });
 
+  // [ADD] components.shema 타입 생성
+  const componentsTypes = generateComponentsTypes(
+    spec.components?.schemas ?? {},
+  );
+
+  // [ADD] 각 오퍼레이션 응답 타입 + ApiReturns 인터페이스
+  const { typeDecls, apiReturns } = buildAllOperationTypesAndApiReturns(
+    groups,
+    spec,
+  );
+
   const content = `/* AUTO-GENERATED FILE. DO NOT EDIT.
  * Generated by scripts/generate-ep.ts
  */
@@ -195,6 +470,19 @@ ${(Object.keys(EP_SKELETON) as Array<keyof typeof EP_SKELETON>)
 
 // 선택지 Enum(정렬)
 export type PhotoSorting = 'POPULAR' | 'CAPTURED_AT' | 'CREATED_AT';
+
+/* =======================
+ * Generated Types
+ * ======================= */
+
+// --- Components
+${componentsTypes}
+
+// --- Operation Response Types
+${typeDecls}
+
+// --- Mapping: 'group.fn' -> Response Type
+${apiReturns}
 `;
 
   fs.mkdirSync(path.dirname(OUT_FILE), { recursive: true });

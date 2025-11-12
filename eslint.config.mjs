@@ -23,6 +23,7 @@ const eslintConfig = [
       'build/**',
       'next-env.d.ts',
       'scripts/**',
+      'global/api/ep.ts',
     ],
     rules: {
       '@typescript-eslint/no-empty-object-type': 'off', // 빈 타입 객체 허용
