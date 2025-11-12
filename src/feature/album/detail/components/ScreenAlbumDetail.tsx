@@ -89,7 +89,7 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
         }
       />
       <div className='mb-22 flex flex-col'>
-        <AlbumInfos ref={albumInfosRef} />
+        <AlbumInfos ref={albumInfosRef} albumId={albumId} />
         <PhotoList
           key={selectionResetKey}
           selectable={mode === 'select'}
