@@ -1,39 +1,8 @@
 import PhotoBox from '@/global/components/photo/PhotoBox';
 import { useRouter } from 'next/navigation';
-import { useRef } from 'react';
+import type { Photo } from '../api/getPhotoListByAlbumId.server';
 import { AlbumDetailMode } from './ScreenAlbumDetail';
-
-// TODO : Mock Dat로 api연동되면 삭제예정
-const photos = [
-  {
-    id: 'photo-1',
-    imageSrc: 'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d',
-  },
-  {
-    id: 'photo-2',
-    imageSrc: 'https://images.unsplash.com/photo-1519681393784-d120267933ba',
-  },
-  {
-    id: 'photo-3',
-    imageSrc: 'https://images.unsplash.com/photo-1506765515384-028b60a970df',
-  },
-  {
-    id: 'photo-4',
-    imageSrc: 'https://images.unsplash.com/photo-1438109491414-7198515b166b',
-  },
-  {
-    id: 'photo-5',
-    imageSrc: 'https://images.unsplash.com/photo-1541696432-82c6da8ce7bf',
-  },
-  {
-    id: 'photo-6',
-    imageSrc: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e',
-  },
-  {
-    id: 'photo-7',
-    imageSrc: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330',
-  },
-];
+import { useRef } from 'react';
 
 const SELECT_MODE_MIN_HEIGHT = '800px';
 
@@ -46,6 +15,7 @@ interface PhotoListProps {
   selectedList: string[];
   changeMode: (newMode: AlbumDetailMode) => void;
   mode: AlbumDetailMode;
+  photos: Photo[]; // 실제 사진 데이터
 }
 
 export default function PhotoList({
@@ -54,6 +24,7 @@ export default function PhotoList({
   selectedList,
   changeMode,
   mode,
+  photos,
 }: PhotoListProps) {
   const router = useRouter();
 
@@ -120,16 +91,16 @@ export default function PhotoList({
       <div className='grid grid-cols-3 gap-0.5'>
         {photos.map((photo) => (
           <PhotoBox
-            key={photo.id}
-            pressed={selectedList.includes(photo.id)}
-            likeCount={0}
-            imageSrc={photo.imageSrc}
+            key={photo.photoId}
+            pressed={selectedList.includes(String(photo.photoId))}
+            likeCount={photo.likesCnt}
+            imageSrc={photo.thumbnailUrl}
             responsive
             onPress={() => {
               if (mode === 'default') {
-                router.push('/photo/ID바꿔야함');
+                router.push(`/photo/${photo.photoId}`);
               } else {
-                handlePhotoPress(photo.id);
+                handlePhotoPress(String(photo.photoId));
               }
             }}
           />
