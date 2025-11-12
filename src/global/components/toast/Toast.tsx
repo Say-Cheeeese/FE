@@ -50,7 +50,6 @@ const unmountToast = (
 const Toast = {
   alert: async (message: string): Promise<void> => {
     const toastContainer = getContainer(TOAST_CONTAINER_ID);
-
     const { default: ToastView } = await import('./ToastView');
 
     renderToast(<ToastView message={message} />, toastContainer);

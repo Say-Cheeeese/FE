@@ -2,9 +2,11 @@ import LongButton from '@/global/components/LongButton';
 import { useRouter } from 'next/navigation';
 import PhotoBox from '../../../../global/components/photo/PhotoBox';
 
-interface AlbumBestCutProps {}
+interface AlbumBestCutProps {
+  albumId: string;
+}
 
-export default function AlbumBestCut({}: AlbumBestCutProps) {
+export default function AlbumBestCut({ albumId }: AlbumBestCutProps) {
   const router = useRouter();
 
   return (
@@ -29,7 +31,11 @@ export default function AlbumBestCut({}: AlbumBestCutProps) {
       </div>
 
       {/* 버튼 */}
-      <LongButton text='치즈 네컷 만들기' noFixed />
+      <LongButton
+        text='치즈 네컷 만들기'
+        onClick={() => router.push(`/album/4cut/${albumId}`)}
+        noFixed
+      />
     </section>
   );
 }

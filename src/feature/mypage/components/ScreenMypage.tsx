@@ -7,7 +7,7 @@ interface ScreenMypageProps {}
 export default function ScreenMypage({}: ScreenMypageProps) {
   return (
     <>
-      <CustomHeader title='설정' />
+      <CustomHeader isShowBack title='설정' />
       <ProfileSetting />
       <SettingButtons />
     </>

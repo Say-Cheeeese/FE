@@ -23,7 +23,7 @@ interface AlbumInfosProps {
 }
 
 const AlbumInfos = forwardRef<HTMLDivElement, AlbumInfosProps>(
-  ({ albumInfo, isLoading, isError, photos }, ref) => {
+  ({ albumId, albumInfo, isLoading, isError, photos }, ref) => {
     let emoji = '';
     let title = '';
     let eventDate = '';
@@ -50,7 +50,7 @@ const AlbumInfos = forwardRef<HTMLDivElement, AlbumInfosProps>(
           </div>
           <div ref={ref} />
         </div>
-        {hasPhotos && <AlbumBestCut />}
+        {hasPhotos && <AlbumBestCut albumId={albumId} />}
       </section>
     );
   },
