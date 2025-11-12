@@ -1,9 +1,11 @@
 'use client';
+import { handleFileUpload } from '@/feature/create-album/utils/handleFileUpload';
 import ToggleAlbumType from '@/feature/main/components/open-album/ToggleAlbumType';
 import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
+import Toast from '@/global/components/toast/Toast';
 import { ArrowDownUp, Plus } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import SelectPhotoSortType, { PhotoSortType } from './SelectPhotoSortType';
 
 interface NavBarAlbumDetailProps {
@@ -20,14 +22,28 @@ export default function NavBarAlbumDetail({
   sortType,
 }: NavBarAlbumDetailProps) {
   const router = useRouter();
-  const [albumType, setAlbumType] = useState<AlbumType>('all');
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handlePhotoAdd = () => {
-    alert('TODO : 이미지 추가 플로우');
-  };
+  const [albumType, setAlbumType] = useState<AlbumType>('all');
 
   const handleToggleChange = (value: AlbumType) => {
     setAlbumType(value);
+  };
+
+  const handleButtonClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const onFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      await handleFileUpload(e, albumId, router);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        Toast.alert(error.message);
+      } else {
+        Toast.alert('알 수 없는 오류가 발생했습니다.');
+      }
+    }
   };
 
   return (
@@ -57,9 +73,17 @@ export default function NavBarAlbumDetail({
         value={albumType}
         labels={{ all: '전체', deep: '띱한 사진' }}
       />
+      <input
+        ref={fileInputRef}
+        type='file'
+        accept='image/*'
+        multiple
+        onChange={onFileChange}
+        className='hidden'
+      />
       <button
         type='button'
-        onClick={handlePhotoAdd}
+        onClick={handleButtonClick}
         className='bg-element-gray-light rounded-full p-2.5'
       >
         <Plus width={24} height={24} color={'var(--color-icon-basic)'} />
