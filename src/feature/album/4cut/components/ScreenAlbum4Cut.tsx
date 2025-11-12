@@ -4,7 +4,7 @@ import LongButton from '@/global/components/LongButton';
 import ConfirmModal from '@/global/components/modal/ConfirmModal';
 import BubbleHint from '@/global/components/tooltip/BubbleTooltip';
 import PersonSvg from '@/global/svg/PersonSvg';
-import { Download, Menu, Send } from 'lucide-react';
+import { Download, LucideIcon, Menu, Send } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import Container4Cut from './Container4Cut';
@@ -60,28 +60,16 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
           <>
             {isConfirmed ? (
               <div className='flex w-full max-w-[430px] justify-center gap-3'>
-                <button
+                <ActionButton
+                  icon={Download}
+                  text='다운로드'
                   onClick={handleDownload}
-                  className='bg-button-tertiary-fill text-text-subtle flex flex-1 items-center justify-center gap-1 rounded-[8px] py-[15px]'
-                >
-                  <Download
-                    width={24}
-                    height={24}
-                    color='var(--color-icon-basic)'
-                  />
-                  <span className='typo-body-1xl-semibold'>다운로드</span>
-                </button>
-                <button
+                />
+                <ActionButton
+                  icon={Send}
+                  text='공유하기'
                   onClick={handleShare}
-                  className='bg-button-tertiary-fill text-text-subtle flex flex-1 items-center justify-center gap-1 rounded-[8px] py-[15px]'
-                >
-                  <Send
-                    width={24}
-                    height={24}
-                    color='var(--color-icon-basic)'
-                  />
-                  <span className='typo-body-1xl-semibold'>공유하기</span>
-                </button>
+                />
               </div>
             ) : (
               <>
@@ -117,3 +105,20 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
     </>
   );
 }
+
+interface ActionButtonProps {
+  icon: LucideIcon;
+  text: string;
+  onClick: () => void;
+}
+
+const ActionButton = ({ icon: Icon, text, onClick }: ActionButtonProps) => (
+  <button
+    type='button'
+    onClick={onClick}
+    className='bg-button-tertiary-fill text-text-subtle flex flex-1 items-center justify-center gap-1 rounded-[8px] py-[15px]'
+  >
+    <Icon width={24} height={24} color='var(--color-icon-basic)' />
+    <span className='typo-body-1xl-semibold'>{text}</span>
+  </button>
+);
