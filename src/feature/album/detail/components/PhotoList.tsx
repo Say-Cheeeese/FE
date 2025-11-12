@@ -1,8 +1,8 @@
 import PhotoBox from '@/global/components/photo/PhotoBox';
 import { useRouter } from 'next/navigation';
+import { useRef } from 'react';
 import type { Photo } from '../api/getPhotoListByAlbumId.server';
 import { AlbumDetailMode } from './ScreenAlbumDetail';
-import { useRef } from 'react';
 
 const SELECT_MODE_MIN_HEIGHT = '800px';
 
@@ -98,7 +98,7 @@ export default function PhotoList({
             responsive
             onPress={() => {
               if (mode === 'default') {
-                router.push(`/photo/${photo.photoId}`);
+                router.push(`/photo/detail/${photo.photoId}`);
               } else {
                 handlePhotoPress(String(photo.photoId));
               }
