@@ -39,7 +39,7 @@ export default function SwiperPhotoList({
     if (!hasNextPage || isFetchingNextPage) return;
     if (images.length === 0) return;
 
-    const PREFETCH_OFFSET = 10; // 마지막 3장 남았을 때 미리 로드
+    const PREFETCH_OFFSET = 10; // PREFETCH_OFFSET만큼 마지막 사진 장 수 남았을 때 미리 로드
     const triggerIndex = Math.max(images.length - PREFETCH_OFFSET, 0);
 
     if (activeIndex >= triggerIndex) {
