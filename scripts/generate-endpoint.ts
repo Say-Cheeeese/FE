@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // scripts/generate-ep.ts
 // Usage:
 //  npx ts-node scripts/generate-ep.ts
