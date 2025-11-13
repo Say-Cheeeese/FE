@@ -48,7 +48,15 @@ export default function ScreenPhotoDetail({ albumId }: ScreenPhotoDetailProps) {
         fetchNextPage={fetchNextPage}
         hasNextPage={hasNextPage}
         isFetchingNextPage={isFetchingNextPage}
-        images={images}
+        images={
+          // images
+          [
+            {
+              thumbnailUrl:
+                'https://say-cheese.edge.naverncp.com/album/1f0bfebf-93b5-65d1-9a61-2daa1019f8c8/original/685_KakaoTalk_Photo_2025-10-28-21-55-52_008__________5.jpeg',
+            },
+          ]
+        }
       />
       {/* TODO : 필드 다 옵셔널인데 required표시 가능한 지 백엔드 문의중. */}
       <FooterPhotoDetail
@@ -59,7 +67,7 @@ export default function ScreenPhotoDetail({ albumId }: ScreenPhotoDetailProps) {
         isRecentlyDownloaded={!!activeImage?.isRecentlyDownloaded}
         imageUrl={
           activeImage?.thumbnailUrl ??
-          'https://github.com/user-attachments/assets/b40be8db-c22e-4c44-a0ed-d2e194b8ecf6'
+          'https://say-cheese.edge.naverncp.com/album/1f0bfebf-93b5-65d1-9a61-2daa1019f8c8/original/685_KakaoTalk_Photo_2025-10-28-21-55-52_008__________5.jpeg'
         } // TODO : imageUrl로 바꿔야함
       />
     </main>

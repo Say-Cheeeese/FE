@@ -1,7 +1,9 @@
+'use client';
 import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
 import Toast from '@/global/components/toast/Toast';
 import { Download, Heart, Info } from 'lucide-react';
 import { useState } from 'react';
+import { usePhotoExifQuery } from '../hooks/usePhotoExifQuery';
 import { usePhotoLikedMutation } from '../hooks/usePhotoLikedMutation';
 import { usePhotoUnlikedMutation } from '../hooks/usePhotoUnlikedMutation';
 import { downloadImageFromUrl } from '../util/downloadImageFromUrl';
@@ -75,6 +77,7 @@ export default function FooterPhotoDetail({
   const [isDownloading, setIsDownloading] = useState(false);
   const { mutateAsync: mutateAsyncLike } = usePhotoLikedMutation();
   const { mutateAsync: mutateAsyncUnlike } = usePhotoUnlikedMutation();
+  const { data } = usePhotoExifQuery(imageUrl);
 
   const handleDeepToggle = async () => {
     try {
@@ -130,8 +133,8 @@ export default function FooterPhotoDetail({
         <SectionPhotoData
           photoInfo={{
             uploaderName: photoUploader,
-            takenAt: '2025-06-03T23:59:00Z',
-            uploadedAt: '2025-06-04T23:59:00Z',
+            takenAt: data?.takenAt ?? '',
+            uploadedAt: data?.createdAt ?? '',
           }}
           isShowDeleteButton
           onDeleteClick={() => console.log('삭제 버튼 클릭!')}
