@@ -59,10 +59,7 @@ export default function ScreenPhotoDetail({ albumId }: ScreenPhotoDetailProps) {
         likeCnt={activeImage?.likeCnt ?? 0}
         photoUploader={''}
         isRecentlyDownloaded={!!activeImage?.isRecentlyDownloaded}
-        imageUrl={
-          activeImage?.thumbnailUrl ??
-          'https://say-cheese.edge.naverncp.com/album/1f0bfebf-93b5-65d1-9a61-2daa1019f8c8/original/685_KakaoTalk_Photo_2025-10-28-21-55-52_008__________5.jpeg'
-        } // TODO : imageUrl로 바꿔야함
+        imageUrl={activeImage?.thumbnailUrl ?? ''} // TODO : 필드명 imageUrl로 바꿔야함. 지금은 없어서 thumbnailUrl로 대체
       />
     </main>
   );
