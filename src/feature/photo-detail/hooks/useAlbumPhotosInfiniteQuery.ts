@@ -11,19 +11,19 @@ interface FetchPageParams {
   sorting: string;
 }
 
-const fetchAlbumPhotosPage = async ({
+async function fetchAlbumPhotosPage({
   code,
   pageParam,
   size,
   sorting,
-}: FetchPageParams): Promise<ApiReturns['album.photos'] & { page: number }> => {
+}: FetchPageParams): Promise<ApiReturns['album.photos'] & { page: number }> {
   const res = await api.get<ApiReturns['album.photos']>({
     path: EP.album.photos(code),
     params: { page: pageParam, size, sorting },
   });
 
   return { ...res.result, page: pageParam };
-};
+}
 
 interface UseAlbumPhotosInfiniteQueryProps {
   code: string;
@@ -31,11 +31,11 @@ interface UseAlbumPhotosInfiniteQueryProps {
   sorting?: string;
 }
 
-export const useAlbumPhotosInfiniteQuery = ({
+export function useAlbumPhotosInfiniteQuery({
   code,
   size = 20,
   sorting = 'CREATED_AT',
-}: UseAlbumPhotosInfiniteQueryProps) => {
+}: UseAlbumPhotosInfiniteQueryProps) {
   const query = useInfiniteQuery({
     queryKey: [EP.album.photos(code), size, sorting],
     initialPageParam: 0,
@@ -58,4 +58,4 @@ export const useAlbumPhotosInfiniteQuery = ({
     fetchNextPage: query.fetchNextPage,
     isFetchingNextPage: query.isFetchingNextPage,
   };
-};
+}

@@ -2,17 +2,17 @@ import { ApiReturns, EP } from '@/global/api/ep';
 import { api } from '@/global/utils/api';
 import { useMutation } from '@tanstack/react-query';
 
-const fetchData = async (photoId: number) => {
+async function fetchData(photoId: number) {
   const res = await api.post<ApiReturns['photo.like']>({
     path: EP.photo.like(photoId),
   });
   return res.result;
-};
+}
 
-export const usePhotoLikedMutation = () => {
+export function usePhotoLikedMutation() {
   const mutation = useMutation({
     mutationFn: (photoId: number) => fetchData(photoId),
   });
 
   return mutation;
-};
+}
