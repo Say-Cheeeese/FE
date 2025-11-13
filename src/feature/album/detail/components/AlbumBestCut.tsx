@@ -1,13 +1,19 @@
+import { PhotoListResponseSchema } from '@/global/api/ep';
 import LongButton from '@/global/components/LongButton';
+import PhotoBox from '@/global/components/photo/PhotoBox';
 import { useRouter } from 'next/navigation';
-import PhotoBox from '../../../../global/components/photo/PhotoBox';
 
 interface AlbumBestCutProps {
   albumId: string;
+  photos: PhotoListResponseSchema[];
 }
 
-export default function AlbumBestCut({ albumId }: AlbumBestCutProps) {
+export default function AlbumBestCut({ albumId, photos }: AlbumBestCutProps) {
   const router = useRouter();
+
+  if (photos.length === 0) {
+    return <div style={{ height: '187.5px' }} />;
+  }
 
   return (
     <section className='rounded-xl bg-white'>

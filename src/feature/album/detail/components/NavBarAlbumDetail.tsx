@@ -6,7 +6,8 @@ import Toast from '@/global/components/toast/Toast';
 import { ArrowDownUp, Plus } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
-import SelectPhotoSortType, { PhotoSortType } from './SelectPhotoSortType';
+import type { PhotoSortType } from '../constants/photoSort';
+import SelectPhotoSortType from './SelectPhotoSortType';
 
 interface NavBarAlbumDetailProps {
   albumId: string;
@@ -23,7 +24,6 @@ export default function NavBarAlbumDetail({
 }: NavBarAlbumDetailProps) {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
-
   const [albumType, setAlbumType] = useState<AlbumType>('all');
 
   const handleToggleChange = (value: AlbumType) => {

@@ -1,8 +1,12 @@
+import { PhotoListResponseSchema } from '@/global/api/ep';
 import PhotoBox from '@/global/components/photo/PhotoBox';
 import { buildQuery } from '@/global/utils/buildQuery';
+import {
+  type FetchNextPageOptions,
+  type InfiniteQueryObserverResult,
+} from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { useRef } from 'react';
-import type { Photo } from '../api/getPhotoListByAlbumId.server';
+import { useEffect, useRef } from 'react';
 import { AlbumDetailMode } from './ScreenAlbumDetail';
 
 const SELECT_MODE_MIN_HEIGHT = '800px';
@@ -13,11 +17,16 @@ export const ID_PHOTO_LIST_ANCHOR = 'photo-list-anchor';
 interface PhotoListProps {
   albumId: string;
   selectable?: boolean;
-  onTogglePhoto?: (photoId: string) => void;
-  selectedList: string[];
+  onTogglePhoto?: (photoId: number) => void;
+  selectedList: number[];
   changeMode: (newMode: AlbumDetailMode) => void;
   mode: AlbumDetailMode;
-  photos: Photo[]; // 실제 사진 데이터
+  photos: PhotoListResponseSchema[];
+  fetchNextPage: (
+    options?: FetchNextPageOptions,
+  ) => Promise<InfiniteQueryObserverResult>;
+  hasNextPage: boolean;
+  isFetchingNextPage: boolean;
 }
 
 export default function PhotoList({
@@ -28,13 +37,40 @@ export default function PhotoList({
   changeMode,
   mode,
   photos,
+  fetchNextPage,
+  hasNextPage,
+  isFetchingNextPage,
 }: PhotoListProps) {
   const router = useRouter();
-
   const photoListRef = useRef<HTMLElement | null>(null);
   const anchorRef = useRef<HTMLDivElement | null>(null);
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
-  const handlePhotoPress = (photoId: string) => {
+  useEffect(() => {
+    if (!hasNextPage) return;
+    const target = loadMoreRef.current;
+    if (!target) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (entry.isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      },
+      {
+        rootMargin: '200px 0px',
+      },
+    );
+
+    observer.observe(target);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+
+  const handlePhotoPress = (photoId: number): void => {
     if (!selectable) return;
     onTogglePhoto?.(photoId);
   };
@@ -95,22 +131,23 @@ export default function PhotoList({
         {photos.map((photo) => (
           <PhotoBox
             key={photo.photoId}
-            pressed={selectedList.includes(String(photo.photoId))}
-            likeCount={photo.likesCnt}
-            imageSrc={photo.thumbnailUrl}
+            pressed={selectedList.includes(photo.photoId ?? 0)}
+            likeCount={photo.likeCnt}
+            imageSrc={photo.thumbnailUrl ?? ''}
             responsive
             onPress={() => {
               if (mode === 'default') {
                 router.push(
-                  `/photo/detail/${albumId}${buildQuery({ photoId: photo.photoId })}`,
+                  `/photo/detail/${albumId}${buildQuery({ ...(photo.photoId && { photoId: photo.photoId }) })}`,
                 );
               } else {
-                handlePhotoPress(String(photo.photoId));
+                handlePhotoPress(photo.photoId ?? 0);
               }
             }}
           />
         ))}
       </div>
+      <div ref={loadMoreRef} />
     </section>
   );
 }

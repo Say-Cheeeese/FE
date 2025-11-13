@@ -28,7 +28,7 @@ async function fetchAlbumPhotosPage({
 interface UseAlbumPhotosInfiniteQueryProps {
   code: string;
   size?: number;
-  sorting?: string;
+  sorting?: 'CREATED_AT' | 'POPULAR' | 'CAPTURED_AT';
 }
 
 export function useAlbumPhotosInfiniteQuery({

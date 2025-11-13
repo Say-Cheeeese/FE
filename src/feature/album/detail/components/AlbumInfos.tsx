@@ -1,10 +1,9 @@
 'use client';
 
+import { PhotoListResponseSchema } from '@/global/api/ep';
+import { convertUnicodeToEmoji } from '@/global/utils/convertEmoji';
 import { forwardRef } from 'react';
 import AlbumBestCut from './AlbumBestCut';
-
-import { convertUnicodeToEmoji } from '@/global/utils/convertEmoji';
-import { Photo } from '../api/getPhotoListByAlbumId.server';
 
 interface AlbumInfosProps {
   albumId: string;
@@ -19,7 +18,7 @@ interface AlbumInfosProps {
   };
   isLoading: boolean;
   isError: boolean;
-  photos: Photo[]; // 실제 사진 데이터
+  photos: PhotoListResponseSchema[]; // 실제 사진 데이터
 }
 
 const AlbumInfos = forwardRef<HTMLDivElement, AlbumInfosProps>(
@@ -33,7 +32,7 @@ const AlbumInfos = forwardRef<HTMLDivElement, AlbumInfosProps>(
       eventDate = albumInfo.eventDate;
     }
 
-    const hasPhotos = Array.isArray(photos) && photos.length > 0;
+    const hasPhotos = photos.length > 0;
     return (
       <section className='border-divider-gray-light border-b-[6px] px-5 py-4'>
         <div className={`${hasPhotos ? 'mb-6' : ''} flex items-center gap-5`}>
@@ -50,7 +49,8 @@ const AlbumInfos = forwardRef<HTMLDivElement, AlbumInfosProps>(
           </div>
           <div ref={ref} />
         </div>
-        {hasPhotos && <AlbumBestCut albumId={albumId} />}
+        {/* TODO : photos 에 앨범 베스트컷에 선정된 사진들이 들어가야함. */}
+        <AlbumBestCut albumId={albumId} photos={photos} />
       </section>
     );
   },
