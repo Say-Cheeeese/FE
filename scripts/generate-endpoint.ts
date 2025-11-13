@@ -239,7 +239,7 @@ function schemaToTs(
 
   // allOf (간단히 & 교차)
   if (schema.allOf && schema.allOf.length > 0) {
-    return schema.allOf.map((s) => schemaToTs(s, components)).join(' & ');
+    return schema.allOf.map((s: any) => schemaToTs(s, components)).join(' & ');
   }
 
   // oneOf/anyOf (간단히 union)
@@ -248,13 +248,13 @@ function schemaToTs(
     (schema.anyOf && schema.anyOf.length)
   ) {
     const arr = (schema.oneOf ?? schema.anyOf)!;
-    return arr.map((s) => schemaToTs(s, components)).join(' | ');
+    return arr.map((s: any) => schemaToTs(s, components)).join(' | ');
   }
 
   // enum
   if (schema.enum && schema.enum.length) {
     return schema.enum
-      .map((v) => (typeof v === 'string' ? JSON.stringify(v) : `${v}`))
+      .map((v: any) => (typeof v === 'string' ? JSON.stringify(v) : `${v}`))
       .join(' | ');
   }
 
