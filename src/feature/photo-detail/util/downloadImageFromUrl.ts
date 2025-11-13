@@ -2,6 +2,7 @@ export async function downloadImageFromUrl(
   imageUrl: string,
   fallbackFileName?: string,
 ) {
+  // TODO : 사진 fetch 시 CORS발생 수정 필요
   const res = await fetch(imageUrl, {
     mode: 'cors',
     credentials: 'include',
