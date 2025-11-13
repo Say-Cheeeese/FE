@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // scripts/generate-ep.ts
 // Usage:
 //  npx ts-node scripts/generate-ep.ts
@@ -14,10 +15,6 @@ const SPEC_URL = process.argv[2] || 'https://dev.say-cheese.me/v3/api-docs';
 const OUT_FILE = path.join(process.cwd(), 'src/global/api/ep.ts');
 
 type Route = { path: string; method: string };
-
-function uniq<T>(arr: T[]) {
-  return Array.from(new Set(arr));
-}
 
 // --- 그룹 매핑 (경로 prefix 기반 강제 매핑) ---
 function groupKeyByPath(p: string): keyof typeof EP_SKELETON {
@@ -243,7 +240,7 @@ function schemaToTs(
 
   // allOf (간단히 & 교차)
   if (schema.allOf && schema.allOf.length > 0) {
-    return schema.allOf.map((s) => schemaToTs(s, components)).join(' & ');
+    return schema.allOf.map((s: any) => schemaToTs(s, components)).join(' & ');
   }
 
   // oneOf/anyOf (간단히 union)
@@ -252,13 +249,13 @@ function schemaToTs(
     (schema.anyOf && schema.anyOf.length)
   ) {
     const arr = (schema.oneOf ?? schema.anyOf)!;
-    return arr.map((s) => schemaToTs(s, components)).join(' | ');
+    return arr.map((s: any) => schemaToTs(s, components)).join(' | ');
   }
 
   // enum
   if (schema.enum && schema.enum.length) {
     return schema.enum
-      .map((v) => (typeof v === 'string' ? JSON.stringify(v) : `${v}`))
+      .map((v: any) => (typeof v === 'string' ? JSON.stringify(v) : `${v}`))
       .join(' | ');
   }
 
@@ -335,46 +332,6 @@ function responseTypeName(group: keyof typeof EP_SKELETON, fn: string) {
   const g = String(group);
   const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
   return `${cap(g)}${cap(fn)}Response`;
-}
-
-// [ADD] ApiReturns 인터페이스( 'album.photos' -> 타입 ) 빌드
-function buildApiReturnsInterface(groups: typeof EP_SKELETON, spec: OpenAPI) {
-  const components = spec.components?.schemas ?? {};
-  const lines: string[] = ['export interface ApiReturns {'];
-
-  // op 탐색을 위해 역인덱스 구성
-  const pathOps = spec.paths;
-
-  (Object.keys(EP_SKELETON) as Array<keyof typeof EP_SKELETON>).forEach(
-    (group) => {
-      const routes = sortByDesiredOrder(groups[group]);
-      routes.forEach(({ path: p, method }) => {
-        const fn = desiredNameFor(p, method);
-        if (!fn) return;
-
-        // spec에서 해당 op 찾기
-        const op = pathOps[p]?.[method];
-        const respSchema = pickSuccessResponseSchema(op);
-        if (!respSchema) return; // 응답 스키마 없으면 스킵
-
-        const typeName = responseTypeName(group, fn);
-        const ts = schemaToTs(respSchema, components, typeName);
-
-        // 타입 별칭 출력
-        const isObjectLike = /^\{\s/.test(ts);
-        if (isObjectLike) {
-          lines.push(`  // ${method.toUpperCase()} ${p}`);
-          lines.push(`  // ${op?.summary ?? ''}`);
-          lines.push(`}`);
-          // 위에서 닫혔으니 바로 내보내기 후 다시 열기 (가독성 위해)
-          // 타입 선언
-        }
-      });
-    },
-  );
-
-  // 위에서 객체/별칭 분리 위해 2패스로 작성(깨끗한 방식)
-  return lines.join('\n');
 }
 
 // [ADD] 2패스: 타입 별칭/인터페이스 모아 쓰고, ApiReturns는 마지막에
