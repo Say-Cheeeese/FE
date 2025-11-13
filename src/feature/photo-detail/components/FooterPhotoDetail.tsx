@@ -80,8 +80,10 @@ export default function FooterPhotoDetail({
   const [isDeep, setIsDeep] = useState(isLiked);
   const [deepCount, setDeepCount] = useState(likeCnt);
   const [isDownloading, setIsDownloading] = useState(false);
-  const { mutateAsync: mutateAsyncLike } = usePhotoLikedMutation();
-  const { mutateAsync: mutateAsyncUnlike } = usePhotoUnlikedMutation();
+  const { mutateAsync: mutateAsyncLike, isPending: isLiking } =
+    usePhotoLikedMutation();
+  const { mutateAsync: mutateAsyncUnlike, isPending: isUnliking } =
+    usePhotoUnlikedMutation();
   const { data } = usePhotoExifQuery(imageUrl);
 
   useEffect(() => {
@@ -92,9 +94,9 @@ export default function FooterPhotoDetail({
   const handleDeepToggle = async (): Promise<void> => {
     try {
       if (isDeep) {
-        await mutateAsyncUnlike(photoId);
+        if (!isLiking) await mutateAsyncLike(photoId);
       } else {
-        await mutateAsyncLike(photoId);
+        if (!isUnliking) await mutateAsyncUnlike(photoId);
       }
 
       updateCacheAlbumPhotosLike({
