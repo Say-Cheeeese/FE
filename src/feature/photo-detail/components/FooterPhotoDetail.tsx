@@ -1,11 +1,13 @@
 'use client';
 import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
 import Toast from '@/global/components/toast/Toast';
+import { useQueryClient } from '@tanstack/react-query';
 import { Download, Heart, Info } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { usePhotoExifQuery } from '../hooks/usePhotoExifQuery';
 import { usePhotoLikedMutation } from '../hooks/usePhotoLikedMutation';
 import { usePhotoUnlikedMutation } from '../hooks/usePhotoUnlikedMutation';
+import { updateCacheAlbumPhotosLike } from '../modules/updateCacheAlbumPhotosLike';
 import { downloadImageFromUrl } from '../util/downloadImageFromUrl';
 import ItemMemberData from './ItemMemberData';
 import SectionPhotoData from './SectionPhotoData';
@@ -56,6 +58,7 @@ const mockMembers = [
 ];
 
 interface FooterPhotoDetailProps {
+  albumId: string;
   photoId: number;
   isLiked: boolean;
   likeCnt: number;
@@ -65,6 +68,7 @@ interface FooterPhotoDetailProps {
 }
 
 export default function FooterPhotoDetail({
+  albumId,
   photoId,
   isLiked,
   likeCnt,
@@ -72,6 +76,7 @@ export default function FooterPhotoDetail({
   isRecentlyDownloaded,
   imageUrl,
 }: FooterPhotoDetailProps) {
+  const queryClient = useQueryClient();
   const [isDeep, setIsDeep] = useState(isLiked);
   const [deepCount, setDeepCount] = useState(likeCnt);
   const [isDownloading, setIsDownloading] = useState(false);
@@ -79,7 +84,12 @@ export default function FooterPhotoDetail({
   const { mutateAsync: mutateAsyncUnlike } = usePhotoUnlikedMutation();
   const { data } = usePhotoExifQuery(imageUrl);
 
-  const handleDeepToggle = async () => {
+  useEffect(() => {
+    setDeepCount(likeCnt);
+    setIsDeep(isLiked);
+  }, [likeCnt, isLiked, photoId]);
+
+  const handleDeepToggle = async (): Promise<void> => {
     try {
       if (isDeep) {
         await mutateAsyncUnlike(photoId);
@@ -87,11 +97,18 @@ export default function FooterPhotoDetail({
         await mutateAsyncLike(photoId);
       }
 
+      updateCacheAlbumPhotosLike({
+        albumId,
+        isCurrentlyLiked: isDeep,
+        photoId,
+        queryClient,
+      });
+
       setIsDeep((prev) => !prev);
       setDeepCount((prev) => (isDeep ? prev - 1 : prev + 1));
     } catch (e) {
       console.error(e);
-      Toast.alert('좋에요에 실패하였습니다.');
+      Toast.alert(`좋에요에 실패하였습니다.`);
     }
   };
 
