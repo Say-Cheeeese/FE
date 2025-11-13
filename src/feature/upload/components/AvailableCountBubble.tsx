@@ -1,14 +1,10 @@
-import { checkAvailableCountServer } from '@/feature/create-album/api/checkAvailableCount.server';
-
 type AvailableCountBubbleProps = {
-  albumId: string;
+  availableCount: number;
 };
 
-export default async function AvailableCountBubble({
-  albumId,
+export default function AvailableCountBubble({
+  availableCount,
 }: AvailableCountBubbleProps) {
-  const availableCount = await checkAvailableCountServer(albumId);
-
   return (
     <div className='relative mt-6 mb-4 px-6'>
       <div className='relative mx-auto w-fit rounded-full bg-white px-4 py-2.5 shadow-[0_2px_8px_rgba(0,0,0,0.15)]'>
