@@ -23,7 +23,7 @@ export default function AlbumBestCut({ albumId }: AlbumBestCutProps) {
             <PhotoBox
               key={index}
               responsive
-              onPress={() => router.push('/photo/ID바꿔야함')}
+              onPress={() => router.push('/photo/detail/ID바꿔야함')}
               imageSrc='https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d'
             />
           ))}

@@ -1,3 +1,4 @@
 *.yaml
 *.css
 **/token.json
+src/global/api/ep.ts
