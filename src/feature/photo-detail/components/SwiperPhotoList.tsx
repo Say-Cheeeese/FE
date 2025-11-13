@@ -114,10 +114,10 @@ export default function SwiperPhotoList({
               }
             }}
           >
-            {images.map(({ thumbnailUrl }, i) => {
+            {images.map(({ thumbnailUrl, photoId }, i) => {
               const isActive = activeIndex === i;
               return (
-                <SwiperSlide key={i}>
+                <SwiperSlide key={photoId}>
                   <div className='flex h-full items-center justify-center'>
                     <img
                       src={thumbnailUrl}
@@ -167,11 +167,11 @@ export default function SwiperPhotoList({
               });
             }}
           >
-            {images.map(({ thumbnailUrl }, i) => {
+            {images.map(({ thumbnailUrl, photoId }, i) => {
               const isActive = activeIndex === i;
               return (
                 <SwiperSlide
-                  key={i}
+                  key={photoId}
                   className={`thumb-slide ${isActive && 'mx-3!'} flex items-center justify-center`}
                   // TODO : tailwind로 아래 값을 관리할 경우, transition이 잘 적용되지 않는 문제가 있음.
                   style={{

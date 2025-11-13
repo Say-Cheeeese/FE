@@ -12,7 +12,7 @@ export interface PhotoExifInfo {
  */
 export async function getExifFromUrl(imageUrl: string): Promise<PhotoExifInfo> {
   const res = await fetch(imageUrl, { mode: 'cors' });
-  console.log(res);
+
   if (!res.ok) {
     throw new Error('이미지를 불러오지 못했습니다.');
   }

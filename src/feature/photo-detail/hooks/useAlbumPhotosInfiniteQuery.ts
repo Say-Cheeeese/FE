@@ -54,8 +54,5 @@ export function useAlbumPhotosInfiniteQuery({
     ...query,
     items,
     thumbnails,
-    hasNextPage: query.hasNextPage,
-    fetchNextPage: query.fetchNextPage,
-    isFetchingNextPage: query.isFetchingNextPage,
   };
 }
