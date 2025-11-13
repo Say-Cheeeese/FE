@@ -5,7 +5,7 @@ import {
   FetchNextPageOptions,
   InfiniteQueryObserverResult,
 } from '@tanstack/react-query';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/css';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -33,30 +33,25 @@ export default function SwiperPhotoList({
   const [mainSwiper, setMainSwiper] = useState<SwiperType | null>(null);
   const [thumbSwiper, setThumbSwiper] = useState<SwiperType | null>(null);
   const [thumbOffset, setThumbOffset] = useState(0);
-  const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
-  // 무한 스크롤: 하단(썸네일) Swiper에만 센티넬 부착
+  // ✅ 가로 스와이프 무한스크롤: 인덱스 기반 프리패치
   useEffect(() => {
-    if (!thumbSwiper || !loadMoreRef.current) return;
+    if (!hasNextPage || isFetchingNextPage) return;
+    if (images.length === 0) return;
 
-    const rootEl = thumbSwiper.el as HTMLElement;
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && hasNextPage && !isFetchingNextPage) {
-          fetchNextPage();
-        }
-      },
-      {
-        root: rootEl, // ✅ 썸네일 Swiper 내부 스크롤 기준
-        rootMargin: '0px 200px 0px 0px', // ✅ 오른쪽 여유(조기 프리패치)
-        threshold: 0.01,
-      },
-    );
+    const PREFETCH_OFFSET = 10; // 마지막 3장 남았을 때 미리 로드
+    const triggerIndex = Math.max(images.length - PREFETCH_OFFSET, 0);
 
-    io.observe(loadMoreRef.current);
-    return () => io.disconnect();
-  }, [thumbSwiper, hasNextPage, isFetchingNextPage, fetchNextPage]);
-  // images.length 변경 시 다시 observe (슬라이드 DOM 갱신 대비)
+    if (activeIndex >= triggerIndex) {
+      fetchNextPage();
+    }
+  }, [
+    activeIndex,
+    images.length,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+  ]);
 
   useEffect(() => {
     const updateOffset = () => {

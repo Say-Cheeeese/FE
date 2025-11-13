@@ -34,7 +34,7 @@ export default function ScreenPhotoDetail({ albumId }: ScreenPhotoDetailProps) {
     isFetchingNextPage,
   } = useAlbumPhotosInfiniteQuery({
     code: albumId,
-    size: 20,
+    size: 30,
   });
 
   const activeImage = images[activeIndex];
@@ -48,15 +48,7 @@ export default function ScreenPhotoDetail({ albumId }: ScreenPhotoDetailProps) {
         fetchNextPage={fetchNextPage}
         hasNextPage={hasNextPage}
         isFetchingNextPage={isFetchingNextPage}
-        images={
-          // images
-          [
-            {
-              thumbnailUrl:
-                'https://say-cheese.edge.naverncp.com/album/1f0bfebf-93b5-65d1-9a61-2daa1019f8c8/original/685_KakaoTalk_Photo_2025-10-28-21-55-52_008__________5.jpeg',
-            },
-          ]
-        }
+        images={images}
       />
       {/* TODO : 필드 다 옵셔널인데 required표시 가능한 지 백엔드 문의중. */}
       <FooterPhotoDetail
