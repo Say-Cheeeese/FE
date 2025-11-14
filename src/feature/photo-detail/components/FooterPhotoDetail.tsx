@@ -1,7 +1,14 @@
+'use client';
 import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
-import ConfirmModal from '@/global/components/modal/ConfirmModal';
+import Toast from '@/global/components/toast/Toast';
+import { useQueryClient } from '@tanstack/react-query';
 import { Download, Heart, Info } from 'lucide-react';
 import { useState } from 'react';
+import { usePhotoExifQuery } from '../hooks/usePhotoExifQuery';
+import { usePhotoLikedMutation } from '../hooks/usePhotoLikedMutation';
+import { usePhotoUnlikedMutation } from '../hooks/usePhotoUnlikedMutation';
+import { updateCacheAlbumPhotosLike } from '../modules/updateCacheAlbumPhotosLike';
+import { downloadImageFromUrl } from '../util/downloadImageFromUrl';
 import ItemMemberData from './ItemMemberData';
 import SectionPhotoData from './SectionPhotoData';
 
@@ -50,15 +57,73 @@ const mockMembers = [
   },
 ];
 
-interface FooterPhotoDetailProps {}
+interface FooterPhotoDetailProps {
+  albumId: string;
+  photoId: number;
+  isLiked: boolean;
+  likeCnt: number;
+  photoUploader: string;
+  isRecentlyDownloaded: boolean;
+  imageUrl: string;
+}
 
-export default function FooterPhotoDetail({}: FooterPhotoDetailProps) {
-  const [isDeep, setIsDeep] = useState(false);
-  const [deepCount, setDeepCount] = useState(0);
+export default function FooterPhotoDetail({
+  albumId,
+  photoId,
+  isLiked,
+  likeCnt,
+  photoUploader,
+  isRecentlyDownloaded,
+  imageUrl,
+}: FooterPhotoDetailProps) {
+  const queryClient = useQueryClient();
+  const [isDownloading, setIsDownloading] = useState(false);
+  const { mutateAsync: mutateAsyncLike, isPending: isLiking } =
+    usePhotoLikedMutation();
+  const { mutateAsync: mutateAsyncUnlike, isPending: isUnliking } =
+    usePhotoUnlikedMutation();
+  const { data } = usePhotoExifQuery(imageUrl);
 
-  const handleDeepToggle = () => {
-    setIsDeep((prev) => !prev);
-    setDeepCount((prev) => (isDeep ? prev - 1 : prev + 1));
+  const handleDeepToggle = async (): Promise<void> => {
+    try {
+      if (isLiked) {
+        if (!isUnliking) await mutateAsyncUnlike(photoId);
+      } else {
+        if (!isLiking) await mutateAsyncLike(photoId);
+      }
+
+      updateCacheAlbumPhotosLike({
+        albumId,
+        isCurrentlyLiked: isLiked,
+        photoId,
+        queryClient,
+      });
+    } catch (e) {
+      console.error(e);
+      Toast.alert(`좋에요에 실패하였습니다.`);
+    }
+  };
+
+  const handleDownload = async () => {
+    if (isRecentlyDownloaded) {
+      Toast.alert(`금방 다운받은 사진이에요.\n1시간 뒤에 다시 시도하세요.`);
+      return;
+    }
+    if (isDownloading) return;
+
+    try {
+      setIsDownloading(true);
+      await downloadImageFromUrl(imageUrl, `cheese-${photoId}`);
+    } catch (e: unknown) {
+      console.error(e);
+
+      const message =
+        e instanceof Error ? e.message : '알 수 없는 오류가 발생했습니다.';
+
+      Toast.alert(`다운로드에 실패했어요.\n(${message})`);
+    } finally {
+      setIsDownloading(false);
+    }
   };
 
   return (
@@ -73,49 +138,53 @@ export default function FooterPhotoDetail({}: FooterPhotoDetailProps) {
       >
         <SectionPhotoData
           photoInfo={{
-            uploaderName: '임민서',
-            takenAt: '2025-06-03T23:59:00Z',
-            uploadedAt: '2025-06-04T23:59:00Z',
+            uploaderName: photoUploader,
+            takenAt: data?.takenAt ?? '',
+            uploadedAt: data?.createdAt ?? '',
           }}
           isShowDeleteButton
           onDeleteClick={() => console.log('삭제 버튼 클릭!')}
         />
       </BottomSheetModal>
 
-      {/* UT를 위한 임시 모달 추가 */}
-      <ConfirmModal
-        title={'성공하였습니다. 좌측 화살표를 누른 후 작업종료 를 눌러주세요.'}
-        trigger={
-          <button className='flex w-12 justify-center'>
-            <Download width={24} height={24} color='white' />
-          </button>
-        }
-      />
+      <button
+        type='button'
+        onClick={handleDownload}
+        disabled={isDownloading}
+        aria-label='사진 다운로드'
+        className='flex w-12 justify-center'
+      >
+        <Download width={24} height={24} color='white' />
+      </button>
+
       <div className='typo-body-lg-semibold flex w-12 justify-center gap-1'>
         <button type='button' onClick={handleDeepToggle}>
           <Heart
             width={24}
             height={24}
-            fill={isDeep ? 'var(--color-icon-primary)' : 'transparent'}
+            fill={isLiked ? 'var(--color-icon-primary)' : 'transparent'}
             color={
-              isDeep ? 'var(--color-icon-primary)' : 'var(--color-icon-inverse)'
+              isLiked
+                ? 'var(--color-icon-primary)'
+                : 'var(--color-icon-inverse)'
             }
           />
         </button>
 
         <BottomSheetModal
-          title={`띱 ${deepCount}개`}
+          title={`띱 ${likeCnt}개`}
           trigger={
             <button>
               <span
-                className={`${isDeep ? 'text-text-brand' : 'text-text-basic-inverse'}`}
+                className={`${isLiked ? 'text-text-brand' : 'text-text-basic-inverse'}`}
               >
-                {deepCount}
+                {likeCnt}
               </span>
             </button>
           }
         >
           <div className='flex flex-col'>
+            {/* TODO : API 연동 */}
             {mockMembers.map((member) => (
               <ItemMemberData
                 key={member.id}

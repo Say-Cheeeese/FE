@@ -1,9 +1,12 @@
+'use client';
 import { X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
-interface HeaderPhotoDetailProps {}
+interface HeaderPhotoDetailProps {
+  title: string;
+}
 
-export default function HeaderPhotoDetail({}: HeaderPhotoDetailProps) {
+export default function HeaderPhotoDetail({ title }: HeaderPhotoDetailProps) {
   const router = useRouter();
 
   const handleClose = (): void => {
@@ -22,7 +25,7 @@ export default function HeaderPhotoDetail({}: HeaderPhotoDetailProps) {
         />
       </div>
       <span className='typo-heading-sm-semibold text-text-basic-inverse flex-1 truncate'>
-        김수한무거북이와두루
+        {title}
       </span>
       <button type='button' onClick={handleClose}>
         <X width='24' height='24' color='white' />

@@ -1,4 +1,5 @@
 import PhotoBox from '@/global/components/photo/PhotoBox';
+import { buildQuery } from '@/global/utils/buildQuery';
 import { useRouter } from 'next/navigation';
 import { useRef } from 'react';
 import type { Photo } from '../api/getPhotoListByAlbumId.server';
@@ -10,6 +11,7 @@ export const ID_PHOTO_LIST = 'photo-list';
 export const ID_PHOTO_LIST_ANCHOR = 'photo-list-anchor';
 
 interface PhotoListProps {
+  albumId: string;
   selectable?: boolean;
   onTogglePhoto?: (photoId: string) => void;
   selectedList: string[];
@@ -19,6 +21,7 @@ interface PhotoListProps {
 }
 
 export default function PhotoList({
+  albumId,
   selectable = false,
   onTogglePhoto,
   selectedList,
@@ -98,7 +101,9 @@ export default function PhotoList({
             responsive
             onPress={() => {
               if (mode === 'default') {
-                router.push(`/photo/detail/${photo.photoId}`);
+                router.push(
+                  `/photo/detail/${albumId}${buildQuery({ photoId: photo.photoId })}`,
+                );
               } else {
                 handlePhotoPress(String(photo.photoId));
               }
