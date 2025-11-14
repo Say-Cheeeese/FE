@@ -1,11 +1,10 @@
+import { PhotoSorting } from '@/global/api/ep';
 import { serverApi } from '@/global/utils/serverApi';
-
-export type PhotoListSorting = 'CREATED_AT' | 'POPULAR' | 'CAPTURED_AT';
 
 export interface GetPhotoListParams {
   page?: number;
   size?: number;
-  sorting?: PhotoListSorting;
+  sorting?: PhotoSorting;
 }
 
 export interface Photo {
