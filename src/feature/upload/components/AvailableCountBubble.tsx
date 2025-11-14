@@ -1,6 +1,6 @@
-type AvailableCountBubbleProps = {
+interface AvailableCountBubbleProps {
   availableCount: number;
-};
+}
 
 export default function AvailableCountBubble({
   availableCount,
