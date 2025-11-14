@@ -4,10 +4,11 @@ import { useAlbumPhotosInfiniteQuery } from '@/feature/photo-detail/hooks/useAlb
 import CustomHeader, {
   HEADER_HEIGHT,
 } from '@/global/components/header/CustomHeader';
+import { useSelectedPhotosStore } from '@/store/useSelectedPhotosStore';
 import { Menu } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { useSelectedPhotosStore } from '../../../../store/useSelectedPhotosStore';
+import { useShallow } from 'zustand/shallow';
 import {
   photoSortToApiSorting,
   type PhotoSortType,
@@ -33,15 +34,14 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
   const [selectionResetKey, setSelectionResetKey] = useState(0);
   const [sortType, setSortType] = useState<PhotoSortType>('liked');
   const sorting = photoSortToApiSorting[sortType];
-  const selectedPhotoIds = useSelectedPhotosStore(
-    (state) => state.selectedPhotoIds,
-  );
-  const togglePhotoSelection = useSelectedPhotosStore(
-    (state) => state.togglePhotoSelection,
-  );
-  const clearSelectedPhotos = useSelectedPhotosStore(
-    (state) => state.clearSelectedPhotos,
-  );
+  const { selectedPhotoIds, togglePhotoSelection, clearSelectedPhotos } =
+    useSelectedPhotosStore(
+      useShallow((state) => ({
+        selectedPhotoIds: state.selectedPhotoIds,
+        togglePhotoSelection: state.togglePhotoSelection,
+        clearSelectedPhotos: state.clearSelectedPhotos,
+      })),
+    );
 
   const {
     data: invitationData,
