@@ -48,11 +48,8 @@ export function useAlbumPhotosInfiniteQuery({
 
   const items = query.data?.pages.flatMap((p) => p.responses ?? []) ?? [];
 
-  const thumbnails = items.map((it) => it.thumbnailUrl);
-
   return {
     ...query,
     items,
-    thumbnails,
   };
 }
