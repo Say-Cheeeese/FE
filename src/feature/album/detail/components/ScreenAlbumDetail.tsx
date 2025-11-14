@@ -35,6 +35,11 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
   const [sortType, setSortType] = useState<PhotoSortType>('liked');
 
   const sorting = photoSortToApiSorting[sortType];
+  const {
+    data: invitationData,
+    isLoading: isInvitationLoading,
+    isError: isInvitationError,
+  } = useGetAlbumInvitation(albumId);
   // TODO : mode가 바뀌면 무한스크롤 호출하는 API가 바뀌어야한다.
   const { items, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useAlbumPhotosInfiniteQuery({
@@ -85,14 +90,13 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
     setSelectedPhotoIds([]);
     setSelectionResetKey((prev) => prev + 1);
   }, [items.length, mode, selectedPhotoIds.length]);
-  const albumData = useGetAlbumInvitation(albumId);
 
   return (
     <>
       <CustomHeader
         isShowBack
         isHidden={mode === 'select'}
-        title={isAlbumInfosHidden ? (albumData.data?.title ?? '') : ''}
+        title={isAlbumInfosHidden ? (invitationData?.title ?? '') : ''}
         rightContent={
           <div className='flex gap-4'>
             <button
@@ -108,9 +112,9 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
         <AlbumInfos
           ref={albumInfosRef}
           albumId={albumId}
-          albumInfo={albumData.data}
-          isLoading={albumData.isLoading}
-          isError={albumData.isError}
+          albumInfo={invitationData}
+          isLoading={isInvitationLoading}
+          isError={isInvitationError}
           photos={items}
         />
         {!isLoading && (
@@ -135,14 +139,14 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
           </>
         )}
       </div>
-      {mode === 'default' && (
+      {!isLoading && mode === 'default' && (
         <NavBarAlbumDetail
           albumId={albumId}
           sortType={sortType}
           changeSortType={(newType) => setSortType(newType)}
         />
       )}
-      {mode === 'select' && (
+      {!isLoading && mode === 'select' && (
         <DownloadActionBar
           selectedCount={selectedPhotoIds.length}
           onDownload={handleDownload}
