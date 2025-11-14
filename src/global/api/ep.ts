@@ -80,11 +80,12 @@ export interface RecentPhotoResponseSchema { "thumbnailUrl": string; "uploaderNa
 export interface PhotoCompleteRequestSchema { "photoId": number; "thumbnailUrl": string; }
 export interface UserProfileRequestSchema { "name"?: string; }
 export interface CommonResponseStringSchema { "isSuccess"?: boolean; "code"?: number; "message"?: string; "result"?: string; }
-export type Cheese4cutFinalResponseSchema = Cheese4cutResponseSchema & { "isFinalized"?: boolean; };
-export type Cheese4cutPreviewResponseSchema = Cheese4cutResponseSchema & { "isFinalized"?: boolean; "previewPhotos"?: PreviewPhotoInfoSchema[]; "uniqueLikesCount"?: number; "participant"?: number; };
+export type Cheese4cutFinalResponseSchema = Cheese4cutResponseSchema & { "isFinalized"?: boolean; "photos"?: FinalPhotoInfoSchema[]; };
+export type Cheese4cutPreviewResponseSchema = Cheese4cutResponseSchema & { "isFinalized"?: boolean; "previewPhotos"?: PreviewPhotoInfoSchema[]; "uniqueLikesCount"?: number; "participant"?: number; "myRole"?: "MAKER" | "GUEST" | "BLACK"; };
 export interface Cheese4cutResponseSchema { "finalized"?: boolean; }
 export interface CommonResponseCheese4cutResponseSchema { "isSuccess"?: boolean; "code"?: number; "message"?: string; "result"?: Cheese4cutFinalResponseSchema | Cheese4cutPreviewResponseSchema; }
-export interface PreviewPhotoInfoSchema { "photoId"?: number; "imageUrl"?: string; }
+export interface FinalPhotoInfoSchema { "photoId"?: number; "imageUrl"?: string; "photoRank"?: number; }
+export interface PreviewPhotoInfoSchema { "photoId"?: number; "imageUrl"?: string; "photoRank"?: number; }
 export interface AuthExchangeResponseSchema { "accessToken"?: string; "refreshToken"?: string; "isOnboarded"?: boolean; "userId"?: number; "name"?: string; "email"?: string; }
 export interface CommonResponseAuthExchangeResponseSchema { "isSuccess"?: boolean; "code"?: number; "message"?: string; "result"?: AuthExchangeResponseSchema; }
 export interface CommonResponsePhotoPageResponseSchema { "isSuccess"?: boolean; "code"?: number; "message"?: string; "result"?: PhotoPageResponseSchema; }

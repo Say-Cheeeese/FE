@@ -50,7 +50,7 @@ const AlbumInfos = forwardRef<HTMLDivElement, AlbumInfosProps>(
           <div ref={ref} />
         </div>
         {/* TODO : photos 에 앨범 베스트컷에 선정된 사진들이 들어가야함. */}
-        <AlbumBestCut albumId={albumId} photos={photos} />
+        <AlbumBestCut albumId={albumId} />
       </section>
     );
   },
