@@ -7,6 +7,7 @@ import CustomHeader, {
 import { Menu } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+import { useSelectedPhotosStore } from '../../../../store/useSelectedPhotosStore';
 import {
   photoSortToApiSorting,
   type PhotoSortType,
@@ -29,11 +30,18 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
   const albumInfosRef = useRef<HTMLDivElement | null>(null);
   const [mode, setMode] = useState<AlbumDetailMode>('default');
   const [isAlbumInfosHidden, setIsAlbumInfosHidden] = useState(false);
-  // TODO : photoIds를 담지않고, 이미지 url도 상태로 관리해야함. 혹은, photoIds로 이미지를 받아와야함.
-  const [selectedPhotoIds, setSelectedPhotoIds] = useState<number[]>([]);
   const [selectionResetKey, setSelectionResetKey] = useState(0);
   const [sortType, setSortType] = useState<PhotoSortType>('liked');
   const sorting = photoSortToApiSorting[sortType];
+  const selectedPhotoIds = useSelectedPhotosStore(
+    (state) => state.selectedPhotoIds,
+  );
+  const togglePhotoSelection = useSelectedPhotosStore(
+    (state) => state.togglePhotoSelection,
+  );
+  const clearSelectedPhotos = useSelectedPhotosStore(
+    (state) => state.clearSelectedPhotos,
+  );
 
   const {
     data: invitationData,
@@ -71,23 +79,23 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
     if (mode === 'select') return;
     if (selectedPhotoIds.length === 0) return;
 
-    setSelectedPhotoIds([]);
+    clearSelectedPhotos();
     setSelectionResetKey((prev) => prev + 1);
-  }, [items.length, mode, selectedPhotoIds.length]);
+  }, [clearSelectedPhotos, items.length, mode, selectedPhotoIds.length]);
+
+  useEffect(() => {
+    return () => {
+      clearSelectedPhotos();
+    };
+  }, [clearSelectedPhotos]);
 
   const handleTogglePhotoSelection = (photoId: number): void => {
-    setSelectedPhotoIds((prev) => {
-      if (prev.includes(photoId)) {
-        return prev.filter((id) => id !== photoId);
-      } else {
-        return [...prev, photoId];
-      }
-    });
+    togglePhotoSelection(photoId);
   };
 
   const handleDownload = (): void => {
     setMode('default');
-    setSelectedPhotoIds([]);
+    clearSelectedPhotos();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
