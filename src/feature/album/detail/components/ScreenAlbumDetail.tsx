@@ -30,7 +30,7 @@ interface ScreenAlbumDetailProps {
 
 export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
   const router = useRouter();
-  const albumInfosRef = useRef<HTMLDivElement | null>(null);
+  const albumInfosRef = useRef<HTMLElement | null>(null);
   const [mode, setMode] = useState<AlbumDetailMode>('default');
   const [isAlbumInfosHidden, setIsAlbumInfosHidden] = useState(false);
   const [selectionResetKey, setSelectionResetKey] = useState(0);
@@ -148,7 +148,6 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
           albumInfo={invitationData}
           isLoading={isInvitationLoading}
           isError={isInvitationError}
-          photos={photos}
         />
         {!isLoading && (
           <>
