@@ -26,15 +26,15 @@ interface ScreenAlbumDetailProps {
 
 export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
   const router = useRouter();
-  const [mode, setMode] = useState<AlbumDetailMode>('default');
   const albumInfosRef = useRef<HTMLDivElement | null>(null);
+  const [mode, setMode] = useState<AlbumDetailMode>('default');
   const [isAlbumInfosHidden, setIsAlbumInfosHidden] = useState(false);
   // TODO : photoIds를 담지않고, 이미지 url도 상태로 관리해야함. 혹은, photoIds로 이미지를 받아와야함.
   const [selectedPhotoIds, setSelectedPhotoIds] = useState<number[]>([]);
   const [selectionResetKey, setSelectionResetKey] = useState(0);
   const [sortType, setSortType] = useState<PhotoSortType>('liked');
-
   const sorting = photoSortToApiSorting[sortType];
+
   const {
     data: invitationData,
     isLoading: isInvitationLoading,
@@ -67,6 +67,14 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
     };
   }, []);
 
+  useEffect(() => {
+    if (mode === 'select') return;
+    if (selectedPhotoIds.length === 0) return;
+
+    setSelectedPhotoIds([]);
+    setSelectionResetKey((prev) => prev + 1);
+  }, [items.length, mode, selectedPhotoIds.length]);
+
   const handleTogglePhotoSelection = (photoId: number): void => {
     setSelectedPhotoIds((prev) => {
       if (prev.includes(photoId)) {
@@ -82,14 +90,6 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
     setSelectedPhotoIds([]);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
-
-  useEffect(() => {
-    if (mode === 'select') return;
-    if (selectedPhotoIds.length === 0) return;
-
-    setSelectedPhotoIds([]);
-    setSelectionResetKey((prev) => prev + 1);
-  }, [items.length, mode, selectedPhotoIds.length]);
 
   return (
     <>
