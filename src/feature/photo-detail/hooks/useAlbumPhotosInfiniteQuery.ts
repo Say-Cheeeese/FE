@@ -11,19 +11,19 @@ interface FetchPageParams {
   sorting: PhotoSorting;
 }
 
-async function fetchAlbumPhotosPage({
+const fetchAlbumPhotosPage = async ({
   code,
   pageParam,
   size,
   sorting,
-}: FetchPageParams): Promise<ApiReturns['album.photos'] & { page: number }> {
+}: FetchPageParams): Promise<ApiReturns['album.photos'] & { page: number }> => {
   const res = await api.get<ApiReturns['album.photos']>({
     path: EP.album.photos(code),
     params: { page: pageParam, size, sorting },
   });
 
   return { ...res.result, page: pageParam };
-}
+};
 
 interface UseAlbumPhotosInfiniteQueryProps {
   code: string;

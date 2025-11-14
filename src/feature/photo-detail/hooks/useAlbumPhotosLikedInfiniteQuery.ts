@@ -9,22 +9,22 @@ interface FetchPageParams {
   size: number;
 }
 
-async function fetchAlbumPhotosPage({
+const fetchAlbumPhotosPage = async ({
   code,
   pageParam,
   size,
 }: FetchPageParams): Promise<
   ApiReturns['album.likedPhotos'] & { page: number }
-> {
+> => {
   const res = await api.get<ApiReturns['album.likedPhotos']>({
     path: EP.album.likedPhotos(code),
     params: { page: pageParam, size },
   });
 
   return { ...res.result, page: pageParam };
-}
+};
 
-interface UseAlbumPhotosInfiniteQueryProps {
+interface UseAlbumPhotosLikedInfiniteQueryProps {
   code: string;
   size?: number;
 }
@@ -32,7 +32,7 @@ interface UseAlbumPhotosInfiniteQueryProps {
 export function useAlbumPhotosLikedInfiniteQuery({
   code,
   size = 20,
-}: UseAlbumPhotosInfiniteQueryProps) {
+}: UseAlbumPhotosLikedInfiniteQueryProps) {
   const query = useInfiniteQuery({
     queryKey: [EP.album.likedPhotos(code), size],
     initialPageParam: 0,
