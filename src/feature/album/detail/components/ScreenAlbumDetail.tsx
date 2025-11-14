@@ -1,9 +1,11 @@
 'use client';
 
 import { useAlbumPhotosInfiniteQuery } from '@/feature/photo-detail/hooks/useAlbumPhotosInfiniteQuery';
+import { useAlbumPhotosLikedInfiniteQuery } from '@/feature/photo-detail/hooks/useAlbumPhotosLikedInfiniteQuery';
 import CustomHeader, {
   HEADER_HEIGHT,
 } from '@/global/components/header/CustomHeader';
+import { PhotoListResponseSchema } from '@/global/api/ep';
 import { useSelectedPhotosStore } from '@/store/useSelectedPhotosStore';
 import { Menu } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -16,7 +18,7 @@ import {
 import { useGetAlbumInvitation } from '../hooks/useGetAlbumInvitation';
 import AlbumInfos from './AlbumInfos';
 import DownloadActionBar from './DownloadActionBar';
-import NavBarAlbumDetail from './NavBarAlbumDetail';
+import NavBarAlbumDetail, { type AlbumType } from './NavBarAlbumDetail';
 import NoPhotoBody from './NoPhotoBody';
 import PhotoList from './PhotoList';
 
@@ -33,6 +35,7 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
   const [isAlbumInfosHidden, setIsAlbumInfosHidden] = useState(false);
   const [selectionResetKey, setSelectionResetKey] = useState(0);
   const [sortType, setSortType] = useState<PhotoSortType>('liked');
+  const [albumType, setAlbumType] = useState<AlbumType>('all');
   const sorting = photoSortToApiSorting[sortType];
   const { selectedPhotoIds, togglePhotoSelection, clearSelectedPhotos } =
     useSelectedPhotosStore(
@@ -48,12 +51,34 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
     isLoading: isInvitationLoading,
     isError: isInvitationError,
   } = useGetAlbumInvitation(albumId);
-  // TODO : mode가 바뀌면 무한스크롤 호출하는 API가 바뀌어야한다.
-  const { items, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
-    useAlbumPhotosInfiniteQuery({
-      code: albumId,
-      sorting,
-    });
+  const isDeepAlbumType = albumType === 'deep';
+
+  const defaultPhotosQuery = useAlbumPhotosInfiniteQuery({
+    code: albumId,
+    sorting,
+    enabled: albumType === 'all',
+  });
+
+  const likedPhotosQuery = useAlbumPhotosLikedInfiniteQuery({
+    code: albumId,
+    enabled: isDeepAlbumType,
+  });
+
+  const photos: PhotoListResponseSchema[] = isDeepAlbumType
+    ? (likedPhotosQuery.items as PhotoListResponseSchema[])
+    : defaultPhotosQuery.items;
+  const fetchNextPage = isDeepAlbumType
+    ? likedPhotosQuery.fetchNextPage
+    : defaultPhotosQuery.fetchNextPage;
+  const hasNextPage = isDeepAlbumType
+    ? likedPhotosQuery.hasNextPage
+    : defaultPhotosQuery.hasNextPage;
+  const isFetchingNextPage = isDeepAlbumType
+    ? likedPhotosQuery.isFetchingNextPage
+    : defaultPhotosQuery.isFetchingNextPage;
+  const isLoading = isDeepAlbumType
+    ? likedPhotosQuery.isLoading
+    : defaultPhotosQuery.isLoading;
 
   useEffect(() => {
     const target = albumInfosRef.current;
@@ -81,7 +106,7 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
 
     clearSelectedPhotos();
     setSelectionResetKey((prev) => prev + 1);
-  }, [clearSelectedPhotos, items.length, mode, selectedPhotoIds.length]);
+  }, [clearSelectedPhotos, photos.length, mode, selectedPhotoIds.length]);
 
   useEffect(() => {
     return () => {
@@ -123,11 +148,11 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
           albumInfo={invitationData}
           isLoading={isInvitationLoading}
           isError={isInvitationError}
-          photos={items}
+          photos={photos}
         />
         {!isLoading && (
           <>
-            {items.length === 0 ? (
+            {photos.length === 0 ? (
               <NoPhotoBody />
             ) : (
               <PhotoList
@@ -138,7 +163,7 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
                 selectedList={selectedPhotoIds}
                 mode={mode}
                 changeMode={(newMode) => setMode(newMode)}
-                photos={items}
+                photos={photos}
                 fetchNextPage={fetchNextPage}
                 hasNextPage={!!hasNextPage}
                 isFetchingNextPage={isFetchingNextPage}
@@ -152,6 +177,8 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
           albumId={albumId}
           sortType={sortType}
           changeSortType={(newType) => setSortType(newType)}
+          albumType={albumType}
+          changeAlbumType={(nextType) => setAlbumType(nextType)}
         />
       )}
       {!isLoading && mode === 'select' && (

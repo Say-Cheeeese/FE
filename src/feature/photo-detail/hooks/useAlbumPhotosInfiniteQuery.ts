@@ -29,17 +29,19 @@ interface UseAlbumPhotosInfiniteQueryProps {
   code: string;
   size?: number;
   sorting?: PhotoSorting;
+  enabled?: boolean;
 }
 
 export function useAlbumPhotosInfiniteQuery({
   code,
   size = 20,
   sorting = 'CREATED_AT',
+  enabled = true,
 }: UseAlbumPhotosInfiniteQueryProps) {
   const query = useInfiniteQuery({
     queryKey: [EP.album.photos(code), size, sorting],
     initialPageParam: 0,
-    enabled: !!code,
+    enabled: enabled && !!code,
     queryFn: ({ pageParam }) =>
       fetchAlbumPhotosPage({ code, pageParam, size, sorting }),
     getNextPageParam: (lastPage) =>

@@ -27,16 +27,18 @@ const fetchAlbumPhotosPage = async ({
 interface UseAlbumPhotosLikedInfiniteQueryProps {
   code: string;
   size?: number;
+  enabled?: boolean;
 }
 
 export function useAlbumPhotosLikedInfiniteQuery({
   code,
   size = 20,
+  enabled = true,
 }: UseAlbumPhotosLikedInfiniteQueryProps) {
   const query = useInfiniteQuery({
     queryKey: [EP.album.likedPhotos(code), size],
     initialPageParam: 0,
-    enabled: !!code,
+    enabled: enabled && !!code,
     queryFn: ({ pageParam }) => fetchAlbumPhotosPage({ code, pageParam, size }),
     getNextPageParam: (lastPage) =>
       lastPage.hasNext ? lastPage.page + 1 : undefined,
