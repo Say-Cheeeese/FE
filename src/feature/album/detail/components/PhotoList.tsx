@@ -133,7 +133,7 @@ export default function PhotoList({
             key={photo.photoId}
             pressed={selectedList.includes(photo.photoId ?? 0)}
             likeCount={photo.likeCnt}
-            imageSrc={photo.thumbnailUrl ?? ''}
+            imageSrc={photo.thumbnailUrl}
             responsive
             onPress={() => {
               if (mode === 'default') {
