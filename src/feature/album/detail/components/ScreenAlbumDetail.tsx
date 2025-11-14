@@ -2,10 +2,10 @@
 
 import { useAlbumPhotosInfiniteQuery } from '@/feature/photo-detail/hooks/useAlbumPhotosInfiniteQuery';
 import { useAlbumPhotosLikedInfiniteQuery } from '@/feature/photo-detail/hooks/useAlbumPhotosLikedInfiniteQuery';
+import { PhotoListResponseSchema } from '@/global/api/ep';
 import CustomHeader, {
   HEADER_HEIGHT,
 } from '@/global/components/header/CustomHeader';
-import { PhotoListResponseSchema } from '@/global/api/ep';
 import { useSelectedPhotosStore } from '@/store/useSelectedPhotosStore';
 import { Menu } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -65,7 +65,7 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
   });
 
   const photos: PhotoListResponseSchema[] = isDeepAlbumType
-    ? (likedPhotosQuery.items as PhotoListResponseSchema[])
+    ? likedPhotosQuery.items
     : defaultPhotosQuery.items;
   const fetchNextPage = isDeepAlbumType
     ? likedPhotosQuery.fetchNextPage

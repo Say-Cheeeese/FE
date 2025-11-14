@@ -132,24 +132,30 @@ export default function PhotoList({
         )}
       </div>
       <div className='grid grid-cols-3 gap-0.5'>
-        {photos.map((photo) => (
-          <PhotoBox
-            key={photo.photoId}
-            pressed={selectedList.includes(photo.photoId ?? 0)}
-            likeCount={photo.likeCnt}
-            imageSrc={photo.thumbnailUrl}
-            responsive
-            onPress={() => {
-              if (mode === 'default') {
-                router.push(
-                  `/photo/detail/${albumId}${buildQuery({ ...(photo.photoId && { photoId: photo.photoId }) })}`,
-                );
-              } else {
-                handlePhotoPress(photo.photoId ?? 0);
-              }
-            }}
-          />
-        ))}
+        {photos.map(({ photoId, likeCnt, thumbnailUrl }) => {
+          if (!photoId) {
+            return null;
+          }
+
+          return (
+            <PhotoBox
+              key={photoId}
+              pressed={selectedList.includes(photoId)}
+              likeCount={likeCnt}
+              imageSrc={thumbnailUrl}
+              responsive
+              onPress={() => {
+                if (mode === 'default') {
+                  router.push(
+                    `/photo/detail/${albumId}${buildQuery({ photoId: photoId })}`,
+                  );
+                } else {
+                  handlePhotoPress(photoId);
+                }
+              }}
+            />
+          );
+        })}
       </div>
       <div ref={loadMoreRef} />
     </section>
