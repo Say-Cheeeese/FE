@@ -22,7 +22,7 @@ interface AlbumInfosProps {
 }
 
 const AlbumInfos = forwardRef<HTMLDivElement, AlbumInfosProps>(
-  ({ albumId, albumInfo, isLoading, isError, photos }, ref) => {
+  ({ albumId, albumInfo, isLoading, isError }, ref) => {
     let emoji = '';
     let title = '';
     let eventDate = '';
@@ -32,10 +32,9 @@ const AlbumInfos = forwardRef<HTMLDivElement, AlbumInfosProps>(
       eventDate = albumInfo.eventDate;
     }
 
-    const hasPhotos = photos.length > 0;
     return (
       <section className='border-divider-gray-light border-b-[6px] px-5 py-4'>
-        <div className={`${hasPhotos ? 'mb-6' : ''} flex items-center gap-5`}>
+        <div className={`mb-6 flex items-center gap-5`}>
           <div className='bg-element-gray-lighter flex h-[74px] w-[74px] items-center justify-center rounded-full text-[28px]'>
             {isError ? '!' : emoji}
           </div>
@@ -49,7 +48,7 @@ const AlbumInfos = forwardRef<HTMLDivElement, AlbumInfosProps>(
           </div>
           <div ref={ref} />
         </div>
-        {/* TODO : photos 에 앨범 베스트컷에 선정된 사진들이 들어가야함. */}
+
         <AlbumBestCut albumId={albumId} />
       </section>
     );

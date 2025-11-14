@@ -24,7 +24,7 @@ export default function AlbumBestCutPhotoList({
   return (
     <div className='grid w-full grid-cols-4'>
       {/* TODO : 백엔드에서 size params 미적용이슈 고쳐주기전까지 slice */}
-      {items.slice(0, 4).map(({ thumbnailUrl, photoId }) => {
+      {items.slice(0, 4).map(({ thumbnailUrl, photoId, likeCnt, isLiked }) => {
         if (!photoId) return null;
 
         return (
@@ -35,6 +35,8 @@ export default function AlbumBestCutPhotoList({
               router.push(`/photo/detail/${albumId}${buildQuery({ photoId })}`)
             }
             imageSrc={thumbnailUrl}
+            likeCount={likeCnt}
+            liked={isLiked}
           />
         );
       })}

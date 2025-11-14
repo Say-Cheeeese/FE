@@ -15,12 +15,10 @@ export default function AlbumBestCut({ albumId }: AlbumBestCutProps) {
         앨범 베스트컷
       </h2>
 
-      {/* 사진 리스트 */}
       <div className='mb-3'>
         <AlbumBestCutPhotoList albumId={albumId} />
       </div>
 
-      {/* 버튼 */}
       <LongButton
         text='치즈 네컷 만들기'
         onClick={() => router.push(`/album/4cut/${albumId}`)}

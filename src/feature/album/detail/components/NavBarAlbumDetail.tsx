@@ -26,15 +26,17 @@ export default function NavBarAlbumDetail({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [albumType, setAlbumType] = useState<AlbumType>('all');
 
-  const handleToggleChange = (value: AlbumType) => {
+  const handleToggleChange = (value: AlbumType): void => {
     setAlbumType(value);
   };
 
-  const handleButtonClick = () => {
+  const handleButtonClick = (): void => {
     fileInputRef.current?.click();
   };
 
-  const onFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onFileChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ): Promise<void> => {
     try {
       await handleFileUpload(e, albumId, router);
     } catch (error: unknown) {

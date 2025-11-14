@@ -75,6 +75,7 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
   const handleDownload = (): void => {
     setMode('default');
     setSelectedPhotoIds([]);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   useEffect(() => {
