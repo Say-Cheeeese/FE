@@ -5,11 +5,8 @@ import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
 import ConfirmModal from '@/global/components/modal/ConfirmModal';
 import { Copy, Ellipsis, QrCode, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useGetAlbumInvitation } from '../../hooks/useGetAlbumInvitation';
 import ItemParticipant from './ItemParticipant';
-
-interface ScreenAlbumSidebarProps {
-  albumId: string;
-}
 
 export interface Participant {
   id: string;
@@ -18,13 +15,6 @@ export interface Participant {
   role?: 'maker';
   isMe?: boolean;
 }
-
-const albumMeta = {
-  title: '김수한무거북이와두루미삼천',
-  date: '2025.08.23',
-  countdown: '앨범 소멸까지 2시간 5분',
-  participantSummary: '54/64',
-};
 
 const participants: Participant[] = [
   {
@@ -38,10 +28,15 @@ const participants: Participant[] = [
   { id: 'member-2', name: '맹소', emoji: '😄' },
 ];
 
+interface ScreenAlbumSidebarProps {
+  albumId: string;
+}
+
 export default function ScreenAlbumSidebar({
-  albumId: _albumId,
+  albumId,
 }: ScreenAlbumSidebarProps) {
   const router = useRouter();
+  const { data, isLoading, isError } = useGetAlbumInvitation(albumId);
 
   return (
     <>
@@ -61,13 +56,14 @@ export default function ScreenAlbumSidebar({
             😄
           </div>
           <h1 className='typo-heading-md-semibold text-text-basic mt-3'>
-            {albumMeta.title}
+            {data?.title ?? ''}
           </h1>
           <p className='typo-body-sm-regular text-text-subtler'>
-            {albumMeta.date}
+            {data?.eventDate}
           </p>
           <div className='typo-caption-sm-medium text-text-basic-inverse bg-element-alpha-dark mt-3 rounded-full px-2.5 py-1'>
-            {albumMeta.countdown}
+            {/* TODO : 삭제까지 얼마나 남았는지 */}
+            ~일남았습니다.
           </div>
         </section>
 
@@ -75,7 +71,7 @@ export default function ScreenAlbumSidebar({
           <div className='mb-3.5 flex items-center justify-between gap-3'>
             <div>
               <p className='typo-heading-sm-semibold text-text-subtle'>
-                앨범 참가자 {albumMeta.participantSummary}
+                앨범 참가자 {'55/66'}
               </p>
             </div>
             <BottomSheetModal

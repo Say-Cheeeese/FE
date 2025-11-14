@@ -29,8 +29,9 @@ function groupKeyByPath(p: string): keyof typeof EP_SKELETON {
   return 'album';
 }
 
-// --- 원하는 함수명 규칙 (정확 매핑) ---
-function desiredNameFor(pathStr: string, method: string): string | null {
+function desiredNameFor(pathStr: string, method: string): string {
+  // 1) 기존 정확 매핑 우선
+  // ----------------------------------
   // Global
   if (pathStr === '/v1/global/health-check') return 'health';
 
@@ -73,24 +74,48 @@ function desiredNameFor(pathStr: string, method: string): string | null {
   // Internal
   if (pathStr === '/internal/thumbnail/complete') return 'thumbnailComplete';
 
-  return null; // 그 외는 생성 안 함 (요구사항 범위 밖)
+  // 2) 여기부터 자동 fallback 생성
+  // ----------------------------------
+  return autoName(pathStr);
 }
 
-// --- 함수 시그니처 (경로 파라미터) ---
+function autoName(pathStr: string): string {
+  const parts = pathStr
+    .split('/')
+    .filter(Boolean)
+    .filter((p) => !p.startsWith('{')) // 경로 파라미터 제거
+    .filter((p) => !/^v\d+$/.test(p)); // v1, v2 같은 prefix 제거
+
+  const camel = parts
+    .map((p, i) =>
+      i === 0
+        ? p.toLowerCase()
+        : p.charAt(0).toUpperCase() + p.slice(1).toLowerCase(),
+    )
+    .join('');
+
+  return camel || 'unknown';
+}
+
 function paramsSignatureFor(pathStr: string): string {
-  // 원하는 타입 시그니처를 정확히 강제
-  if (/^\/v1\/album\/\{code\}\/photos\/\{photoId\}$/.test(pathStr)) {
+  const hasCode = pathStr.includes('{code}');
+  const hasPhotoId = pathStr.includes('{photoId}');
+
+  // 1) code + photoId 둘 다 있을 때
+  if (hasCode && hasPhotoId) {
     return '(code: string, photoId: number)';
   }
-  if (
-    /^\/v1\/album\/\{code\}\//.test(pathStr) ||
-    /^\/v1\/cheese4cut\/\{code\}\//.test(pathStr)
-  ) {
+
+  // 2) code만 있을 때
+  if (hasCode) {
     return '(code: string)';
   }
-  if (/^\/v1\/photo\/\{photoId\}\//.test(pathStr)) {
+
+  // 3) photoId만 있을 때
+  if (hasPhotoId) {
     return '(photoId: number)';
   }
+
   return '()';
 }
 
@@ -119,15 +144,15 @@ function sortByDesiredOrder(routes: Route[]) {
 function renderGroup(name: keyof typeof EP_SKELETON, routes: Route[]): string {
   const lines: string[] = [];
 
-  // 원하는 엔드포인트만 뽑아 이름 매칭
   sortByDesiredOrder(routes).forEach(({ path: p, method }) => {
     const fn = desiredNameFor(p, method);
-    if (!fn) return; // 스펙엔 있지만 요구사항에 없는 건 스킵
+    if (!fn) return;
 
     const sig = paramsSignatureFor(p);
     const pathExpr = pathTemplateToTs(p);
 
-    lines.push(`    ${fn}: ${sig} => ${pathExpr},`);
+    // 🔥 key 항상 문자열 처리
+    lines.push(`    "${fn}": ${sig} => ${pathExpr},`);
   });
 
   return `  ${name}: {\n${lines.join('\n')}\n  }`;
@@ -328,10 +353,9 @@ function pickSuccessResponseSchema(op: any): Schema | undefined {
 }
 
 // [ADD] 이름 규칙: 그룹+함수명 기반 Response 타입명
-function responseTypeName(group: keyof typeof EP_SKELETON, fn: string) {
-  const g = String(group);
-  const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
-  return `${cap(g)}${cap(fn)}Response`;
+function responseTypeName(group: string, fn: string) {
+  const cap = (s: string) => toPascalCase(s);
+  return `${cap(group)}${cap(fn)}Response`;
 }
 
 // [ADD] 2패스: 타입 별칭/인터페이스 모아 쓰고, ApiReturns는 마지막에

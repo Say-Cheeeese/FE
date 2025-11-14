@@ -1,13 +1,13 @@
 'use client';
 
-import type { AlbumInvitationResponse } from '@/feature/upload/api/getAlbumInvitation';
+import { AlbumInvitationResponseSchema } from '@/global/api/ep';
 import { forwardRef } from 'react';
 import AlbumBestCut from './AlbumBestCut';
 import { AlbumInfoSummary } from './AlbumInfoSummary';
 
 interface AlbumInfosProps {
   albumId: string;
-  albumInfo?: AlbumInvitationResponse;
+  albumInfo?: AlbumInvitationResponseSchema;
   isLoading: boolean;
   isError: boolean;
 }
