@@ -28,7 +28,6 @@ export default function UploadButtonInDetail({
     setIsUploading(true);
     await handleFileUpload(e, albumId, router, { stay: true });
     setIsUploading(false);
-    window.location.reload();
   };
 
   const handleButtonClick = () => {

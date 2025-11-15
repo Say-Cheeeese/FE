@@ -45,7 +45,8 @@ export default function CreateAlbumList() {
           }
         },
         onError: (err: CreateAlbumError) => {
-          alert(err.message);
+          alert('이미지 업로드에 실패했습니다.');
+          router.push('/login');
           console.error('앨범 생성 실패:', err);
         },
       },
