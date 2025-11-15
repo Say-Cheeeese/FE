@@ -1,7 +1,6 @@
 'use client';
 
 import { HEADER_HEIGHT } from '@/global/components/header/CustomHeader';
-import ConfirmModal from '@/global/components/modal/ConfirmModal';
 import { convertUnicodeToEmoji } from '@/global/utils/convertEmoji';
 import { X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -45,13 +44,14 @@ export default function ScreenAlbumSidebar({
             {data?.eventDate}
           </p>
           <div className='typo-caption-sm-medium text-text-basic-inverse bg-element-alpha-dark mt-3 rounded-full px-2.5 py-1'>
-            {/* TODO : 삭제까지 얼마나 남았는지 */}
-            ~일남았습니다.
+            {/* TODO : 삭제까지 얼마나 남았는지 백엔드로부터 받아야함. */}
+            앨범 소멸까지 2시간 5분
           </div>
         </section>
 
         <AlbumParticipants albumId={albumId} />
-        <div className='mt-auto w-full px-5'>
+        {/* TODO : 백엔드 앨범나가기기능 구현 전까지 주석 */}
+        {/* <div className='mt-auto w-full px-5'>
           <ConfirmModal
             trigger={
               <button
@@ -67,7 +67,7 @@ export default function ScreenAlbumSidebar({
             confirmText='앨범 나가기'
             confirmClassName='bg-button-accent-fill text-white'
           />
-        </div>
+        </div> */}
       </main>
     </>
   );
