@@ -1,32 +1,12 @@
 'use client';
 
 import { HEADER_HEIGHT } from '@/global/components/header/CustomHeader';
-import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
 import ConfirmModal from '@/global/components/modal/ConfirmModal';
-import { Copy, Ellipsis, QrCode, X } from 'lucide-react';
+import { convertUnicodeToEmoji } from '@/global/utils/convertEmoji';
+import { X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useGetAlbumInvitation } from '../../hooks/useGetAlbumInvitation';
-import ItemParticipant from './ItemParticipant';
-
-export interface Participant {
-  id: string;
-  name: string;
-  emoji: string;
-  role?: 'maker';
-  isMe?: boolean;
-}
-
-const participants: Participant[] = [
-  {
-    id: 'owner',
-    name: '김수한무거북이와두루미삼천',
-    emoji: '😄',
-    isMe: true,
-  },
-  { id: 'maker', name: '맹소', emoji: '😄', role: 'maker' },
-  { id: 'member-1', name: '맹소', emoji: '😄' },
-  { id: 'member-2', name: '맹소', emoji: '😄' },
-];
+import { useGetAlbumInfo } from '../../hooks/useGetAlbumInfo';
+import AlbumParticipants from './AlbumParticipants';
 
 interface ScreenAlbumSidebarProps {
   albumId: string;
@@ -36,7 +16,10 @@ export default function ScreenAlbumSidebar({
   albumId,
 }: ScreenAlbumSidebarProps) {
   const router = useRouter();
-  const { data, isLoading, isError } = useGetAlbumInvitation(albumId);
+  const { data, isPending, isError } = useGetAlbumInfo(albumId);
+
+  if (isPending) return null;
+  if (isError) return null;
 
   return (
     <>
@@ -53,10 +36,10 @@ export default function ScreenAlbumSidebar({
             <X width={24} height={24} color='var(--color-icon-basic)' />
           </button>
           <div className='bg-element-gray-light flex h-16 w-16 items-center justify-center rounded-full text-[36px]'>
-            😄
+            {data?.themeEmoji ? convertUnicodeToEmoji(data?.themeEmoji) : '😀'}
           </div>
           <h1 className='typo-heading-md-semibold text-text-basic mt-3'>
-            {data?.title ?? ''}
+            {data?.title}
           </h1>
           <p className='typo-body-sm-regular text-text-subtler'>
             {data?.eventDate}
@@ -67,96 +50,7 @@ export default function ScreenAlbumSidebar({
           </div>
         </section>
 
-        <section className='rounded-2xl bg-white px-5 py-8'>
-          <div className='mb-3.5 flex items-center justify-between gap-3'>
-            <div>
-              <p className='typo-heading-sm-semibold text-text-subtle'>
-                앨범 참가자 {'55/66'}
-              </p>
-            </div>
-            <BottomSheetModal
-              trigger={
-                <button
-                  type='button'
-                  className='typo-body-sm-medium text-text-primary bg-button-primary-fill rounded-[4px] px-3 py-1.5'
-                >
-                  친구 초대
-                </button>
-              }
-            >
-              <div className='mx-6 mt-6 mb-10'>
-                <div className='pb-8'>
-                  <h3 className='typo-heading-md-bold text-text-basic mb-1'>
-                    친구 초대하기
-                  </h3>
-                  <span className='typo-body-lg-medium text-text-subtle'>
-                    사진이 채워지는 동안 친구에게 앨범을 공유해보세요.
-                  </span>
-                </div>
-                <div className='typo-body-sm-semibold flex justify-between'>
-                  <button
-                    type='button'
-                    className='flex flex-col items-center justify-center'
-                  >
-                    <img
-                      src='/icon/icon_kakao.png'
-                      alt='카카오톡'
-                      width={58}
-                      height={58}
-                      className='rounded-full'
-                    />
-                    <span>카카오톡</span>
-                  </button>
-                  <button
-                    type='button'
-                    className='flex flex-col items-center justify-center'
-                  >
-                    <div className='flex h-[58px] w-[58px] items-center justify-center rounded-full bg-[#fff2c2]'>
-                      <QrCode
-                        width={24}
-                        height={24}
-                        color='var(--color-icon-basic)'
-                      />
-                    </div>
-                    <span>QR코드</span>
-                  </button>
-                  <button
-                    type='button'
-                    className='flex flex-col items-center justify-center'
-                  >
-                    <div className='flex h-[58px] w-[58px] items-center justify-center rounded-full bg-[#fff2c2]'>
-                      <Copy
-                        width={24}
-                        height={24}
-                        color='var(--color-icon-basic)'
-                      />
-                    </div>
-                    <span>링크복사</span>
-                  </button>
-                  <button
-                    type='button'
-                    className='flex flex-col items-center justify-center'
-                  >
-                    <div className='flex h-[58px] w-[58px] items-center justify-center rounded-full bg-[#fff2c2]'>
-                      <Ellipsis
-                        width={24}
-                        height={24}
-                        color='var(--color-icon-basic)'
-                      />
-                    </div>
-                    <span>더보기</span>
-                  </button>
-                </div>
-              </div>
-            </BottomSheetModal>
-          </div>
-
-          <div>
-            {participants.map((participant, index) => (
-              <ItemParticipant key={participant.id} participant={participant} />
-            ))}
-          </div>
-        </section>
+        <AlbumParticipants albumId={albumId} />
         <div className='mt-auto w-full px-5'>
           <ConfirmModal
             trigger={
