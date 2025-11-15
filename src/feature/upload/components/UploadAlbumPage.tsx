@@ -34,7 +34,6 @@ export default function UploadAlbumPage({ albumId }: UploadAlbumPageProps) {
           {data?.result && (
             <AlbumInfoHeader photoCount={cards.length} albumData={data.result}/>
           )}
-  
           <Image
             src='/assets/album/test-lottie.svg'
             alt='사진'
