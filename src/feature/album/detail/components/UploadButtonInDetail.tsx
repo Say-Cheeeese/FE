@@ -28,7 +28,7 @@ export default function UploadButtonInDetail({
     setIsUploading(true);
     await handleFileUpload(e, albumId, router);
     setIsUploading(false);
-    window.location.reload();
+    // window.location.reload();
   };
 
   const handleButtonClick = () => {
@@ -47,7 +47,7 @@ export default function UploadButtonInDetail({
       />
       <LongButton
         text={isUploading ? '업로드중이에요.' : buttonText || '앨범 채우기'}
-        noFixed={true}
+        noFixed={false}
         onClick={handleButtonClick}
         disabled={isUploading}
       />

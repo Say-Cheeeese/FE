@@ -1,6 +1,7 @@
 import { presignedAndUploadToNCP } from '@/global/api/presignedAndUploadToNCP';
 import { useUploadingStore } from '@/store/useUploadingStore';
 import { ChangeEvent } from 'react';
+import { convertHeicFilesToJpeg } from './heicToJpeg';
 import { saveFilesToStore } from './saveFilesToStore';
 import { sortImagesByDate } from './sortImagesByDate';
 import { validateUpload } from './validateUpload';
@@ -15,8 +16,10 @@ export async function handleFileUpload(
   if (!fl) return;
 
   let files = Array.from(fl).filter((f) => f.type.startsWith('image/'));
-  // EXIF 촬영일 기준 최신순 정렬
+  // heic/heif 이미지는 jpeg로 변환
   files = await sortImagesByDate(files);
+  files = await convertHeicFilesToJpeg(files);
+  // EXIF 촬영일 기준 최신순 정렬
 
   const result = await validateUpload(files, albumId);
   if (result.ok) {
