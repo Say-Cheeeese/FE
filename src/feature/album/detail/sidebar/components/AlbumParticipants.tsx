@@ -19,7 +19,7 @@ export default function AlbumParticipants({ albumId }: AlbumParticipantsProps) {
   if (isError) return null;
   if (!data) return null;
 
-  const handleKakaoClick = () => {
+  const handleKakaoClick = (): void => {
     shareKakao({
       title: '앨범에 초대해요',
       description: '치이이즈: 추억은 따끈할 때 제맛',
@@ -28,7 +28,7 @@ export default function AlbumParticipants({ albumId }: AlbumParticipantsProps) {
     });
   };
 
-  const handleMoreClick = () => {
+  const handleMoreClick = (): void => {
     const albumEntryUrl = `${process.env.NEXT_PUBLIC_CLIENT_URL}/album/entry/${albumId}`;
     const shareData = {
       title: `우리 공유앨범에 초대합니다 - 치이이즈`,
