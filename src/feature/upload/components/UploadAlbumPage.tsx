@@ -33,7 +33,6 @@ export default function UploadAlbumPage({ albumId }: UploadAlbumPageProps) {
         <div className='flex w-full flex-col items-center'>
           {data?.result && (
             <AlbumInfoHeader
-              albumId={albumId}
               photoCount={cards.length}
               albumData={data.result}
             />

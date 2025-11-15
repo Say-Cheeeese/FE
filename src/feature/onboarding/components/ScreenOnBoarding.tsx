@@ -9,12 +9,11 @@ export default function ScreenOnboardingComplete() {
     const entry =
       typeof window !== 'undefined' ? localStorage.getItem('entry') : null;
     if (entry === 'create-album') {
-      localStorage.removeItem('entry');
       router.push('/create-album');
     } else {
-      localStorage.removeItem('entry');
       router.push('/main');
     }
+    localStorage.removeItem('entry');
   };
   return (
     <div className='mt-[24.65vh] flex flex-col items-center'>

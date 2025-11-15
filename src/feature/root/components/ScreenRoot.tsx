@@ -6,7 +6,6 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 export default function ScreenRoot() {
-  console.log('들어와짐');
   const router = useRouter();
   const handleCreateAlbumClick = () => {
     localStorage.setItem('entry', 'create-album');
