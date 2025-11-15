@@ -20,13 +20,11 @@ export interface AlbumInvitation {
 }
 
 type AlbumInfoHeaderProps = {
-  albumId: string;
   photoCount: number;
   albumData: AlbumInvitation;
 };
 
 export default function AlbumInfoHeader({
-  albumId,
   photoCount,
   albumData,
 }: AlbumInfoHeaderProps) {
