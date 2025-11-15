@@ -1,6 +1,7 @@
 import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
 import Toast from '@/global/components/toast/Toast';
 import { copyToClipboard } from '@/global/utils/copyToClipboard';
+import { shareKakao } from '@/global/utils/shareKakao';
 import { Copy, Ellipsis, QrCode } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useGetAlbumParticipants } from '../hooks/useGetAlbumParticipants';
@@ -17,6 +18,30 @@ export default function AlbumParticipants({ albumId }: AlbumParticipantsProps) {
   if (isPending) return null;
   if (isError) return null;
   if (!data) return null;
+
+  const handleKakaoClick = () => {
+    shareKakao({
+      title: '앨범에 초대해요',
+      description: '치이이즈: 추억은 따끈할 때 제맛',
+      imageUrl: `${process.env.NEXT_PUBLIC_CLIENT_URL}/assets/og/og_kakao.png`,
+      link: `${process.env.NEXT_PUBLIC_CLIENT_URL}/album/entry/${albumId}`,
+    });
+  };
+
+  const handleMoreClick = () => {
+    const albumEntryUrl = `${process.env.NEXT_PUBLIC_CLIENT_URL}/album/entry/${albumId}`;
+    const shareData = {
+      title: `우리 공유앨범에 초대합니다 - 치이이즈`,
+      text: '일주일 뒤에는 앨범이 사라져요!',
+      url: albumEntryUrl,
+    };
+
+    if (navigator.share) {
+      navigator.share(shareData);
+    } else {
+      Toast.alert('이 기능을 지원하지 않는 브라우저입니다.');
+    }
+  };
 
   return (
     <section className='rounded-2xl bg-white px-5 py-8'>
@@ -49,6 +74,7 @@ export default function AlbumParticipants({ albumId }: AlbumParticipantsProps) {
             <div className='typo-body-sm-semibold flex justify-between'>
               <button
                 type='button'
+                onClick={handleKakaoClick}
                 className='flex flex-col items-center justify-center'
               >
                 <img
@@ -97,6 +123,7 @@ export default function AlbumParticipants({ albumId }: AlbumParticipantsProps) {
               </button>
               <button
                 type='button'
+                onClick={handleMoreClick}
                 className='flex flex-col items-center justify-center'
               >
                 <div className='flex h-[58px] w-[58px] items-center justify-center rounded-full bg-[#fff2c2]'>
