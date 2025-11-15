@@ -25,7 +25,6 @@ type AlbumInfoHeaderProps = {
 };
 
 export default function AlbumInfoHeader({
-  albumId,
   photoCount,
   albumData,
 }: AlbumInfoHeaderProps) {
