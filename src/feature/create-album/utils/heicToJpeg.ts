@@ -3,12 +3,9 @@ import { heicTo } from 'heic-to';
 
 // heic/heif 이미지를 jpeg로 변환하는 함수
 export async function convertHeicFilesToJpeg(files: File[]): Promise<File[]> {
-  console.log('Converting HEIC/HEIF files to JPEG...', files);
   const convertedFiles = await Promise.all(
     files.map(async (file) => {
-      console.log('Processing file:', file.name, 'of type:', file.type);
       if (/heic|heif/i.test(file.type) || /\.heic$|\.heif$/i.test(file.name)) {
-        console.log('Converting HEIC/HEIF file:', file.name);
         try {
           const jpegBlob = await heicTo({
             blob: file,

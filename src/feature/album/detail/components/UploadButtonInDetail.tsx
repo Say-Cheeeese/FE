@@ -26,9 +26,9 @@ export default function UploadButtonInDetail({
   const onFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) return;
     setIsUploading(true);
-    await handleFileUpload(e, albumId, router);
+    await handleFileUpload(e, albumId, router, { stay: true });
     setIsUploading(false);
-    // window.location.reload();
+    window.location.reload();
   };
 
   const handleButtonClick = () => {
