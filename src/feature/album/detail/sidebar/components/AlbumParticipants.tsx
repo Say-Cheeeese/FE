@@ -1,4 +1,6 @@
 import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
+import Toast from '@/global/components/toast/Toast';
+import { copyToClipboard } from '@/global/utils/copyToClipboard';
 import { Copy, Ellipsis, QrCode } from 'lucide-react';
 import { useGetAlbumParticipants } from '../hooks/useGetAlbumParticipants';
 import ItemParticipant from './ItemParticipant';
@@ -71,6 +73,12 @@ export default function AlbumParticipants({ albumId }: AlbumParticipantsProps) {
               </button>
               <button
                 type='button'
+                onClick={() => {
+                  copyToClipboard(
+                    `${process.env.NEXT_PUBLIC_CLIENT_URL}/album/entry/${albumId}`,
+                  );
+                  Toast.alert('링크가 복사되었습니다.');
+                }}
                 className='flex flex-col items-center justify-center'
               >
                 <div className='flex h-[58px] w-[58px] items-center justify-center rounded-full bg-[#fff2c2]'>

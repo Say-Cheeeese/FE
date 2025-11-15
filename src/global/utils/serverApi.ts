@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation';
 import { ACCESS_TOKEN_KEY } from '../constants/cookies';
 import { buildQuery } from './buildQuery';
 
-const API_URL = 'https://dev.say-cheese.me';
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const serverClient = axios.create({
   baseURL: API_URL,
