@@ -23,17 +23,17 @@ export default function UploadButtonInDetail({
         ? params.albumId[0]
         : '';
 
-  async function onFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+  const onFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) return;
     setIsUploading(true);
-    await handleFileUpload(e, albumId, router);
+    await handleFileUpload(e, albumId, router, { stay: true });
     setIsUploading(false);
     window.location.reload();
-  }
+  };
 
-  function handleButtonClick() {
+  const handleButtonClick = () => {
     if (!isUploading) fileInputRef.current?.click();
-  }
+  };
 
   return (
     <>
@@ -47,7 +47,7 @@ export default function UploadButtonInDetail({
       />
       <LongButton
         text={isUploading ? '업로드중이에요.' : buttonText || '앨범 채우기'}
-        noFixed={true}
+        noFixed={false}
         onClick={handleButtonClick}
         disabled={isUploading}
       />

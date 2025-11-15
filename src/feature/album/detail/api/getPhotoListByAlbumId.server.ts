@@ -46,6 +46,5 @@ export async function getPhotoListByAlbumId(
     path: `/v1/album/${albumId}/photos`,
     params: queryParams,
   });
-  console.log('res', res);
   return res.result as PhotoListResult;
 }
