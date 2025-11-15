@@ -2,6 +2,7 @@ import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
 import Toast from '@/global/components/toast/Toast';
 import { copyToClipboard } from '@/global/utils/copyToClipboard';
 import { Copy, Ellipsis, QrCode } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useGetAlbumParticipants } from '../hooks/useGetAlbumParticipants';
 import ItemParticipant from './ItemParticipant';
 
@@ -10,6 +11,7 @@ interface AlbumParticipantsProps {
 }
 
 export default function AlbumParticipants({ albumId }: AlbumParticipantsProps) {
+  const router = useRouter();
   const { data, isPending, isError } = useGetAlbumParticipants(albumId);
 
   if (isPending) return null;
@@ -60,6 +62,9 @@ export default function AlbumParticipants({ albumId }: AlbumParticipantsProps) {
               </button>
               <button
                 type='button'
+                onClick={() => {
+                  router.push(`/album/qrcode/${albumId}`);
+                }}
                 className='flex flex-col items-center justify-center'
               >
                 <div className='flex h-[58px] w-[58px] items-center justify-center rounded-full bg-[#fff2c2]'>
