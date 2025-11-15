@@ -16,16 +16,15 @@ interface AlbumCard {
 // ✅ API 연동 전까지는 상수로 유지
 const MOCK_CARDS: AlbumCard[] = [];
 
-type UploadAlbumPageProps = {
+interface UploadAlbumPageProps {
   albumId: string;
-};
+}
 
 export default function UploadAlbumPage({ albumId }: UploadAlbumPageProps) {
-  const { data, isLoading, error } = useGetAlbumInform({ code: albumId });
+  const { data } = useGetAlbumInform({ code: albumId });
   const cards = MOCK_CARDS; // ✅ 나중에 API 결과로 교체 예정
   const availableCount =
-    (data?.result?.maxParticipantCount ?? 0) -
-    (data?.result?.currentParticipantCount ?? 0);
+    (data?.maxParticipantCount ?? 0) - (data?.currentParticipantCount ?? 0);
   return (
     <div className='flex flex-col'>
       <CustomHeader title='앨범 채우기' border={false} />
@@ -44,7 +43,7 @@ export default function UploadAlbumPage({ albumId }: UploadAlbumPageProps) {
         </div>
 
         <div className='flex w-full flex-col items-center'>
-          {data?.result?.myRole === 'MAKER' ? (
+          {data?.myRole === 'MAKER' ? (
             <AvailableCountBubble availableCount={availableCount} />
           ) : (
             <span className='typo-body-sm-medium text-text-secondary mb-3'>

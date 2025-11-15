@@ -120,6 +120,7 @@ export default function ScreenAlbumDetail({
         ) : (
           <PhotoList
             key={selectionResetKey}
+            albumId={albumId}
             selectable={mode === 'select'}
             onTogglePhoto={handleTogglePhotoSelection}
             selectedList={selectedPhotoIds}

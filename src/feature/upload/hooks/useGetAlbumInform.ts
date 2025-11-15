@@ -3,10 +3,10 @@ import { api } from '@/global/utils/api';
 import { useQuery } from '@tanstack/react-query';
 
 const getAlbumDataWithRole = async (code: string) => {
-  const data = api.get<ApiReturns['album.participants']>({
+  const data = await api.get<ApiReturns['album.participants']>({
     path: EP.album.participants(code),
   });
-  return data;
+  return data.result;
 };
 
 interface UseGetAlbumInformProps {
