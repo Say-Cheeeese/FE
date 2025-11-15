@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
 
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_DEV_URL}/v1/auth/exchange?code=${code}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/v1/auth/exchange?code=${code}`,
       {
         method: 'GET',
         headers: {
