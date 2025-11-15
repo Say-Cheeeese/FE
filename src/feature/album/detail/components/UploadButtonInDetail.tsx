@@ -23,17 +23,17 @@ export default function UploadButtonInDetail({
         ? params.albumId[0]
         : '';
 
-  async function onFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+  const onFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) return;
     setIsUploading(true);
     await handleFileUpload(e, albumId, router);
     setIsUploading(false);
     window.location.reload();
-  }
+  };
 
-  function handleButtonClick() {
+  const handleButtonClick = () => {
     if (!isUploading) fileInputRef.current?.click();
-  }
+  };
 
   return (
     <>

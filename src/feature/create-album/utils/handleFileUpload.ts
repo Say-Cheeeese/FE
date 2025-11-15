@@ -21,7 +21,7 @@ export async function handleFileUpload(
   const result = await validateUpload(files, albumId);
   if (result.ok) {
     if (!options?.stay && router) {
-      router.push(`/album/${albumId}`);
+      router.push(`/album/${albumId}/waiting`);
     }
     const setUploading = useUploadingStore.getState().setUploading;
     const startTime = Date.now();
@@ -59,6 +59,6 @@ export async function handleFileUpload(
 
   // 검증 실패/성공 모두 같은 페이지로 이동 (WaitingAlbum에서 분기 처리)
   if (router) {
-    router.push(`/album/${albumId}`);
+    router.push(`/album/${albumId}/waiting`);
   }
 }
