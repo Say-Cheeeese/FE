@@ -3,9 +3,11 @@ import { X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import CardAlbumQrcode from './CardAlbumQrcode';
 
-interface ScreenAlbumQrcodeProps {}
+interface ScreenAlbumQrcodeProps {
+  albumId: string;
+}
 
-export default function ScreenAlbumQrcode({}: ScreenAlbumQrcodeProps) {
+export default function ScreenAlbumQrcode({ albumId }: ScreenAlbumQrcodeProps) {
   const router = useRouter();
 
   return (
@@ -18,7 +20,7 @@ export default function ScreenAlbumQrcode({}: ScreenAlbumQrcodeProps) {
         <X width={24} height={24} color='var(--color-icon-basic)' />
       </button>
       <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
-        <CardAlbumQrcode />
+        <CardAlbumQrcode albumId={albumId} />
       </div>
     </div>
   );
