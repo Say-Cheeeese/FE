@@ -26,11 +26,11 @@ export default function CardAlbumQrcode({ albumId }: CardAlbumQrcodeProps) {
       <p className='typo-body-sm-regular text-text-subtler mb-3'>
         {data.eventDate}
       </p>
-      <div className='bg-element-gray-lighter h-[250px] w-[250px]'>
+      <div className='flex h-[250px] w-[250px] items-center justify-center'>
         <QRCode
           value={qrValue}
-          size={250}
-          style={{ width: '250px', height: '250px' }}
+          size={220}
+          style={{ width: '220px', height: '220px' }}
         />
       </div>
     </section>
