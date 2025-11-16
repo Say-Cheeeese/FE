@@ -53,7 +53,7 @@ export function useAlbumOpenInfiniteQuery({
 }: UseAlbumOpenInfiniteQueryProps = {}) {
   const path = type === 'mine' ? EP.album.albumOpenMe() : EP.album.albumOpen();
   const query = useInfiniteQuery({
-    queryKey: ['album-open', path, size],
+    queryKey: [path, size],
     initialPageParam: 0,
     enabled: enabled,
     queryFn: ({ pageParam }) => fetchData({ pageParam, size, path }),
