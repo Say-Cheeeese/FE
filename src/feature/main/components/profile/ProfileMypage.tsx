@@ -1,30 +1,36 @@
-import Image from 'next/image';
+'use client';
+import { DEFAULT_PROFILE_IMAGE } from '@/global/constants/images';
+import { Settings } from 'lucide-react';
+import { useGetUserMe } from '../../hooks/useGetUserMe';
 
 interface ProfileMypageProps {}
 
 export default function ProfileMypage({}: ProfileMypageProps) {
+  const { data } = useGetUserMe();
+
   return (
     <section className='px-5 py-4'>
       <div className='flex gap-4'>
         <div className='flex items-center justify-center overflow-hidden rounded-full'>
-          <Image
-            src='/assets/onboarding/smile1.svg'
+          <img
+            src={data?.profileImage ?? DEFAULT_PROFILE_IMAGE}
             alt='프로필사진'
             width={80}
             height={80}
-            priority
           />
         </div>
 
         <div className='flex-1'>
           <div className='mb-1'>
-            <span className='typo-body-lg-semibold text-text-basic'>제리</span>
+            <span className='typo-body-lg-semibold text-text-basic'>
+              {data?.name ?? '사용자'}
+            </span>
           </div>
 
           <div className='grid grid-cols-3 gap-8'>
             <div className='flex flex-col'>
               <span className='typo-heading-sm-semibold text-text-basic'>
-                21
+                {data?.albumCount ?? 0}
               </span>
               <span className='typo-body-sm-regular text-text-subtle'>
                 앨범 수
@@ -32,7 +38,7 @@ export default function ProfileMypage({}: ProfileMypageProps) {
             </div>
             <div className='flex flex-col'>
               <span className='text-text-basic typo-heading-sm-semibold'>
-                203
+                {data?.photoCount ?? 0}
               </span>
               <span className='typo-body-sm-regular text-text-subtle'>
                 올린 사진
@@ -40,7 +46,7 @@ export default function ProfileMypage({}: ProfileMypageProps) {
             </div>
             <div className='flex flex-col'>
               <span className='typo-heading-sm-semibold text-text-basic'>
-                441
+                {data?.likesCount ?? 0}
               </span>
               <span className='typo-body-sm-regular text-text-subtle'>
                 받은 띱
@@ -48,15 +54,14 @@ export default function ProfileMypage({}: ProfileMypageProps) {
             </div>
           </div>
         </div>
-        <div className='h-full'>
-          {/* TODO : 설정페이지 구현 전까지 주석처리 */}
-          {/* <button type='button' aria-label='설정'>
+        <div className='absolute right-5'>
+          <button type='button' aria-label='설정'>
             <Settings
               width={24}
               height={24}
               color={'var(--color-icon-basic)'}
             />
-          </button> */}
+          </button>
         </div>
       </div>
     </section>
