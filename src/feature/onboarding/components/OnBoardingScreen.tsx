@@ -9,7 +9,7 @@ import XInput from '@/global/components/XInput';
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 
-export default function OnBoardingClient() {
+export default function OnBoardingScreen() {
   const searchParams = useSearchParams();
   const termType = searchParams.get('term');
   const currentTerm =
