@@ -1,86 +1,93 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import {
+  useAlbumOpenInfiniteQuery,
+  type AlbumOpenItem,
+  type AlbumOpenType,
+} from '../../hooks/useAlbumOpenInfiniteQuery';
 import EmptyAlbum from '../EmptyAlbum';
 import ButtonMore from './ButtonMore';
 import OpenAlbum from './OpenAlbum';
 import ToggleAlbumType from './ToggleAlbumType';
 
-type AlbumType = 'all' | 'mine';
+const MIN_VISIBLE_COUNT = 2;
 
-interface OpenAlbumItem {
+interface OpenAlbumListItem {
+  code: string;
   author: string;
   date: string;
   expirationTime: string;
   joinedMembers: number;
   totalMembers: number;
   title: string;
-  thumbnails?: string[];
-  isMine: boolean;
+  thumbnails: string[];
 }
-
-// 실제 데이터라고 가정
-const albums: OpenAlbumItem[] = [
-  // {
-  //   author: '이유정',
-  //   date: '2025.09.20',
-  //   expirationTime: '6일 2시간',
-  //   joinedMembers: 7,
-  //   totalMembers: 8,
-  //   title: '큐시즘 MT',
-  //   thumbnails: ['/ut/1.jpg', '/ut/2.jpg', '/ut/3.jpg'],
-  //   isMine: false,
-  // },
-
-  {
-    author: '맹소현',
-    date: '2025.08.23',
-    expirationTime: '4일 2시간',
-    joinedMembers: 7,
-    totalMembers: 8,
-    title: '큐시즘 UT',
-    thumbnails: ['/ut/3주차_1.jpg', '/ut/3주차_2.jpg', '/ut/3주차_3.jpg'],
-    isMine: true,
-  },
-  {
-    author: '정윤서',
-    date: '2025.08.30',
-    expirationTime: '5일 2시간',
-    joinedMembers: 7,
-    totalMembers: 8,
-    title: '파트별 상호 피드백',
-    isMine: false,
-  },
-  {
-    author: '김건우',
-    date: '2025.08.16',
-    expirationTime: '3일 12시간',
-    joinedMembers: 7,
-    totalMembers: 8,
-    title: '집중협업세션',
-    thumbnails: [
-      '/ut/2주차_1.jpg',
-      '/ut/2주차_2.jpg',
-      '/ut/2주차_3.jpg',
-      '/ut/2주차_4.jpg',
-    ],
-    isMine: false,
-  },
-];
 
 interface OpenAlbumContainerProps {}
 
 export default function OpenAlbumContainer({}: OpenAlbumContainerProps) {
-  const [albumType, setAlbumType] = useState<AlbumType>('all');
-  const [visibleCount, setVisibleCount] = useState(2);
+  const [albumType, setAlbumType] = useState<AlbumOpenType>('all');
+  const [isMoreOpened, setIsMoreOpened] = useState(false);
+  const [hasOpenedMine, setHasOpenedMine] = useState(false);
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    setVisibleCount(2);
+    if (albumType === 'mine' && !hasOpenedMine) {
+      setHasOpenedMine(true);
+    }
+  }, [albumType, hasOpenedMine]);
+
+  useEffect(() => {
+    setIsMoreOpened(false);
   }, [albumType]);
 
-  const filteredAlbums =
-    albumType === 'mine' ? albums.filter((album) => album.isMine) : albums;
-  const showing = filteredAlbums.slice(0, visibleCount);
-  const moreCount = Math.max(filteredAlbums.length - visibleCount, 0);
+  const allQuery = useAlbumOpenInfiniteQuery({ type: 'all' });
+  const mineQuery = useAlbumOpenInfiniteQuery({
+    type: 'mine',
+    enabled: albumType === 'mine' || hasOpenedMine,
+  });
+
+  const activeQuery = albumType === 'all' ? allQuery : mineQuery;
+  const {
+    items: activeItems,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+  } = activeQuery;
+
+  const albums = useMemo(() => mapOpenAlbumItems(activeItems), [activeItems]);
+  const showing = isMoreOpened ? albums : albums.slice(0, MIN_VISIBLE_COUNT);
+  const moreCount = Math.max(albums.length - MIN_VISIBLE_COUNT, 0);
+  const showMoreButton = !isMoreOpened && moreCount > 0;
+  const showLoadingState = isLoading && albums.length === 0;
+  const showEmptyState = !isLoading && albums.length === 0;
+
+  useEffect(() => {
+    if (!isMoreOpened) return;
+    if (!hasNextPage) return;
+
+    const target = loadMoreRef.current;
+    if (!target) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (entry.isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      },
+      {
+        rootMargin: '200px 0px',
+      },
+    );
+
+    observer.observe(target);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage, isMoreOpened]);
 
   return (
     <section className='mb-16 px-5'>
@@ -93,9 +100,9 @@ export default function OpenAlbumContainer({}: OpenAlbumContainerProps) {
         onChange={(next) => setAlbumType(next)}
       />
       <div className='mb-5 flex flex-col gap-5'>
-        {showing.length > 0 ? (
-          showing.map((album, idx) => <OpenAlbum key={idx} {...album} />)
-        ) : (
+        {!showLoadingState &&
+          showing.map((album) => <OpenAlbum key={album.code} {...album} />)}
+        {!showLoadingState && showEmptyState && (
           <EmptyAlbum
             title={
               albumType === 'all'
@@ -105,13 +112,80 @@ export default function OpenAlbumContainer({}: OpenAlbumContainerProps) {
           />
         )}
       </div>
-      {/* 더 볼 게 있을 때만 버튼 보여주기 */}
-      {moreCount > 0 && (
+      {showMoreButton && (
         <ButtonMore
           moreCount={moreCount}
-          onClick={() => setVisibleCount(filteredAlbums.length)}
+          onClick={() => setIsMoreOpened(true)}
         />
       )}
+      {isMoreOpened && isFetchingNextPage && (
+        <div className='typo-body-sm-medium text-text-subtle py-4 text-center'>
+          불러오는 중...
+        </div>
+      )}
+      <div ref={loadMoreRef} />
     </section>
   );
+}
+
+function mapOpenAlbumItems(items: AlbumOpenItem[]): OpenAlbumListItem[] {
+  return items.map((item) => ({
+    code: item.code,
+    author: item.makerName ?? '',
+    date: formatEventDate(item.eventDate),
+    expirationTime: formatExpirationTime(item.expiredAt),
+    joinedMembers: item.currentParticipant ?? 0,
+    totalMembers: item.participant ?? 0,
+    title: item.title ?? '',
+    thumbnails:
+      item.recentPhotoThumbnails
+        ?.slice(0, 3)
+        .filter((thumbnail): thumbnail is string => Boolean(thumbnail)) ?? [],
+  }));
+}
+
+const MINUTE = 60 * 1000;
+const HOUR = 60 * MINUTE;
+const DAY = 24 * HOUR;
+
+function formatExpirationTime(expiredAt?: string) {
+  if (!expiredAt) return '만료됨';
+  const expiresAt = new Date(expiredAt).getTime();
+  if (Number.isNaN(expiresAt)) return '만료됨';
+
+  const diff = expiresAt - Date.now();
+  if (diff <= 0) return '만료됨';
+
+  const days = Math.floor(diff / DAY);
+  const hours = Math.floor((diff % DAY) / HOUR);
+  const minutes = Math.floor((diff % HOUR) / MINUTE);
+  const seconds = Math.max(Math.floor((diff % MINUTE) / 1000), 1);
+
+  if (days > 0) {
+    return `${days}일 ${hours}시간`;
+  }
+
+  if (hours > 0) {
+    return `${hours}시간 ${minutes}분`;
+  }
+
+  if (minutes > 0) {
+    return `${minutes}분 ${seconds}초`;
+  }
+
+  return `${seconds}초`;
+}
+
+function formatEventDate(date?: string) {
+  if (!date) return '';
+  const parsed = new Date(date);
+  if (Number.isNaN(parsed.getTime())) {
+    return date;
+  }
+
+  const year = parsed.getFullYear();
+  const month = String(parsed.getMonth() + 1).padStart(2, '0');
+  const day = String(parsed.getDate()).padStart(2, '0');
+
+  return `${year}.${month}.${day}`;
 }

@@ -16,7 +16,7 @@ const fetchAlbumPhotosPage = async ({
   pageParam,
   size,
   sorting,
-}: FetchPageParams): Promise<ApiReturns['album.photos'] & { page: number }> => {
+}: FetchPageParams) => {
   const res = await api.get<ApiReturns['album.photos']>({
     path: EP.album.photos(code),
     params: { page: pageParam, size, sorting },
