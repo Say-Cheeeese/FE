@@ -1,4 +1,6 @@
+'use client';
 import Link from 'next/link';
+import { useAlbumClosedInfiniteQuery } from '../../hooks/useAlbumClosedInfiniteQuery';
 import EmptyAlbum from '../EmptyAlbum';
 import CloseAlbum from './CloseAlbum';
 
@@ -24,6 +26,8 @@ const closeAlbums: CloseAlbumData[] = [
 ];
 
 export default function CloseAlbumContainer() {
+  const {} = useAlbumClosedInfiniteQuery();
+
   return (
     <section className='mb-20 px-5'>
       <Link href='#'>
