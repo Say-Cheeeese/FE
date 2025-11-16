@@ -1,8 +1,11 @@
-import { AlbumInvitationResponse } from '@/feature/upload/api/getAlbumInvitation';
+import { AlbumInvitationResponseSchema } from '@/global/api/ep';
 import { convertUnicodeToEmoji } from '@/global/utils/convertEmoji';
 
+// 😀 <- 이 이모지
+const DEFAULT_EMOJI = 'U+1F600';
+
 interface AlbumInfoSummaryProps {
-  albumInfo?: AlbumInvitationResponse;
+  albumInfo?: AlbumInvitationResponseSchema;
   isLoading: boolean;
   isError: boolean;
 }
@@ -19,7 +22,7 @@ export function AlbumInfoSummary({
     return <div style={{ height: '98px' }} />;
   }
 
-  const emoji = convertUnicodeToEmoji(albumInfo.themeEmoji);
+  const emoji = convertUnicodeToEmoji(albumInfo.themeEmoji ?? DEFAULT_EMOJI);
 
   return (
     <div className='mb-6 flex items-center gap-5'>

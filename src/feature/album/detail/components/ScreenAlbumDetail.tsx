@@ -16,11 +16,10 @@ import {
   type PhotoSortType,
 } from '../constants/photoSort';
 import { useGetAlbumInvitation } from '../hooks/useGetAlbumInvitation';
+import AlbumBottomActions from './AlbumBottomActions';
 import AlbumInfos from './AlbumInfos';
-import DownloadActionBar from './DownloadActionBar';
-import NavBarAlbumDetail, { type AlbumType } from './NavBarAlbumDetail';
-import NoPhotoBody from './NoPhotoBody';
-import PhotoList from './PhotoList';
+import AlbumPhotoSection from './AlbumPhotoSection';
+import { type AlbumType } from './NavBarAlbumDetail';
 
 export type AlbumDetailMode = 'select' | 'default';
 
@@ -79,6 +78,7 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
   const isLoading = isDeepAlbumType
     ? likedPhotosQuery.isLoading
     : defaultPhotosQuery.isLoading;
+  const hasPhotos = photos.length > 0;
 
   useEffect(() => {
     const target = albumInfosRef.current;
@@ -149,43 +149,31 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
           isLoading={isInvitationLoading}
           isError={isInvitationError}
         />
-        {!isLoading && (
-          <>
-            {photos.length === 0 ? (
-              <NoPhotoBody />
-            ) : (
-              <PhotoList
-                key={selectionResetKey}
-                albumId={albumId}
-                selectable={mode === 'select'}
-                onTogglePhoto={handleTogglePhotoSelection}
-                selectedList={selectedPhotoIds}
-                mode={mode}
-                changeMode={(newMode) => setMode(newMode)}
-                photos={photos}
-                fetchNextPage={fetchNextPage}
-                hasNextPage={!!hasNextPage}
-                isFetchingNextPage={isFetchingNextPage}
-              />
-            )}
-          </>
-        )}
-      </div>
-      {!isLoading && mode === 'default' && (
-        <NavBarAlbumDetail
+        <AlbumPhotoSection
+          isLoading={isLoading}
+          photos={photos}
+          selectionResetKey={selectionResetKey}
           albumId={albumId}
-          sortType={sortType}
-          changeSortType={(newType) => setSortType(newType)}
-          albumType={albumType}
-          changeAlbumType={(nextType) => setAlbumType(nextType)}
+          mode={mode}
+          selectedPhotoIds={selectedPhotoIds}
+          onTogglePhoto={handleTogglePhotoSelection}
+          onChangeMode={setMode}
+          fetchNextPage={fetchNextPage}
+          hasNextPage={!!hasNextPage}
+          isFetchingNextPage={isFetchingNextPage}
         />
-      )}
-      {!isLoading && mode === 'select' && (
-        <DownloadActionBar
-          selectedCount={selectedPhotoIds.length}
-          onDownload={handleDownload}
-        />
-      )}
+      </div>
+      <AlbumBottomActions
+        hasPhotos={hasPhotos}
+        mode={mode}
+        albumId={albumId}
+        sortType={sortType}
+        changeSortType={setSortType}
+        albumType={albumType}
+        changeAlbumType={setAlbumType}
+        selectedCount={selectedPhotoIds.length}
+        onDownload={handleDownload}
+      />
     </>
   );
 }
