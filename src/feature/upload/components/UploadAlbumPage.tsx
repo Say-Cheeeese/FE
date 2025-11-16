@@ -30,11 +30,8 @@ export default function UploadAlbumPage({ albumId }: UploadAlbumPageProps) {
       <CustomHeader title='앨범 채우기' border={false} />
       <main className='flex min-h-[calc(100dvh-72px)] flex-col items-center justify-between pt-6 pb-[calc(20px+env(safe-area-inset-bottom))]'>
         <div className='flex w-full flex-col items-center'>
-          {data?.result && (
-            <AlbumInfoHeader
-              photoCount={cards.length}
-              albumData={data.result}
-            />
+          {data && (
+            <AlbumInfoHeader photoCount={cards.length} albumData={data} />
           )}
           <Image
             src='/assets/album/test-lottie.svg'
