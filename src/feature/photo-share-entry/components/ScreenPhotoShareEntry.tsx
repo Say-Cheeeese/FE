@@ -1,6 +1,10 @@
 'use client';
+import { handleFileUpload } from '@/feature/create-album/utils/handleFileUpload';
+import CheckNoImgModal from '@/feature/upload/components/CheckNoImgModal';
 import CustomHeader from '@/global/components/header/CustomHeader';
 import LongButton from '@/global/components/LongButton';
+import { useRouter } from 'next/navigation';
+import { useRef } from 'react';
 import AlbumSharePreviewSection from './AlbumSharePreviewSection';
 
 interface ScreenPhotoShareEntryProps {
@@ -10,6 +14,17 @@ interface ScreenPhotoShareEntryProps {
 export default function ScreenPhotoShareEntry({
   albumId,
 }: ScreenPhotoShareEntryProps) {
+  const router = useRouter();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleUpload = () => {
+    fileInputRef.current?.click();
+  };
+
+  const onFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    await handleFileUpload(e, albumId, router);
+  };
+
   return (
     <>
       <CustomHeader title='앨범 채우기' />
@@ -25,6 +40,7 @@ export default function ScreenPhotoShareEntry({
                 <span role='img' aria-label='카메라'>
                   📸
                 </span>
+                {/* TODO : 비로그인도 남은장수 알수있는 방법 논의 필요 */}
                 <span>지금 930장 더 올릴 수 있어요</span>
               </div>
               {/* 말풍선 꼬리 */}
@@ -35,15 +51,32 @@ export default function ScreenPhotoShareEntry({
           </div>
 
           <div className='w-full px-6'>
-            <LongButton text='내가 찍은 사진 공유하기' noFixed />
+            <input
+              ref={fileInputRef}
+              type='file'
+              accept='image/*'
+              multiple
+              onChange={onFileChange}
+              className='hidden'
+            />
+            <LongButton
+              text='내가 찍은 사진 올리기'
+              noFixed
+              onClick={handleUpload}
+            />
           </div>
 
-          <button
-            type='button'
-            className='typo-body-md-medium text-text-subtler mt-3 px-6 underline'
-          >
-            올릴 사진이 없어요
-          </button>
+          <CheckNoImgModal
+            albumId={albumId}
+            trigger={
+              <button
+                type='button'
+                className='typo-body-sm-medium text-text-subtler mt-3'
+              >
+                올릴 사진이 없어요
+              </button>
+            }
+          />
         </div>
       </main>
     </>
