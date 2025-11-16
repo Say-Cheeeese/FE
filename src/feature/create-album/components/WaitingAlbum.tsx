@@ -1,6 +1,7 @@
 'use client';
 
 import CheeseCartLoading from '@/../public/assets/album/CheeseCart_Loading.json';
+import Toast from '@/global/components/toast/Toast';
 import { useImageStore } from '@/store/useImageStore';
 import { motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
@@ -39,7 +40,7 @@ export default function WaitingAlbum({ albumId }: WaitingAlbumProps) {
         router.replace(`/album/detail/${albumId}`);
       } catch (err) {
         console.error('Image processing error:', err);
-        alert('사진 처리 중 에러가 발생했습니다.');
+        Toast.alert('사진 처리 중 에러가 발생했습니다.');
         router.replace(`/album/detail/${albumId}`);
       }
     };
