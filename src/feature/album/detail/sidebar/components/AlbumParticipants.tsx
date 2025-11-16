@@ -1,9 +1,9 @@
+import { useGetAlbumInform } from '@/feature/upload/hooks/useGetAlbumInform';
 import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
 import Toast from '@/global/components/toast/Toast';
 import { copyToClipboard } from '@/global/utils/copyToClipboard';
 import { Copy, Ellipsis, QrCode } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useGetAlbumParticipants } from '../hooks/useGetAlbumParticipants';
 import ItemParticipant from './ItemParticipant';
 
 interface AlbumParticipantsProps {
@@ -12,7 +12,7 @@ interface AlbumParticipantsProps {
 
 export default function AlbumParticipants({ albumId }: AlbumParticipantsProps) {
   const router = useRouter();
-  const { data, isPending, isError } = useGetAlbumParticipants(albumId);
+  const { data, isPending, isError } = useGetAlbumInform({ code: albumId });
 
   if (isPending) return null;
   if (isError) return null;

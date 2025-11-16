@@ -6,11 +6,12 @@ import CustomHeader from '@/global/components/header/CustomHeader';
 import LogoHeader from '@/global/components/header/LogoHeader';
 import LongButton from '@/global/components/LongButton';
 import XInput from '@/global/components/XInput';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 
 export default function OnBoardingClient() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const termType = searchParams.get('term');
   const currentTerm =
     termType && Object.prototype.hasOwnProperty.call(TermContent, termType)
@@ -70,6 +71,7 @@ export default function OnBoardingClient() {
         agreements,
       });
       // 가입 완료 API 호출 등
+      router.push('/onboarding/complete');
     }
   };
 
