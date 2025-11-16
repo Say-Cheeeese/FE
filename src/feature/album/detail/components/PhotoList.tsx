@@ -1,8 +1,14 @@
+'use client';
+import { PhotoListResponseSchema } from '@/global/api/ep';
 import PhotoBox from '@/global/components/photo/PhotoBox';
 import { buildQuery } from '@/global/utils/buildQuery';
+import {
+  type FetchNextPageOptions,
+  type InfiniteQueryObserverResult,
+} from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { useRef } from 'react';
-import type { Photo } from '../api/getPhotoListByAlbumId.server';
+import { useEffect, useRef } from 'react';
+import { useGetAlbumAvailableCount } from '../hooks/useGetAlbumAvailableCount';
 import { AlbumDetailMode } from './ScreenAlbumDetail';
 
 const SELECT_MODE_MIN_HEIGHT = '800px';
@@ -13,11 +19,16 @@ export const ID_PHOTO_LIST_ANCHOR = 'photo-list-anchor';
 interface PhotoListProps {
   albumId: string;
   selectable?: boolean;
-  onTogglePhoto?: (photoId: string) => void;
-  selectedList: string[];
+  onTogglePhoto?: (photoId: number) => void;
+  selectedList: number[];
   changeMode: (newMode: AlbumDetailMode) => void;
   mode: AlbumDetailMode;
-  photos: Photo[]; // 실제 사진 데이터
+  photos: PhotoListResponseSchema[];
+  fetchNextPage: (
+    options?: FetchNextPageOptions,
+  ) => Promise<InfiniteQueryObserverResult>;
+  hasNextPage: boolean;
+  isFetchingNextPage: boolean;
 }
 
 export default function PhotoList({
@@ -28,13 +39,42 @@ export default function PhotoList({
   changeMode,
   mode,
   photos,
+  fetchNextPage,
+  hasNextPage,
+  isFetchingNextPage,
 }: PhotoListProps) {
   const router = useRouter();
-
   const photoListRef = useRef<HTMLElement | null>(null);
   const anchorRef = useRef<HTMLDivElement | null>(null);
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
+  const { data } = useGetAlbumAvailableCount(albumId);
+  const totalPhotoCount = data?.currentPhotoCount ?? '  ';
 
-  const handlePhotoPress = (photoId: string) => {
+  useEffect(() => {
+    if (!hasNextPage) return;
+    const target = loadMoreRef.current;
+    if (!target) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (entry.isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      },
+      {
+        rootMargin: '200px 0px',
+      },
+    );
+
+    observer.observe(target);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+
+  const handlePhotoPress = (photoId: number): void => {
     if (!selectable) return;
     onTogglePhoto?.(photoId);
   };
@@ -70,7 +110,7 @@ export default function PhotoList({
       <div ref={anchorRef} className='invisible absolute top-[-72px] left-0' />
       <div className='mb-3 flex justify-between'>
         <span className='typo-body-lg-regular text-text-subtle'>
-          총 {photos.length ?? 0}장
+          총 {totalPhotoCount}장
         </span>
         {mode === 'default' && (
           <button
@@ -92,25 +132,32 @@ export default function PhotoList({
         )}
       </div>
       <div className='grid grid-cols-3 gap-0.5'>
-        {photos.map((photo) => (
-          <PhotoBox
-            key={photo.photoId}
-            pressed={selectedList.includes(String(photo.photoId))}
-            likeCount={photo.likesCnt}
-            imageSrc={photo.thumbnailUrl}
-            responsive
-            onPress={() => {
-              if (mode === 'default') {
-                router.push(
-                  `/photo/detail/${albumId}${buildQuery({ photoId: photo.photoId })}`,
-                );
-              } else {
-                handlePhotoPress(String(photo.photoId));
-              }
-            }}
-          />
-        ))}
+        {photos.map(({ photoId, likeCnt, thumbnailUrl }) => {
+          if (!photoId) {
+            return null;
+          }
+
+          return (
+            <PhotoBox
+              key={photoId}
+              pressed={selectedList.includes(photoId)}
+              likeCount={likeCnt}
+              imageSrc={thumbnailUrl}
+              responsive
+              onPress={() => {
+                if (mode === 'default') {
+                  router.push(
+                    `/photo/detail/${albumId}${buildQuery({ photoId: photoId })}`,
+                  );
+                } else {
+                  handlePhotoPress(photoId);
+                }
+              }}
+            />
+          );
+        })}
       </div>
+      <div ref={loadMoreRef} />
     </section>
   );
 }

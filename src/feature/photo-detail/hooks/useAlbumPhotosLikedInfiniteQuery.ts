@@ -1,4 +1,4 @@
-import { ApiReturns, EP, PhotoSorting } from '@/global/api/ep';
+import { ApiReturns, EP } from '@/global/api/ep';
 import { api } from '@/global/utils/api';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
@@ -7,43 +7,39 @@ interface FetchPageParams {
   pageParam: number;
   /** 페이지 사이즈 (기본 20) */
   size: number;
-  /** API가 받는 정렬 형식: 예) 'CREATED_AT' */
-  sorting: PhotoSorting;
 }
 
 const fetchAlbumPhotosPage = async ({
   code,
   pageParam,
   size,
-  sorting,
-}: FetchPageParams): Promise<ApiReturns['album.photos'] & { page: number }> => {
-  const res = await api.get<ApiReturns['album.photos']>({
-    path: EP.album.photos(code),
-    params: { page: pageParam, size, sorting },
+}: FetchPageParams): Promise<
+  ApiReturns['album.likedPhotos'] & { page: number }
+> => {
+  const res = await api.get<ApiReturns['album.likedPhotos']>({
+    path: EP.album.likedPhotos(code),
+    params: { page: pageParam, size },
   });
 
   return { ...res.result, page: pageParam };
 };
 
-interface UseAlbumPhotosInfiniteQueryProps {
+interface UseAlbumPhotosLikedInfiniteQueryProps {
   code: string;
   size?: number;
-  sorting?: PhotoSorting;
   enabled?: boolean;
 }
 
-export function useAlbumPhotosInfiniteQuery({
+export function useAlbumPhotosLikedInfiniteQuery({
   code,
   size = 20,
-  sorting = 'CREATED_AT',
   enabled = true,
-}: UseAlbumPhotosInfiniteQueryProps) {
+}: UseAlbumPhotosLikedInfiniteQueryProps) {
   const query = useInfiniteQuery({
-    queryKey: [EP.album.photos(code), size, sorting],
+    queryKey: [EP.album.likedPhotos(code), size],
     initialPageParam: 0,
     enabled: enabled && !!code,
-    queryFn: ({ pageParam }) =>
-      fetchAlbumPhotosPage({ code, pageParam, size, sorting }),
+    queryFn: ({ pageParam }) => fetchAlbumPhotosPage({ code, pageParam, size }),
     getNextPageParam: (lastPage) =>
       lastPage.hasNext ? lastPage.page + 1 : undefined,
   });

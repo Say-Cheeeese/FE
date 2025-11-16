@@ -1,13 +1,7 @@
 import { DrawerClose } from '@/components/ui/drawer';
 import { Check } from 'lucide-react';
-
-const SORT_OPTIONS: { value: PhotoSortType; label: string }[] = [
-  { value: 'uploaded', label: '최근 업로드된 사진순' },
-  { value: 'shot', label: '최근 촬영한 시간순' },
-  { value: 'liked', label: '띠 많은 순' },
-];
-
-export type PhotoSortType = 'uploaded' | 'shot' | 'liked';
+import type { PhotoSortType } from '../constants/photoSort';
+import { photoSortOptions } from '../constants/photoSort';
 
 interface SelectPhotoSortTypeProps {
   sort: PhotoSortType;
@@ -21,7 +15,7 @@ export default function SelectPhotoSortType({
   return (
     <div className='px-2'>
       <ul className='flex flex-col'>
-        {SORT_OPTIONS.map((item) => {
+        {photoSortOptions.map((item) => {
           const isActive = sort === item.value;
           return (
             <li key={item.value}>

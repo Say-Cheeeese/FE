@@ -5,36 +5,41 @@ import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
 import Toast from '@/global/components/toast/Toast';
 import { ArrowDownUp, Plus } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useRef, useState } from 'react';
-import SelectPhotoSortType, { PhotoSortType } from './SelectPhotoSortType';
+import { useRef } from 'react';
+import type { PhotoSortType } from '../constants/photoSort';
+import SelectPhotoSortType from './SelectPhotoSortType';
+
+export type AlbumType = 'all' | 'deep';
 
 interface NavBarAlbumDetailProps {
   albumId: string;
   sortType: PhotoSortType;
   changeSortType: (newType: PhotoSortType) => void;
+  albumType: AlbumType;
+  changeAlbumType: (value: AlbumType) => void;
 }
-
-type AlbumType = 'all' | 'deep';
 
 export default function NavBarAlbumDetail({
   albumId,
   changeSortType,
   sortType,
+  albumType,
+  changeAlbumType,
 }: NavBarAlbumDetailProps) {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const [albumType, setAlbumType] = useState<AlbumType>('all');
-
-  const handleToggleChange = (value: AlbumType) => {
-    setAlbumType(value);
+  const handleToggleChange = (value: AlbumType): void => {
+    changeAlbumType(value);
   };
 
-  const handleButtonClick = () => {
+  const handleButtonClick = (): void => {
     fileInputRef.current?.click();
   };
 
-  const onFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onFileChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ): Promise<void> => {
     try {
       await handleFileUpload(e, albumId, router);
     } catch (error: unknown) {
