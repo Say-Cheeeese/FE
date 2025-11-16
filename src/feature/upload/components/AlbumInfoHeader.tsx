@@ -1,16 +1,34 @@
 import { convertUnicodeToEmoji } from '@/global/utils/convertEmoji';
-import { getAlbumInvitationServer } from '../api/getAlbumInvitation.server';
+
+export interface AlbumParticipant {
+  name?: string;
+  profileImage?: string;
+  role?: string; // "MAKER" | "GUEST" 등으로 좁힐 수 있음
+  isMe?: boolean;
+}
+
+export interface AlbumInvitation {
+  currentParticipantCount?: number;
+  eventDate?: string;
+  expiredAt?: string;
+  isExpired?: boolean;
+  maxParticipantCount?: number;
+  myRole?: string;
+  participants?: AlbumParticipant[];
+  themeEmoji?: string;
+  title?: string;
+}
 
 type AlbumInfoHeaderProps = {
-  albumId: string;
   photoCount: number;
+  albumData: AlbumInvitation;
 };
-export default async function AlbumInfoHeader({
-  albumId,
+
+export default function AlbumInfoHeader({
   photoCount,
+  albumData,
 }: AlbumInfoHeaderProps) {
-  const albumInfo = await getAlbumInvitationServer(albumId);
-  const emoji = convertUnicodeToEmoji(albumInfo.themeEmoji);
+  const emoji = convertUnicodeToEmoji(albumData.themeEmoji || '');
 
   return (
     <div className='flex w-full flex-col items-center'>
@@ -26,7 +44,7 @@ export default async function AlbumInfoHeader({
               : 'typo-heading-md-semibold text-text-basic'
           }
         >
-          {albumInfo.title}
+          {albumData.title || '제목 없음'}
         </h2>
         {photoCount === 0 ? (
           <p className='typo-heading-sm-semibold text-text-subtle'>
@@ -34,7 +52,7 @@ export default async function AlbumInfoHeader({
           </p>
         ) : (
           <p className='typo-body-md-medium text-text-subtle'>
-            {albumInfo.eventDate}
+            {albumData.eventDate || '날짜 없음'}
           </p>
         )}
       </div>
