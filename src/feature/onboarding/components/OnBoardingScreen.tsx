@@ -18,7 +18,7 @@ export default function OnBoardingScreen() {
       ? TermContent[termType as keyof typeof TermContent]
       : null;
   // 프로필 이미지 상태
-  const [selectedImage, setSelectedImage] = useState<string>('smile1.svg');
+  const [selectedImage, setSelectedImage] = useState<string>('P1');
 
   // 쿼리스트링에서 name 추출
   const nameFromQuery = searchParams.get('name') || '';
