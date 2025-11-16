@@ -1,6 +1,9 @@
 'use client';
 import { cn } from '@/lib/utils';
 import { Check, Heart } from 'lucide-react';
+import { useEffect, useState } from 'react';
+
+const FALLBACK_SRC = '/icon/error-image.svg';
 
 interface PhotoBoxProps {
   size?: number; // px
@@ -11,7 +14,7 @@ interface PhotoBoxProps {
   downloaded?: boolean;
   pressed?: boolean;
   disabled?: boolean;
-  imageSrc: string;
+  imageSrc?: string;
   imageAlt?: string;
   onPress?: (pressed: boolean) => void;
   pressable?: boolean;
@@ -31,6 +34,16 @@ export default function PhotoBox({
   pressable = true,
 }: PhotoBoxProps) {
   const showLike = likeCount !== undefined;
+  const [currentSrc, setCurrentSrc] = useState(imageSrc ?? FALLBACK_SRC);
+
+  useEffect(() => {
+    setCurrentSrc(imageSrc ?? FALLBACK_SRC);
+  }, [imageSrc]);
+
+  const handleImageError = (): void => {
+    if (currentSrc === FALLBACK_SRC) return;
+    setCurrentSrc(FALLBACK_SRC);
+  };
 
   const handlePress = () => {
     if (disabled || !pressable) return;
@@ -62,8 +75,9 @@ export default function PhotoBox({
       {/* 항상 정사각형 유지 */}
       <div className='aspect-square w-full overflow-hidden'>
         <img
-          src={imageSrc}
+          src={currentSrc}
           alt={imageAlt}
+          onError={handleImageError}
           className='bg-element-gray-lighter h-full w-full object-cover'
         />
       </div>

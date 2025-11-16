@@ -1,5 +1,6 @@
 'use client';
 
+import { PhotoSorting } from '@/global/api/ep';
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
 import { useAlbumPhotosInfiniteQuery } from '../hooks/useAlbumPhotosInfiniteQuery';
@@ -16,9 +17,13 @@ const SwiperPhotoList = dynamic(() => import('./SwiperPhotoList'), {
 
 interface ScreenPhotoDetailProps {
   albumId: string;
+  sort: PhotoSorting;
 }
 
-export default function ScreenPhotoDetail({ albumId }: ScreenPhotoDetailProps) {
+export default function ScreenPhotoDetail({
+  albumId,
+  sort,
+}: ScreenPhotoDetailProps) {
   const [activeIndex, setActiveIndex] = useState(0);
 
   const changeActiveIndex = (newIndex: number): void => {
@@ -35,6 +40,7 @@ export default function ScreenPhotoDetail({ albumId }: ScreenPhotoDetailProps) {
   } = useAlbumPhotosInfiniteQuery({
     code: albumId,
     size: 30,
+    sorting: sort,
   });
 
   const activeImage = images[activeIndex];

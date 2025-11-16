@@ -4,7 +4,7 @@ import { buildQuery } from './buildQuery';
 import { getCookie, removeCookie, setCookie } from './cookies';
 
 // TODO : 공통으로 사용하는 api url 을 사용해야함. 임시 상수 생성
-const API_URL = 'https://dev.say-cheese.me';
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 type RequestOptions = {
   path: string;

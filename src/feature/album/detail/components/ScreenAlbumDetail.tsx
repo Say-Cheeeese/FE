@@ -1,43 +1,84 @@
 'use client';
 
+import { useAlbumPhotosInfiniteQuery } from '@/feature/photo-detail/hooks/useAlbumPhotosInfiniteQuery';
+import { useAlbumPhotosLikedInfiniteQuery } from '@/feature/photo-detail/hooks/useAlbumPhotosLikedInfiniteQuery';
+import { PhotoListResponseSchema } from '@/global/api/ep';
 import CustomHeader, {
   HEADER_HEIGHT,
 } from '@/global/components/header/CustomHeader';
+import { useSelectedPhotosStore } from '@/store/useSelectedPhotosStore';
 import { Menu } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { PhotoListResult } from '../api/getPhotoListByAlbumId.server';
+import { useShallow } from 'zustand/shallow';
+import {
+  photoSortToApiSorting,
+  type PhotoSortType,
+} from '../constants/photoSort';
 import { useGetAlbumInvitation } from '../hooks/useGetAlbumInvitation';
+import AlbumBottomActions from './AlbumBottomActions';
 import AlbumInfos from './AlbumInfos';
-import DownloadActionBar from './DownloadActionBar';
-import NavBarAlbumDetail from './NavBarAlbumDetail';
-import NoPhotoBody from './NoPhotoBody';
-import PhotoList from './PhotoList';
-import { PhotoSortType } from './SelectPhotoSortType';
+import AlbumPhotoSection from './AlbumPhotoSection';
+import { type AlbumType } from './NavBarAlbumDetail';
 
-export type AlbumDetailMode = 'select' | 'default' | 'empty';
+export type AlbumDetailMode = 'select' | 'default';
 
 interface ScreenAlbumDetailProps {
   albumId: string;
-  initialData: PhotoListResult; // 서버에서 전달받은 초기 데이터
 }
 
-export default function ScreenAlbumDetail({
-  albumId,
-  initialData,
-}: ScreenAlbumDetailProps) {
+export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
   const router = useRouter();
-  const [mode, setMode] = useState<AlbumDetailMode>(
-    initialData.responses && initialData.responses.length > 0
-      ? 'default'
-      : 'empty',
-  );
-  const albumInfosRef = useRef<HTMLDivElement | null>(null);
+  const albumInfosRef = useRef<HTMLElement | null>(null);
+  const [mode, setMode] = useState<AlbumDetailMode>('default');
   const [isAlbumInfosHidden, setIsAlbumInfosHidden] = useState(false);
-  // TODO : photoIds를 담지않고, 이미지 url도 상태로 관리해야함. 혹은, photoIds로 이미지를 받아와야함.
-  const [selectedPhotoIds, setSelectedPhotoIds] = useState<string[]>([]);
   const [selectionResetKey, setSelectionResetKey] = useState(0);
   const [sortType, setSortType] = useState<PhotoSortType>('liked');
+  const [albumType, setAlbumType] = useState<AlbumType>('all');
+  const sorting = photoSortToApiSorting[sortType];
+  const { selectedPhotoIds, togglePhotoSelection, clearSelectedPhotos } =
+    useSelectedPhotosStore(
+      useShallow((state) => ({
+        selectedPhotoIds: state.selectedPhotoIds,
+        togglePhotoSelection: state.togglePhotoSelection,
+        clearSelectedPhotos: state.clearSelectedPhotos,
+      })),
+    );
+
+  const {
+    data: invitationData,
+    isLoading: isInvitationLoading,
+    isError: isInvitationError,
+  } = useGetAlbumInvitation(albumId);
+  const isDeepAlbumType = albumType === 'deep';
+
+  const defaultPhotosQuery = useAlbumPhotosInfiniteQuery({
+    code: albumId,
+    sorting,
+    enabled: albumType === 'all',
+  });
+
+  const likedPhotosQuery = useAlbumPhotosLikedInfiniteQuery({
+    code: albumId,
+    enabled: isDeepAlbumType,
+  });
+
+  const photos: PhotoListResponseSchema[] = isDeepAlbumType
+    ? likedPhotosQuery.items
+    : defaultPhotosQuery.items;
+  const fetchNextPage = isDeepAlbumType
+    ? likedPhotosQuery.fetchNextPage
+    : defaultPhotosQuery.fetchNextPage;
+  const hasNextPage = isDeepAlbumType
+    ? likedPhotosQuery.hasNextPage
+    : defaultPhotosQuery.hasNextPage;
+  const isFetchingNextPage = isDeepAlbumType
+    ? likedPhotosQuery.isFetchingNextPage
+    : defaultPhotosQuery.isFetchingNextPage;
+  const isLoading = isDeepAlbumType
+    ? likedPhotosQuery.isLoading
+    : defaultPhotosQuery.isLoading;
+  const hasPhotos = photos.length > 0;
 
   useEffect(() => {
     const target = albumInfosRef.current;
@@ -59,42 +100,36 @@ export default function ScreenAlbumDetail({
     };
   }, []);
 
-  const handleTogglePhotoSelection = (photoId: string) => {
-    setSelectedPhotoIds((prev) => {
-      if (prev.includes(photoId)) {
-        return prev.filter((id) => id !== photoId);
-      } else {
-        return [...prev, photoId];
-      }
-    });
-  };
-
-  const handleDownload = () => {
-    setMode('default');
-    setSelectedPhotoIds([]);
-  };
-
   useEffect(() => {
-    // 사진이 없으면 empty 모드로 자동 진입
-    if (!initialData.responses || initialData.responses.length === 0) {
-      if (mode !== 'empty') setMode('empty');
-      return;
-    }
-    // 사진이 있으면 select/reset 로직 유지
     if (mode === 'select') return;
     if (selectedPhotoIds.length === 0) return;
 
-    setSelectedPhotoIds([]);
+    clearSelectedPhotos();
     setSelectionResetKey((prev) => prev + 1);
-  }, [mode, selectedPhotoIds, initialData.responses]);
-  const albumData = useGetAlbumInvitation(albumId);
+  }, [clearSelectedPhotos, photos.length, mode, selectedPhotoIds.length]);
+
+  useEffect(() => {
+    return () => {
+      clearSelectedPhotos();
+    };
+  }, [clearSelectedPhotos]);
+
+  const handleTogglePhotoSelection = (photoId: number): void => {
+    togglePhotoSelection(photoId);
+  };
+
+  const handleDownload = (): void => {
+    setMode('default');
+    clearSelectedPhotos();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
     <>
       <CustomHeader
         isShowBack
         isHidden={mode === 'select'}
-        title={isAlbumInfosHidden ? (albumData.data?.title ?? '') : ''}
+        title={isAlbumInfosHidden ? (invitationData?.title ?? '') : ''}
         rightContent={
           <div className='flex gap-4'>
             <button
@@ -110,39 +145,35 @@ export default function ScreenAlbumDetail({
         <AlbumInfos
           ref={albumInfosRef}
           albumId={albumId}
-          albumInfo={albumData.data}
-          isLoading={albumData.isLoading}
-          isError={albumData.isError}
-          photos={initialData.responses}
+          albumInfo={invitationData}
+          isLoading={isInvitationLoading}
+          isError={isInvitationError}
         />
-        {mode === 'empty' ? (
-          <NoPhotoBody />
-        ) : (
-          <PhotoList
-            key={selectionResetKey}
-            albumId={albumId}
-            selectable={mode === 'select'}
-            onTogglePhoto={handleTogglePhotoSelection}
-            selectedList={selectedPhotoIds}
-            mode={mode}
-            changeMode={(newMode) => setMode(newMode)}
-            photos={initialData.responses}
-          />
-        )}
-      </div>
-      {mode === 'default' && (
-        <NavBarAlbumDetail
+        <AlbumPhotoSection
+          isLoading={isLoading}
+          photos={photos}
+          selectionResetKey={selectionResetKey}
           albumId={albumId}
-          sortType={sortType}
-          changeSortType={(newType) => setSortType(newType)}
+          mode={mode}
+          selectedPhotoIds={selectedPhotoIds}
+          onTogglePhoto={handleTogglePhotoSelection}
+          onChangeMode={setMode}
+          fetchNextPage={fetchNextPage}
+          hasNextPage={!!hasNextPage}
+          isFetchingNextPage={isFetchingNextPage}
         />
-      )}
-      {mode === 'select' && (
-        <DownloadActionBar
-          selectedCount={selectedPhotoIds.length}
-          onDownload={handleDownload}
-        />
-      )}
+      </div>
+      <AlbumBottomActions
+        hasPhotos={hasPhotos}
+        mode={mode}
+        albumId={albumId}
+        sortType={sortType}
+        changeSortType={setSortType}
+        albumType={albumType}
+        changeAlbumType={setAlbumType}
+        selectedCount={selectedPhotoIds.length}
+        onDownload={handleDownload}
+      />
     </>
   );
 }
