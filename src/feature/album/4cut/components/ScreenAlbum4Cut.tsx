@@ -8,6 +8,7 @@ import PersonSvg from '@/global/svg/PersonSvg';
 import { Download, LucideIcon, Menu, Send } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { useGetAlbumInfo } from '../../detail/hooks/useGetAlbumInfo';
 import Container4Cut from './Container4Cut';
 
 interface ScreenAlbum4CutProps {
@@ -17,6 +18,7 @@ interface ScreenAlbum4CutProps {
 export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
   const router = useRouter();
   const [isConfirmed, setIsConfirmed] = useState(false);
+  const { data } = useGetAlbumInfo(albumId);
   // TODO : maker 여부 api통해 확인
   const isMaker = false;
 
@@ -39,7 +41,7 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
     <>
       <CustomHeader
         isShowBack
-        title='김수한무거북이와두루미삼천'
+        title={data?.title ?? ''}
         rightContent={
           <div className='flex gap-4'>
             <button
