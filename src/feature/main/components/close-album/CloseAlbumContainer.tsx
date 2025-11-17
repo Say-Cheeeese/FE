@@ -63,6 +63,7 @@ export default function CloseAlbumContainer() {
           albums.map((album) => (
             <CloseAlbum
               key={album.code}
+              code={album.code}
               title={album.title}
               date={album.date}
               author={album.author}

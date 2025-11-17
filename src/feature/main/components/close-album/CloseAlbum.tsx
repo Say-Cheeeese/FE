@@ -1,4 +1,7 @@
+import Link from 'next/link';
+
 interface CloseAlbumProps {
+  code: string;
   title: string;
   date: string;
   author: string;
@@ -6,14 +9,15 @@ interface CloseAlbumProps {
 }
 
 export default function CloseAlbum({
+  code,
   title,
   date,
   author,
   images,
 }: CloseAlbumProps) {
   return (
-    <button
-      type='button'
+    <Link
+      href={`/album/4cut/${code}`}
       className='drop-shadow-25-5 flex items-center gap-5 overflow-hidden rounded-[20px] border border-white bg-white'
     >
       {/* 이미지 4개 */}
@@ -36,6 +40,6 @@ export default function CloseAlbum({
           {date} · {author}
         </div>
       </div>
-    </button>
+    </Link>
   );
 }
