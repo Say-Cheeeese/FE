@@ -1,17 +1,26 @@
 // SpinningRing.tsx
 'use client';
+import { convertUnicodeToEmoji } from '@/global/utils/convertEmoji';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 
-export default function EmojiLoading() {
+interface EmojiLoadingProps {
+  duration?: number;
+  emoji?: string;
+}
+
+export default function EmojiLoading({
+  duration = 2000,
+  emoji = 'U+1F60A',
+}: EmojiLoadingProps) {
   const [percent, setPercent] = useState(0);
 
+  const displayEmoji = convertUnicodeToEmoji(emoji);
+
   useEffect(() => {
-    // 시작 시 약간의 딜레이를 준 후 애니메이션 시작
     const timeout = setTimeout(() => {
       let frame: number;
       const startTime = performance.now();
-      const duration = 3000; // 3초 동안 애니메이션
 
       const animate = (currentTime: number) => {
         const elapsed = currentTime - startTime;
@@ -24,17 +33,17 @@ export default function EmojiLoading() {
       };
       frame = requestAnimationFrame(animate);
       return () => cancelAnimationFrame(frame);
-    }, 100); // 100ms 딜레이
+    }, 100);
 
     return () => clearTimeout(timeout);
-  }, []);
+  }, [duration]);
 
   return (
     <div
-      className='h-screen w-full'
+      className='fixed inset-0 z-99 flex items-center justify-center'
       style={{ backgroundColor: 'rgba(24, 25, 27, 0.50)' }}
     >
-      <div className='relative h-40 w-40 rounded-full'>
+      <div className='relative flex h-40 w-40 items-center justify-center rounded-full'>
         <motion.div
           className='absolute rounded-full'
           style={{
@@ -54,13 +63,11 @@ export default function EmojiLoading() {
           }}
         >
           <div
-            className='absolute rounded-full bg-white'
+            className='absolute flex items-center justify-center rounded-full bg-white text-5xl'
             style={{ inset: '6px' }}
-          />
-        </div>
-        {/* 중앙에 이모지 등 원하는 내용 */}
-        <div className='absolute inset-0 flex items-center justify-center'>
-          <span className='text-[50px]'>😀</span>
+          >
+            {displayEmoji}
+          </div>
         </div>
       </div>
     </div>

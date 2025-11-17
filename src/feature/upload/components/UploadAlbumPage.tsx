@@ -1,11 +1,14 @@
 'use client';
+import LotateAnimation from '@/../public/assets/upload/3Tags_Fill Album.json';
 import CheckNoImgModal from '@/feature/upload/components/CheckNoImgModal';
 import CustomHeader from '@/global/components/header/CustomHeader';
-import Image from 'next/image';
+import dynamic from 'next/dynamic';
 import { useGetAlbumInform } from '../hooks/useGetAlbumInform';
 import AlbumInfoHeader from './AlbumInfoHeader';
 import AvailableCountBubble from './AvailableCountBubble';
 import UploadButton from './UploadButton';
+
+const Lottie = dynamic(() => import('lottie-react'), { ssr: false });
 
 interface AlbumCard {
   imageUrl: string;
@@ -33,17 +36,16 @@ export default function UploadAlbumPage({ albumId }: UploadAlbumPageProps) {
           {data && (
             <AlbumInfoHeader photoCount={cards.length} albumData={data} />
           )}
-          <Image
-            src='/assets/album/test-lottie.svg'
-            alt='사진'
-            width={300}
-            height={136}
-            className='mt-[52px]'
+          <Lottie
+            animationData={LotateAnimation}
+            loop
+            autoplay
+            className='mt-[6.1vh] h-full w-full'
           />
         </div>
 
         <div className='flex w-full flex-col items-center'>
-          {data?.myRole === 'MAKER' ? (
+          {data?.myRole !== 'MAKER' ? (
             <AvailableCountBubble availableCount={availableCount} />
           ) : (
             <span className='typo-body-sm-medium text-text-secondary mb-3'>
