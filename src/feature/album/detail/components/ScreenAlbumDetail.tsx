@@ -1,7 +1,10 @@
 'use client';
 
 import { useAlbumPhotosInfiniteQuery } from '@/feature/photo-detail/hooks/useAlbumPhotosInfiniteQuery';
-import { useAlbumPhotosLikedInfiniteQuery } from '@/feature/photo-detail/hooks/useAlbumPhotosLikedInfiniteQuery';
+import {
+  useAlbumPhotosLikedInfiniteQuery,
+  type AlbumPhotosLikedItem,
+} from '@/feature/photo-detail/hooks/useAlbumPhotosLikedInfiniteQuery';
 import { PhotoListResponseSchema } from '@/global/api/ep';
 import CustomHeader, {
   HEADER_HEIGHT,
@@ -9,7 +12,7 @@ import CustomHeader, {
 import { useSelectedPhotosStore } from '@/store/useSelectedPhotosStore';
 import { Menu } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useShallow } from 'zustand/shallow';
 import {
   photoSortToApiSorting,
@@ -63,8 +66,13 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
     enabled: isDeepAlbumType,
   });
 
+  const likedPhotos = useMemo(
+    () => mapLikedPhotosToPhotoList(likedPhotosQuery.items),
+    [likedPhotosQuery.items],
+  );
+
   const photos: PhotoListResponseSchema[] = isDeepAlbumType
-    ? likedPhotosQuery.items
+    ? likedPhotos
     : defaultPhotosQuery.items;
   const fetchNextPage = isDeepAlbumType
     ? likedPhotosQuery.fetchNextPage
@@ -176,4 +184,19 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
       />
     </>
   );
+}
+
+function mapLikedPhotosToPhotoList(
+  items: AlbumPhotosLikedItem[],
+): PhotoListResponseSchema[] {
+  return items.map((item) => ({
+    name: item.name,
+    photoId: item.photoId,
+    imageUrl: item.imageUrl,
+    thumbnailUrl: item.thumbnailUrl,
+    likeCnt: 0,
+    isLiked: true,
+    isDownloaded: item.isDownloaded,
+    isRecentlyDownloaded: item.isRecentlyDownloaded,
+  }));
 }

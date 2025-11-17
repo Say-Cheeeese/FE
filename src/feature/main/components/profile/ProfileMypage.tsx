@@ -54,7 +54,7 @@ export default function ProfileMypage({}: ProfileMypageProps) {
             </div>
           </div>
         </div>
-        <div className='absolute right-5'>
+        <div>
           <button type='button' aria-label='설정'>
             <Settings
               width={24}

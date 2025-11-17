@@ -2,26 +2,16 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   useAlbumOpenInfiniteQuery,
-  type AlbumOpenItem,
   type AlbumOpenType,
 } from '../../hooks/useAlbumOpenInfiniteQuery';
+import { mapOpenAlbumItems } from '../../utils/mapOpenAlbumItems';
 import EmptyAlbum from '../EmptyAlbum';
 import ButtonMore from './ButtonMore';
 import OpenAlbum from './OpenAlbum';
 import ToggleAlbumType from './ToggleAlbumType';
 
 const MIN_VISIBLE_COUNT = 2;
-
-interface OpenAlbumListItem {
-  code: string;
-  author: string;
-  date: string;
-  expirationTime: string;
-  joinedMembers: number;
-  totalMembers: number;
-  title: string;
-  thumbnails: string[];
-}
+const LOADING_TEXT = '불러오는 중...';
 
 interface OpenAlbumContainerProps {}
 
@@ -120,72 +110,10 @@ export default function OpenAlbumContainer({}: OpenAlbumContainerProps) {
       )}
       {isMoreOpened && isFetchingNextPage && (
         <div className='typo-body-sm-medium text-text-subtle py-4 text-center'>
-          불러오는 중...
+          {LOADING_TEXT}
         </div>
       )}
       <div ref={loadMoreRef} />
     </section>
   );
-}
-
-function mapOpenAlbumItems(items: AlbumOpenItem[]): OpenAlbumListItem[] {
-  return items.map((item) => ({
-    code: item.code,
-    author: item.makerName ?? '',
-    date: formatEventDate(item.eventDate),
-    expirationTime: formatExpirationTime(item.expiredAt),
-    joinedMembers: item.currentParticipant ?? 0,
-    totalMembers: item.participant ?? 0,
-    title: item.title ?? '',
-    thumbnails:
-      item.recentPhotoThumbnails
-        ?.slice(0, 3)
-        .filter((thumbnail): thumbnail is string => Boolean(thumbnail)) ?? [],
-  }));
-}
-
-const MINUTE = 60 * 1000;
-const HOUR = 60 * MINUTE;
-const DAY = 24 * HOUR;
-
-function formatExpirationTime(expiredAt?: string) {
-  if (!expiredAt) return '만료됨';
-  const expiresAt = new Date(expiredAt).getTime();
-  if (Number.isNaN(expiresAt)) return '만료됨';
-
-  const diff = expiresAt - Date.now();
-  if (diff <= 0) return '만료됨';
-
-  const days = Math.floor(diff / DAY);
-  const hours = Math.floor((diff % DAY) / HOUR);
-  const minutes = Math.floor((diff % HOUR) / MINUTE);
-  const seconds = Math.max(Math.floor((diff % MINUTE) / 1000), 1);
-
-  if (days > 0) {
-    return `${days}일 ${hours}시간`;
-  }
-
-  if (hours > 0) {
-    return `${hours}시간 ${minutes}분`;
-  }
-
-  if (minutes > 0) {
-    return `${minutes}분 ${seconds}초`;
-  }
-
-  return `${seconds}초`;
-}
-
-function formatEventDate(date?: string) {
-  if (!date) return '';
-  const parsed = new Date(date);
-  if (Number.isNaN(parsed.getTime())) {
-    return date;
-  }
-
-  const year = parsed.getFullYear();
-  const month = String(parsed.getMonth() + 1).padStart(2, '0');
-  const day = String(parsed.getDate()).padStart(2, '0');
-
-  return `${year}.${month}.${day}`;
 }

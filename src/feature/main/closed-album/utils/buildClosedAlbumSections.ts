@@ -1,4 +1,5 @@
 import { type AlbumClosedItem } from '@/feature/main/hooks/useAlbumClosedInfiniteQuery';
+import { formatEventDate } from '@/global/utils/formatEventDate';
 
 const MAX_IMAGES = 4;
 
@@ -74,18 +75,4 @@ function extractYear(date?: string) {
   }
 
   return String(parsed.getFullYear());
-}
-
-function formatEventDate(date?: string) {
-  if (!date) return '';
-  const parsed = new Date(date);
-  if (Number.isNaN(parsed.getTime())) {
-    return date;
-  }
-
-  const year = parsed.getFullYear();
-  const month = String(parsed.getMonth() + 1).padStart(2, '0');
-  const day = String(parsed.getDate()).padStart(2, '0');
-
-  return `${year}.${month}.${day}`;
 }
