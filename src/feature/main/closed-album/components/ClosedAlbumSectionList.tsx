@@ -11,9 +11,9 @@ export default function ClosedAlbumSectionList({
   if (sections.length === 0) return null;
 
   return sections.map(({ year, albums }) => (
-    <section key={year} className='mb-8 last:mb-0'>
-      <h2 className='typo-heading-lg-semibold text-text-basic mb-4'>{year}</h2>
-      <div className='flex flex-col gap-3'>
+    <section key={year} className='mb-12 last:mb-0'>
+      <h2 className='typo-heading-md-semibold text-text-subtle mb-4'>{year}</h2>
+      <div className='flex flex-col gap-4'>
         {albums.map((album) => (
           <CloseAlbum
             key={album.code}

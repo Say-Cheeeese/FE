@@ -44,7 +44,7 @@ export default function ScreenMainClosedAlbum({}: ScreenMainClosedAlbumProps) {
   return (
     <div className='min-h-screen'>
       <CustomHeader title='닫힌 앨범' isShowBack />
-      <main className='px-5 pt-6 pb-10'>
+      <main className='px-4 pt-6 pb-10'>
         {showLoadingState && (
           <div className='typo-body-md-medium text-text-subtle rounded-2xl bg-white py-10 text-center'>
             {LOADING_TEXT}
