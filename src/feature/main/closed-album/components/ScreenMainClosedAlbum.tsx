@@ -1,5 +1,4 @@
 'use client';
-
 import EmptyAlbum from '@/feature/main/components/EmptyAlbum';
 import { useAlbumClosedInfiniteQuery } from '@/feature/main/hooks/useAlbumClosedInfiniteQuery';
 import CustomHeader from '@/global/components/header/CustomHeader';
@@ -7,9 +6,10 @@ import { useEffect, useMemo, useRef } from 'react';
 import { buildClosedAlbumSections } from '../utils/buildClosedAlbumSections';
 import ClosedAlbumSectionList from './ClosedAlbumSectionList';
 
+const LOADING_TEXT = '불러오는 중...';
+
 interface ScreenMainClosedAlbumProps {}
 
-const LOADING_TEXT = '불러오는 중...';
 export default function ScreenMainClosedAlbum({}: ScreenMainClosedAlbumProps) {
   const { items, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useAlbumClosedInfiniteQuery();

@@ -1,28 +1,15 @@
 'use client';
 import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useRef } from 'react';
-import {
-  useAlbumClosedInfiniteQuery,
-  type AlbumClosedItem,
-} from '../../hooks/useAlbumClosedInfiniteQuery';
+import { useAlbumClosedInfiniteQuery } from '../../hooks/useAlbumClosedInfiniteQuery';
+import { mapClosedAlbumItems } from '../../utils/mapClosedAlbumItems';
 import EmptyAlbum from '../EmptyAlbum';
 import CloseAlbum from './CloseAlbum';
 
-interface CloseAlbumListItem {
-  code: string;
-  title: string;
-  date: string;
-  author: string;
-  images: string[];
-}
-
-const MAX_IMAGES = 4;
 const LOADING_TEXT = '불러오는 중...';
 
 export default function CloseAlbumContainer() {
-  const router = useRouter();
   const { items, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useAlbumClosedInfiniteQuery();
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
@@ -59,7 +46,6 @@ export default function CloseAlbumContainer() {
       <Link href='/main/closed-album'>
         <h3 className='typo-heading-md-semibold text-text-subtle mb-4 flex items-center'>
           닫힌 앨범 {albums.length}
-          {/* TODO : Link연동 전까지 화살표 주석 */}
           <ChevronRight
             width={24}
             height={24}
@@ -95,31 +81,4 @@ export default function CloseAlbumContainer() {
       <div ref={loadMoreRef} />
     </section>
   );
-}
-
-function mapClosedAlbumItems(items: AlbumClosedItem[]): CloseAlbumListItem[] {
-  return items.map((item) => ({
-    code: item.code,
-    title: item.title ?? '',
-    date: formatEventDate(item.eventDate),
-    author: item.makerName ?? '',
-    images:
-      item.thumbnails
-        ?.filter((thumbnail): thumbnail is string => Boolean(thumbnail))
-        ?.slice(0, MAX_IMAGES) ?? [],
-  }));
-}
-
-function formatEventDate(date?: string) {
-  if (!date) return '';
-  const parsed = new Date(date);
-  if (Number.isNaN(parsed.getTime())) {
-    return date;
-  }
-
-  const year = parsed.getFullYear();
-  const month = String(parsed.getMonth() + 1).padStart(2, '0');
-  const day = String(parsed.getDate()).padStart(2, '0');
-
-  return `${year}.${month}.${day}`;
 }
