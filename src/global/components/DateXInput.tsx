@@ -42,7 +42,6 @@ export default function DateXInput({
       ? new Date(value)
       : undefined;
 
-  // min/max YYYY-MM-DD → Date
   const minDate = min ? new Date(min) : undefined;
   const maxDate = max ? new Date(max) : undefined;
 

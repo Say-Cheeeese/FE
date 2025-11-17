@@ -11,7 +11,7 @@ import XInput from '@/global/components/XInput';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 
-export default function OnBoardingScreen() {
+export default function ScreenOnBoarding() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const termType = searchParams.get('term');

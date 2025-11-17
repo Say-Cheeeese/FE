@@ -21,7 +21,6 @@ export async function convertHeicFilesToJpeg(files: File[]): Promise<File[]> {
             },
           );
         } catch (e) {
-          console.log('HEIC to JPEG 변환 오류:', e);
           Toast.alert(`${file.name} 파일의 변환에 실패했습니다.`);
           return file;
         }

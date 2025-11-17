@@ -15,7 +15,6 @@ export default function EmojiLoading({
 }: EmojiLoadingProps) {
   const [percent, setPercent] = useState(0);
 
-  // 무조건 변환
   const displayEmoji = convertUnicodeToEmoji(emoji);
 
   useEffect(() => {

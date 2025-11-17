@@ -17,7 +17,8 @@ export default function ProfileImage({
 }: ProfileImageProps) {
   const { data, isLoading, isError } = useGetAllProfiles();
   // 서버에서 받아온 이미지 리스트 (string[])
-  const imageList = data?.opts ?? [];
+  const imageList =
+    data?.opts?.filter((img) => img.imageCode && img.profileImageUrl) ?? [];
   // imageCode에 따라 profileImageUrl을 보여줌
   const currentImage =
     (selectedImage
@@ -25,7 +26,6 @@ export default function ProfileImage({
           ?.profileImageUrl
       : imageList[0]?.profileImageUrl) ||
     'https://say-cheese-profile.edge.naverncp.com/profile/signup_profile_1.jpg';
-  console.log(currentImage);
   return (
     <div className='mt-4 mb-10 flex flex-col items-center'>
       {/* 프로필 이미지 */}
@@ -71,7 +71,9 @@ export default function ProfileImage({
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ delay: index * 0.03, duration: 0.2 }}
                       whileTap={{ scale: 0.8 }}
-                      onClick={() => onImageSelect(img.imageCode || '')}
+                      onClick={() =>
+                        img.imageCode && onImageSelect(img.imageCode)
+                      }
                       className={`box-content shrink-0 rounded-full p-1 transition-all ${
                         url === currentImage
                           ? 'ring-element-primary ring-3'

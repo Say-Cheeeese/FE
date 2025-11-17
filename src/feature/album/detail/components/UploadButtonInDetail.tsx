@@ -1,8 +1,10 @@
 'use client';
 
 import { handleFileUpload } from '@/feature/create-album/utils/handleFileUpload';
+import { EP } from '@/global/api/ep';
 import LongButton from '@/global/components/LongButton';
 import { useUploadingStore } from '@/store/useUploadingStore';
+import { useQueryClient } from '@tanstack/react-query';
 import { useParams, useRouter } from 'next/navigation';
 import { useRef } from 'react';
 
@@ -17,6 +19,7 @@ export default function UploadButtonInDetail({
   const isUploading = useUploadingStore((state) => state.isUploading);
   const router = useRouter();
   const params = useParams();
+  const queryClient = useQueryClient();
   const albumId =
     typeof params.albumId === 'string'
       ? params.albumId
@@ -27,6 +30,9 @@ export default function UploadButtonInDetail({
   const onFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) return;
     await handleFileUpload(e, albumId, router, { stay: true });
+    await queryClient.invalidateQueries({
+      queryKey: [EP.album.photos(albumId)],
+    });
   };
 
   const handleButtonClick = () => {
