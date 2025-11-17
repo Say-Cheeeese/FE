@@ -3,7 +3,6 @@
 import EmojiLoading from '@/components/ui/EmojiLoading';
 import { useAlbumPhotosInfiniteQuery } from '@/feature/photo-detail/hooks/useAlbumPhotosInfiniteQuery';
 import { useAlbumPhotosLikedInfiniteQuery } from '@/feature/photo-detail/hooks/useAlbumPhotosLikedInfiniteQuery';
-import { PhotoListResponseSchema } from '@/global/api/ep';
 import CustomHeader, {
   HEADER_HEIGHT,
 } from '@/global/components/header/CustomHeader';
@@ -92,7 +91,9 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
     enabled: isDeepAlbumType,
   });
 
-  const photos: PhotoListResponseSchema[] = isDeepAlbumType
+  // TODO : 백엔드에서 필드 넘겨받기
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const photos: any = isDeepAlbumType
     ? likedPhotosQuery.items
     : defaultPhotosQuery.items;
   const fetchNextPage = isDeepAlbumType
