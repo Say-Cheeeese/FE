@@ -1,5 +1,6 @@
 'use client';
 
+import DateXInput from '@/global/components/DateXInput';
 import XInput from '@/global/components/XInput';
 import { useState } from 'react';
 
@@ -95,12 +96,11 @@ export default function CreateInputList({
         error={eventNameError}
         maxLength={13}
       />
-      <XInput
+      <DateXInput
         label='이벤트 날짜'
         value={eventDate}
         onChange={onEventDateChange}
         placeholder='YYYY-MM-DD'
-        type='date'
         max={yesterday}
       />
       <XInput
