@@ -11,7 +11,7 @@ const fetchData = async () => {
 };
 
 export function useGetUserMe(
-  options?: UseQueryOptions<ApiReturns['user.userMe'], Error>,
+  options?: Partial<UseQueryOptions<ApiReturns['user.userMe'], Error>>,
 ) {
   const query = useQuery({
     queryKey: [EP.user.userMe()],

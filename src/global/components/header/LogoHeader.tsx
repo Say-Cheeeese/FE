@@ -1,4 +1,5 @@
 'use client';
+import { useGetUserMe } from '@/feature/main/hooks/useGetUserMe';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useCallback } from 'react';
@@ -14,6 +15,11 @@ export default function LogoHeader({
   bgColor = 'white',
   border = false,
 }: LogoHeaderProps) {
+  const { isSuccess: isLoggedIn, isLoading } = useGetUserMe({
+    enabled: showLogin,
+  });
+  const shouldShowLogin = showLogin && !isLoading && !isLoggedIn;
+
   // 로그인 버튼 클릭 시 entry를 main으로 저장
   const handleLoginClick = useCallback(() => {
     if (typeof window !== 'undefined') {
@@ -34,7 +40,7 @@ export default function LogoHeader({
             height={120}
             alt='치즈 아이콘'
           />
-          {showLogin && (
+          {shouldShowLogin && (
             <Link href='/login' onClick={handleLoginClick}>
               <div className='cursor-pointer px-3 py-2.5'>
                 <span className='typo-body-sm-medium text-text-basic'>
