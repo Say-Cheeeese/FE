@@ -31,7 +31,7 @@ export default function EmojiLoading() {
 
   return (
     <div
-      className='h-screen w-full'
+      className='z-99 h-screen w-full'
       style={{ backgroundColor: 'rgba(24, 25, 27, 0.50)' }}
     >
       <div className='relative h-40 w-40 rounded-full'>
