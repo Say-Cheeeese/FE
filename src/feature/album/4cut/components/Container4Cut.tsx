@@ -15,7 +15,13 @@ export default function Container4Cut({ albumId }: Container4CutProps) {
       <Svg4Cut
         width={216}
         height={384}
-        photos={data?.previewPhotos ?? data?.photos}
+        photos={
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          data?.previewPhotos?.map((item: any) => item.imageUrl) ??
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          data?.photos?.map((item: any) => item.imageUrl) ??
+          []
+        }
       />
     </div>
   );
