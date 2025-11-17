@@ -19,8 +19,6 @@ export async function handleFileUpload(
   const startTime = Date.now();
 
   try {
-    setUploading(true);
-
     let files = Array.from(fl).filter((f) => f.type.startsWith('image/'));
     // EXIF 촬영일 기준 최신순 정렬
     files = await sortImagesByDate(files);
@@ -29,6 +27,7 @@ export async function handleFileUpload(
 
     const result = await validateUpload(files, albumId);
     if (result.ok) {
+      setUploading(true);
       if (!options?.stay && router) {
         router.push(`/album/${albumId}/waiting`);
       }
@@ -41,7 +40,6 @@ export async function handleFileUpload(
     } else {
       // 검증 실패 시 Zustand 스토어에 저장
       saveFilesToStore(files);
-
       // 검증 실패 시 페이지로 이동 (WaitingAlbum에서 분기 처리)
       if (router) {
         router.push(`/album/${albumId}/waiting`);
@@ -55,7 +53,7 @@ export async function handleFileUpload(
 
     setUploading(false);
     if (options?.stay && router) {
-      window.location.reload();
+      // window.location.reload();
     }
   }
 }

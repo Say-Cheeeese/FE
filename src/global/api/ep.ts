@@ -12,11 +12,11 @@ export const EP = {
     "reissue": () => `/v1/auth/reissue`,
   },
   user: {
-    "agreement": () => `/v1/user/agreement`,
     "userMe": () => `/v1/user/me`,
     "userMeName": () => `/v1/user/me/name`,
-    "userMeProfile-image": () => `/v1/user/me/profile-image`,
-    "userProfile-images": () => `/v1/user/profile-images`,
+    "userMeProfileImage": () => `/v1/user/me/profile-image`,
+    "userOnboarding": () => `/v1/user/onboarding`,
+    "userProfileImages": () => `/v1/user/profile-images`,
   },
   album: {
     "create": () => `/v1/album`,
@@ -58,7 +58,7 @@ export type PhotoSorting = 'POPULAR' | 'CAPTURED_AT' | 'CREATED_AT';
  * ======================= */
 
 // --- Components
-export interface UserAgreementRequestSchema { "isServiceAgreement": boolean; "isUserInfoAgreement": boolean; "isMarketingAgreement"?: boolean; "isThirdPartyAgreement": boolean; }
+export interface UserOnboardingRequestSchema { "name": string; "imageCode": string; "isServiceAgreement": boolean; "isUserInfoAgreement": boolean; "isMarketingAgreement"?: boolean; "isThirdPartyAgreement": boolean; }
 export interface CommonResponseVoidSchema { "isSuccess"?: boolean; "code"?: number; "message"?: string; "result"?: unknown; }
 export interface PhotoUploadReportRequestSchema { "failurePhotoIds": number[]; }
 export interface FileInfoSchema { "fileName": string; "fileSize"?: number; "contentType": string; }
@@ -90,7 +90,7 @@ export interface CommonResponseUserProfileImageResponseSchema { "isSuccess"?: bo
 export interface ProfileImageOptSchema { "imageCode"?: string; "profileImageUrl"?: string; }
 export interface UserProfileImageResponseSchema { "opts"?: ProfileImageOptSchema[]; }
 export interface CommonResponseUserInfoResponseSchema { "isSuccess"?: boolean; "code"?: number; "message"?: string; "result"?: UserInfoResponseSchema; }
-export interface UserInfoResponseSchema { "profileImage": string; "name": string; "albumCount": number; "photoCount": number; "likesCount": number; }
+export interface UserInfoResponseSchema { "profileImage": string; "email": string; "name": string; "albumCount": number; "photoCount": number; "likesCount": number; }
 export interface CommonResponseStringSchema { "isSuccess"?: boolean; "code"?: number; "message"?: string; "result"?: string; }
 export type Cheese4cutFinalResponseSchema = Cheese4cutResponseSchema & { "isFinalized"?: boolean; "photos"?: FinalPhotoInfoSchema[]; };
 export type Cheese4cutPreviewResponseSchema = Cheese4cutResponseSchema & { "isFinalized"?: boolean; "previewPhotos"?: PreviewPhotoInfoSchema[]; "uniqueLikesCount"?: number; "participant"?: number; "myRole"?: "MAKER" | "GUEST" | "BLACK"; };
@@ -134,10 +134,10 @@ export type GlobalHealthResponse = CommonResponseStringSchema["result"];
 export type AuthExchangeResponse = CommonResponseAuthExchangeResponseSchema["result"];
 export type AuthLogoutResponse = CommonResponseVoidSchema["result"];
 export type AuthReissueResponse = CommonResponseAuthReissueResponseSchema["result"];
-export type UserAgreementResponse = CommonResponseVoidSchema["result"];
 export type UserUserMeResponse = CommonResponseUserInfoResponseSchema["result"];
 export type UserUserMeNameResponse = CommonResponseVoidSchema["result"];
 export type UserUserMeProfileImageResponse = CommonResponseVoidSchema["result"];
+export type UserUserOnboardingResponse = CommonResponseVoidSchema["result"];
 export type UserUserProfileImagesResponse = CommonResponseUserProfileImageResponseSchema["result"];
 export type AlbumCreateResponse = CommonResponseAlbumCreationResponseSchema["result"];
 export type AlbumAvailableCountResponse = CommonResponseUploadAvailableCountResponseSchema["result"];
@@ -168,11 +168,11 @@ export interface ApiReturns {
   "auth.exchange": AuthExchangeResponse; // GET /v1/auth/exchange
   "auth.logout": AuthLogoutResponse; // POST /v1/auth/logout
   "auth.reissue": AuthReissueResponse; // POST /v1/auth/reissue
-  "user.agreement": UserAgreementResponse; // POST /v1/user/agreement
   "user.userMe": UserUserMeResponse; // GET /v1/user/me
   "user.userMeName": UserUserMeNameResponse; // PATCH /v1/user/me/name
-  "user.userMeProfile-image": UserUserMeProfileImageResponse; // PATCH /v1/user/me/profile-image
-  "user.userProfile-images": UserUserProfileImagesResponse; // GET /v1/user/profile-images
+  "user.userMeProfileImage": UserUserMeProfileImageResponse; // PATCH /v1/user/me/profile-image
+  "user.userOnboarding": UserUserOnboardingResponse; // POST /v1/user/onboarding
+  "user.userProfileImages": UserUserProfileImagesResponse; // GET /v1/user/profile-images
   "album.create": AlbumCreateResponse; // POST /v1/album
   "album.availableCount": AlbumAvailableCountResponse; // GET /v1/album/{code}/available-count
   "album.albumBest-4cut": AlbumAlbumBest4cutResponse; // GET /v1/album/{code}/best-4cut

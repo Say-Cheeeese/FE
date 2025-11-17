@@ -86,12 +86,17 @@ function autoName(pathStr: string): string {
     .filter((p) => !p.startsWith('{')) // 경로 파라미터 제거
     .filter((p) => !/^v\d+$/.test(p)); // v1, v2 같은 prefix 제거
 
+  // 하이픈(-)을 카멜케이스로 변환
+  const toCamel = (str: string) =>
+    str.replace(/-([a-zA-Z])/g, (_, c) => c.toUpperCase());
+
   const camel = parts
-    .map((p, i) =>
-      i === 0
-        ? p.toLowerCase()
-        : p.charAt(0).toUpperCase() + p.slice(1).toLowerCase(),
-    )
+    .map((p, i) => {
+      const camelPart = toCamel(p);
+      return i === 0
+        ? camelPart.toLowerCase()
+        : camelPart.charAt(0).toUpperCase() + camelPart.slice(1);
+    })
     .join('');
 
   return camel || 'unknown';

@@ -48,7 +48,6 @@ client.interceptors.response.use(
       try {
         const refreshToken = getCookie(REFRESH_TOKEN_KEY);
         if (!refreshToken) {
-          console.log('No refresh token');
           removeCookie(ACCESS_TOKEN_KEY);
           removeCookie(REFRESH_TOKEN_KEY);
           window.location.href = '/login';

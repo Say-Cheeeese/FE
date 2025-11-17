@@ -1,5 +1,6 @@
 'use client';
 
+import EmojiLoading from '@/components/ui/EmojiLoading';
 import { useAlbumPhotosInfiniteQuery } from '@/feature/photo-detail/hooks/useAlbumPhotosInfiniteQuery';
 import {
   useAlbumPhotosLikedInfiniteQuery,
@@ -10,6 +11,7 @@ import CustomHeader, {
   HEADER_HEIGHT,
 } from '@/global/components/header/CustomHeader';
 import { useSelectedPhotosStore } from '@/store/useSelectedPhotosStore';
+import { useUploadingStore } from '@/store/useUploadingStore';
 import { Menu } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -30,7 +32,13 @@ interface ScreenAlbumDetailProps {
   albumId: string;
 }
 
+const LOADING_MODAL_DURATION = 2000;
+
 export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
+  const isUploading = useUploadingStore((state) => state.isUploading);
+  const [showLoading, setShowLoading] = useState(false);
+  const loadingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const prevIsUploading = useRef(isUploading);
   const router = useRouter();
   const albumInfosRef = useRef<HTMLElement | null>(null);
   const [mode, setMode] = useState<AlbumDetailMode>('default');
@@ -47,6 +55,27 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
         clearSelectedPhotos: state.clearSelectedPhotos,
       })),
     );
+
+  // isUploading이 true로 바뀌는 순간에만 2초간 showLoading true 유지
+  useEffect(() => {
+    if (!prevIsUploading.current && isUploading) {
+      // false -> true로 바뀌는 순간
+      setShowLoading(true);
+      if (loadingTimeoutRef.current) clearTimeout(loadingTimeoutRef.current);
+      loadingTimeoutRef.current = setTimeout(() => {
+        setShowLoading(false);
+      }, LOADING_MODAL_DURATION);
+    }
+    if (prevIsUploading.current && !isUploading) {
+      // true -> false로 바뀌는 순간에도 showLoading을 false로 강제
+      setShowLoading(false);
+      if (loadingTimeoutRef.current) clearTimeout(loadingTimeoutRef.current);
+    }
+    prevIsUploading.current = isUploading;
+    return () => {
+      if (loadingTimeoutRef.current) clearTimeout(loadingTimeoutRef.current);
+    };
+  }, [isUploading]);
 
   const {
     data: invitationData,
@@ -132,8 +161,13 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const emoji = invitationData?.themeEmoji;
+
   return (
     <>
+      {showLoading && (
+        <EmojiLoading duration={LOADING_MODAL_DURATION} emoji={emoji} />
+      )}
       <CustomHeader
         isShowBack
         isHidden={mode === 'select'}
