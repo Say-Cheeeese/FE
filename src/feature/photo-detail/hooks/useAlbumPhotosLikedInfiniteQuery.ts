@@ -2,6 +2,9 @@ import { ApiReturns, EP } from '@/global/api/ep';
 import { api } from '@/global/utils/api';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
+type AlbumPhotosLikedPage = NonNullable<ApiReturns['album.likedPhotos']>;
+type AlbumPhotosLikedItem = AlbumPhotosLikedPage['responses'][number];
+
 interface FetchPageParams {
   code: string;
   pageParam: number;
@@ -13,18 +16,29 @@ const fetchAlbumPhotosPage = async ({
   code,
   pageParam,
   size,
-}: FetchPageParams): Promise<
-  ApiReturns['album.likedPhotos'] & { page: number }
-> => {
+}: FetchPageParams): Promise<AlbumPhotosLikedPage & { page: number }> => {
   const res = await api.get<ApiReturns['album.likedPhotos']>({
     path: EP.album.likedPhotos(code),
     params: { page: pageParam, size },
   });
 
-  if (!res.result) throw Error('result가 없습니다.');
+  const result: AlbumPhotosLikedPage =
+    res.result ?? createEmptyPage({ pageParam });
 
-  return { ...res.result, page: pageParam };
+  return { ...result, page: pageParam };
 };
+
+const createEmptyPage = ({
+  pageParam,
+}: {
+  pageParam: number;
+}): AlbumPhotosLikedPage => ({
+  responses: [],
+  listSize: 0,
+  isFirst: pageParam === 0,
+  isLast: true,
+  hasNext: false,
+});
 
 interface UseAlbumPhotosLikedInfiniteQueryProps {
   code: string;
@@ -46,10 +60,13 @@ export function useAlbumPhotosLikedInfiniteQuery({
       lastPage.hasNext ? lastPage.page + 1 : undefined,
   });
 
-  const items = query.data?.pages.flatMap((p) => p.responses ?? []) ?? [];
+  const items: AlbumPhotosLikedItem[] =
+    query.data?.pages.flatMap((p) => p.responses ?? []) ?? [];
 
   return {
     ...query,
     items,
   };
 }
+
+export type { AlbumPhotosLikedItem };

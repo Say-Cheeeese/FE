@@ -2,7 +2,11 @@
 
 import EmojiLoading from '@/components/ui/EmojiLoading';
 import { useAlbumPhotosInfiniteQuery } from '@/feature/photo-detail/hooks/useAlbumPhotosInfiniteQuery';
-import { useAlbumPhotosLikedInfiniteQuery } from '@/feature/photo-detail/hooks/useAlbumPhotosLikedInfiniteQuery';
+import {
+  useAlbumPhotosLikedInfiniteQuery,
+  type AlbumPhotosLikedItem,
+} from '@/feature/photo-detail/hooks/useAlbumPhotosLikedInfiniteQuery';
+import { PhotoListResponseSchema } from '@/global/api/ep';
 import CustomHeader, {
   HEADER_HEIGHT,
 } from '@/global/components/header/CustomHeader';
@@ -10,7 +14,7 @@ import { useSelectedPhotosStore } from '@/store/useSelectedPhotosStore';
 import { useUploadingStore } from '@/store/useUploadingStore';
 import { Menu } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useShallow } from 'zustand/shallow';
 import {
   photoSortToApiSorting,
@@ -91,10 +95,13 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
     enabled: isDeepAlbumType,
   });
 
-  // TODO : 백엔드에서 필드 넘겨받기
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const photos: any = isDeepAlbumType
-    ? likedPhotosQuery.items
+  const likedPhotos = useMemo(
+    () => mapLikedPhotosToPhotoList(likedPhotosQuery.items),
+    [likedPhotosQuery.items],
+  );
+
+  const photos: PhotoListResponseSchema[] = isDeepAlbumType
+    ? likedPhotos
     : defaultPhotosQuery.items;
   const fetchNextPage = isDeepAlbumType
     ? likedPhotosQuery.fetchNextPage
@@ -211,4 +218,19 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
       />
     </>
   );
+}
+
+function mapLikedPhotosToPhotoList(
+  items: AlbumPhotosLikedItem[],
+): PhotoListResponseSchema[] {
+  return items.map((item) => ({
+    name: item.name,
+    photoId: item.photoId,
+    imageUrl: item.imageUrl,
+    thumbnailUrl: item.thumbnailUrl,
+    likeCnt: 0,
+    isLiked: true,
+    isDownloaded: item.isDownloaded,
+    isRecentlyDownloaded: item.isRecentlyDownloaded,
+  }));
 }

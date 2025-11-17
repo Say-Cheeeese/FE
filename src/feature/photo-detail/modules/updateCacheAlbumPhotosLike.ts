@@ -16,38 +16,36 @@ export function updateCacheAlbumPhotosLike({
 }: ToggleAlbumPhotoLikeInCacheParams) {
   queryClient.setQueriesData<InfiniteData<ApiReturns['album.photos']>>(
     { queryKey: [EP.album.photos(albumId)] },
-    // TODO : any타입없애기
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (old: any) => {
+    (old) => {
       if (!old) return old;
 
       return {
         ...old,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        pages: old.pages.map((page: any) => ({
-          ...page,
-          ...(page?.responses !== undefined && {
-            responses:
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              page.responses?.map((res: any) => {
-                if (res.photoId !== photoId) return res;
+        pages: old.pages.map((page) => {
+          if (!page) return page;
+          if (!page.responses) return page;
 
-                const updated = { ...res };
+          return {
+            ...page,
+            responses: page.responses.map((res) => {
+              if (res.photoId !== photoId) return res;
 
-                if (res.isLiked !== undefined) {
-                  updated.isLiked = !res.isLiked;
-                }
+              const updated = { ...res };
 
-                if (res.likeCnt !== undefined) {
-                  updated.likeCnt = isCurrentlyLiked
-                    ? res.likeCnt - 1
-                    : res.likeCnt + 1;
-                }
+              if (res.isLiked !== undefined) {
+                updated.isLiked = !res.isLiked;
+              }
 
-                return updated;
-              }) ?? page.responses,
-          }),
-        })),
+              if (res.likeCnt !== undefined) {
+                updated.likeCnt = isCurrentlyLiked
+                  ? res.likeCnt - 1
+                  : res.likeCnt + 1;
+              }
+
+              return updated;
+            }),
+          };
+        }),
       };
     },
   );
