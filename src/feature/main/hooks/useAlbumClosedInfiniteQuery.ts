@@ -3,7 +3,7 @@ import { api } from '@/global/utils/api';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
 type AlbumClosedPage = NonNullable<ApiReturns['album.albumClosed']>;
-type AlbumClosedItem = AlbumClosedPage['responses'][number];
+export type AlbumClosedItem = AlbumClosedPage['responses'][number];
 
 interface FetchPageParams {
   pageParam: number;
