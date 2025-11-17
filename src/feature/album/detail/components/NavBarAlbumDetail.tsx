@@ -41,7 +41,7 @@ export default function NavBarAlbumDetail({
     e: React.ChangeEvent<HTMLInputElement>,
   ): Promise<void> => {
     try {
-      await handleFileUpload(e, albumId, router);
+      await handleFileUpload(e, albumId, router, { stay: true });
     } catch (error: unknown) {
       if (error instanceof Error) {
         Toast.alert(error.message);
