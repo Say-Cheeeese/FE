@@ -56,11 +56,11 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
         <Container4Cut albumId={albumId} />
       </section>
 
-      <div className='fixed bottom-5 flex w-full flex-col items-center px-4'>
+      <div className='fixed bottom-5 flex w-full max-w-[430px] flex-col items-center px-4'>
         {isMaker ? (
           <>
             {isConfirmed ? (
-              <div className='flex w-full max-w-[430px] justify-center gap-3'>
+              <div className='flex w-full justify-center gap-3'>
                 <ActionButton
                   icon={Download}
                   text='다운로드'
@@ -94,10 +94,10 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
             )}
           </>
         ) : (
-          <div className='relative w-full'>
+          <div className=''>
             <BubbleHint
               message='📸 사진 확정 권한은 메이커에게만 있어요'
-              className='-top-4'
+              className='absolute bottom-18 left-1/2 w-full -translate-x-1/2'
             />
             <LongButton
               text='메이커에게 조르기'
@@ -122,7 +122,6 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
                   );
                 }
               }}
-              noFixed
             />
           </div>
         )}
