@@ -8,17 +8,20 @@ interface LogoHeaderProps {
   showLogin?: boolean;
   bgColor?: string;
   border?: boolean;
+  checkAuth?: boolean;
 }
 
 export default function LogoHeader({
   showLogin = true,
   bgColor = 'white',
   border = false,
+  checkAuth = true,
 }: LogoHeaderProps) {
   const { isSuccess: isLoggedIn, isLoading } = useGetUserMe({
-    enabled: showLogin,
+    enabled: checkAuth && showLogin,
   });
-  const shouldShowLogin = showLogin && !isLoading && !isLoggedIn;
+  const shouldShowLogin =
+    showLogin && (!checkAuth || (!isLoading && !isLoggedIn));
 
   // 로그인 버튼 클릭 시 entry를 main으로 저장
   const handleLoginClick = useCallback(() => {
