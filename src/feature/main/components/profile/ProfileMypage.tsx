@@ -1,11 +1,13 @@
 'use client';
 import { DEFAULT_PROFILE_IMAGE } from '@/global/constants/images';
 import { Settings } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useGetUserMe } from '../../hooks/useGetUserMe';
 
 interface ProfileMypageProps {}
 
 export default function ProfileMypage({}: ProfileMypageProps) {
+  const router = useRouter();
   const { data } = useGetUserMe();
 
   return (
@@ -55,7 +57,10 @@ export default function ProfileMypage({}: ProfileMypageProps) {
           </div>
         </div>
         <div>
-          <button type='button' aria-label='설정'>
+          <button
+            onClick={() => router.push('/mypage/setting')}
+            aria-label='설정'
+          >
             <Settings
               width={24}
               height={24}
