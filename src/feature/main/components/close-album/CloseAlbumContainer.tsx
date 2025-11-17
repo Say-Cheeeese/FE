@@ -1,5 +1,7 @@
 'use client';
+import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useRef } from 'react';
 import {
   useAlbumClosedInfiniteQuery,
@@ -20,6 +22,7 @@ const MAX_IMAGES = 4;
 const LOADING_TEXT = '불러오는 중...';
 
 export default function CloseAlbumContainer() {
+  const router = useRouter();
   const { items, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useAlbumClosedInfiniteQuery();
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
@@ -53,15 +56,15 @@ export default function CloseAlbumContainer() {
 
   return (
     <section className='mb-20 px-5'>
-      <Link href='#'>
+      <Link href='/main/closed-album'>
         <h3 className='typo-heading-md-semibold text-text-subtle mb-4 flex items-center'>
           닫힌 앨범 {albums.length}
           {/* TODO : Link연동 전까지 화살표 주석 */}
-          {/* <ChevronRight
+          <ChevronRight
             width={24}
             height={24}
             color='var(--color-icon-basic)'
-          /> */}
+          />
         </h3>
       </Link>
       <div className='flex flex-col gap-4'>
