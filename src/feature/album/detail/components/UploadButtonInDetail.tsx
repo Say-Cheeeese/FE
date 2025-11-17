@@ -2,8 +2,9 @@
 
 import { handleFileUpload } from '@/feature/create-album/utils/handleFileUpload';
 import LongButton from '@/global/components/LongButton';
+import { useUploadingStore } from '@/store/useUploadingStore';
 import { useParams, useRouter } from 'next/navigation';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 
 interface UploadButtonInDetailProps {
   buttonText?: string;
@@ -13,7 +14,7 @@ export default function UploadButtonInDetail({
   buttonText,
 }: UploadButtonInDetailProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [isUploading, setIsUploading] = useState(false);
+  const isUploading = useUploadingStore((state) => state.isUploading);
   const router = useRouter();
   const params = useParams();
   const albumId =
@@ -25,9 +26,7 @@ export default function UploadButtonInDetail({
 
   const onFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) return;
-    setIsUploading(true);
     await handleFileUpload(e, albumId, router, { stay: true });
-    setIsUploading(false);
   };
 
   const handleButtonClick = () => {

@@ -3,7 +3,11 @@
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 
-export default function EmojiLoading() {
+interface EmojiLoadingProps {
+  duration?: number;
+}
+
+export default function EmojiLoading({ duration = 2000 }: EmojiLoadingProps) {
   const [percent, setPercent] = useState(0);
 
   useEffect(() => {
@@ -11,7 +15,6 @@ export default function EmojiLoading() {
     const timeout = setTimeout(() => {
       let frame: number;
       const startTime = performance.now();
-      const duration = 3000; // 3초 동안 애니메이션
 
       const animate = (currentTime: number) => {
         const elapsed = currentTime - startTime;
@@ -27,14 +30,14 @@ export default function EmojiLoading() {
     }, 100); // 100ms 딜레이
 
     return () => clearTimeout(timeout);
-  }, []);
+  }, [duration]);
 
   return (
     <div
-      className='z-99 h-screen w-full'
+      className='fixed inset-0 z-99 flex items-center justify-center'
       style={{ backgroundColor: 'rgba(24, 25, 27, 0.50)' }}
     >
-      <div className='relative h-40 w-40 rounded-full'>
+      <div className='relative flex h-40 w-40 items-center justify-center rounded-full'>
         <motion.div
           className='absolute rounded-full'
           style={{
