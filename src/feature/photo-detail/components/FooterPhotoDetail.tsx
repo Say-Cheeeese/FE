@@ -136,15 +136,7 @@ export default function FooterPhotoDetail({
           </button>
         }
       >
-        <SectionPhotoData
-          photoInfo={{
-            uploaderName: photoUploader,
-            takenAt: data?.takenAt ?? '',
-            uploadedAt: data?.createdAt ?? '',
-          }}
-          isShowDeleteButton
-          onDeleteClick={() => console.log('삭제 버튼 클릭!')}
-        />
+        <SectionPhotoData albumId={albumId} photoId={photoId} />
       </BottomSheetModal>
 
       <button
