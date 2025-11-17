@@ -1,13 +1,17 @@
 import ConfirmModal from '@/global/components/modal/ConfirmModal';
+import { useRouter } from 'next/navigation';
+import { useLogoutMutation } from '../hooks/useLogoutMutation';
 
-interface ButtonLogoutProps {
-  onConfirm?: () => Promise<void> | void;
-}
+interface ButtonLogoutProps {}
 
-export default function ButtonLogout({ onConfirm }: ButtonLogoutProps) {
+export default function ButtonLogout({}: ButtonLogoutProps) {
+  const router = useRouter();
+  const { mutateAsync } = useLogoutMutation();
+
   const handleConfirm = async () => {
     try {
-      if (onConfirm) await onConfirm();
+      await mutateAsync();
+      router.push('/');
     } catch (err) {
       console.error(err);
     }
