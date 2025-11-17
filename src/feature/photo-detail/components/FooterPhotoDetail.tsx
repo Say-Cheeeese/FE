@@ -3,12 +3,12 @@ import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
 import Toast from '@/global/components/toast/Toast';
 import { useQueryClient } from '@tanstack/react-query';
 import { Download, Heart, Info } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { usePhotoExifQuery } from '../hooks/usePhotoExifQuery';
+import { usePhotoDownloadMutation } from '../hooks/usePhotoDownloadMutation';
 import { usePhotoLikedMutation } from '../hooks/usePhotoLikedMutation';
 import { usePhotoUnlikedMutation } from '../hooks/usePhotoUnlikedMutation';
 import { updateCacheAlbumPhotosLike } from '../modules/updateCacheAlbumPhotosLike';
-import { downloadImageFromUrl } from '../util/downloadImageFromUrl';
 import ItemMemberData from './ItemMemberData';
 import SectionPhotoData from './SectionPhotoData';
 
@@ -76,13 +76,14 @@ export default function FooterPhotoDetail({
   isRecentlyDownloaded,
   imageUrl,
 }: FooterPhotoDetailProps) {
+  const router = useRouter();
   const queryClient = useQueryClient();
   const [isDownloading, setIsDownloading] = useState(false);
   const { mutateAsync: mutateAsyncLike, isPending: isLiking } =
     usePhotoLikedMutation();
   const { mutateAsync: mutateAsyncUnlike, isPending: isUnliking } =
     usePhotoUnlikedMutation();
-  const { data } = usePhotoExifQuery(imageUrl);
+  const { mutateAsync } = usePhotoDownloadMutation();
 
   const handleDeepToggle = async (): Promise<void> => {
     try {
@@ -113,7 +114,11 @@ export default function FooterPhotoDetail({
 
     try {
       setIsDownloading(true);
-      await downloadImageFromUrl(imageUrl, `cheese-${photoId}`);
+      const res = await mutateAsync({ albumId, photoIds: [photoId] });
+
+      if (res?.downloadFiles[0]?.downloadUrl) {
+        router.push(res.downloadFiles[0].downloadUrl);
+      }
     } catch (e: unknown) {
       console.error(e);
 

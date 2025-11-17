@@ -12,7 +12,6 @@ interface AlbumBottomActionsProps {
   albumType: AlbumType;
   changeAlbumType: (newType: AlbumType) => void;
   selectedCount: number;
-  onDownload: () => void;
 }
 
 export default function AlbumBottomActions({
@@ -24,7 +23,6 @@ export default function AlbumBottomActions({
   albumType,
   changeAlbumType,
   selectedCount,
-  onDownload,
 }: AlbumBottomActionsProps) {
   if (!hasPhotos) return null;
 
@@ -42,10 +40,7 @@ export default function AlbumBottomActions({
 
   if (mode === 'select') {
     return (
-      <DownloadActionBar
-        selectedCount={selectedCount}
-        onDownload={onDownload}
-      />
+      <DownloadActionBar albumId={albumId} selectedCount={selectedCount} />
     );
   }
 

@@ -1,15 +1,30 @@
+import { usePhotoDownloadMutation } from '@/feature/photo-detail/hooks/usePhotoDownloadMutation';
+import { useSelectedPhotosStore } from '@/store/useSelectedPhotosStore';
+import { useRouter } from 'next/navigation';
+
 interface DownloadActionBarProps {
+  albumId: string;
   selectedCount: number;
-  onDownload?: () => void;
 }
 
 export default function DownloadActionBar({
+  albumId,
   selectedCount,
-  onDownload,
 }: DownloadActionBarProps) {
-  const handleDownload = () => {
+  const router = useRouter();
+  const { mutateAsync } = usePhotoDownloadMutation();
+  const { selectedPhotoIds } = useSelectedPhotosStore((state) => ({
+    selectedPhotoIds: state.selectedPhotoIds,
+  }));
+
+  const handleDownload = async () => {
     if (selectedCount === 0) return;
-    onDownload?.();
+
+    const res = await mutateAsync({ albumId, photoIds: selectedPhotoIds });
+    // TODO : 여러장 다운로드 로직 개선
+    res?.downloadFiles.map(({ downloadUrl }) => {
+      router.push(downloadUrl);
+    });
   };
 
   const isDisabled = selectedCount === 0;
