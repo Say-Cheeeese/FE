@@ -21,6 +21,8 @@ const fetchAlbumPhotosPage = async ({
     params: { page: pageParam, size },
   });
 
+  if (!res.result) throw Error('result가 없습니다.');
+
   return { ...res.result, page: pageParam };
 };
 

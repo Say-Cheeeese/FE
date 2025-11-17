@@ -16,16 +16,20 @@ export function updateCacheAlbumPhotosLike({
 }: ToggleAlbumPhotoLikeInCacheParams) {
   queryClient.setQueriesData<InfiniteData<ApiReturns['album.photos']>>(
     { queryKey: [EP.album.photos(albumId)] },
-    (old) => {
+    // TODO : any타입없애기
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (old: any) => {
       if (!old) return old;
 
       return {
         ...old,
-        pages: old.pages.map((page) => ({
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        pages: old.pages.map((page: any) => ({
           ...page,
           ...(page?.responses !== undefined && {
             responses:
-              page.responses?.map((res) => {
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              page.responses?.map((res: any) => {
                 if (res.photoId !== photoId) return res;
 
                 const updated = { ...res };
