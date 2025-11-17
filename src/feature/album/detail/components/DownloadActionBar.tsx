@@ -1,21 +1,28 @@
 import { usePhotoDownloadMutation } from '@/feature/photo-detail/hooks/usePhotoDownloadMutation';
 import { useSelectedPhotosStore } from '@/store/useSelectedPhotosStore';
 import { useRouter } from 'next/navigation';
+import { useShallow } from 'zustand/shallow';
+import { AlbumDetailMode } from './ScreenAlbumDetail';
 
 interface DownloadActionBarProps {
   albumId: string;
   selectedCount: number;
+  changeAlbumMode: (newMode: AlbumDetailMode) => void;
 }
 
 export default function DownloadActionBar({
   albumId,
   selectedCount,
+  changeAlbumMode,
 }: DownloadActionBarProps) {
   const router = useRouter();
   const { mutateAsync } = usePhotoDownloadMutation();
-  const { selectedPhotoIds } = useSelectedPhotosStore((state) => ({
-    selectedPhotoIds: state.selectedPhotoIds,
-  }));
+  const { selectedPhotoIds, clearSelectedPhotos } = useSelectedPhotosStore(
+    useShallow((state) => ({
+      selectedPhotoIds: state.selectedPhotoIds,
+      clearSelectedPhotos: state.clearSelectedPhotos,
+    })),
+  );
 
   const handleDownload = async () => {
     if (selectedCount === 0) return;
@@ -25,6 +32,10 @@ export default function DownloadActionBar({
     res?.downloadFiles.map(({ downloadUrl }) => {
       router.push(downloadUrl);
     });
+
+    changeAlbumMode('default');
+    clearSelectedPhotos();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const isDisabled = selectedCount === 0;

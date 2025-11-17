@@ -155,11 +155,7 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
     togglePhotoSelection(photoId);
   };
 
-  const handleDownload = (): void => {
-    setMode('default');
-    clearSelectedPhotos();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  const handleChangeMode = (newMode: AlbumDetailMode) => setMode(newMode);
 
   const emoji = invitationData?.themeEmoji;
 
@@ -213,8 +209,8 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
         changeSortType={setSortType}
         albumType={albumType}
         changeAlbumType={setAlbumType}
+        changeAlbumMode={handleChangeMode}
         selectedCount={selectedPhotoIds.length}
-        onDownload={handleDownload}
       />
     </>
   );
