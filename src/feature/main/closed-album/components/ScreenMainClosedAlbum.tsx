@@ -4,8 +4,8 @@ import EmptyAlbum from '@/feature/main/components/EmptyAlbum';
 import { useAlbumClosedInfiniteQuery } from '@/feature/main/hooks/useAlbumClosedInfiniteQuery';
 import CustomHeader from '@/global/components/header/CustomHeader';
 import { useEffect, useMemo, useRef } from 'react';
-import ClosedAlbumSectionList from './ClosedAlbumSectionList';
 import { buildClosedAlbumSections } from '../utils/buildClosedAlbumSections';
+import ClosedAlbumSectionList from './ClosedAlbumSectionList';
 
 interface ScreenMainClosedAlbumProps {}
 
@@ -42,7 +42,7 @@ export default function ScreenMainClosedAlbum({}: ScreenMainClosedAlbumProps) {
   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
   return (
-    <div className='bg-element-gray-light min-h-screen'>
+    <div className='min-h-screen'>
       <CustomHeader title='닫힌 앨범' isShowBack />
       <main className='px-5 pt-6 pb-10'>
         {showLoadingState && (
