@@ -1,17 +1,24 @@
 // SpinningRing.tsx
 'use client';
+import { convertUnicodeToEmoji } from '@/global/utils/convertEmoji';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 
 interface EmojiLoadingProps {
   duration?: number;
+  emoji?: string;
 }
 
-export default function EmojiLoading({ duration = 2000 }: EmojiLoadingProps) {
+export default function EmojiLoading({
+  duration = 2000,
+  emoji = 'U+1F60A',
+}: EmojiLoadingProps) {
   const [percent, setPercent] = useState(0);
 
+  // 무조건 변환
+  const displayEmoji = convertUnicodeToEmoji(emoji);
+
   useEffect(() => {
-    // 시작 시 약간의 딜레이를 준 후 애니메이션 시작
     const timeout = setTimeout(() => {
       let frame: number;
       const startTime = performance.now();
@@ -27,7 +34,7 @@ export default function EmojiLoading({ duration = 2000 }: EmojiLoadingProps) {
       };
       frame = requestAnimationFrame(animate);
       return () => cancelAnimationFrame(frame);
-    }, 100); // 100ms 딜레이
+    }, 100);
 
     return () => clearTimeout(timeout);
   }, [duration]);
@@ -57,13 +64,11 @@ export default function EmojiLoading({ duration = 2000 }: EmojiLoadingProps) {
           }}
         >
           <div
-            className='absolute rounded-full bg-white'
+            className='absolute flex items-center justify-center rounded-full bg-white text-5xl'
             style={{ inset: '6px' }}
-          />
-        </div>
-        {/* 중앙에 이모지 등 원하는 내용 */}
-        <div className='absolute inset-0 flex items-center justify-center'>
-          <span className='text-[50px]'>😀</span>
+          >
+            {displayEmoji}
+          </div>
         </div>
       </div>
     </div>

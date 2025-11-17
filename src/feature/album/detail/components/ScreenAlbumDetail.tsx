@@ -153,9 +153,13 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const emoji = invitationData?.themeEmoji;
+
   return (
     <>
-      {showLoading && <EmojiLoading duration={LOADING_MODAL_DURATION} />}
+      {showLoading && (
+        <EmojiLoading duration={LOADING_MODAL_DURATION} emoji={emoji} />
+      )}
       <CustomHeader
         isShowBack
         isHidden={mode === 'select'}
