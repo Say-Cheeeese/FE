@@ -2,9 +2,11 @@
 import { ProfileAgree } from '@/feature/onboarding/components/ProfileAgree';
 import ProfileImage from '@/feature/onboarding/components/ProfileImage';
 import { TermContent } from '@/feature/onboarding/components/TermContent';
+import { useOnBoardingMutation } from '@/feature/onboarding/hooks/useOnBoardingMutation';
 import CustomHeader from '@/global/components/header/CustomHeader';
 import LogoHeader from '@/global/components/header/LogoHeader';
 import LongButton from '@/global/components/LongButton';
+import Toast from '@/global/components/toast/Toast';
 import XInput from '@/global/components/XInput';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
@@ -63,16 +65,30 @@ export default function OnBoardingScreen() {
     nicknameError === '' &&
     isRequiredAgreed;
 
+  const { mutate, status } = useOnBoardingMutation();
+  const isLoading = status === 'pending';
+
   const handleSubmit = () => {
-    if (isFormComplete) {
-      console.log('가입 완료:', {
-        selectedImage,
-        nickname,
-        agreements,
-      });
-      // 가입 완료 API 호출 등
-      router.push('/onboarding/complete');
-    }
+    if (!isFormComplete || isLoading) return;
+    mutate(
+      {
+        name: nickname,
+        imageCode: selectedImage,
+        isServiceAgreement: agreements.terms,
+        isUserInfoAgreement: agreements.privacy,
+        isMarketingAgreement: agreements.marketing,
+        isThirdPartyAgreement: agreements.thirdParty,
+      },
+      {
+        onSuccess: () => {
+          router.push('/onboarding/complete');
+        },
+        onError: (error) => {
+          Toast.alert('가입에 실패했어요. 잠시 후 다시 시도해주세요.');
+          console.error('온보딩 실패:', error);
+        },
+      },
+    );
   };
 
   // 약관 상세가 있을 때 렌더링
@@ -108,8 +124,8 @@ export default function OnBoardingScreen() {
         onAgreementsChange={setAgreements}
       />
       <LongButton
-        text='가입 완료하기'
-        disabled={!isFormComplete}
+        text={isLoading ? '가입 처리 중...' : '가입 완료하기'}
+        disabled={!isFormComplete || isLoading}
         onClick={handleSubmit}
         bottomGap={20}
         sideGap={16}

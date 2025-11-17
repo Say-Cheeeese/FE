@@ -24,7 +24,7 @@ export default function ScreenOnboardingComplete() {
         alt='환영합니다'
         priority
       />
-      <span className='typo-heading-md-bold text-text-subtle'>
+      <span className='typo-heading-md-bold text-text-subtle text-center'>
         치이이즈에
         <br />
         오신 걸 환영해요
