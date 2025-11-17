@@ -11,7 +11,10 @@ const fetchData = async () => {
 };
 
 export function useGetUserMe(
-  options?: UseQueryOptions<ApiReturns['user.userMe'], Error>,
+  options?: Omit<
+    UseQueryOptions<ApiReturns['user.userMe'], Error>,
+    'queryKey' | 'queryFn'
+  >,
 ) {
   const query = useQuery({
     queryKey: [EP.user.userMe()],
