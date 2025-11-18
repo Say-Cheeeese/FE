@@ -1,16 +1,34 @@
 'use client';
+import { useGetUserMe } from '@/feature/main/hooks/useGetUserMe';
 import CustomHeader from '@/global/components/header/CustomHeader';
 import LongButton from '@/global/components/LongButton';
 import ConfirmModal from '@/global/components/modal/ConfirmModal';
 import Toast from '@/global/components/toast/Toast';
 import BubbleHint from '@/global/components/tooltip/BubbleTooltip';
 import PersonSvg from '@/global/svg/PersonSvg';
+import { shareViaNavigator } from '@/global/utils/shareNavigator';
+import { toBlob } from 'html-to-image';
 import { Download, LucideIcon, Menu, Send } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useGetAlbumInfo } from '../../detail/hooks/useGetAlbumInfo';
+import { use4CutFixed } from '../hooks/use4CutFixed';
+import { use4CutPreviewQuery } from '../hooks/use4CutPreviewQuery';
 import Container4Cut from './Container4Cut';
 
+const extracthtmlToBlob = async (node: HTMLElement): Promise<Blob> => {
+  const blob = await toBlob(node, {
+    cacheBust: true,
+    backgroundColor: '#ffffff',
+    pixelRatio: 2,
+  });
+
+  if (!blob) {
+    throw new Error('이미지 생성 실패');
+  }
+
+  return blob;
+};
 interface ScreenAlbum4CutProps {
   albumId: string;
 }
@@ -18,23 +36,85 @@ interface ScreenAlbum4CutProps {
 export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
   const router = useRouter();
   const [isConfirmed, setIsConfirmed] = useState(false);
+  const captureRef = useRef<HTMLDivElement>(null);
   const { data } = useGetAlbumInfo(albumId);
-  // TODO : maker 여부 api통해 확인
-  const isMaker = false;
+  const { data: { name } = {} } = useGetUserMe();
+  // TODO : openapi type이 이상해서 임시 any처리. 백엔드랑 협의 필요
 
-  const handleConfirm = () => {
-    // TODO : 치즈네컷 확정
+  const {
+    data: { myRole, previewPhotos, isFinalized } = {},
+    isPending: is4CutPreviewPending,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  }: any = use4CutPreviewQuery(albumId);
+  const { mutateAsync } = use4CutFixed();
+
+  const isMaker = myRole === 'MAKER';
+
+  const handleConfirm = async (): Promise<void> => {
+    await mutateAsync({
+      albumId,
+      photoIds: previewPhotos.map(
+        (photo: { photoId: number; imageUrl: string; photoRank: number }) =>
+          photo.photoId,
+      ),
+    });
     setIsConfirmed(true);
   };
 
-  const handleDownload = () => {
-    // TODO : 다운로드 로직
-    console.log('다운로드 클릭');
+  const handleDownload = async () => {
+    if (!captureRef.current) {
+      Toast.alert(
+        '다운로드할 이미지를 찾지 못했어요. 잠시 후 다시 시도해주세요.',
+      );
+      return;
+    }
+
+    try {
+      const blob = await extracthtmlToBlob(captureRef.current);
+
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = data?.title
+        ? `${data.title}-cheese-4cut.png`
+        : 'cheese-4cut.png';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Failed to download 4cut preview:', error);
+      Toast.alert('이미지를 다운로드하지 못했습니다. 다시 시도해주세요.');
+    }
   };
 
-  const handleShare = () => {
-    // TODO : 공유 로직
-    console.log('공유하기 클릭');
+  const handleShare = async () => {
+    if (!captureRef.current) {
+      Toast.alert('공유할 이미지를 찾지 못했어요. 잠시 후 다시 시도해주세요.');
+      return;
+    }
+
+    try {
+      const blob = await extracthtmlToBlob(captureRef.current);
+
+      const file = new File([blob], 'cheese-4cut.png', {
+        type: blob.type ?? 'image/png',
+      });
+
+      await shareViaNavigator({
+        data: {
+          files: [file],
+          title: data?.title ? `'${data.title}' 치즈네컷` : '치즈네컷 미리보기',
+          text: '확정된 치즈네컷을 공유해요.',
+        },
+        errorMessage: '공유에 실패하였습니다. 다시한번 시도해주세요.',
+        fileNotSupportedMessage:
+          '이 브라우저는 파일 공유 기능을 지원하지 않습니다.',
+      });
+    } catch (error) {
+      console.error('Failed to share 4cut preview:', error);
+      Toast.alert('이미지를 생성하지 못했습니다. 다시 시도해주세요.');
+    }
   };
 
   return (
@@ -55,79 +135,78 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
       />
       <section className='absolute top-[46%] left-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center'>
         <div className='typo-body-lg-semibold mb-2'>현재 TOP 4 사진</div>
-        <Container4Cut albumId={albumId} />
+        <div ref={captureRef}>
+          <Container4Cut albumId={albumId} />
+        </div>
       </section>
 
-      <div className='fixed bottom-5 flex w-full max-w-[430px] flex-col items-center px-4'>
-        {isMaker ? (
-          <>
-            {isConfirmed ? (
-              <div className='flex w-full justify-center gap-3'>
-                <ActionButton
-                  icon={Download}
-                  text='다운로드'
-                  onClick={handleDownload}
-                />
-                <ActionButton
-                  icon={Send}
-                  text='공유하기'
-                  onClick={handleShare}
-                />
-              </div>
-            ) : (
-              <>
-                <div className='typo-body-sm-semibold flex items-center gap-2 pb-3'>
-                  <span>띱 진행상황</span>
-                  <div className='flex items-center'>
-                    <span className='p-[5px]'>
-                      <PersonSvg />
-                    </span>
-                    <span>7 / 8 명</span>
-                  </div>
+      {!is4CutPreviewPending && (
+        <div className='fixed bottom-5 flex w-full max-w-[430px] flex-col items-center px-4'>
+          {isMaker || isFinalized ? (
+            <>
+              {isFinalized ? (
+                <div className='flex w-full justify-center gap-3'>
+                  <ActionButton
+                    icon={Download}
+                    text='다운로드'
+                    onClick={handleDownload}
+                  />
+                  <ActionButton
+                    icon={Send}
+                    text='공유하기'
+                    onClick={handleShare}
+                  />
                 </div>
-                <ConfirmModal
-                  trigger={<LongButton text='사진 확정하기' noFixed />}
-                  title='이대로 확정하시겠어요?'
-                  description='예쁜 치즈네컷을 만들어드릴게요'
-                  confirmText='확정하기'
-                  onConfirm={handleConfirm}
-                />
-              </>
-            )}
-          </>
-        ) : (
-          <div className=''>
-            <BubbleHint
-              message='📸 사진 확정 권한은 메이커에게만 있어요'
-              className='absolute bottom-18 left-1/2 w-full -translate-x-1/2'
-            />
-            <LongButton
-              text='메이커에게 조르기'
-              onClick={async () => {
-                // TODO : share api 모듈화 및 개선
-                if (navigator.share) {
-                  try {
-                    await navigator.share({
-                      title: `'졸업식'앨범에 대한 치즈네컷을 선정해주세요`,
-                      text: '이유정님이 임민서 메이커님에게 조르기를 요청했어요!',
-                      url: 'https://say-cheese.me/album/4cut/1',
-                    });
-                  } catch (err) {
-                    console.error('공유 취소 또는 실패:', err);
-                    Toast.alert(
+              ) : (
+                <>
+                  <div className='typo-body-sm-semibold flex items-center gap-2 pb-3'>
+                    <span>띱 진행상황</span>
+                    <div className='flex items-center'>
+                      <span className='p-[5px]'>
+                        <PersonSvg />
+                      </span>
+                      <span>
+                        {`${data?.currentParticipant} / ${data?.participant}`}{' '}
+                        명
+                      </span>
+                    </div>
+                  </div>
+                  <ConfirmModal
+                    trigger={<LongButton text='사진 확정하기' noFixed />}
+                    title='이대로 확정하시겠어요?'
+                    description='예쁜 치즈네컷을 만들어드릴게요'
+                    confirmText='확정하기'
+                    onConfirm={handleConfirm}
+                  />
+                </>
+              )}
+            </>
+          ) : (
+            <div className=''>
+              <BubbleHint
+                message='📸 사진 확정 권한은 메이커에게만 있어요'
+                className='absolute bottom-18 left-1/2 w-full -translate-x-1/2'
+              />
+              <LongButton
+                text='메이커에게 조르기'
+                onClick={async () => {
+                  if (!data) return;
+
+                  await shareViaNavigator({
+                    data: {
+                      title: `'${data.title}'앨범에 대한 치즈네컷을 선정해주세요`,
+                      text: `${name}님이 메이커님에게 조르기를 요청했어요!`,
+                      url: `https://say-cheese.me/album/4cut/${albumId}`,
+                    },
+                    errorMessage:
                       '공유에 실패하였습니다. 다시한번 시도해주세요.',
-                    );
-                  }
-                } else {
-                  Toast.alert(
-                    '이 브라우저는 공유하기 기능을 지원하지 않습니다.',
-                  );
-                }
-              }}
-            />
-          </div>
-        )}
-      </div>
+                  });
+                }}
+              />
+            </div>
+          )}
+        </div>
+      )}
     </>
   );
 }
@@ -138,7 +217,11 @@ interface ActionButtonProps {
   onClick: () => void;
 }
 
-const ActionButton = ({ icon: Icon, text, onClick }: ActionButtonProps) => (
+export const ActionButton = ({
+  icon: Icon,
+  text,
+  onClick,
+}: ActionButtonProps) => (
   <button
     type='button'
     onClick={onClick}

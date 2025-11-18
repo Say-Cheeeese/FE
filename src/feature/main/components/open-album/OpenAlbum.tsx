@@ -1,5 +1,5 @@
 import PersonSvg from '@/global/svg/PersonSvg';
-import Image from 'next/image';
+import { convertUnicodeToEmoji } from '@/global/utils/convertEmoji';
 import Link from 'next/link';
 import { getOpenAlbumGridConfig } from '../../utils/getOpenAlbumGridConfig';
 
@@ -14,6 +14,7 @@ interface OpenAlbumProps {
   totalMembers: number;
   joinedMembers: number;
   thumbnails?: string[];
+  emoji: string;
 }
 
 export default function OpenAlbum({
@@ -25,6 +26,7 @@ export default function OpenAlbum({
   totalMembers,
   joinedMembers,
   thumbnails = [],
+  emoji,
 }: OpenAlbumProps) {
   const [main, side1, side2] = thumbnails;
   const count = thumbnails.length;
@@ -102,15 +104,8 @@ export default function OpenAlbum({
 
         {/* 아래 정보 */}
         <div className='flex h-full items-end gap-3 px-4 py-6'>
-          <div className='h-14 w-14 shrink-0 overflow-hidden rounded-full bg-neutral-200'>
-            <Image
-              src='/assets/onboarding/smile1.svg'
-              alt='프로필사진'
-              width={80}
-              height={80}
-              priority
-              className='h-full w-full object-cover'
-            />
+          <div className='bg-element-gray-light flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full text-2xl'>
+            {emoji ? convertUnicodeToEmoji(emoji) : '😀'}
           </div>
           <div className='flex-1'>
             <h3 className='typo-heading-sm-semibold text-text-basic'>
