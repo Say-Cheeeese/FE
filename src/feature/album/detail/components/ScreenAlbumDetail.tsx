@@ -118,9 +118,7 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
   const isFetchingNextPage = isDeepAlbumType
     ? likedPhotosQuery.isFetchingNextPage
     : defaultPhotosQuery.isFetchingNextPage;
-  const isLoading = isDeepAlbumType
-    ? likedPhotosQuery.isLoading
-    : defaultPhotosQuery.isLoading;
+  const isLoading = defaultPhotosQuery.isLoading;
 
   useEffect(() => {
     const target = albumInfosRef.current;
