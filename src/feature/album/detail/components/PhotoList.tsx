@@ -132,7 +132,7 @@ export default function PhotoList({
         )}
       </div>
       <div className='grid grid-cols-3 gap-0.5'>
-        {photos.map(({ photoId, likeCnt, thumbnailUrl }) => {
+        {photos.map(({ photoId, likeCnt, isLiked, thumbnailUrl }) => {
           if (!photoId) {
             return null;
           }
@@ -142,6 +142,7 @@ export default function PhotoList({
               key={photoId}
               pressed={selectedList.includes(photoId)}
               likeCount={likeCnt}
+              liked={isLiked}
               imageSrc={thumbnailUrl}
               responsive
               onPress={() => {
