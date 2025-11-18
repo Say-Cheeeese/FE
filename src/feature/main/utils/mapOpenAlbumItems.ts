@@ -10,6 +10,7 @@ interface OpenAlbumListItem {
   totalMembers: number;
   title: string;
   thumbnails: string[];
+  emoji: string;
 }
 
 export function mapOpenAlbumItems(items: AlbumOpenItem[]): OpenAlbumListItem[] {
@@ -25,6 +26,7 @@ export function mapOpenAlbumItems(items: AlbumOpenItem[]): OpenAlbumListItem[] {
       item.recentPhotoThumbnails
         ?.slice(0, 3)
         .filter((thumbnail): thumbnail is string => Boolean(thumbnail)) ?? [],
+    emoji: item.themeEmoji,
   }));
 }
 
