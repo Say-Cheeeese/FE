@@ -10,16 +10,17 @@ interface AlbumInfosProps {
   albumInfo?: AlbumInvitationResponseSchema;
   isLoading: boolean;
   isError: boolean;
+  photoCount: number;
 }
 
 const AlbumInfos = forwardRef<HTMLElement, AlbumInfosProps>(
-  ({ albumId, ...rest }, ref) => (
+  ({ albumId, photoCount, ...rest }, ref) => (
     <section
       ref={ref}
       className='border-divider-gray-light border-b-[6px] px-5 py-4'
     >
       <AlbumInfoSummary {...rest} />
-      <AlbumBestCut albumId={albumId} />
+      <AlbumBestCut albumId={albumId} photoCount={photoCount} />
     </section>
   ),
 );

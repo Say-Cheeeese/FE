@@ -4,10 +4,16 @@ import AlbumBestCutPhotoList from './AlbumBestCutPhotoList';
 
 interface AlbumBestCutProps {
   albumId: string;
+  photoCount: number;
 }
 
-export default function AlbumBestCut({ albumId }: AlbumBestCutProps) {
+export default function AlbumBestCut({
+  albumId,
+  photoCount,
+}: AlbumBestCutProps) {
   const router = useRouter();
+
+  if (photoCount === 0) return null;
 
   return (
     <section className='rounded-xl bg-white'>
