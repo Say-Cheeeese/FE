@@ -28,9 +28,14 @@ export default function DownloadActionBar({
     if (selectedCount === 0) return;
 
     const res = await mutateAsync({ albumId, photoIds: selectedPhotoIds });
-    // TODO : 여러장 다운로드 로직 개선
-    res?.downloadFiles.map(({ downloadUrl }) => {
-      router.push(downloadUrl);
+
+    res?.downloadFiles.forEach(({ downloadUrl, fileName }) => {
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.setAttribute('download', fileName);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     });
 
     changeAlbumMode('default');
