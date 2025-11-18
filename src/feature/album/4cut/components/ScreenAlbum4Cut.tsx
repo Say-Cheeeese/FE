@@ -26,7 +26,7 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
   // TODO : openapi type이 이상해서 임시 any처리. 백엔드랑 협의 필요
 
   const {
-    data: { myRole, previewPhotos } = {},
+    data: { myRole, previewPhotos, isFinalized } = {},
     isPending: is4CutPreviewPending,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   }: any = use4CutPreviewQuery(albumId);
@@ -35,7 +35,13 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
   const isMaker = myRole === 'MAKER';
 
   const handleConfirm = async (): Promise<void> => {
-    await mutateAsync({ albumId, photoIds: previewPhotos });
+    await mutateAsync({
+      albumId,
+      photoIds: previewPhotos.map(
+        (photo: { photoId: number; imageUrl: string; photoRank: number }) =>
+          photo.photoId,
+      ),
+    });
     setIsConfirmed(true);
   };
 
@@ -72,9 +78,9 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
 
       {!is4CutPreviewPending && (
         <div className='fixed bottom-5 flex w-full max-w-[430px] flex-col items-center px-4'>
-          {isMaker ? (
+          {isMaker || isFinalized ? (
             <>
-              {isConfirmed ? (
+              {isFinalized ? (
                 <div className='flex w-full justify-center gap-3'>
                   <ActionButton
                     icon={Download}
