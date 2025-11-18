@@ -1,4 +1,5 @@
 'use client';
+import { useGetUserMe } from '@/feature/main/hooks/useGetUserMe';
 import CustomHeader from '@/global/components/header/CustomHeader';
 import LongButton from '@/global/components/LongButton';
 import ConfirmModal from '@/global/components/modal/ConfirmModal';
@@ -19,6 +20,7 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
   const router = useRouter();
   const [isConfirmed, setIsConfirmed] = useState(false);
   const { data } = useGetAlbumInfo(albumId);
+  const { data: { name } = {} } = useGetUserMe();
   // TODO : maker 여부 api통해 확인
   const isMaker = false;
 
@@ -82,7 +84,9 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
                     <span className='p-[5px]'>
                       <PersonSvg />
                     </span>
-                    <span>7 / 8 명</span>
+                    <span>
+                      {`${data?.currentParticipant} / ${data?.participant}`} 명
+                    </span>
                   </div>
                 </div>
                 <ConfirmModal
@@ -104,13 +108,15 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
             <LongButton
               text='메이커에게 조르기'
               onClick={async () => {
+                if (!data) return;
+
                 // TODO : share api 모듈화 및 개선
                 if (navigator.share) {
                   try {
                     await navigator.share({
-                      title: `'졸업식'앨범에 대한 치즈네컷을 선정해주세요`,
-                      text: '이유정님이 임민서 메이커님에게 조르기를 요청했어요!',
-                      url: 'https://say-cheese.me/album/4cut/1',
+                      title: `'${data.title}'앨범에 대한 치즈네컷을 선정해주세요`,
+                      text: `${name}님이 메이커님에게 조르기를 요청했어요!`, // TODO : 메이커님 앞에 메이커 이름이 붙어야함. 000 메이커님
+                      url: `https://say-cheese.me/album/4cut/${albumId}`,
                     });
                   } catch (err) {
                     console.error('공유 취소 또는 실패:', err);
