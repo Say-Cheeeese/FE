@@ -10,6 +10,7 @@ import { Download, LucideIcon, Menu, Send } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useGetAlbumInfo } from '../../detail/hooks/useGetAlbumInfo';
+import { use4CutPreviewQuery } from '../hooks/use4CutPreviewQuery';
 import Container4Cut from './Container4Cut';
 
 interface ScreenAlbum4CutProps {
@@ -21,8 +22,12 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
   const [isConfirmed, setIsConfirmed] = useState(false);
   const { data } = useGetAlbumInfo(albumId);
   const { data: { name } = {} } = useGetUserMe();
-  // TODO : maker 여부 api통해 확인
-  const isMaker = false;
+  // TODO : openapi type이 이상해서 임시 any처리. 백엔드랑 협의 필요
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: { myRole } = {}, isPending: is4CutPreviewPending }: any =
+    use4CutPreviewQuery(albumId);
+
+  const isMaker = myRole === 'MAKER';
 
   const handleConfirm = () => {
     // TODO : 치즈네컷 확정
@@ -60,80 +65,83 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
         <Container4Cut albumId={albumId} />
       </section>
 
-      <div className='fixed bottom-5 flex w-full max-w-[430px] flex-col items-center px-4'>
-        {isMaker ? (
-          <>
-            {isConfirmed ? (
-              <div className='flex w-full justify-center gap-3'>
-                <ActionButton
-                  icon={Download}
-                  text='다운로드'
-                  onClick={handleDownload}
-                />
-                <ActionButton
-                  icon={Send}
-                  text='공유하기'
-                  onClick={handleShare}
-                />
-              </div>
-            ) : (
-              <>
-                <div className='typo-body-sm-semibold flex items-center gap-2 pb-3'>
-                  <span>띱 진행상황</span>
-                  <div className='flex items-center'>
-                    <span className='p-[5px]'>
-                      <PersonSvg />
-                    </span>
-                    <span>
-                      {`${data?.currentParticipant} / ${data?.participant}`} 명
-                    </span>
-                  </div>
+      {!is4CutPreviewPending && (
+        <div className='fixed bottom-5 flex w-full max-w-[430px] flex-col items-center px-4'>
+          {isMaker ? (
+            <>
+              {isConfirmed ? (
+                <div className='flex w-full justify-center gap-3'>
+                  <ActionButton
+                    icon={Download}
+                    text='다운로드'
+                    onClick={handleDownload}
+                  />
+                  <ActionButton
+                    icon={Send}
+                    text='공유하기'
+                    onClick={handleShare}
+                  />
                 </div>
-                <ConfirmModal
-                  trigger={<LongButton text='사진 확정하기' noFixed />}
-                  title='이대로 확정하시겠어요?'
-                  description='예쁜 치즈네컷을 만들어드릴게요'
-                  confirmText='확정하기'
-                  onConfirm={handleConfirm}
-                />
-              </>
-            )}
-          </>
-        ) : (
-          <div className=''>
-            <BubbleHint
-              message='📸 사진 확정 권한은 메이커에게만 있어요'
-              className='absolute bottom-18 left-1/2 w-full -translate-x-1/2'
-            />
-            <LongButton
-              text='메이커에게 조르기'
-              onClick={async () => {
-                if (!data) return;
+              ) : (
+                <>
+                  <div className='typo-body-sm-semibold flex items-center gap-2 pb-3'>
+                    <span>띱 진행상황</span>
+                    <div className='flex items-center'>
+                      <span className='p-[5px]'>
+                        <PersonSvg />
+                      </span>
+                      <span>
+                        {`${data?.currentParticipant} / ${data?.participant}`}{' '}
+                        명
+                      </span>
+                    </div>
+                  </div>
+                  <ConfirmModal
+                    trigger={<LongButton text='사진 확정하기' noFixed />}
+                    title='이대로 확정하시겠어요?'
+                    description='예쁜 치즈네컷을 만들어드릴게요'
+                    confirmText='확정하기'
+                    onConfirm={handleConfirm}
+                  />
+                </>
+              )}
+            </>
+          ) : (
+            <div className=''>
+              <BubbleHint
+                message='📸 사진 확정 권한은 메이커에게만 있어요'
+                className='absolute bottom-18 left-1/2 w-full -translate-x-1/2'
+              />
+              <LongButton
+                text='메이커에게 조르기'
+                onClick={async () => {
+                  if (!data) return;
 
-                // TODO : share api 모듈화 및 개선
-                if (navigator.share) {
-                  try {
-                    await navigator.share({
-                      title: `'${data.title}'앨범에 대한 치즈네컷을 선정해주세요`,
-                      text: `${name}님이 메이커님에게 조르기를 요청했어요!`, // TODO : 메이커님 앞에 메이커 이름이 붙어야함. 000 메이커님
-                      url: `https://say-cheese.me/album/4cut/${albumId}`,
-                    });
-                  } catch (err) {
-                    console.error('공유 취소 또는 실패:', err);
+                  // TODO : share api 모듈화 및 개선
+                  if (navigator.share) {
+                    try {
+                      await navigator.share({
+                        title: `'${data.title}'앨범에 대한 치즈네컷을 선정해주세요`,
+                        text: `${name}님이 메이커님에게 조르기를 요청했어요!`, // TODO : 메이커님 앞에 메이커 이름이 붙어야함. 000 메이커님
+                        url: `https://say-cheese.me/album/4cut/${albumId}`,
+                      });
+                    } catch (err) {
+                      console.error('공유 취소 또는 실패:', err);
+                      Toast.alert(
+                        '공유에 실패하였습니다. 다시한번 시도해주세요.',
+                      );
+                    }
+                  } else {
                     Toast.alert(
-                      '공유에 실패하였습니다. 다시한번 시도해주세요.',
+                      '이 브라우저는 공유하기 기능을 지원하지 않습니다.',
                     );
                   }
-                } else {
-                  Toast.alert(
-                    '이 브라우저는 공유하기 기능을 지원하지 않습니다.',
-                  );
-                }
-              }}
-            />
-          </div>
-        )}
-      </div>
+                }}
+              />
+            </div>
+          )}
+        </div>
+      )}
     </>
   );
 }
