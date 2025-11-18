@@ -225,21 +225,20 @@ export default function SelectAlbumBody() {
           const isSelected = selectedIds.has(img.id);
           return (
             <div key={img.id} className='relative aspect-square w-full'>
-              <div className='absolute inset-0'>
-                <PhotoBox
-                  imageSrc={img.url}
-                  imageAlt={`이미지 ${img.id}`}
-                  pressed={isSelected}
-                  disabled={img.isOversized}
-                  onPress={(next) => {
-                    if (img.isOversized) {
-                      showToast('사진이 6MB를 초과해 업로드할 수 없어요.');
-                    } else {
-                      toggleSelect(img.id, img.isOversized, next);
-                    }
-                  }}
-                />
-              </div>
+              <PhotoBox
+                responsive={true}
+                imageSrc={img.url}
+                imageAlt={`이미지 ${img.id}`}
+                pressed={isSelected}
+                disabled={img.isOversized}
+                onPress={(next) => {
+                  if (img.isOversized) {
+                    showToast('사진이 6MB를 초과해 업로드할 수 없어요.');
+                  } else {
+                    toggleSelect(img.id, img.isOversized, next);
+                  }
+                }}
+              />
             </div>
           );
         })}
