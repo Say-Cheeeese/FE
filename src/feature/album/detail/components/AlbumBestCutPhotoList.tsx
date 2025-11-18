@@ -15,6 +15,8 @@ export default function AlbumBestCutPhotoList({
     code: albumId,
     size: 4,
     sorting: 'POPULAR',
+    // 좋아요 누른것 실시간으로 반영되게 매번 호출
+    refetchOnMount: 'always',
   });
 
   // Layout Shifting 방지 위해 height 고정
@@ -23,8 +25,7 @@ export default function AlbumBestCutPhotoList({
 
   return (
     <div className='grid w-full grid-cols-4'>
-      {/* TODO : 백엔드에서 size params 미적용이슈 고쳐주기전까지 slice */}
-      {items.slice(0, 4).map(({ thumbnailUrl, photoId, likeCnt, isLiked }) => {
+      {items.map(({ thumbnailUrl, photoId, likeCnt, isLiked }) => {
         if (!photoId) return null;
 
         return (

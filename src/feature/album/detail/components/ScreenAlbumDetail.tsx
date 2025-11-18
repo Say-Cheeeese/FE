@@ -88,11 +88,15 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
     code: albumId,
     sorting,
     enabled: albumType === 'all',
+    // 좋아요 누른것 실시간으로 반영되게 매번 호출
+    refetchOnMount: 'always',
   });
 
   const likedPhotosQuery = useAlbumPhotosLikedInfiniteQuery({
     code: albumId,
     enabled: isDeepAlbumType,
+    // 좋아요 누른것 실시간으로 반영되게 매번 호출
+    refetchOnMount: 'always',
   });
 
   const likedPhotos = useMemo(

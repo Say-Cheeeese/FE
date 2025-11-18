@@ -32,6 +32,7 @@ interface UseAlbumPhotosInfiniteQueryProps {
   size?: number;
   sorting?: PhotoSorting;
   enabled?: boolean;
+  refetchOnMount?: boolean | 'always';
 }
 
 export function useAlbumPhotosInfiniteQuery({
@@ -39,6 +40,7 @@ export function useAlbumPhotosInfiniteQuery({
   size = 20,
   sorting = 'CREATED_AT',
   enabled = true,
+  refetchOnMount = true,
 }: UseAlbumPhotosInfiniteQueryProps) {
   const query = useInfiniteQuery({
     queryKey: [EP.album.photos(code), size, sorting],
@@ -48,6 +50,7 @@ export function useAlbumPhotosInfiniteQuery({
       fetchAlbumPhotosPage({ code, pageParam, size, sorting }),
     getNextPageParam: (lastPage) =>
       lastPage.hasNext ? lastPage.page + 1 : undefined,
+    refetchOnMount,
   });
 
   const items = query.data?.pages.flatMap((p) => p.responses ?? []) ?? [];

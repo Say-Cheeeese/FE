@@ -44,12 +44,14 @@ interface UseAlbumPhotosLikedInfiniteQueryProps {
   code: string;
   size?: number;
   enabled?: boolean;
+  refetchOnMount?: boolean | 'always';
 }
 
 export function useAlbumPhotosLikedInfiniteQuery({
   code,
   size = 20,
   enabled = true,
+  refetchOnMount,
 }: UseAlbumPhotosLikedInfiniteQueryProps) {
   const query = useInfiniteQuery({
     queryKey: [EP.album.likedPhotos(code), size],
@@ -58,6 +60,7 @@ export function useAlbumPhotosLikedInfiniteQuery({
     queryFn: ({ pageParam }) => fetchAlbumPhotosPage({ code, pageParam, size }),
     getNextPageParam: (lastPage) =>
       lastPage.hasNext ? lastPage.page + 1 : undefined,
+    refetchOnMount,
   });
 
   const items: AlbumPhotosLikedItem[] =
