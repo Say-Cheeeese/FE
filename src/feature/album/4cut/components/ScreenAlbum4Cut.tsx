@@ -10,6 +10,7 @@ import { Download, LucideIcon, Menu, Send } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useGetAlbumInfo } from '../../detail/hooks/useGetAlbumInfo';
+import { use4CutFixed } from '../hooks/use4CutFixed';
 import { use4CutPreviewQuery } from '../hooks/use4CutPreviewQuery';
 import Container4Cut from './Container4Cut';
 
@@ -26,11 +27,12 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: { myRole } = {}, isPending: is4CutPreviewPending }: any =
     use4CutPreviewQuery(albumId);
+  const { mutateAsync } = use4CutFixed();
 
   const isMaker = myRole === 'MAKER';
 
-  const handleConfirm = () => {
-    // TODO : 치즈네컷 확정
+  const handleConfirm = async (): Promise<void> => {
+    await mutateAsync(albumId);
     setIsConfirmed(true);
   };
 
