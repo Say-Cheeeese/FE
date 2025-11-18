@@ -45,7 +45,7 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
   const [mode, setMode] = useState<AlbumDetailMode>('default');
   const [isAlbumInfosHidden, setIsAlbumInfosHidden] = useState(false);
   const [selectionResetKey, setSelectionResetKey] = useState(0);
-  const [sortType, setSortType] = useState<PhotoSortType>('liked');
+  const [sortType, setSortType] = useState<PhotoSortType>('uploaded');
   const [albumType, setAlbumType] = useState<AlbumType>('all');
   const sorting = photoSortToApiSorting[sortType];
   const { selectedPhotoIds, togglePhotoSelection, clearSelectedPhotos } =
