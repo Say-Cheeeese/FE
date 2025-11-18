@@ -24,15 +24,18 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
   const { data } = useGetAlbumInfo(albumId);
   const { data: { name } = {} } = useGetUserMe();
   // TODO : openapi type이 이상해서 임시 any처리. 백엔드랑 협의 필요
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: { myRole } = {}, isPending: is4CutPreviewPending }: any =
-    use4CutPreviewQuery(albumId);
+
+  const {
+    data: { myRole, previewPhotos } = {},
+    isPending: is4CutPreviewPending,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  }: any = use4CutPreviewQuery(albumId);
   const { mutateAsync } = use4CutFixed();
 
   const isMaker = myRole === 'MAKER';
 
   const handleConfirm = async (): Promise<void> => {
-    await mutateAsync(albumId);
+    await mutateAsync({ albumId, photoIds: previewPhotos });
     setIsConfirmed(true);
   };
 
