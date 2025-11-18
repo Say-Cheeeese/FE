@@ -169,6 +169,7 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
       )}
       <CustomHeader
         isShowBack
+        onBackClick={() => router.replace('/main')}
         isHidden={mode === 'select'}
         title={isAlbumInfosHidden ? (invitationData?.title ?? '') : ''}
         rightContent={
