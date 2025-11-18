@@ -3,9 +3,9 @@ import { useGetUserMe } from '@/feature/main/hooks/useGetUserMe';
 import CustomHeader from '@/global/components/header/CustomHeader';
 import LongButton from '@/global/components/LongButton';
 import ConfirmModal from '@/global/components/modal/ConfirmModal';
-import Toast from '@/global/components/toast/Toast';
 import BubbleHint from '@/global/components/tooltip/BubbleTooltip';
 import PersonSvg from '@/global/svg/PersonSvg';
+import { shareViaNavigator } from '@/global/utils/shareNavigator';
 import { Download, LucideIcon, Menu, Send } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -50,9 +50,17 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
     console.log('다운로드 클릭');
   };
 
-  const handleShare = () => {
-    // TODO : 공유 로직
-    console.log('공유하기 클릭');
+  const handleShare = async () => {
+    // TODO : 4컷 사진 뽑아서 blob만들기
+    const imageUrl = '/assets/album/bg-album-default.png'; // 공유할 이미지 URL
+    const blob = await fetch(imageUrl).then((res) => res.blob());
+    const file = new File([blob], '4cut.png', { type: blob.type });
+
+    const shareData = {
+      files: [file],
+    };
+
+    await shareViaNavigator({ data: shareData });
   };
 
   return (
@@ -128,25 +136,15 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
                 onClick={async () => {
                   if (!data) return;
 
-                  // TODO : share api 모듈화 및 개선
-                  if (navigator.share) {
-                    try {
-                      await navigator.share({
-                        title: `'${data.title}'앨범에 대한 치즈네컷을 선정해주세요`,
-                        text: `${name}님이 메이커님에게 조르기를 요청했어요!`, // TODO : 메이커님 앞에 메이커 이름이 붙어야함. 000 메이커님
-                        url: `https://say-cheese.me/album/4cut/${albumId}`,
-                      });
-                    } catch (err) {
-                      console.error('공유 취소 또는 실패:', err);
-                      Toast.alert(
-                        '공유에 실패하였습니다. 다시한번 시도해주세요.',
-                      );
-                    }
-                  } else {
-                    Toast.alert(
-                      '이 브라우저는 공유하기 기능을 지원하지 않습니다.',
-                    );
-                  }
+                  await shareViaNavigator({
+                    data: {
+                      title: `'${data.title}'앨범에 대한 치즈네컷을 선정해주세요`,
+                      text: `${name}님이 메이커님에게 조르기를 요청했어요!`,
+                      url: `https://say-cheese.me/album/4cut/${albumId}`,
+                    },
+                    errorMessage:
+                      '공유에 실패하였습니다. 다시한번 시도해주세요.',
+                  });
                 }}
               />
             </div>
@@ -163,7 +161,11 @@ interface ActionButtonProps {
   onClick: () => void;
 }
 
-const ActionButton = ({ icon: Icon, text, onClick }: ActionButtonProps) => (
+export const ActionButton = ({
+  icon: Icon,
+  text,
+  onClick,
+}: ActionButtonProps) => (
   <button
     type='button'
     onClick={onClick}
