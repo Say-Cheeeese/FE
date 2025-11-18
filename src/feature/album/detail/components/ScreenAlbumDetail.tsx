@@ -228,8 +228,8 @@ function mapLikedPhotosToPhotoList(
     photoId: item.photoId,
     imageUrl: item.imageUrl,
     thumbnailUrl: item.thumbnailUrl,
-    likeCnt: 0,
-    isLiked: true,
+    likeCnt: item.likeCnt ?? 0,
+    isLiked: item.isLiked ?? false,
     isDownloaded: item.isDownloaded,
     isRecentlyDownloaded: item.isRecentlyDownloaded,
   }));
