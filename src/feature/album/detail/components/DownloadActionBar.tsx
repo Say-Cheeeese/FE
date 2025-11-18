@@ -1,15 +1,46 @@
+import { usePhotoDownloadMutation } from '@/feature/photo-detail/hooks/usePhotoDownloadMutation';
+import { useSelectedPhotosStore } from '@/store/useSelectedPhotosStore';
+import { useRouter } from 'next/navigation';
+import { useShallow } from 'zustand/shallow';
+import { AlbumDetailMode } from './ScreenAlbumDetail';
+
 interface DownloadActionBarProps {
+  albumId: string;
   selectedCount: number;
-  onDownload?: () => void;
+  changeAlbumMode: (newMode: AlbumDetailMode) => void;
 }
 
 export default function DownloadActionBar({
+  albumId,
   selectedCount,
-  onDownload,
+  changeAlbumMode,
 }: DownloadActionBarProps) {
-  const handleDownload = () => {
+  const router = useRouter();
+  const { mutateAsync } = usePhotoDownloadMutation();
+  const { selectedPhotoIds, clearSelectedPhotos } = useSelectedPhotosStore(
+    useShallow((state) => ({
+      selectedPhotoIds: state.selectedPhotoIds,
+      clearSelectedPhotos: state.clearSelectedPhotos,
+    })),
+  );
+
+  const handleDownload = async () => {
     if (selectedCount === 0) return;
-    onDownload?.();
+
+    const res = await mutateAsync({ albumId, photoIds: selectedPhotoIds });
+
+    res?.downloadFiles.forEach(({ downloadUrl, fileName }) => {
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.setAttribute('download', fileName);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+
+    changeAlbumMode('default');
+    clearSelectedPhotos();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const isDisabled = selectedCount === 0;

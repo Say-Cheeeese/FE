@@ -32,8 +32,6 @@ export default function ScreenPhotoDetail({
 
   const {
     items: images,
-    isFetching,
-    isError,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
@@ -47,8 +45,7 @@ export default function ScreenPhotoDetail({
 
   return (
     <main className='bg-surface-inverse flex h-dvh w-full flex-col justify-between'>
-      {/* TODO : 앨범 상세정보(제목) api 연동 필요 */}
-      <HeaderPhotoDetail title={'김수한무~'} />
+      <HeaderPhotoDetail albumId={albumId} />
       <SwiperPhotoList
         activeIndex={activeIndex}
         changeActiveIndex={changeActiveIndex}
