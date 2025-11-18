@@ -66,7 +66,7 @@ export default function RootLayout({
       </Script>
 
       <body
-        className={`${pretendard.className} antialiased`}
+        className={`${pretendard.className} max-w-[430px] antialiased`}
         style={{
           maxWidth: '430px',
           width: '100vw',
