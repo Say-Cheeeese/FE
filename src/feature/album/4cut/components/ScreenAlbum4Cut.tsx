@@ -16,6 +16,19 @@ import { use4CutFixed } from '../hooks/use4CutFixed';
 import { use4CutPreviewQuery } from '../hooks/use4CutPreviewQuery';
 import Container4Cut from './Container4Cut';
 
+const extracthtmlToBlob = async (node: HTMLElement): Promise<Blob> => {
+  const blob = await toBlob(node, {
+    cacheBust: true,
+    backgroundColor: '#ffffff',
+    pixelRatio: 2,
+  });
+
+  if (!blob) {
+    throw new Error('이미지 생성 실패');
+  }
+
+  return blob;
+};
 interface ScreenAlbum4CutProps {
   albumId: string;
 }
@@ -48,9 +61,31 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
     setIsConfirmed(true);
   };
 
-  const handleDownload = () => {
-    // TODO : 다운로드 로직
-    console.log('다운로드 클릭');
+  const handleDownload = async () => {
+    if (!captureRef.current) {
+      Toast.alert(
+        '다운로드할 이미지를 찾지 못했어요. 잠시 후 다시 시도해주세요.',
+      );
+      return;
+    }
+
+    try {
+      const blob = await extracthtmlToBlob(captureRef.current);
+
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = data?.title
+        ? `${data.title}-cheese-4cut.png`
+        : 'cheese-4cut.png';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Failed to download 4cut preview:', error);
+      Toast.alert('이미지를 다운로드하지 못했습니다. 다시 시도해주세요.');
+    }
   };
 
   const handleShare = async () => {
@@ -60,15 +95,7 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
     }
 
     try {
-      const blob = await toBlob(captureRef.current, {
-        cacheBust: true,
-        backgroundColor: '#ffffff',
-        pixelRatio: 2,
-      });
-
-      if (!blob) {
-        throw new Error('이미지 생성 실패');
-      }
+      const blob = await extracthtmlToBlob(captureRef.current);
 
       const file = new File([blob], 'cheese-4cut.png', {
         type: blob.type ?? 'image/png',
