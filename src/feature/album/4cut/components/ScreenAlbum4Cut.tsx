@@ -3,12 +3,14 @@ import { useGetUserMe } from '@/feature/main/hooks/useGetUserMe';
 import CustomHeader from '@/global/components/header/CustomHeader';
 import LongButton from '@/global/components/LongButton';
 import ConfirmModal from '@/global/components/modal/ConfirmModal';
+import Toast from '@/global/components/toast/Toast';
 import BubbleHint from '@/global/components/tooltip/BubbleTooltip';
 import PersonSvg from '@/global/svg/PersonSvg';
 import { shareViaNavigator } from '@/global/utils/shareNavigator';
+import { toBlob } from 'html-to-image';
 import { Download, LucideIcon, Menu, Send } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useGetAlbumInfo } from '../../detail/hooks/useGetAlbumInfo';
 import { use4CutFixed } from '../hooks/use4CutFixed';
 import { use4CutPreviewQuery } from '../hooks/use4CutPreviewQuery';
@@ -21,6 +23,7 @@ interface ScreenAlbum4CutProps {
 export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
   const router = useRouter();
   const [isConfirmed, setIsConfirmed] = useState(false);
+  const captureRef = useRef<HTMLDivElement>(null);
   const { data } = useGetAlbumInfo(albumId);
   const { data: { name } = {} } = useGetUserMe();
   // TODO : openapi type이 이상해서 임시 any처리. 백엔드랑 협의 필요
@@ -51,16 +54,40 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
   };
 
   const handleShare = async () => {
-    // TODO : 4컷 사진 뽑아서 blob만들기
-    const imageUrl = '/assets/album/bg-album-default.png'; // 공유할 이미지 URL
-    const blob = await fetch(imageUrl).then((res) => res.blob());
-    const file = new File([blob], '4cut.png', { type: blob.type });
+    if (!captureRef.current) {
+      Toast.alert('공유할 이미지를 찾지 못했어요. 잠시 후 다시 시도해주세요.');
+      return;
+    }
 
-    const shareData = {
-      files: [file],
-    };
+    try {
+      const blob = await toBlob(captureRef.current, {
+        cacheBust: true,
+        backgroundColor: '#ffffff',
+        pixelRatio: 2,
+      });
 
-    await shareViaNavigator({ data: shareData });
+      if (!blob) {
+        throw new Error('이미지 생성 실패');
+      }
+
+      const file = new File([blob], 'cheese-4cut.png', {
+        type: blob.type ?? 'image/png',
+      });
+
+      await shareViaNavigator({
+        data: {
+          files: [file],
+          title: data?.title ? `'${data.title}' 치즈네컷` : '치즈네컷 미리보기',
+          text: '확정된 치즈네컷을 공유해요.',
+        },
+        errorMessage: '공유에 실패하였습니다. 다시한번 시도해주세요.',
+        fileNotSupportedMessage:
+          '이 브라우저는 파일 공유 기능을 지원하지 않습니다.',
+      });
+    } catch (error) {
+      console.error('Failed to share 4cut preview:', error);
+      Toast.alert('이미지를 생성하지 못했습니다. 다시 시도해주세요.');
+    }
   };
 
   return (
@@ -81,7 +108,9 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
       />
       <section className='absolute top-[46%] left-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center'>
         <div className='typo-body-lg-semibold mb-2'>현재 TOP 4 사진</div>
-        <Container4Cut albumId={albumId} />
+        <div ref={captureRef}>
+          <Container4Cut albumId={albumId} />
+        </div>
       </section>
 
       {!is4CutPreviewPending && (

@@ -26,10 +26,12 @@ export default function Svg4Cut({ photos, height, width }: Svg4CutProps) {
       xmlnsXlink='http://www.w3.org/1999/xlink'
     >
       {PHOTO_SLOTS.map((pos, i) => {
+        if (!photoSources[i]) return null;
+
         return (
           <image
             key={i}
-            href={photoSources[i] || undefined}
+            href={photoSources[i]}
             x={pos.x}
             y={pos.y}
             width='463'
