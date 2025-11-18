@@ -20,6 +20,7 @@ import {
   photoSortToApiSorting,
   type PhotoSortType,
 } from '../constants/photoSort';
+import { useGetAlbumAvailableCount } from '../hooks/useGetAlbumAvailableCount';
 import { useGetAlbumInvitation } from '../hooks/useGetAlbumInvitation';
 import AlbumBottomActions from './AlbumBottomActions';
 import AlbumInfos from './AlbumInfos';
@@ -83,7 +84,8 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
     isError: isInvitationError,
   } = useGetAlbumInvitation(albumId);
   const isDeepAlbumType = albumType === 'deep';
-
+  const { data } = useGetAlbumAvailableCount(albumId);
+  const totalPhotoCount = data?.currentPhotoCount;
   const defaultPhotosQuery = useAlbumPhotosInfiniteQuery({
     code: albumId,
     sorting,
@@ -119,7 +121,6 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
   const isLoading = isDeepAlbumType
     ? likedPhotosQuery.isLoading
     : defaultPhotosQuery.isLoading;
-  const hasPhotos = photos.length > 0;
 
   useEffect(() => {
     const target = albumInfosRef.current;
@@ -190,7 +191,7 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
           albumInfo={invitationData}
           isLoading={isInvitationLoading}
           isError={isInvitationError}
-          photoCount={photos.length}
+          photoCount={totalPhotoCount}
         />
         <AlbumPhotoSection
           isLoading={isLoading}
@@ -204,10 +205,10 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
           fetchNextPage={fetchNextPage}
           hasNextPage={!!hasNextPage}
           isFetchingNextPage={isFetchingNextPage}
+          totalPhotoCount={totalPhotoCount}
         />
       </div>
       <AlbumBottomActions
-        hasPhotos={hasPhotos}
         mode={mode}
         albumId={albumId}
         sortType={sortType}
@@ -216,6 +217,8 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
         changeAlbumType={setAlbumType}
         changeAlbumMode={handleChangeMode}
         selectedCount={selectedPhotoIds.length}
+        totalPhotoCount={totalPhotoCount}
+        isLoading={isLoading}
       />
     </>
   );

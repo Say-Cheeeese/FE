@@ -4,7 +4,7 @@ import AlbumBestCutPhotoList from './AlbumBestCutPhotoList';
 
 interface AlbumBestCutProps {
   albumId: string;
-  photoCount: number;
+  photoCount?: number;
 }
 
 export default function AlbumBestCut({

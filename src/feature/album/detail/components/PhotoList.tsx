@@ -8,7 +8,6 @@ import {
 } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef } from 'react';
-import { useGetAlbumAvailableCount } from '../hooks/useGetAlbumAvailableCount';
 import { AlbumDetailMode } from './ScreenAlbumDetail';
 
 const SELECT_MODE_MIN_HEIGHT = '800px';
@@ -29,6 +28,7 @@ interface PhotoListProps {
   ) => Promise<InfiniteQueryObserverResult>;
   hasNextPage: boolean;
   isFetchingNextPage: boolean;
+  totalPhotoCount?: number;
 }
 
 export default function PhotoList({
@@ -42,13 +42,12 @@ export default function PhotoList({
   fetchNextPage,
   hasNextPage,
   isFetchingNextPage,
+  totalPhotoCount,
 }: PhotoListProps) {
   const router = useRouter();
   const photoListRef = useRef<HTMLElement | null>(null);
   const anchorRef = useRef<HTMLDivElement | null>(null);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
-  const { data } = useGetAlbumAvailableCount(albumId);
-  const totalPhotoCount = data?.currentPhotoCount ?? '  ';
 
   useEffect(() => {
     if (!hasNextPage) return;
@@ -110,7 +109,7 @@ export default function PhotoList({
       <div ref={anchorRef} className='invisible absolute top-[-72px] left-0' />
       <div className='mb-3 flex justify-between'>
         <span className='typo-body-lg-regular text-text-subtle'>
-          총 {totalPhotoCount}장
+          총 {totalPhotoCount || ''}장
         </span>
         {mode === 'default' && (
           <button

@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import UploadButtonInDetail from './UploadButtonInDetail';
 
 export default function NoPhotoBody() {
   return (
@@ -20,7 +19,6 @@ export default function NoPhotoBody() {
       >
         새로고침
       </button>
-      <UploadButtonInDetail buttonText='앨범 채우기' />
     </div>
   );
 }

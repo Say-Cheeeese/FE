@@ -10,7 +10,7 @@ interface AlbumInfosProps {
   albumInfo?: AlbumInvitationResponseSchema;
   isLoading: boolean;
   isError: boolean;
-  photoCount: number;
+  photoCount?: number;
 }
 
 const AlbumInfos = forwardRef<HTMLElement, AlbumInfosProps>(
