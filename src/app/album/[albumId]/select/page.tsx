@@ -64,7 +64,7 @@ export default function Page() {
     confirmedRef.current = true;
     setModalOpen(false);
     if (albumId) {
-      window.location.replace('/album/mypage');
+      window.location.replace('/main');
     }
   };
 

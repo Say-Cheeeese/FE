@@ -6,6 +6,7 @@ import PhotoBox from '@/global/components/photo/PhotoBox';
 import { AlbumToastList } from '@/global/components/toast/AlbumToast';
 import { usePresignedAndUploadToNCP } from '@/global/hooks/usePresignedAndUploadToNCP';
 import { useImageStore } from '@/store/useImageStore';
+import { useUploadingStore } from '@/store/useUploadingStore';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 
@@ -34,6 +35,8 @@ export default function SelectAlbumBody() {
       fileInfos,
       files,
     });
+    // 업로드 시작 시 isUploaded false로 초기화(필요시)
+    // useUploadingStore.getState().setUploaded(false);
   };
   // presignedAndUploadToNCP를 직접 사용
   const { albumId } = useParams() as { albumId: string };
@@ -67,6 +70,8 @@ export default function SelectAlbumBody() {
         } else {
           revokeAllObjectUrls();
           showToast('모든 사진이 성공적으로 업로드되었어요!');
+          // 업로드 성공 시 전역 isUploaded true
+          useUploadingStore.getState().setUploaded(true);
           // 업로드 성공 시 detail로 이동
           router.replace(`/album/detail/${albumId}`);
           // 라우팅 후 images 클리어 (useEffect 트리거 방지)

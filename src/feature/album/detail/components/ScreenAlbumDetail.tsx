@@ -6,12 +6,13 @@ import {
   useAlbumPhotosLikedInfiniteQuery,
   type AlbumPhotosLikedItem,
 } from '@/feature/photo-detail/hooks/useAlbumPhotosLikedInfiniteQuery';
-import { PhotoListResponseSchema } from '@/global/api/ep';
+import { EP, PhotoListResponseSchema } from '@/global/api/ep';
 import CustomHeader, {
   HEADER_HEIGHT,
 } from '@/global/components/header/CustomHeader';
 import { useSelectedPhotosStore } from '@/store/useSelectedPhotosStore';
 import { useUploadingStore } from '@/store/useUploadingStore';
+import { useQueryClient } from '@tanstack/react-query';
 import { Menu } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -32,13 +33,18 @@ interface ScreenAlbumDetailProps {
   albumId: string;
 }
 
-const LOADING_MODAL_DURATION = 2000;
+const LOADING_MODAL_DURATION = 3000;
 
 export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
-  const isUploading = useUploadingStore((state) => state.isUploading);
-  const [showLoading, setShowLoading] = useState(false);
-  const loadingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const prevIsUploading = useRef(isUploading);
+  const queryClient = useQueryClient();
+  const { isUploaded, setUploaded } = useUploadingStore(
+    useShallow((state) => ({
+      isUploaded: state.isUploaded,
+      setUploaded: state.setUploaded,
+    })),
+  );
+  // showLoading 상태 제거, isUploaded만으로 분기
+  // uploadDoneRef 제거
   const router = useRouter();
   const albumInfosRef = useRef<HTMLElement | null>(null);
   const [mode, setMode] = useState<AlbumDetailMode>('default');
@@ -56,26 +62,8 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
       })),
     );
 
-  // isUploading이 true로 바뀌는 순간에만 2초간 showLoading true 유지
-  useEffect(() => {
-    if (!prevIsUploading.current && isUploading) {
-      // false -> true로 바뀌는 순간
-      setShowLoading(true);
-      if (loadingTimeoutRef.current) clearTimeout(loadingTimeoutRef.current);
-      loadingTimeoutRef.current = setTimeout(() => {
-        setShowLoading(false);
-      }, LOADING_MODAL_DURATION);
-    }
-    if (prevIsUploading.current && !isUploading) {
-      // true -> false로 바뀌는 순간에도 showLoading을 false로 강제
-      setShowLoading(false);
-      if (loadingTimeoutRef.current) clearTimeout(loadingTimeoutRef.current);
-    }
-    prevIsUploading.current = isUploading;
-    return () => {
-      if (loadingTimeoutRef.current) clearTimeout(loadingTimeoutRef.current);
-    };
-  }, [isUploading]);
+  // 업로드 완료 전에는 showLoading true, 완료 후에는 false
+  // showLoading 관련 useEffect 제거
 
   const {
     data: invitationData,
@@ -165,8 +153,18 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
 
   return (
     <>
-      {showLoading && (
-        <EmojiLoading duration={LOADING_MODAL_DURATION} emoji={emoji} />
+      {isUploaded && (
+        <EmojiLoading
+          duration={LOADING_MODAL_DURATION}
+          emoji={emoji}
+          onComplete={() => {
+            setUploaded(false);
+            queryClient.invalidateQueries({
+              queryKey: [EP.album.photos(albumId)],
+            });
+            console.log('refetch');
+          }}
+        />
       )}
       <CustomHeader
         isShowBack

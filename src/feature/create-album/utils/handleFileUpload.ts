@@ -27,6 +27,7 @@ export async function handleFileUpload(
 
     const result = await validateUpload(files, albumId);
     if (result.ok) {
+      useUploadingStore.getState().setUploaded(true);
       setUploading(true);
       if (!options?.stay && router) {
         router.push(`/album/${albumId}/waiting`);
@@ -52,8 +53,8 @@ export async function handleFileUpload(
     await new Promise((resolve) => setTimeout(resolve, remainingTime));
 
     setUploading(false);
-    if (options?.stay && router) {
-      // window.location.reload();
-    }
+    // if (options?.stay && router) {
+    //   // window.location.reload();
+    // }
   }
 }
