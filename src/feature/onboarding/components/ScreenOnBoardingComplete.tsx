@@ -16,7 +16,7 @@ export default function ScreenOnboardingComplete() {
     localStorage.removeItem('entry');
   };
   return (
-    <div className='mt-[24.65vh] flex flex-col items-center'>
+    <div className='mt-[37dvh] flex flex-col items-center'>
       <Image
         src='/assets/onboarding/congratulation.svg'
         width={132}
