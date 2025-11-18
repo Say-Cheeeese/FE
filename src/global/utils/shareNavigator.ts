@@ -29,10 +29,15 @@ export const shareViaNavigator = async ({
   try {
     await navigator.share(data);
     return true;
-  } catch (error) {
-    console.error('공유 취소 또는 실패:', error);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    if (error?.name === 'AbortError') {
+      return false;
+    }
+
+    console.error('공유 실패:', error);
     if (errorMessage) {
-      Toast.alert(errorMessage);
+      Toast.alert('공유에 실패하였습니다.');
     }
     return false;
   }
