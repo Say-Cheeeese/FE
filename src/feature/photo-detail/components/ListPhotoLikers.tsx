@@ -24,7 +24,7 @@ export default function ListPhotoLikers({
       {data.photoLikers.map(({ name, profileImageUrl, role, isMe }, index) => (
         <ItemMemberData
           key={index}
-          profileImageUrl={profileImageUrl ?? ''}
+          profileImageUrl={profileImageUrl}
           nickname={name ?? ''}
           isMe={isMe ?? false}
           isMaker={role === 'MAKER'}
