@@ -47,11 +47,7 @@ export default function DownloadActionBar({
         );
 
         await shareViaNavigator({
-          data: {
-            files,
-            title: '선택한 사진을 공유해요',
-            text: '치즈 앨범에서 선택한 사진들입니다.',
-          },
+          data: { files },
           errorMessage: '사진 공유에 실패했습니다. 다시 시도해주세요.',
           fileNotSupportedMessage:
             '이 브라우저는 선택한 사진의 공유를 지원하지 않습니다.',
