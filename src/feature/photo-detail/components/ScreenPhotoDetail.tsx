@@ -42,6 +42,7 @@ export default function ScreenPhotoDetail({
   });
 
   const activeImage = images[activeIndex];
+  if (!activeImage) return null;
 
   return (
     <main className='bg-surface-inverse flex h-dvh w-full flex-col justify-between'>

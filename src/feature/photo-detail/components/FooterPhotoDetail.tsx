@@ -1,4 +1,5 @@
 'use client';
+import { EP } from '@/global/api/ep';
 import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
 import Toast from '@/global/components/toast/Toast';
 import { shareImage } from '@/global/utils/image/shareImage';
@@ -8,53 +9,8 @@ import { useState } from 'react';
 import { usePhotoLikedMutation } from '../hooks/usePhotoLikedMutation';
 import { usePhotoUnlikedMutation } from '../hooks/usePhotoUnlikedMutation';
 import { updateCacheAlbumPhotosLike } from '../modules/updateCacheAlbumPhotosLike';
-import ItemMemberData from './ItemMemberData';
+import ListPhotoLikers from './ListPhotoLikers';
 import SectionPhotoData from './SectionPhotoData';
-
-const mockMembers = [
-  {
-    id: 'member-1',
-    profileImageUrl: '/assets/onboarding/smile1.svg',
-    nickname: '테스트',
-    isMe: true,
-    isMaker: true,
-  },
-  {
-    id: 'member-2',
-    profileImageUrl: '/assets/onboarding/smile2.svg',
-    nickname: '코코',
-    isMe: true,
-    isMaker: false,
-  },
-  {
-    id: 'member-3',
-    profileImageUrl: '/assets/onboarding/smile3.svg',
-    nickname: '멜로',
-    isMe: false,
-    isMaker: false,
-  },
-  {
-    id: 'member-4',
-    profileImageUrl: '/assets/onboarding/smile4.svg',
-    nickname: '차차',
-    isMe: false,
-    isMaker: false,
-  },
-  {
-    id: 'member-5',
-    profileImageUrl: '/assets/onboarding/smile1.svg',
-    nickname: '도도',
-    isMe: false,
-    isMaker: false,
-  },
-  {
-    id: 'member-6',
-    profileImageUrl: '/assets/onboarding/smile2.svg',
-    nickname: '라라',
-    isMe: false,
-    isMaker: false,
-  },
-];
 
 interface FooterPhotoDetailProps {
   albumId: string;
@@ -93,6 +49,9 @@ export default function FooterPhotoDetail({
         isCurrentlyLiked: isLiked,
         photoId,
         queryClient,
+      });
+      queryClient.invalidateQueries({
+        queryKey: [EP.album.albumPhotosLikers(albumId, photoId)],
       });
     } catch (e) {
       console.error(e);
@@ -168,18 +127,7 @@ export default function FooterPhotoDetail({
             </button>
           }
         >
-          <div className='flex flex-col'>
-            {/* TODO : API 연동 */}
-            {mockMembers.map((member) => (
-              <ItemMemberData
-                key={member.id}
-                profileImageUrl={member.profileImageUrl}
-                nickname={member.nickname}
-                isMe={member.isMe}
-                isMaker={member.isMaker}
-              />
-            ))}
-          </div>
+          <ListPhotoLikers albumId={albumId} photoId={photoId} />
         </BottomSheetModal>
       </div>
     </section>
