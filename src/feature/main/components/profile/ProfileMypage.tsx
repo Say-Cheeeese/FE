@@ -23,10 +23,21 @@ export default function ProfileMypage({}: ProfileMypageProps) {
         </div>
 
         <div className='flex-1'>
-          <div className='mb-1'>
+          <div className='mb-1 flex items-center justify-between'>
             <span className='typo-body-lg-semibold text-text-basic'>
               {data?.name ?? '사용자'}
             </span>
+
+            <button
+              onClick={() => router.push('/mypage/setting')}
+              aria-label='설정'
+            >
+              <Settings
+                width={24}
+                height={24}
+                color={'var(--color-icon-basic)'}
+              />
+            </button>
           </div>
 
           <div className='grid grid-cols-3 gap-8'>
@@ -55,18 +66,6 @@ export default function ProfileMypage({}: ProfileMypageProps) {
               </span>
             </div>
           </div>
-        </div>
-        <div>
-          <button
-            onClick={() => router.push('/mypage/setting')}
-            aria-label='설정'
-          >
-            <Settings
-              width={24}
-              height={24}
-              color={'var(--color-icon-basic)'}
-            />
-          </button>
         </div>
       </div>
     </section>
