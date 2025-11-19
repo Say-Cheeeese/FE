@@ -27,7 +27,6 @@ export default function CreateAlbumList() {
   const [eventDate, setEventDate] = useState('');
   const [participantCount, setParticipantCount] = useState('');
   const [hasFormError, setHasFormError] = useState(false);
-  const [modalOpen, setModalOpen] = useState(false);
 
   const { mutate: createAlbum } = useCreateAlbum();
 
@@ -48,7 +47,6 @@ export default function CreateAlbumList() {
         },
         onError: (err: CreateAlbumError) => {
           Toast.alert(err.message || '앨범 생성에 실패했습니다.');
-          setModalOpen(false);
           // router.push('/login');
           console.error('앨범 생성 실패:', err);
         },
@@ -88,7 +86,6 @@ export default function CreateAlbumList() {
             sideGap={16}
             noFixed={false}
             bottomGap={20}
-            onClick={() => setModalOpen(true)}
           />
         }
         showCloseButton={false}

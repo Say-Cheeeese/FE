@@ -1,11 +1,10 @@
 import KakaoSignupButton from '@/feature/login/components/KakaoSignupButton';
-import LogoHeader from '@/global/components/header/LogoHeader';
 import Image from 'next/image';
 
 export default function LoginPage() {
   return (
     <div className='flex h-screen w-full flex-col px-4'>
-      <LogoHeader showLogin={false} />
+      {/* <LogoHeader showLogin={false} /> */}
       <div className='mt-[173px] flex w-full flex-1 flex-col items-center gap-[17px]'>
         <Image
           src='/assets/login/cheese-icon.svg'
@@ -23,7 +22,7 @@ export default function LoginPage() {
           우리가 특별한 순간을 기억하는 법
         </span>
       </div>
-      <div className='mt-10 mb-[171px] flex flex-col gap-2'>
+      <div className='mt-10 flex flex-col gap-2'>
         <div className='flex flex-col items-center justify-center'>
           <div className='bg-surface-inverse h-9 w-[177px] cursor-pointer rounded-full py-2 pl-[14px]'>
             <span className='typo-body-sm-semibold text-text-basic-inverse flex items-center gap-1'>
