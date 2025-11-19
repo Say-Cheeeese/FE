@@ -1,7 +1,6 @@
 import { usePhotoDownloadMutation } from '@/feature/photo-detail/hooks/usePhotoDownloadMutation';
 import { shareViaNavigator } from '@/global/utils/shareNavigator';
 import { useSelectedPhotosStore } from '@/store/useSelectedPhotosStore';
-import { useRouter } from 'next/navigation';
 import { useShallow } from 'zustand/shallow';
 import { AlbumDetailMode } from './ScreenAlbumDetail';
 
@@ -16,11 +15,10 @@ export default function DownloadActionBar({
   selectedCount,
   changeAlbumMode,
 }: DownloadActionBarProps) {
-  const router = useRouter();
   const { mutateAsync } = usePhotoDownloadMutation();
-  const { selectedPhotoIds, clearSelectedPhotos } = useSelectedPhotosStore(
+  const { selectedPhotos, clearSelectedPhotos } = useSelectedPhotosStore(
     useShallow((state) => ({
-      selectedPhotoIds: state.selectedPhotoIds,
+      selectedPhotos: state.selectedPhotos,
       clearSelectedPhotos: state.clearSelectedPhotos,
     })),
   );
@@ -29,19 +27,18 @@ export default function DownloadActionBar({
     if (selectedCount === 0) return;
 
     try {
-      const res = await mutateAsync({ albumId, photoIds: selectedPhotoIds });
-      const downloadFiles = res?.downloadFiles ?? [];
+      const photoUrls = selectedPhotos.map((photo) => photo.url);
 
-      if (downloadFiles.length > 0) {
+      if (photoUrls.length > 0) {
         const files = await Promise.all(
-          downloadFiles.map(async ({ downloadUrl, fileName }) => {
-            const response = await fetch(downloadUrl);
+          photoUrls.map(async (photoUrl, index) => {
+            const response = await fetch(photoUrl);
             if (!response.ok) {
               throw new Error('사진 파일을 불러오지 못했습니다.');
             }
             const blob = await response.blob();
-            return new File([blob], fileName, {
-              type: blob.type || 'application/octet-stream',
+            return new File([blob], `${index}`, {
+              type: blob.type || 'image/png',
             });
           }),
         );
