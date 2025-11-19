@@ -13,7 +13,7 @@ export default function AlbumBestCut({
 }: AlbumBestCutProps) {
   const router = useRouter();
 
-  if (photoCount === 0) return null;
+  if (photoCount === undefined || photoCount === 0) return null;
 
   return (
     <section className='rounded-xl bg-white'>
@@ -29,6 +29,7 @@ export default function AlbumBestCut({
         text='치즈 네컷 만들기'
         onClick={() => router.push(`/album/4cut/${albumId}`)}
         noFixed
+        disabled={photoCount < 4}
       />
     </section>
   );
