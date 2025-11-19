@@ -6,7 +6,7 @@ import {
   useAlbumPhotosLikedInfiniteQuery,
   type AlbumPhotosLikedItem,
 } from '@/feature/photo-detail/hooks/useAlbumPhotosLikedInfiniteQuery';
-import { PhotoListResponseSchema } from '@/global/api/ep';
+import { EP, PhotoListResponseSchema } from '@/global/api/ep';
 import CustomHeader, {
   HEADER_HEIGHT,
 } from '@/global/components/header/CustomHeader';
@@ -154,7 +154,15 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
   return (
     <>
       {isUploaded && (
-        <EmojiLoading duration={LOADING_MODAL_DURATION} emoji={emoji} />
+        <EmojiLoading
+          duration={LOADING_MODAL_DURATION}
+          emoji={emoji}
+          onComplete={() => {
+            queryClient.invalidateQueries({
+              queryKey: [EP.album.photos(albumId)],
+            });
+          }}
+        />
       )}
       <CustomHeader
         isShowBack
