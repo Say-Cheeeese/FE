@@ -1,10 +1,6 @@
 'use client';
 
 import { PhotoListResponseSchema } from '@/global/api/ep';
-import {
-  FetchNextPageOptions,
-  InfiniteQueryObserverResult,
-} from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/css';
@@ -14,44 +10,17 @@ import { calcThumbSwiperCenterOffset } from '../util/calcThumbSwiperCenterOffset
 interface SwiperPhotoListProps {
   images?: PhotoListResponseSchema[];
   activeIndex: number;
-  hasNextPage: boolean;
-  isFetchingNextPage: boolean;
-  fetchNextPage: (
-    options?: FetchNextPageOptions,
-  ) => Promise<InfiniteQueryObserverResult>;
   changeActiveIndex: (newIndex: number) => void;
 }
 
 export default function SwiperPhotoList({
   activeIndex,
-  fetchNextPage,
-  hasNextPage,
-  isFetchingNextPage,
   changeActiveIndex,
   images = [],
 }: SwiperPhotoListProps) {
   const [mainSwiper, setMainSwiper] = useState<SwiperType | null>(null);
   const [thumbSwiper, setThumbSwiper] = useState<SwiperType | null>(null);
   const [thumbOffset, setThumbOffset] = useState(0);
-
-  // ✅ 가로 스와이프 무한스크롤: 인덱스 기반 프리패치
-  useEffect(() => {
-    if (!hasNextPage || isFetchingNextPage) return;
-    if (images.length === 0) return;
-
-    const PREFETCH_OFFSET = 15; // PREFETCH_OFFSET만큼 마지막 사진 장 수 남았을 때 미리 로드
-    const triggerIndex = Math.max(images.length - PREFETCH_OFFSET, 0);
-
-    if (activeIndex >= triggerIndex) {
-      fetchNextPage();
-    }
-  }, [
-    activeIndex,
-    images.length,
-    hasNextPage,
-    isFetchingNextPage,
-    fetchNextPage,
-  ]);
 
   useEffect(() => {
     const updateOffset = () => {
@@ -79,6 +48,7 @@ export default function SwiperPhotoList({
         <div className='h-0 min-h-0 flex-1'>
           <Swiper
             onSwiper={setMainSwiper}
+            initialSlide={activeIndex}
             slidesPerView={1}
             spaceBetween={16}
             speed={0}
@@ -138,6 +108,7 @@ export default function SwiperPhotoList({
         <div className='mx-auto w-full max-w-md'>
           <Swiper
             onSwiper={setThumbSwiper}
+            initialSlide={activeIndex}
             slidesPerView='auto'
             spaceBetween={2}
             slidesOffsetBefore={thumbOffset}
