@@ -1,8 +1,8 @@
 'use client';
 
-import { PhotoSorting } from '@/global/api/ep';
+import { PhotoListResponseSchema, PhotoSorting } from '@/global/api/ep';
 import dynamic from 'next/dynamic';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAlbumPhotosInfiniteQuery } from '../hooks/useAlbumPhotosInfiniteQuery';
 import FooterPhotoDetail from './FooterPhotoDetail';
 import HeaderPhotoDetail from './HeaderPhotoDetail';
@@ -18,11 +18,13 @@ const SwiperPhotoList = dynamic(() => import('./SwiperPhotoList'), {
 interface ScreenPhotoDetailProps {
   albumId: string;
   sort: PhotoSorting;
+  photoId?: number;
 }
 
 export default function ScreenPhotoDetail({
   albumId,
   sort,
+  photoId,
 }: ScreenPhotoDetailProps) {
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -37,9 +39,16 @@ export default function ScreenPhotoDetail({
     isFetchingNextPage,
   } = useAlbumPhotosInfiniteQuery({
     code: albumId,
-    size: 30,
+    size: 2000,
     sorting: sort,
   });
+
+  useEffect(() => {
+    const index = findImageIndexByPhotoId(images, photoId);
+    if (index >= 0) {
+      setActiveIndex(index);
+    }
+  }, [images, photoId]);
 
   const activeImage = images[activeIndex];
   if (!activeImage) return null;
@@ -65,4 +74,13 @@ export default function ScreenPhotoDetail({
       />
     </main>
   );
+}
+
+function findImageIndexByPhotoId(
+  images: PhotoListResponseSchema[],
+  targetPhotoId?: number,
+): number {
+  if (!targetPhotoId) return -1;
+
+  return images.findIndex((image) => image.photoId === targetPhotoId);
 }
