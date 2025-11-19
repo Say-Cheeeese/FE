@@ -1,6 +1,7 @@
 'use client';
 import LogoHeader from '@/global/components/header/LogoHeader';
 import LongButton from '@/global/components/LongButton';
+import { useCheckAuth } from '@/global/hooks/useCheckAuth';
 import { ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -11,6 +12,9 @@ export default function ScreenRoot() {
     localStorage.setItem('entry', 'create-album');
     router.push('/login');
   };
+
+  useCheckAuth({ onAuthed: () => router.push('/main') });
+
   return (
     <div className='flex min-h-screen w-full flex-col px-4'>
       {/* 헤더 */}

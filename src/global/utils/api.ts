@@ -11,6 +11,7 @@ type RequestOptions = {
   params?: Record<string, string | number | boolean>;
   headers?: Record<string, string>;
   body?: Record<string, unknown>;
+  redirectOnAuthError?: boolean;
 };
 
 const client = axios.create({
@@ -48,9 +49,6 @@ client.interceptors.response.use(
       try {
         const refreshToken = getCookie(REFRESH_TOKEN_KEY);
         if (!refreshToken) {
-          removeCookie(ACCESS_TOKEN_KEY);
-          removeCookie(REFRESH_TOKEN_KEY);
-          window.location.href = '/login';
           throw new Error('No refresh token');
         }
 
@@ -73,7 +71,6 @@ client.interceptors.response.use(
         removeCookie(ACCESS_TOKEN_KEY);
         removeCookie(REFRESH_TOKEN_KEY);
         console.error('Token refresh failed:', refreshError);
-        window.location.href = '/login';
         return Promise.reject(refreshError);
       }
     }
@@ -84,7 +81,7 @@ client.interceptors.response.use(
 
 async function request<T>(
   method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH',
-  { path, params, headers, body }: RequestOptions,
+  { path, params, headers, body, redirectOnAuthError = true }: RequestOptions,
 ): Promise<{
   result: T;
   code: number;
@@ -125,6 +122,12 @@ async function request<T>(
     if (status === 500 || status === 401) {
       // TODO 에러발생 시 공통 토스트 필요하면 추가
       // toast.show(errorMessage);
+    }
+
+    if (status === 401) {
+      if (redirectOnAuthError) {
+        window.location.href = '/login';
+      }
     }
 
     throw new Error(`${errorMessage} ${statusText}`);
