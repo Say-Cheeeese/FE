@@ -1,4 +1,4 @@
-import { usePhotoDownloadMutation } from '@/feature/photo-detail/hooks/usePhotoDownloadMutation';
+import { getExtensionFromMime } from '@/global/utils/image/getExtensionFromMime';
 import { shareViaNavigator } from '@/global/utils/shareNavigator';
 import { useSelectedPhotosStore } from '@/store/useSelectedPhotosStore';
 import { useShallow } from 'zustand/shallow';
@@ -15,7 +15,6 @@ export default function DownloadActionBar({
   selectedCount,
   changeAlbumMode,
 }: DownloadActionBarProps) {
-  const { mutateAsync } = usePhotoDownloadMutation();
   const { selectedPhotos, clearSelectedPhotos } = useSelectedPhotosStore(
     useShallow((state) => ({
       selectedPhotos: state.selectedPhotos,
@@ -37,9 +36,13 @@ export default function DownloadActionBar({
               throw new Error('사진 파일을 불러오지 못했습니다.');
             }
             const blob = await response.blob();
-            return new File([blob], `${index}`, {
-              type: blob.type || 'image/png',
-            });
+            return new File(
+              [blob],
+              `${index}.${getExtensionFromMime(blob.type)}`,
+              {
+                type: blob.type || 'image/png',
+              },
+            );
           }),
         );
 
