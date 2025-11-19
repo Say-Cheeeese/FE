@@ -26,18 +26,13 @@ export default function ScreenPhotoDetail({
   sort,
   photoId,
 }: ScreenPhotoDetailProps) {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(2);
 
   const changeActiveIndex = (newIndex: number): void => {
     setActiveIndex(newIndex);
   };
 
-  const {
-    items: images,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  } = useAlbumPhotosInfiniteQuery({
+  const { items: images } = useAlbumPhotosInfiniteQuery({
     code: albumId,
     size: 2000,
     sorting: sort,
@@ -59,9 +54,6 @@ export default function ScreenPhotoDetail({
       <SwiperPhotoList
         activeIndex={activeIndex}
         changeActiveIndex={changeActiveIndex}
-        fetchNextPage={fetchNextPage}
-        hasNextPage={hasNextPage}
-        isFetchingNextPage={isFetchingNextPage}
         images={images}
       />
       <FooterPhotoDetail
