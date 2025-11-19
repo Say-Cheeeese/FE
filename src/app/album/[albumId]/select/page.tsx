@@ -43,7 +43,9 @@ export default function Page() {
   // 뒤로가기(브라우저/하드웨어) 감지
   useEffect(() => {
     const handler = () => {
-      if (!confirmedRef.current) {
+      if (modalOpen) {
+        setModalOpen(false); // 모달만 닫기
+      } else if (!confirmedRef.current) {
         setModalOpen(true);
         history.pushState(null, '', location.href); // 뒤로가기 무효화
       }
@@ -56,13 +58,13 @@ export default function Page() {
     return () => {
       window.removeEventListener('popstate', handler);
     };
-  }, []);
+  }, [modalOpen]);
 
   const handleConfirm = () => {
     confirmedRef.current = true;
     setModalOpen(false);
     if (albumId) {
-      window.location.replace(`/album/upload/${albumId}`);
+      window.location.replace('/main');
     }
   };
 

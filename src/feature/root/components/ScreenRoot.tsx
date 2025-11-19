@@ -14,7 +14,7 @@ export default function ScreenRoot() {
   return (
     <div className='flex min-h-screen w-full flex-col px-4'>
       {/* 헤더 */}
-      <LogoHeader showLogin={true} />
+      <LogoHeader showLogin={true} checkAuth={false} />
       {/* 본문 */}
       <div className='mt-18 flex-1'>
         <ChevronRight className='h-6 w-6' strokeWidth={1} color='#000' />

@@ -1,6 +1,11 @@
+import { useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 
 export default function NoPhotoBody() {
+  const queryClient = useQueryClient();
+  const handleRefresh = () => {
+    queryClient.invalidateQueries();
+  };
   return (
     <div className='flex flex-col items-center gap-3 pt-[11.74vh]'>
       <Image
@@ -15,7 +20,7 @@ export default function NoPhotoBody() {
       </span>
       <button
         className='bg-button-tertiary-fill text-text-subtle typo-body-sm-medium h-8 w-[73px] rounded-[4px]'
-        onClick={() => window.location.reload()}
+        onClick={handleRefresh}
       >
         새로고침
       </button>
