@@ -20,6 +20,7 @@ import {
   photoSortToApiSorting,
   type PhotoSortType,
 } from '../constants/photoSort';
+import { useGetAlbumAvailableCount } from '../hooks/useGetAlbumAvailableCount';
 import { useGetAlbumInvitation } from '../hooks/useGetAlbumInvitation';
 import AlbumBottomActions from './AlbumBottomActions';
 import AlbumInfos from './AlbumInfos';
@@ -44,7 +45,7 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
   const [mode, setMode] = useState<AlbumDetailMode>('default');
   const [isAlbumInfosHidden, setIsAlbumInfosHidden] = useState(false);
   const [selectionResetKey, setSelectionResetKey] = useState(0);
-  const [sortType, setSortType] = useState<PhotoSortType>('liked');
+  const [sortType, setSortType] = useState<PhotoSortType>('uploaded');
   const [albumType, setAlbumType] = useState<AlbumType>('all');
   const sorting = photoSortToApiSorting[sortType];
   const { selectedPhotoIds, togglePhotoSelection, clearSelectedPhotos } =
@@ -83,16 +84,21 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
     isError: isInvitationError,
   } = useGetAlbumInvitation(albumId);
   const isDeepAlbumType = albumType === 'deep';
-
+  const { data } = useGetAlbumAvailableCount(albumId);
+  const totalPhotoCount = data?.currentPhotoCount;
   const defaultPhotosQuery = useAlbumPhotosInfiniteQuery({
     code: albumId,
     sorting,
     enabled: albumType === 'all',
+    // 좋아요 누른것 실시간으로 반영되게 매번 호출
+    refetchOnMount: 'always',
   });
 
   const likedPhotosQuery = useAlbumPhotosLikedInfiniteQuery({
     code: albumId,
     enabled: isDeepAlbumType,
+    // 좋아요 누른것 실시간으로 반영되게 매번 호출
+    refetchOnMount: 'always',
   });
 
   const likedPhotos = useMemo(
@@ -112,10 +118,7 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
   const isFetchingNextPage = isDeepAlbumType
     ? likedPhotosQuery.isFetchingNextPage
     : defaultPhotosQuery.isFetchingNextPage;
-  const isLoading = isDeepAlbumType
-    ? likedPhotosQuery.isLoading
-    : defaultPhotosQuery.isLoading;
-  const hasPhotos = photos.length > 0;
+  const isLoading = defaultPhotosQuery.isLoading;
 
   useEffect(() => {
     const target = albumInfosRef.current;
@@ -166,6 +169,7 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
       )}
       <CustomHeader
         isShowBack
+        onBackClick={() => router.replace('/main')}
         isHidden={mode === 'select'}
         title={isAlbumInfosHidden ? (invitationData?.title ?? '') : ''}
         rightContent={
@@ -186,6 +190,7 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
           albumInfo={invitationData}
           isLoading={isInvitationLoading}
           isError={isInvitationError}
+          photoCount={totalPhotoCount}
         />
         <AlbumPhotoSection
           isLoading={isLoading}
@@ -199,10 +204,10 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
           fetchNextPage={fetchNextPage}
           hasNextPage={!!hasNextPage}
           isFetchingNextPage={isFetchingNextPage}
+          totalPhotoCount={totalPhotoCount}
         />
       </div>
       <AlbumBottomActions
-        hasPhotos={hasPhotos}
         mode={mode}
         albumId={albumId}
         sortType={sortType}
@@ -211,6 +216,8 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
         changeAlbumType={setAlbumType}
         changeAlbumMode={handleChangeMode}
         selectedCount={selectedPhotoIds.length}
+        totalPhotoCount={totalPhotoCount}
+        isLoading={isLoading}
       />
     </>
   );
@@ -224,8 +231,8 @@ function mapLikedPhotosToPhotoList(
     photoId: item.photoId,
     imageUrl: item.imageUrl,
     thumbnailUrl: item.thumbnailUrl,
-    likeCnt: 0,
-    isLiked: true,
+    likeCnt: item.likeCnt ?? 0,
+    isLiked: item.isLiked ?? false,
     isDownloaded: item.isDownloaded,
     isRecentlyDownloaded: item.isRecentlyDownloaded,
   }));

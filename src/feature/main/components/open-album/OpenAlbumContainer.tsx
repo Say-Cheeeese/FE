@@ -89,7 +89,7 @@ export default function OpenAlbumContainer({}: OpenAlbumContainerProps) {
         labels={{ all: '전체', mine: '내가 만든 앨범' }}
         onChange={(next) => setAlbumType(next)}
       />
-      <div className='mb-5 flex flex-col gap-5'>
+      <div className='mt-3 mb-5 flex flex-col gap-5'>
         {!showLoadingState &&
           showing.map((album) => <OpenAlbum key={album.code} {...album} />)}
         {!showLoadingState && showEmptyState && (

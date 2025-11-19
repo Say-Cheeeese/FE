@@ -21,6 +21,7 @@ interface AlbumPhotoSectionProps {
   ) => Promise<InfiniteQueryObserverResult>;
   hasNextPage: boolean;
   isFetchingNextPage: boolean;
+  totalPhotoCount?: number;
 }
 
 export default function AlbumPhotoSection({
@@ -35,6 +36,7 @@ export default function AlbumPhotoSection({
   fetchNextPage,
   hasNextPage,
   isFetchingNextPage,
+  totalPhotoCount,
 }: AlbumPhotoSectionProps) {
   if (isLoading) return null;
 
@@ -55,6 +57,7 @@ export default function AlbumPhotoSection({
       fetchNextPage={fetchNextPage}
       hasNextPage={hasNextPage}
       isFetchingNextPage={isFetchingNextPage}
+      totalPhotoCount={totalPhotoCount}
     />
   );
 }

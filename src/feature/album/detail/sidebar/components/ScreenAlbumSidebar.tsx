@@ -2,6 +2,7 @@
 
 import { HEADER_HEIGHT } from '@/global/components/header/CustomHeader';
 import { convertUnicodeToEmoji } from '@/global/utils/convertEmoji';
+import { formatExpirationTime } from '@/global/utils/time/formatExpirationTime';
 import { X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useGetAlbumInfo } from '../../hooks/useGetAlbumInfo';
@@ -44,8 +45,7 @@ export default function ScreenAlbumSidebar({
             {data?.eventDate}
           </p>
           <div className='typo-caption-sm-medium text-text-basic-inverse bg-element-alpha-dark mt-3 rounded-full px-2.5 py-1'>
-            {/* TODO : 삭제까지 얼마나 남았는지 백엔드로부터 받아야함. */}
-            앨범 소멸까지 2시간 5분
+            앨범 소멸까지 {formatExpirationTime(data?.expiredAt)}
           </div>
         </section>
 

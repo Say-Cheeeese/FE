@@ -52,7 +52,7 @@ export default function DownloadActionBar({
       </div>
       <button
         type='button'
-        className='typo-body-sm-medium text-text-primary bg-button-primary-fill rounded-[4px] px-3 py-1.5 disabled:opacity-40'
+        className='typo-body-sm-medium text-text-primary bg-button-primary-fill disabled:bg-button-disabled-fill disabled:text-text-disabled rounded-[4px] px-3 py-1.5'
         disabled={isDisabled}
         onClick={handleDownload}
       >

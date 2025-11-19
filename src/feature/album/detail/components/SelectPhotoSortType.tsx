@@ -13,7 +13,7 @@ export default function SelectPhotoSortType({
   onChange,
 }: SelectPhotoSortTypeProps) {
   return (
-    <div className='px-2'>
+    <div className='mb-5 px-2'>
       <ul className='flex flex-col'>
         {photoSortOptions.map((item) => {
           const isActive = sort === item.value;
