@@ -1,5 +1,6 @@
 'use client';
 import { useGetUserMe } from '@/feature/main/hooks/useGetUserMe';
+import { EP } from '@/global/api/ep';
 import CustomHeader from '@/global/components/header/CustomHeader';
 import LongButton from '@/global/components/LongButton';
 import ConfirmModal from '@/global/components/modal/ConfirmModal';
@@ -7,6 +8,7 @@ import Toast from '@/global/components/toast/Toast';
 import BubbleHint from '@/global/components/tooltip/BubbleTooltip';
 import PersonSvg from '@/global/svg/PersonSvg';
 import { shareViaNavigator } from '@/global/utils/shareNavigator';
+import { useQueryClient } from '@tanstack/react-query';
 import { toBlob } from 'html-to-image';
 import { Download, LucideIcon, Menu, Send } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -35,6 +37,7 @@ interface ScreenAlbum4CutProps {
 
 export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [isConfirmed, setIsConfirmed] = useState(false);
   const captureRef = useRef<HTMLDivElement>(null);
   const { data } = useGetAlbumInfo(albumId);
@@ -57,6 +60,9 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
         (photo: { photoId: number; imageUrl: string; photoRank: number }) =>
           photo.photoId,
       ),
+    });
+    queryClient.invalidateQueries({
+      queryKey: [EP.cheese4cut.preview(albumId)],
     });
     setIsConfirmed(true);
   };
