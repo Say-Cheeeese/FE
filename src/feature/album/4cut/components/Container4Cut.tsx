@@ -3,9 +3,15 @@ import Svg4Cut from '../svg/Svg4Cut';
 
 interface Container4CutProps {
   albumId: string;
+  eventName?: string;
+  eventDate?: string;
 }
 
-export default function Container4Cut({ albumId }: Container4CutProps) {
+export default function Container4Cut({
+  albumId,
+  eventDate,
+  eventName,
+}: Container4CutProps) {
   // TODO : openapi type이 이상해서 임시 any처리. 백엔드랑 협의 필요
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data }: any = use4CutPreviewQuery(albumId);
@@ -23,12 +29,19 @@ export default function Container4Cut({ albumId }: Container4CutProps) {
           []
         }
       />
-      <span className='paperozi-font absolute bottom-[7.4px] left-[9.6px]'>
-        큐시즘 MT
-      </span>
-      <span className='paperozi-font absolute right-[10.4px] bottom-[7.4px] text-[7.963px]'>
-        2025.09.20
-      </span>
+
+      {eventName && (
+        <span className='paperozi-font absolute bottom-[7.4px] left-[9.6px]'>
+          {eventName}
+        </span>
+      )}
+
+      {eventDate && (
+        <span className='paperozi-font absolute right-[10.4px] bottom-[7.4px] text-[7.963px]'>
+          {eventDate}
+        </span>
+      )}
+
       {/* 이 컴포넌트에서만 사용되는 폰트 */}
       <style jsx global>{`
         @font-face {
