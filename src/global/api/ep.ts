@@ -116,7 +116,7 @@ export interface CommonResponseAlbumParticipantResponseSchema { "isSuccess"?: bo
 export interface ParticipantInfoSchema { "name": string; "profileImage": string; "role": "MAKER" | "GUEST" | "BLACK"; "isMe": boolean; }
 export interface AlbumInvitationResponseSchema { "title": string; "themeEmoji": string; "eventDate": string; "expiredAt": string; "makerName": string; "makerProfileImage": string; "isExpired": boolean; }
 export interface CommonResponseAlbumInvitationResponseSchema { "isSuccess"?: boolean; "code"?: number; "message"?: string; "result"?: AlbumInvitationResponseSchema; }
-export interface AlbumInfoResponseSchema { "makerId"?: number; "title"?: string; "themeEmoji"?: string; "participant"?: number; "currentParticipant"?: number; "eventDate"?: string; "currentPhotoCnt"?: number; "expiredAt"?: string; }
+export interface AlbumInfoResponseSchema { "makerId"?: number; "name"?: string; "title"?: string; "themeEmoji"?: string; "participant"?: number; "currentParticipant"?: number; "eventDate"?: string; "currentPhotoCnt"?: number; "expiredAt"?: string; }
 export interface CommonResponseAlbumInfoResponseSchema { "isSuccess"?: boolean; "code"?: number; "message"?: string; "result"?: AlbumInfoResponseSchema; }
 export interface AlbumBest4CutResponseSchema { "thumbnailUrl"?: string; "likeCnt"?: number; "isLiked"?: boolean; }
 export interface CommonResponseListAlbumBest4CutResponseSchema { "isSuccess"?: boolean; "code"?: number; "message"?: string; "result"?: AlbumBest4CutResponseSchema[]; }
