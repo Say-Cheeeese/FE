@@ -35,8 +35,6 @@ export default function SelectAlbumBody() {
       fileInfos,
       files,
     });
-    // 업로드 시작 시 isUploaded false로 초기화(필요시)
-    // useUploadingStore.getState().setUploaded(false);
   };
   // presignedAndUploadToNCP를 직접 사용
   const { albumId } = useParams() as { albumId: string };

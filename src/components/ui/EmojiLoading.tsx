@@ -1,4 +1,3 @@
-// SpinningRing.tsx
 'use client';
 import { convertUnicodeToEmoji } from '@/global/utils/convertEmoji';
 import { useUploadingStore } from '@/store/useUploadingStore';
@@ -8,13 +7,11 @@ import { useEffect, useState } from 'react';
 interface EmojiLoadingProps {
   duration?: number;
   emoji?: string;
-  onComplete?: () => void;
 }
 
 export default function EmojiLoading({
   duration = 3000,
   emoji = 'U+1F60A',
-  onComplete,
 }: EmojiLoadingProps) {
   const [percent, setPercent] = useState(0);
 
@@ -34,7 +31,6 @@ export default function EmojiLoading({
           frame = requestAnimationFrame(animate);
         } else {
           // 애니메이션 끝나면 전역 isUploaded false로 변경
-          onComplete?.();
           useUploadingStore.getState().setUploaded(false);
         }
       };

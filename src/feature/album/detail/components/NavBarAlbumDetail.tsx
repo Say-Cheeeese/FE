@@ -3,7 +3,6 @@ import { handleFileUpload } from '@/feature/create-album/utils/handleFileUpload'
 import ToggleAlbumType from '@/feature/main/components/open-album/ToggleAlbumType';
 import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
 import Toast from '@/global/components/toast/Toast';
-import { useQueryClient } from '@tanstack/react-query';
 import { ArrowDownUp, Plus } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useRef } from 'react';
@@ -29,7 +28,6 @@ export default function NavBarAlbumDetail({
 }: NavBarAlbumDetailProps) {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const queryClient = useQueryClient();
 
   const handleToggleChange = (value: AlbumType): void => {
     changeAlbumType(value);
