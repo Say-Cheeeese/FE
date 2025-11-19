@@ -1,22 +1,42 @@
 import { create } from 'zustand';
 
-interface SelectedPhotosState {
-  selectedPhotoIds: number[];
-  togglePhotoSelection: (photoId: number) => void;
-  clearSelectedPhotos: () => void;
+export interface StorePhotoItem {
+  id: number;
+  url: string;
 }
 
-export const useSelectedPhotosStore = create<SelectedPhotosState>((set) => ({
-  selectedPhotoIds: [],
-  togglePhotoSelection: (photoId) =>
-    set((state) => {
-      const exists = state.selectedPhotoIds.includes(photoId);
+interface SelectedPhotosState {
+  selectedPhotos: StorePhotoItem[];
+  addSelectedPhoto: ({ id, url }: StorePhotoItem) => void;
+  deleteSelectedPhoto: (photoId: number) => void;
+  clearSelectedPhotos: () => void;
+  isSelected: (photoId: number) => boolean;
+}
 
-      return {
-        selectedPhotoIds: exists
-          ? state.selectedPhotoIds.filter((id) => id !== photoId)
-          : [...state.selectedPhotoIds, photoId],
-      };
-    }),
-  clearSelectedPhotos: () => set({ selectedPhotoIds: [] }),
-}));
+export const useSelectedPhotosStore = create<SelectedPhotosState>(
+  (set, get) => ({
+    selectedPhotos: [],
+
+    addSelectedPhoto: ({ id, url }) =>
+      set((state) => {
+        const exists = state.selectedPhotos.some((p) => p.id === id);
+        if (exists) return state;
+
+        return {
+          selectedPhotos: [...state.selectedPhotos, { id: id, url: url }],
+        };
+      }),
+
+    deleteSelectedPhoto: (photoId) =>
+      set((state) => ({
+        selectedPhotos: state.selectedPhotos.filter((p) => p.id !== photoId),
+      })),
+
+    clearSelectedPhotos: () => set({ selectedPhotos: [] }),
+
+    isSelected: (photoId) => {
+      const { selectedPhotos } = get();
+      return selectedPhotos.some((p) => p.id === photoId);
+    },
+  }),
+);

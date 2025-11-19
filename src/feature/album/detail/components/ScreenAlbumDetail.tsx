@@ -54,14 +54,19 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
   const [sortType, setSortType] = useState<PhotoSortType>('uploaded');
   const [albumType, setAlbumType] = useState<AlbumType>('all');
   const sorting = photoSortToApiSorting[sortType];
-  const { selectedPhotoIds, togglePhotoSelection, clearSelectedPhotos } =
-    useSelectedPhotosStore(
-      useShallow((state) => ({
-        selectedPhotoIds: state.selectedPhotoIds,
-        togglePhotoSelection: state.togglePhotoSelection,
-        clearSelectedPhotos: state.clearSelectedPhotos,
-      })),
-    );
+  const {
+    selectedPhotos,
+    addSelectedPhoto,
+    deleteSelectedPhoto,
+    clearSelectedPhotos,
+  } = useSelectedPhotosStore(
+    useShallow((state) => ({
+      selectedPhotos: state.selectedPhotos,
+      addSelectedPhoto: state.addSelectedPhoto,
+      deleteSelectedPhoto: state.deleteSelectedPhoto,
+      clearSelectedPhotos: state.clearSelectedPhotos,
+    })),
+  );
 
   // 업로드 완료 전에는 showLoading true, 완료 후에는 false
   // showLoading 관련 useEffect 제거
@@ -130,21 +135,17 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
 
   useEffect(() => {
     if (mode === 'select') return;
-    if (selectedPhotoIds.length === 0) return;
+    if (selectedPhotos.length === 0) return;
 
     clearSelectedPhotos();
     setSelectionResetKey((prev) => prev + 1);
-  }, [clearSelectedPhotos, photos.length, mode, selectedPhotoIds.length]);
+  }, [clearSelectedPhotos, photos.length, mode, selectedPhotos.length]);
 
   useEffect(() => {
     return () => {
       clearSelectedPhotos();
     };
   }, [clearSelectedPhotos]);
-
-  const handleTogglePhotoSelection = (photoId: number): void => {
-    togglePhotoSelection(photoId);
-  };
 
   const handleChangeMode = (newMode: AlbumDetailMode) => setMode(newMode);
 
@@ -194,8 +195,6 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
           selectionResetKey={selectionResetKey}
           albumId={albumId}
           mode={mode}
-          selectedPhotoIds={selectedPhotoIds}
-          onTogglePhoto={handleTogglePhotoSelection}
           onChangeMode={setMode}
           fetchNextPage={fetchNextPage}
           hasNextPage={!!hasNextPage}
@@ -211,7 +210,7 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
         albumType={albumType}
         changeAlbumType={setAlbumType}
         changeAlbumMode={handleChangeMode}
-        selectedCount={selectedPhotoIds.length}
+        selectedCount={selectedPhotos.length}
         totalPhotoCount={totalPhotoCount}
         isLoading={isLoading}
       />

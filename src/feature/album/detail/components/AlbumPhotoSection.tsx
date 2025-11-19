@@ -13,8 +13,6 @@ interface AlbumPhotoSectionProps {
   selectionResetKey: number;
   albumId: string;
   mode: AlbumDetailMode;
-  selectedPhotoIds: number[];
-  onTogglePhoto: (photoId: number) => void;
   onChangeMode: (mode: AlbumDetailMode) => void;
   fetchNextPage: (
     options?: FetchNextPageOptions,
@@ -30,8 +28,6 @@ export default function AlbumPhotoSection({
   selectionResetKey,
   albumId,
   mode,
-  selectedPhotoIds,
-  onTogglePhoto,
   onChangeMode,
   fetchNextPage,
   hasNextPage,
@@ -49,8 +45,6 @@ export default function AlbumPhotoSection({
       key={selectionResetKey}
       albumId={albumId}
       selectable={mode === 'select'}
-      onTogglePhoto={onTogglePhoto}
-      selectedList={selectedPhotoIds}
       mode={mode}
       changeMode={onChangeMode}
       photos={photos}

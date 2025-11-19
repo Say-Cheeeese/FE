@@ -1,6 +1,6 @@
-import { usePhotoDownloadMutation } from '@/feature/photo-detail/hooks/usePhotoDownloadMutation';
+import Toast from '@/global/components/toast/Toast';
+import { shareImage } from '@/global/utils/image/shareImage';
 import { useSelectedPhotosStore } from '@/store/useSelectedPhotosStore';
-import { useRouter } from 'next/navigation';
 import { useShallow } from 'zustand/shallow';
 import { AlbumDetailMode } from './ScreenAlbumDetail';
 
@@ -15,11 +15,9 @@ export default function DownloadActionBar({
   selectedCount,
   changeAlbumMode,
 }: DownloadActionBarProps) {
-  const router = useRouter();
-  const { mutateAsync } = usePhotoDownloadMutation();
-  const { selectedPhotoIds, clearSelectedPhotos } = useSelectedPhotosStore(
+  const { selectedPhotos, clearSelectedPhotos } = useSelectedPhotosStore(
     useShallow((state) => ({
-      selectedPhotoIds: state.selectedPhotoIds,
+      selectedPhotos: state.selectedPhotos,
       clearSelectedPhotos: state.clearSelectedPhotos,
     })),
   );
@@ -27,20 +25,18 @@ export default function DownloadActionBar({
   const handleDownload = async () => {
     if (selectedCount === 0) return;
 
-    const res = await mutateAsync({ albumId, photoIds: selectedPhotoIds });
-
-    res?.downloadFiles.forEach(({ downloadUrl, fileName }) => {
-      const link = document.createElement('a');
-      link.href = downloadUrl;
-      link.setAttribute('download', fileName);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+    const photoUrls = selectedPhotos.map((photo) => photo.url);
+    await shareImage({
+      imageUrls: photoUrls,
+      onSuccess: () => {
+        changeAlbumMode('default');
+        clearSelectedPhotos();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      },
+      onError: () => {
+        Toast.alert('사진을 준비하는 중 오류가 발생했습니다.');
+      },
     });
-
-    changeAlbumMode('default');
-    clearSelectedPhotos();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const isDisabled = selectedCount === 0;
