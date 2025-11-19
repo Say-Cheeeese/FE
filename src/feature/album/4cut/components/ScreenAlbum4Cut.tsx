@@ -103,6 +103,7 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
         type: blob.type ?? 'image/png',
       });
 
+      // TODO : shareImage 함수로 리팩토링
       await shareViaNavigator({
         data: {
           files: [file],
