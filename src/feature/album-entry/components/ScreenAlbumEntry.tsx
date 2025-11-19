@@ -15,7 +15,7 @@ export default function ScreenAlbumEntry({ albumId }: ScreenAlbumEntryProps) {
         style={{ backgroundImage: "url('/assets/album/bg-album-entry.png')" }}
       />
 
-      <FullSizeLetter />
+      <FullSizeLetter albumId={albumId} />
     </main>
   );
 }
