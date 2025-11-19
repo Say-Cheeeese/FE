@@ -46,11 +46,13 @@ export default function CloseAlbumContainer() {
       <Link href='/main/closed-album'>
         <h3 className='typo-heading-md-semibold text-text-subtle mb-4 flex items-center'>
           닫힌 앨범 {albums.length}
-          <ChevronRight
-            width={24}
-            height={24}
-            color='var(--color-icon-basic)'
-          />
+          {albums.length !== 0 && (
+            <ChevronRight
+              width={24}
+              height={24}
+              color='var(--color-icon-basic)'
+            />
+          )}
         </h3>
       </Link>
       <div className='flex flex-col gap-4'>
