@@ -54,15 +54,13 @@ export default function ScreenPhotoDetail({
         isFetchingNextPage={isFetchingNextPage}
         images={images}
       />
-      {/* TODO : 필드 다 옵셔널인데 required표시 가능한 지 백엔드 문의중. */}
       <FooterPhotoDetail
         albumId={albumId}
-        photoId={activeImage?.photoId ?? 0}
-        isLiked={!!activeImage?.isLiked}
-        likeCnt={activeImage?.likeCnt ?? 0}
-        photoUploader={''}
-        isRecentlyDownloaded={!!activeImage?.isRecentlyDownloaded}
-        imageUrl={activeImage?.thumbnailUrl ?? ''} // TODO : 필드명 imageUrl로 바꿔야함. 지금은 없어서 thumbnailUrl로 대체
+        photoId={activeImage.photoId}
+        isLiked={activeImage.isLiked}
+        likeCnt={activeImage.likeCnt}
+        isRecentlyDownloaded={activeImage.isRecentlyDownloaded}
+        imageUrl={activeImage.imageUrl}
       />
     </main>
   );

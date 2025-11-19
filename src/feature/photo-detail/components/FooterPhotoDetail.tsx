@@ -1,11 +1,10 @@
 'use client';
 import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
 import Toast from '@/global/components/toast/Toast';
+import { shareImage } from '@/global/utils/image/shareImage';
 import { useQueryClient } from '@tanstack/react-query';
 import { Download, Heart, Info } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { usePhotoDownloadMutation } from '../hooks/usePhotoDownloadMutation';
 import { usePhotoLikedMutation } from '../hooks/usePhotoLikedMutation';
 import { usePhotoUnlikedMutation } from '../hooks/usePhotoUnlikedMutation';
 import { updateCacheAlbumPhotosLike } from '../modules/updateCacheAlbumPhotosLike';
@@ -62,9 +61,8 @@ interface FooterPhotoDetailProps {
   photoId: number;
   isLiked: boolean;
   likeCnt: number;
-  photoUploader: string;
   isRecentlyDownloaded: boolean;
-  imageUrl: string;
+  imageUrl: string | undefined;
 }
 
 export default function FooterPhotoDetail({
@@ -72,18 +70,15 @@ export default function FooterPhotoDetail({
   photoId,
   isLiked,
   likeCnt,
-  photoUploader,
   isRecentlyDownloaded,
   imageUrl,
 }: FooterPhotoDetailProps) {
-  const router = useRouter();
   const queryClient = useQueryClient();
   const [isDownloading, setIsDownloading] = useState(false);
   const { mutateAsync: mutateAsyncLike, isPending: isLiking } =
     usePhotoLikedMutation();
   const { mutateAsync: mutateAsyncUnlike, isPending: isUnliking } =
     usePhotoUnlikedMutation();
-  const { mutateAsync } = usePhotoDownloadMutation();
 
   const handleDeepToggle = async (): Promise<void> => {
     try {
@@ -105,30 +100,23 @@ export default function FooterPhotoDetail({
     }
   };
 
-  const handleDownload = async () => {
+  const handleDownload = async (): Promise<void> => {
+    if (!imageUrl) return;
     if (isRecentlyDownloaded) {
       Toast.alert(`금방 다운받은 사진이에요.\n1시간 뒤에 다시 시도하세요.`);
       return;
     }
     if (isDownloading) return;
 
-    try {
-      setIsDownloading(true);
-      const res = await mutateAsync({ albumId, photoIds: [photoId] });
-
-      if (res?.downloadFiles[0]?.downloadUrl) {
-        router.push(res.downloadFiles[0].downloadUrl);
-      }
-    } catch (e: unknown) {
-      console.error(e);
-
-      const message =
-        e instanceof Error ? e.message : '알 수 없는 오류가 발생했습니다.';
-
-      Toast.alert(`다운로드에 실패했어요.\n(${message})`);
-    } finally {
-      setIsDownloading(false);
-    }
+    setIsDownloading(true);
+    await shareImage({
+      imageUrls: imageUrl,
+      onSuccess: () => {},
+      onError: () => {
+        Toast.alert('사진을 준비하는 중 오류가 발생했습니다.');
+      },
+    });
+    setIsDownloading(false);
   };
 
   return (

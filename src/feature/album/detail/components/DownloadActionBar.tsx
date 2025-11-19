@@ -1,6 +1,5 @@
 import Toast from '@/global/components/toast/Toast';
-import { getExtensionFromMime } from '@/global/utils/image/getExtensionFromMime';
-import { shareViaNavigator } from '@/global/utils/shareNavigator';
+import { shareImage } from '@/global/utils/image/shareImage';
 import { useSelectedPhotosStore } from '@/store/useSelectedPhotosStore';
 import { useShallow } from 'zustand/shallow';
 import { AlbumDetailMode } from './ScreenAlbumDetail';
@@ -26,44 +25,18 @@ export default function DownloadActionBar({
   const handleDownload = async () => {
     if (selectedCount === 0) return;
 
-    try {
-      const photoUrls = selectedPhotos.map((photo) => photo.url);
-
-      if (photoUrls.length > 0) {
-        const files = await Promise.all(
-          photoUrls.map(async (photoUrl, index) => {
-            const response = await fetch(photoUrl);
-            if (!response.ok) {
-              throw new Error('사진 파일을 불러오지 못했습니다.');
-            }
-            const blob = await response.blob();
-            return new File(
-              [blob],
-              `${index}.${getExtensionFromMime(blob.type)}`,
-              {
-                type: blob.type || 'image/png',
-              },
-            );
-          }),
-        );
-
-        const success = await shareViaNavigator({
-          data: { files },
-          errorMessage: '사진 공유에 실패했습니다. 다시 시도해주세요.',
-          fileNotSupportedMessage:
-            '이 브라우저는 선택한 사진의 공유를 지원하지 않습니다.',
-        });
-
-        if (success) {
-          changeAlbumMode('default');
-          clearSelectedPhotos();
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-      }
-    } catch (error) {
-      console.error('Failed to share downloaded photos:', error);
-      Toast.alert('사진을 준비하는 중 오류가 발생했습니다.');
-    }
+    const photoUrls = selectedPhotos.map((photo) => photo.url);
+    await shareImage({
+      imageUrls: photoUrls,
+      onSuccess: () => {
+        changeAlbumMode('default');
+        clearSelectedPhotos();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      },
+      onError: () => {
+        Toast.alert('사진을 준비하는 중 오류가 발생했습니다.');
+      },
+    });
   };
 
   const isDisabled = selectedCount === 0;
