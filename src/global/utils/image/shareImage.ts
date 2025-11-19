@@ -18,6 +18,7 @@ interface ShareImagesWithNavigatorParams {
   onError?: (error: unknown) => void;
 }
 
+// TODO : PC일때는 a tag download를 사용해야함.
 /**
  * 주어진 이미지 URL 또는 Blob을 File 객체로 변환한 뒤,
  * navigator.share를 통해 파일 공유를 시도하는 유틸 함수입니다.
