@@ -4,6 +4,8 @@ import { getExtensionFromMime } from './getExtensionFromMime';
 interface ShareImagesWithNavigatorParams {
   /** 공유할 이미지 URL */
   imageUrls: string | string[];
+  /** 공유할 이미지 제목 */
+  imageTitle?: string;
   /** 공유 성공 시 실행할 콜백  */
   onSuccess?: () => void;
   /** 이미지 준비 중 에러 발생 시 실행할 콜백  */
@@ -16,6 +18,7 @@ interface ShareImagesWithNavigatorParams {
  */
 export async function shareImage({
   imageUrls,
+  imageTitle,
   onSuccess,
   onError,
 }: ShareImagesWithNavigatorParams): Promise<boolean> {
@@ -36,7 +39,7 @@ export async function shareImage({
         const blob = await response.blob();
         const ext = getExtensionFromMime(blob.type);
 
-        return new File([blob], `${index}.${ext}`, {
+        return new File([blob], `${imageTitle ?? index}.${ext}`, {
           type: blob.type || 'image/png',
         });
       }),

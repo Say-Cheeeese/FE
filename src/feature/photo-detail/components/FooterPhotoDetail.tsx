@@ -70,6 +70,7 @@ export default function FooterPhotoDetail({
     setIsDownloading(true);
     await shareImage({
       imageUrls: imageUrl,
+      imageTitle: `IMG_${photoId}`,
       onSuccess: () => {},
       onError: () => {
         Toast.alert('사진을 준비하는 중 오류가 발생했습니다.');
