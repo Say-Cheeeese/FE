@@ -1,3 +1,4 @@
+import Toast from '@/global/components/toast/Toast';
 import { getExtensionFromMime } from '@/global/utils/image/getExtensionFromMime';
 import { shareViaNavigator } from '@/global/utils/shareNavigator';
 import { useSelectedPhotosStore } from '@/store/useSelectedPhotosStore';
@@ -46,20 +47,23 @@ export default function DownloadActionBar({
           }),
         );
 
-        await shareViaNavigator({
+        const success = await shareViaNavigator({
           data: { files },
           errorMessage: '사진 공유에 실패했습니다. 다시 시도해주세요.',
           fileNotSupportedMessage:
             '이 브라우저는 선택한 사진의 공유를 지원하지 않습니다.',
         });
+
+        if (success) {
+          changeAlbumMode('default');
+          clearSelectedPhotos();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
       }
     } catch (error) {
       console.error('Failed to share downloaded photos:', error);
+      Toast.alert('사진을 준비하는 중 오류가 발생했습니다.');
     }
-
-    changeAlbumMode('default');
-    clearSelectedPhotos();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const isDisabled = selectedCount === 0;
