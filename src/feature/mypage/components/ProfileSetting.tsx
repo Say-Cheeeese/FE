@@ -25,7 +25,9 @@ export default function ProfileSetting({}: ProfileSettingProps) {
             <h2 className='typo-heading-sm-semibold text-text-basic'>
               {data?.name}
             </h2>
-            <p className='typo-body-lg-regular text-text-disabled'>email</p>
+            <p className='typo-body-lg-regular text-text-disabled'>
+              {data?.email}
+            </p>
           </div>
         </div>
       </div>
