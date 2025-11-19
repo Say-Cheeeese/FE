@@ -2,7 +2,6 @@
 import { useGetAlbumInvitation } from '@/feature/album/detail/hooks/useGetAlbumInvitation';
 import { convertUnicodeToEmoji } from '@/global/utils/convertEmoji';
 import { formatExpirationTime } from '@/global/utils/time/formatExpirationTime';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 interface FullSizeLetterProps {
@@ -22,7 +21,7 @@ export default function FullSizeLetter({ albumId }: FullSizeLetterProps) {
       {/* 편지지 */}
       <div className='border-border-primary-lighter relative z-10 mx-9 mt-20 rounded-[20px] border bg-white pb-100 shadow-[0_12px_40px_rgba(0,0,0,0.08)]'>
         <header className='border-border-gray-lighter flex items-center gap-2 border-b px-5 py-5'>
-          <Image
+          <img
             src={data.makerProfileImage}
             width={32}
             height={32}
