@@ -21,7 +21,7 @@ export default function ScreenRoot() {
       {/* 헤더 */}
       <LogoHeader showLogin={true} checkAuth={false} />
       {/* 본문 */}
-      <span className='typo-heading-md-bold mt-6 mb-2 text-center text-[#424349]'>
+      <span className='typo-heading-md-bold mt-6 mb-4 text-center text-[#424349]'>
         딱 7일만 열리는 특별한 <br />
         공유 앨범 서비스
       </span>
@@ -34,13 +34,12 @@ export default function ScreenRoot() {
           src='/assets/rending/blur.svg'
           width={411}
           height={411}
-          priority
           alt='블러 배경'
           className='pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 select-none'
-          style={{ zIndex: 1 }}
+          style={{ zIndex: -1 }}
         />
         <Image
-          src='/assets/rending/phone.svg'
+          src='/assets/rending/phone.png'
           width={294}
           height={288}
           priority
@@ -50,7 +49,7 @@ export default function ScreenRoot() {
         />
       </div>
 
-      <span className='typo-body-sm-regular mt-[28px] mb-3 text-[#747681]'>
+      <span className='typo-body-sm-regular mt-7 mb-3 text-[#747681]'>
         1000개 모임에서 치이이즈를 사용했어요
       </span>
       <LongButton
