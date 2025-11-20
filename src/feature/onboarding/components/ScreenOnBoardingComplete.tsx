@@ -6,14 +6,23 @@ import { useRouter } from 'next/navigation';
 export default function ScreenOnboardingComplete() {
   const router = useRouter();
   const handleStartClick = () => {
-    const entry =
-      typeof window !== 'undefined' ? localStorage.getItem('entry') : null;
+    let entry: string | null = null;
+    if (typeof document !== 'undefined') {
+      // 쿠키에서 entry 값 읽기
+      const match = document.cookie.match(/(?:^|; )entry=([^;]*)/);
+      entry = match ? decodeURIComponent(match[1]) : null;
+    }
     if (entry === 'create-album') {
       router.push('/create-album');
     } else {
       router.push('/main');
     }
-    localStorage.removeItem('entry');
+    // entry 쿠키 삭제 (만료일을 과거로)
+    if (typeof document !== 'undefined') {
+      const domain =
+        process.env.NODE_ENV === 'production' ? '.say-cheese.me' : undefined;
+      document.cookie = `entry=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT${domain ? `; domain=${domain}` : ''}`;
+    }
   };
   return (
     <div className='mt-[37dvh] flex flex-col items-center'>

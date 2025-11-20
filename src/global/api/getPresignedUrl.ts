@@ -6,6 +6,7 @@ export type PresignedUrlRequest = {
     fileName: string;
     fileSize: number;
     contentType: string;
+    captureTime: string; // yyyy-MM-ddTHH:mm:ss
   }[];
 };
 

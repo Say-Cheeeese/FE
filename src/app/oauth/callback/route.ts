@@ -39,7 +39,21 @@ export async function GET(request: NextRequest) {
       request.headers.get('host') ||
       'localhost:3000';
 
-    const redirectPath = data.result.isOnboarded ? '/main' : '/onboarding';
+    // ----- entry 쿠키 기준 서버 분기 -----
+    const cookieDomain =
+      process.env.NODE_ENV === 'production' ? '.say-cheese.me' : undefined;
+
+    // 쿠키 파싱 (Next.js 13+ 방식)
+    const entry = request.cookies.get('entry')?.value ?? null;
+
+    let redirectPath = '/main';
+    if (data.result.isOnboarded) {
+      if (entry === 'create-album') {
+        redirectPath = '/create-album';
+      }
+    } else {
+      redirectPath = '/onboarding';
+    }
     const redirectUrl = new URL(redirectPath, `${protocol}://${host}`);
 
     if (!data.result.isOnboarded) {
@@ -55,10 +69,6 @@ export async function GET(request: NextRequest) {
 
     // redirect 응답 객체 생성
     const res = NextResponse.redirect(redirectUrl);
-
-    const cookieDomain =
-      process.env.NODE_ENV === 'production' ? '.say-cheese.me' : undefined; // example.com을 실제 도메인으로 교체
-    // ✅ 쿠키 설정 (redirect 응답에 바로 세팅)
     res.cookies.set(ACCESS_TOKEN_KEY, data.result.accessToken, {
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
@@ -66,7 +76,6 @@ export async function GET(request: NextRequest) {
       maxAge: 60 * 60 * 2, // 2시간
       path: '/',
     });
-
     res.cookies.set(REFRESH_TOKEN_KEY, data.result.refreshToken, {
       secure: process.env.NODE_ENV === 'production',
       domain: cookieDomain,
@@ -74,7 +83,12 @@ export async function GET(request: NextRequest) {
       maxAge: 60 * 60 * 24 * 7, // 7일
       path: '/',
     });
-
+    // entry 쿠키 삭제 (만료일을 과거로)
+    res.cookies.set('entry', '', {
+      path: '/',
+      expires: new Date(0),
+      domain: cookieDomain,
+    });
     return res;
   } catch (error) {
     console.error('Auth callback error:', error);

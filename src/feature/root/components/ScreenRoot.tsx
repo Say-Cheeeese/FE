@@ -13,7 +13,9 @@ export default function ScreenRoot() {
     'first' | 'second' | 'third'
   >('first');
   const handleCreateAlbumClick = () => {
-    localStorage.setItem('entry', 'create-album');
+    if (typeof document !== 'undefined') {
+      document.cookie = 'entry=create-album; path=/;';
+    }
     router.push('/login');
   };
   return (

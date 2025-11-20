@@ -1,5 +1,6 @@
 'use client';
 import { useCheckImages } from '@/feature/create-album/hook/useCheckImages';
+import { getFilesWithCaptureTime } from '@/feature/create-album/utils/getFilesWithCaptureTime';
 import { validateImages } from '@/feature/create-album/utils/validateImages';
 import LongButton from '@/global/components/LongButton';
 import PhotoBox from '@/global/components/photo/PhotoBox';
@@ -20,17 +21,20 @@ type ImageWithUrl = {
 
 export default function SelectAlbumBody() {
   const isUploaded = useUploadingStore((state) => state.isUploaded);
-  // LongButton 업로드 핸들러 함수로 분리
-  const handleUpload = () => {
+  // LongButton 업로드 핸들러 함수 (captureTime 포함)
+  const handleUpload = async () => {
     const selectedFiles = processedImages.filter((img) =>
       selectedIds.has(img.id),
     );
-    const fileInfos = selectedFiles.map((img) => ({
-      fileName: img.file.name,
-      fileSize: img.file.size,
-      contentType: img.file.type,
-    }));
     const files = selectedFiles.map((img) => img.file);
+    // captureTime 포함 fileInfos 생성
+    const filesWithCapture = await getFilesWithCaptureTime(files);
+    const fileInfos = filesWithCapture.map(({ file, captureTime }) => ({
+      fileName: file.name,
+      fileSize: file.size,
+      contentType: file.type,
+      captureTime,
+    }));
 
     uploadMutate({
       albumCode: albumId,

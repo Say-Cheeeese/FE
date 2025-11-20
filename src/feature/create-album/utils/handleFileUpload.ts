@@ -1,6 +1,7 @@
 import { presignedAndUploadToNCP } from '@/global/api/presignedAndUploadToNCP';
 import { useUploadingStore } from '@/store/useUploadingStore';
 import { ChangeEvent } from 'react';
+import { getFilesWithCaptureTime } from './getFilesWithCaptureTime';
 import { convertHeicFilesToJpeg } from './heicToJpeg';
 import { saveFilesToStore } from './saveFilesToStore';
 import { sortImagesByDate } from './sortImagesByDate';
@@ -30,10 +31,12 @@ export async function handleFileUpload(
       if (!options?.stay && router) {
         router.push(`/album/${albumId}/waiting`);
       }
-      const fileInfos = files.map((file) => ({
+      const filesWithCapture = await getFilesWithCaptureTime(files);
+      const fileInfos = filesWithCapture.map(({ file, captureTime }) => ({
         fileName: file.name,
         fileSize: file.size,
         contentType: file.type,
+        captureTime,
       }));
       await presignedAndUploadToNCP({ albumCode: albumId, files, fileInfos });
     } else {
