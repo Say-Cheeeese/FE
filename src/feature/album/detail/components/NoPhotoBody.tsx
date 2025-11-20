@@ -1,7 +1,12 @@
 import { useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 
-export default function NoPhotoBody() {
+interface NoPhotoBodyProps {
+  text: string;
+  isRefresh?: boolean;
+}
+
+export default function NoPhotoBody({ text, isRefresh }: NoPhotoBodyProps) {
   const queryClient = useQueryClient();
   const handleRefresh = () => {
     queryClient.invalidateQueries();
@@ -15,15 +20,15 @@ export default function NoPhotoBody() {
         alt='사진 없음'
         priority
       />
-      <span className='typo-caption-md-regular text-text-disabled'>
-        앨범에 아직 사진이 없어요
-      </span>
-      <button
-        className='bg-button-tertiary-fill text-text-subtle typo-body-sm-medium h-8 w-[73px] rounded-[4px]'
-        onClick={handleRefresh}
-      >
-        새로고침
-      </button>
+      <span className='typo-caption-md-regular text-text-disabled'>{text}</span>
+      {isRefresh && (
+        <button
+          className='bg-button-tertiary-fill text-text-subtle typo-body-sm-medium h-8 w-[73px] rounded-[4px]'
+          onClick={handleRefresh}
+        >
+          새로고침
+        </button>
+      )}
     </div>
   );
 }

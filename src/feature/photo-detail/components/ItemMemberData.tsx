@@ -1,5 +1,5 @@
 interface ItemMemberDataProps {
-  profileImageUrl: string;
+  profileImageUrl: string | undefined;
   nickname: string;
   isMe: boolean;
   isMaker: boolean;

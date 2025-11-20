@@ -10,6 +10,8 @@ import { PhotoListResponseSchema } from '@/global/api/ep';
 import CustomHeader, {
   HEADER_HEIGHT,
 } from '@/global/components/header/CustomHeader';
+import { useAlbumSortStore } from '@/store/useAlbumSortStore';
+import { useAlbumTypeStore } from '@/store/useAlbumTypeStore';
 import { useSelectedPhotosStore } from '@/store/useSelectedPhotosStore';
 import { useUploadingStore } from '@/store/useUploadingStore';
 import { useQueryClient } from '@tanstack/react-query';
@@ -17,18 +19,16 @@ import { Menu } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useShallow } from 'zustand/shallow';
-import {
-  photoSortToApiSorting,
-  type PhotoSortType,
-} from '../constants/photoSort';
+import { photoSortToApiSorting } from '../constants/photoSort';
 import { useGetAlbumAvailableCount } from '../hooks/useGetAlbumAvailableCount';
 import { useGetAlbumInvitation } from '../hooks/useGetAlbumInvitation';
 import AlbumBottomActions from './AlbumBottomActions';
 import AlbumInfos from './AlbumInfos';
 import AlbumPhotoSection from './AlbumPhotoSection';
-import { type AlbumType } from './NavBarAlbumDetail';
 
 export type AlbumDetailMode = 'select' | 'default';
+
+const LOADING_MODAL_DURATION = 3000;
 
 interface ScreenAlbumDetailProps {
   albumId: string;
@@ -38,21 +38,24 @@ const LOADING_MODAL_DURATION = 3500;
 
 export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
   const queryClient = useQueryClient();
-  const { isUploaded, setUploaded } = useUploadingStore(
-    useShallow((state) => ({
-      isUploaded: state.isUploaded,
-      setUploaded: state.setUploaded,
-    })),
-  );
-  // showLoading 상태 제거, isUploaded만으로 분기
-  // uploadDoneRef 제거
+
   const router = useRouter();
   const albumInfosRef = useRef<HTMLElement | null>(null);
   const [mode, setMode] = useState<AlbumDetailMode>('default');
   const [isAlbumInfosHidden, setIsAlbumInfosHidden] = useState(false);
   const [selectionResetKey, setSelectionResetKey] = useState(0);
-  const [sortType, setSortType] = useState<PhotoSortType>('uploaded');
-  const [albumType, setAlbumType] = useState<AlbumType>('all');
+  const { sortType, setSortType } = useAlbumSortStore(
+    useShallow((state) => ({
+      sortType: state.sortType,
+      setSortType: state.setSortType,
+    })),
+  );
+  const { albumType, setAlbumType } = useAlbumTypeStore(
+    useShallow((state) => ({
+      albumType: state.albumType,
+      setAlbumType: state.setAlbumType,
+    })),
+  );
   const sorting = photoSortToApiSorting[sortType];
   const {
     selectedPhotos,
@@ -67,9 +70,12 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
       clearSelectedPhotos: state.clearSelectedPhotos,
     })),
   );
-
-  // 업로드 완료 전에는 showLoading true, 완료 후에는 false
-  // showLoading 관련 useEffect 제거
+  const { isUploaded, setUploaded } = useUploadingStore(
+    useShallow((state) => ({
+      isUploaded: state.isUploaded,
+      setUploaded: state.setUploaded,
+    })),
+  );
 
   const {
     data: invitationData,
@@ -201,10 +207,6 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
       <AlbumBottomActions
         mode={mode}
         albumId={albumId}
-        sortType={sortType}
-        changeSortType={setSortType}
-        albumType={albumType}
-        changeAlbumType={setAlbumType}
         changeAlbumMode={handleChangeMode}
         selectedCount={selectedPhotos.length}
         totalPhotoCount={totalPhotoCount}
