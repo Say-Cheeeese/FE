@@ -33,7 +33,7 @@ export default function LogoHeader({
   return (
     <>
       <div
-        className={`fixed top-0 right-0 left-0 z-40 ${border ? 'border-divider-gray border-b' : ''}`}
+        className={`fixed top-0 left-1/2 z-40 w-full max-w-[430px] -translate-x-1/2 transform ${border ? 'border-divider-gray border-b' : ''}`}
         style={{ background: bgColor }}
       >
         <div className='mx-auto flex h-18 w-full max-w-[430px] items-center justify-between px-5'>
