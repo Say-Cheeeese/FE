@@ -49,7 +49,9 @@ client.interceptors.response.use(
       try {
         const refreshToken = getCookie(REFRESH_TOKEN_KEY);
         if (!refreshToken) {
-          throw new Error('No refresh token');
+          removeCookie(ACCESS_TOKEN_KEY);
+          removeCookie(REFRESH_TOKEN_KEY);
+          return Promise.reject(error);
         }
 
         const response = await axios.post(`${API_URL}/v1/auth/reissue`, {

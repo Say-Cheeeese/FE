@@ -38,7 +38,7 @@ export function useCheckAuth({ onAuthed, onUnauthed }: UseCheckAuthOptions) {
           return;
         }
 
-        console.error(err);
+        console.log(err);
       }
     };
 
