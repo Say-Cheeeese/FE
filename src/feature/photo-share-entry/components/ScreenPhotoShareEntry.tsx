@@ -1,4 +1,5 @@
 'use client';
+import { useGetAlbumAvailableCount } from '@/feature/album/detail/hooks/useGetAlbumAvailableCount';
 import { handleFileUpload } from '@/feature/create-album/utils/handleFileUpload';
 import CheckNoImgModal from '@/feature/upload/components/CheckNoImgModal';
 import CustomHeader from '@/global/components/header/CustomHeader';
@@ -16,6 +17,7 @@ export default function ScreenPhotoShareEntry({
 }: ScreenPhotoShareEntryProps) {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { data } = useGetAlbumAvailableCount(albumId);
 
   const handleUpload = () => {
     fileInputRef.current?.click();
@@ -41,7 +43,7 @@ export default function ScreenPhotoShareEntry({
                   📸
                 </span>
                 {/* TODO : 비로그인도 남은장수 알수있는 방법 논의 필요 */}
-                <span>지금 930장 더 올릴 수 있어요</span>
+                <span>지금 {data?.availableCount}장 더 올릴 수 있어요</span>
               </div>
               {/* 말풍선 꼬리 */}
               <div className='absolute top-[85%] left-1/2 h-3 w-3 -translate-x-1/2'>
