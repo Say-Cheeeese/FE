@@ -1,5 +1,19 @@
+import { useBase64Images } from '@/global/hooks/useBase64Images';
+import { useMemo } from 'react';
 import { use4CutPreviewQuery } from '../hooks/use4CutPreviewQuery';
 import Svg4Cut from '../svg/Svg4Cut';
+
+/** URL → base64(data URL) 변환 */
+async function imageUrlToBase64(url: string): Promise<string> {
+  const res = await fetch(url, { mode: 'cors' });
+  const blob = await res.blob();
+
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result as string);
+    reader.readAsDataURL(blob);
+  });
+}
 
 interface Container4CutProps {
   albumId: string;
@@ -16,19 +30,21 @@ export default function Container4Cut({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data }: any = use4CutPreviewQuery(albumId);
 
+  const images = useMemo(() => {
+    return (
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      data?.previewPhotos?.map((item: any) => item.imageUrl) ??
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      data?.photos?.map((item: any) => item.imageUrl) ??
+      []
+    );
+  }, [data]);
+
+  const { base64List } = useBase64Images({ imageUrls: images });
+
   return (
     <div className='border-border-primary text-text-secondary relative border text-[7.963px] font-medium'>
-      <Svg4Cut
-        width={216}
-        height={384}
-        photos={
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          data?.previewPhotos?.map((item: any) => item.imageUrl) ??
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          data?.photos?.map((item: any) => item.imageUrl) ??
-          []
-        }
-      />
+      <Svg4Cut width={216} height={384} photos={base64List} />
 
       {eventName && (
         <span className='paperozi-font absolute bottom-[7.4px] left-[9.6px]'>
