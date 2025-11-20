@@ -14,7 +14,6 @@ import { useAlbumSortStore } from '@/store/useAlbumSortStore';
 import { useAlbumTypeStore } from '@/store/useAlbumTypeStore';
 import { useSelectedPhotosStore } from '@/store/useSelectedPhotosStore';
 import { useUploadingStore } from '@/store/useUploadingStore';
-import { useQueryClient } from '@tanstack/react-query';
 import { Menu } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -28,8 +27,6 @@ import AlbumPhotoSection from './AlbumPhotoSection';
 
 export type AlbumDetailMode = 'select' | 'default';
 
-const LOADING_MODAL_DURATION = 3000;
-
 interface ScreenAlbumDetailProps {
   albumId: string;
 }
@@ -37,8 +34,6 @@ interface ScreenAlbumDetailProps {
 const LOADING_MODAL_DURATION = 3500;
 
 export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
-  const queryClient = useQueryClient();
-
   const router = useRouter();
   const albumInfosRef = useRef<HTMLElement | null>(null);
   const [mode, setMode] = useState<AlbumDetailMode>('default');
