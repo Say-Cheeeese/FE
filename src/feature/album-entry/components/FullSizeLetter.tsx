@@ -25,7 +25,7 @@ export default function FullSizeLetter({ albumId }: FullSizeLetterProps) {
             src={data.makerProfileImage}
             width={32}
             height={32}
-            alt={data?.makerName ?? '프로필 사진'}
+            alt={data.makerName}
             className='rounded-full'
           />
           <span className='typo-body-lg-semibold text-text-subtler'>
