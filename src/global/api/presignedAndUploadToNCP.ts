@@ -3,7 +3,7 @@ import {
   PresignedUrlRequest,
 } from '@/global/api/getPresignedUrl';
 import { uploadFilesToNCP } from '@/global/api/uploadToNCP';
-import { reportFailedPhotoIds } from '@/global/hooks/useReportFailded';
+import { reportFailedPhotoIds } from '@/global/hooks/useReportFailed';
 
 /**
  * Presigned URL을 발급받고, 해당 URL로 파일을 NCP에 업로드까지 처리하는 통합 API
