@@ -30,7 +30,7 @@ export async function uploadFileToNCP(
     return true;
   } catch (error) {
     console.error(`파일 업로드 중 오류 발생 (photoId: ${photoId}):`, error);
-    throw { stage: 'upload', error };
+    return false;
   }
 }
 
@@ -43,24 +43,36 @@ export async function uploadFileToNCP(
 export async function uploadFilesToNCP(
   files: File[],
   presignedUrlInfos: PresignedUrlInfo[],
-): Promise<{ success: number; failed: number }> {
+): Promise<{ success: number; failed: number; failedPhotoIds: number[] }> {
   if (files.length !== presignedUrlInfos.length) {
     console.error('파일 개수와 presigned URL 개수가 일치하지 않습니다.');
-    return { success: 0, failed: files.length };
+    return {
+      success: 0,
+      failed: files.length,
+      failedPhotoIds: presignedUrlInfos.map((i) => i.photoId),
+    };
   }
 
-  const uploadPromises = files.map((file, index) => {
-    const { uploadUrl, photoId } = presignedUrlInfos[index];
-    console.log('uploadUrl', uploadUrl);
-    return uploadFileToNCP(file, uploadUrl, photoId);
-  });
+  const uploadResults = await Promise.all(
+    files.map((file, index) => {
+      const { uploadUrl, photoId } = presignedUrlInfos[index];
+      return uploadFileToNCP(file, uploadUrl, photoId).then((ok) => ({
+        ok,
+        photoId,
+      }));
+    }),
+  );
 
-  const results = await Promise.all(uploadPromises);
+  const success = uploadResults.filter((r) => r.ok).length;
+  const failed = uploadResults.length - success;
+  const failedPhotoIds = uploadResults
+    .filter((r) => !r.ok)
+    .map((r) => r.photoId);
 
-  const success = results.filter(Boolean).length;
-  const failed = results.length - success;
+  console.log(
+    `업로드 완료: 성공 ${success}개, 실패 ${failed}개`,
+    failedPhotoIds.length ? `실패 photoId: ${failedPhotoIds.join(',')}` : '',
+  );
 
-  console.log(`업로드 완료: 성공 ${success}개, 실패 ${failed}개`);
-
-  return { success, failed };
+  return { success, failed, failedPhotoIds };
 }
