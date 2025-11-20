@@ -1,8 +1,10 @@
 'use client';
 import { useGetAlbumInvitation } from '@/feature/album/detail/hooks/useGetAlbumInvitation';
+import Toast from '@/global/components/toast/Toast';
 import { convertUnicodeToEmoji } from '@/global/utils/convertEmoji';
 import { formatExpirationTime } from '@/global/utils/time/formatExpirationTime';
 import { useRouter } from 'next/navigation';
+import { useAlbumEnterMutation } from '../hooks/useAlbumEnterMutation';
 
 interface FullSizeLetterProps {
   albumId: string;
@@ -11,10 +13,20 @@ interface FullSizeLetterProps {
 export default function FullSizeLetter({ albumId }: FullSizeLetterProps) {
   const router = useRouter();
   const { data, isPending, isError } = useGetAlbumInvitation(albumId);
+  const { mutateAsync } = useAlbumEnterMutation();
 
   if (isPending) return null;
   if (isError) return null;
   if (!data) return null;
+
+  const handleInviteAccept = async () => {
+    try {
+      await mutateAsync(albumId);
+      router.push(`/photo-share-entry/${albumId}`);
+    } catch (error) {
+      Toast.alert('앨범 입장에 실패하였습니다');
+    }
+  };
 
   return (
     <>
@@ -51,7 +63,7 @@ export default function FullSizeLetter({ albumId }: FullSizeLetterProps) {
           </span>
 
           <button
-            onClick={() => router.push(`/photo-share-entry/${albumId}`)}
+            onClick={handleInviteAccept}
             type='button'
             className='bg-button-primary-fill typo-body-lg-semibold text-text-inverse mt-8 w-[230px] rounded-[14px] px-6 py-3'
           >
