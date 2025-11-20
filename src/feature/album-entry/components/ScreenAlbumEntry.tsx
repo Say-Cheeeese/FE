@@ -6,8 +6,6 @@ interface ScreenAlbumEntryProps {
 }
 
 export default function ScreenAlbumEntry({ albumId }: ScreenAlbumEntryProps) {
-  // TODO : albumId 로 api 받아오기.
-
   return (
     <main className='bg-background-brand relative min-h-screen overflow-hidden'>
       <LogoHeader bgColor='var(--color-background-brand)' />
@@ -17,7 +15,7 @@ export default function ScreenAlbumEntry({ albumId }: ScreenAlbumEntryProps) {
         style={{ backgroundImage: "url('/assets/album/bg-album-entry.png')" }}
       />
 
-      <FullSizeLetter />
+      <FullSizeLetter albumId={albumId} />
     </main>
   );
 }
