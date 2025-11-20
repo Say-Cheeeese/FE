@@ -53,6 +53,8 @@ export async function handleFileUpload(
     await new Promise((resolve) => setTimeout(resolve, remainingTime));
 
     setUploading(false);
+    // input value 초기화(업로드 성공/실패 관계없이)
+    if (e.target) e.target.value = '';
     // if (options?.stay && router) {
     //   // window.location.reload();
     // }
