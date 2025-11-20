@@ -3,18 +3,6 @@ import { useMemo } from 'react';
 import { use4CutPreviewQuery } from '../hooks/use4CutPreviewQuery';
 import Svg4Cut from '../svg/Svg4Cut';
 
-/** URL → base64(data URL) 변환 */
-async function imageUrlToBase64(url: string): Promise<string> {
-  const res = await fetch(url, { mode: 'cors' });
-  const blob = await res.blob();
-
-  return new Promise((resolve) => {
-    const reader = new FileReader();
-    reader.onloadend = () => resolve(reader.result as string);
-    reader.readAsDataURL(blob);
-  });
-}
-
 interface Container4CutProps {
   albumId: string;
   eventName?: string;
