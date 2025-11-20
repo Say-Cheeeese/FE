@@ -42,7 +42,7 @@ export default function ScreenPhotoShareEntry({
                 <span role='img' aria-label='카메라'>
                   📸
                 </span>
-                {/* TODO : 비로그인도 남은장수 알수있는 방법 논의 필요 */}
+
                 <span>지금 {data?.availableCount}장 더 올릴 수 있어요</span>
               </div>
               {/* 말풍선 꼬리 */}
