@@ -113,13 +113,8 @@ async function request<T>(
       isSuccess: boolean;
       message: string;
     }>;
-    if (e.response?.data) {
-      throw e.response.data;
-    }
 
     const status = e.response?.status;
-    const statusText = e.message || 'Unknown Error';
-    const errorMessage = `API Error: ${status ?? 'N/A'}`;
 
     if (status === 500 || status === 401) {
       // TODO 에러발생 시 공통 토스트 필요하면 추가
@@ -131,6 +126,13 @@ async function request<T>(
         window.location.href = '/login';
       }
     }
+
+    if (e.response?.data) {
+      throw e.response.data;
+    }
+
+    const statusText = e.message || 'Unknown Error';
+    const errorMessage = `API Error: ${status ?? 'N/A'}`;
 
     throw new Error(`${errorMessage} ${statusText}`);
   }
