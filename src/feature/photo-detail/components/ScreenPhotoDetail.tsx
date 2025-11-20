@@ -22,7 +22,7 @@ export default function ScreenPhotoDetail({
     sorting: sort,
   });
 
-  if (!images) return null;
+  if (images.length === 0) return null;
 
   return (
     <main className='bg-surface-inverse flex h-dvh w-full flex-col justify-between'>
