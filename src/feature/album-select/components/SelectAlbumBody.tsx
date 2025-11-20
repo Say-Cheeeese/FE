@@ -5,7 +5,7 @@ import LongButton from '@/global/components/LongButton';
 import PhotoBox from '@/global/components/photo/PhotoBox';
 import { AlbumToastList } from '@/global/components/toast/AlbumToast';
 import { usePresignedAndUploadToNCP } from '@/global/hooks/usePresignedAndUploadToNCP';
-import { useReportFailed } from '@/global/hooks/useReportFailded';
+import { useReportFailed } from '@/global/hooks/useReportFailed';
 import { useImageStore } from '@/store/useImageStore';
 import { useUploadingStore } from '@/store/useUploadingStore';
 import { useParams, useRouter } from 'next/navigation';
@@ -19,6 +19,7 @@ type ImageWithUrl = {
 };
 
 export default function SelectAlbumBody() {
+  const isUploaded = useUploadingStore((state) => state.isUploaded);
   // LongButton 업로드 핸들러 함수로 분리
   const handleUpload = () => {
     const selectedFiles = processedImages.filter((img) =>
@@ -259,7 +260,7 @@ export default function SelectAlbumBody() {
       <LongButton
         text={`앨범에 ${selectedIds.size}장 채우기`}
         noFixed={false}
-        disabled={isOverCount || selectedIds.size === 0}
+        disabled={isUploaded || isOverCount || selectedIds.size === 0}
         onClick={handleUpload}
       />
       {toasts.length > 0 && (
