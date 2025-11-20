@@ -25,7 +25,7 @@ export default function FullSizeLetter({ albumId }: FullSizeLetterProps) {
             src={data.makerProfileImage}
             width={32}
             height={32}
-            alt='프로필 사진'
+            alt={data.makerName}
             className='rounded-full'
           />
           <span className='typo-body-lg-semibold text-text-subtler'>
@@ -62,7 +62,7 @@ export default function FullSizeLetter({ albumId }: FullSizeLetterProps) {
 
       {/* 뒷편지봉투 svg */}
       <svg
-        className='fixed bottom-0 left-0 z-0 w-full'
+        className='fixed bottom-0 left-1/2 z-0 w-full max-w-[430px] -translate-x-1/2 transform'
         viewBox='0 0 393 400'
         preserveAspectRatio='none'
         xmlns='http://www.w3.org/2000/svg'
@@ -76,7 +76,7 @@ export default function FullSizeLetter({ albumId }: FullSizeLetterProps) {
       <img
         src='/assets/album/letter-full-size.svg'
         alt='편지 배경'
-        className='fixed bottom-[-10px] z-20 w-full object-cover'
+        className='fixed bottom-[-10px] z-20 w-full max-w-[430px] object-cover'
       />
     </>
   );
