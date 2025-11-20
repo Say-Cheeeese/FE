@@ -2,13 +2,15 @@
 import { PhotoListResponseSchema } from '@/global/api/ep';
 import PhotoBox from '@/global/components/photo/PhotoBox';
 import { buildQuery } from '@/global/utils/buildQuery';
+import { useAlbumSortStore } from '@/store/useAlbumSortStore';
+import { useSelectedPhotosStore } from '@/store/useSelectedPhotosStore';
 import {
   type FetchNextPageOptions,
   type InfiniteQueryObserverResult,
 } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef } from 'react';
-import { useGetAlbumAvailableCount } from '../hooks/useGetAlbumAvailableCount';
+import { useShallow } from 'zustand/shallow';
 import { AlbumDetailMode } from './ScreenAlbumDetail';
 
 const SELECT_MODE_MIN_HEIGHT = '800px';
@@ -19,8 +21,6 @@ export const ID_PHOTO_LIST_ANCHOR = 'photo-list-anchor';
 interface PhotoListProps {
   albumId: string;
   selectable?: boolean;
-  onTogglePhoto?: (photoId: number) => void;
-  selectedList: number[];
   changeMode: (newMode: AlbumDetailMode) => void;
   mode: AlbumDetailMode;
   photos: PhotoListResponseSchema[];
@@ -29,26 +29,40 @@ interface PhotoListProps {
   ) => Promise<InfiniteQueryObserverResult>;
   hasNextPage: boolean;
   isFetchingNextPage: boolean;
+  totalPhotoCount?: number;
 }
 
 export default function PhotoList({
   albumId,
   selectable = false,
-  onTogglePhoto,
-  selectedList,
   changeMode,
   mode,
   photos,
   fetchNextPage,
   hasNextPage,
   isFetchingNextPage,
+  totalPhotoCount,
 }: PhotoListProps) {
   const router = useRouter();
   const photoListRef = useRef<HTMLElement | null>(null);
   const anchorRef = useRef<HTMLDivElement | null>(null);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
-  const { data } = useGetAlbumAvailableCount(albumId);
-  const totalPhotoCount = data?.currentPhotoCount ?? '  ';
+  const { addSelectedPhoto, deleteSelectedPhoto, isSelected } =
+    useSelectedPhotosStore(
+      useShallow((state) => ({
+        selectedPhotos: state.selectedPhotos,
+        addSelectedPhoto: state.addSelectedPhoto,
+        deleteSelectedPhoto: state.deleteSelectedPhoto,
+        clearSelectedPhotos: state.clearSelectedPhotos,
+        isSelected: state.isSelected,
+      })),
+    );
+  const { sortType, setSortType } = useAlbumSortStore(
+    useShallow((state) => ({
+      sortType: state.sortType,
+      setSortType: state.setSortType,
+    })),
+  );
 
   useEffect(() => {
     if (!hasNextPage) return;
@@ -74,12 +88,23 @@ export default function PhotoList({
     };
   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
-  const handlePhotoPress = (photoId: number): void => {
+  const handlePhotoPress = ({
+    photoId,
+    photoUrl,
+  }: {
+    photoId: number;
+    photoUrl: string;
+  }): void => {
     if (!selectable) return;
-    onTogglePhoto?.(photoId);
+
+    if (isSelected(photoId)) {
+      deleteSelectedPhoto(photoId);
+    } else {
+      addSelectedPhoto({ id: photoId, url: photoUrl });
+    }
   };
 
-  const handleChangeMode = (nextMode: AlbumDetailMode) => {
+  const handleChangeMode = (nextMode: AlbumDetailMode): void => {
     const photoListEl = photoListRef.current;
     const anchorEl = anchorRef.current;
 
@@ -110,7 +135,7 @@ export default function PhotoList({
       <div ref={anchorRef} className='invisible absolute top-[-72px] left-0' />
       <div className='mb-3 flex justify-between'>
         <span className='typo-body-lg-regular text-text-subtle'>
-          총 {totalPhotoCount}장
+          총 {totalPhotoCount || ''}장
         </span>
         {mode === 'default' && (
           <button
@@ -132,16 +157,18 @@ export default function PhotoList({
         )}
       </div>
       <div className='grid grid-cols-3 gap-0.5'>
-        {photos.map(({ photoId, likeCnt, thumbnailUrl }) => {
-          if (!photoId) {
+        {photos.map(({ photoId, likeCnt, isLiked, thumbnailUrl, imageUrl }) => {
+          if (!photoId || !thumbnailUrl || !imageUrl) {
             return null;
           }
 
           return (
             <PhotoBox
               key={photoId}
-              pressed={selectedList.includes(photoId)}
-              likeCount={likeCnt}
+              pressed={isSelected(photoId)}
+              // 띱많은순이 아니면, 좋아요수가 있을때 의식하게되어 보여주지않음.
+              likeCount={sortType === 'liked' ? likeCnt : undefined}
+              liked={sortType === 'liked' ? isLiked : undefined}
               imageSrc={thumbnailUrl}
               responsive
               onPress={() => {
@@ -150,7 +177,7 @@ export default function PhotoList({
                     `/photo/detail/${albumId}${buildQuery({ photoId: photoId })}`,
                   );
                 } else {
-                  handlePhotoPress(photoId);
+                  handlePhotoPress({ photoId, photoUrl: imageUrl });
                 }
               }}
             />

@@ -1,9 +1,12 @@
 'use client';
 
 import { handleFileUpload } from '@/feature/create-album/utils/handleFileUpload';
+import { EP } from '@/global/api/ep';
 import LongButton from '@/global/components/LongButton';
+import { useUploadingStore } from '@/store/useUploadingStore';
+import { useQueryClient } from '@tanstack/react-query';
 import { useParams, useRouter } from 'next/navigation';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 
 interface UploadButtonInDetailProps {
   buttonText?: string;
@@ -13,9 +16,10 @@ export default function UploadButtonInDetail({
   buttonText,
 }: UploadButtonInDetailProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [isUploading, setIsUploading] = useState(false);
+  const isUploading = useUploadingStore((state) => state.isUploading);
   const router = useRouter();
   const params = useParams();
+  const queryClient = useQueryClient();
   const albumId =
     typeof params.albumId === 'string'
       ? params.albumId
@@ -23,17 +27,17 @@ export default function UploadButtonInDetail({
         ? params.albumId[0]
         : '';
 
-  async function onFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+  const onFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) return;
-    setIsUploading(true);
-    await handleFileUpload(e, albumId, router);
-    setIsUploading(false);
-    window.location.reload();
-  }
+    await handleFileUpload(e, albumId, router, { stay: true });
+    await queryClient.invalidateQueries({
+      queryKey: [EP.album.photos(albumId)],
+    });
+  };
 
-  function handleButtonClick() {
+  const handleButtonClick = () => {
     if (!isUploading) fileInputRef.current?.click();
-  }
+  };
 
   return (
     <>
@@ -47,7 +51,7 @@ export default function UploadButtonInDetail({
       />
       <LongButton
         text={isUploading ? '업로드중이에요.' : buttonText || '앨범 채우기'}
-        noFixed={true}
+        noFixed={false}
         onClick={handleButtonClick}
         disabled={isUploading}
       />

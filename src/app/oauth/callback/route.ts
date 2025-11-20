@@ -39,15 +39,19 @@ export async function GET(request: NextRequest) {
       request.headers.get('host') ||
       'localhost:3000';
 
-    const redirectPath = data.result.isOnboarded ? '/main' : '/create-album';
+    const redirectPath = data.result.isOnboarded ? '/main' : '/onboarding';
     const redirectUrl = new URL(redirectPath, `${protocol}://${host}`);
-    redirectUrl.searchParams.set('login', 'success');
-    redirectUrl.searchParams.set(
-      'onboarding',
-      data.result.isOnboarded.toString(),
-    );
-    redirectUrl.searchParams.set('userId', data.result.userId);
-    redirectUrl.searchParams.set('name', encodeURIComponent(data.result.name));
+
+    if (!data.result.isOnboarded) {
+      redirectUrl.searchParams.set(
+        'onboarding',
+        data.result.isOnboarded.toString(),
+      );
+      redirectUrl.searchParams.set(
+        'name',
+        encodeURIComponent(data.result.name),
+      );
+    }
 
     // redirect 응답 객체 생성
     const res = NextResponse.redirect(redirectUrl);

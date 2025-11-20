@@ -1,25 +1,29 @@
 'use client';
 
+import EmojiLoading from '@/components/ui/EmojiLoading';
 import { useAlbumPhotosInfiniteQuery } from '@/feature/photo-detail/hooks/useAlbumPhotosInfiniteQuery';
-import { useAlbumPhotosLikedInfiniteQuery } from '@/feature/photo-detail/hooks/useAlbumPhotosLikedInfiniteQuery';
+import {
+  useAlbumPhotosLikedInfiniteQuery,
+  type AlbumPhotosLikedItem,
+} from '@/feature/photo-detail/hooks/useAlbumPhotosLikedInfiniteQuery';
 import { PhotoListResponseSchema } from '@/global/api/ep';
 import CustomHeader, {
   HEADER_HEIGHT,
 } from '@/global/components/header/CustomHeader';
+import { useAlbumSortStore } from '@/store/useAlbumSortStore';
+import { useAlbumTypeStore } from '@/store/useAlbumTypeStore';
 import { useSelectedPhotosStore } from '@/store/useSelectedPhotosStore';
+import { useUploadingStore } from '@/store/useUploadingStore';
 import { Menu } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useShallow } from 'zustand/shallow';
-import {
-  photoSortToApiSorting,
-  type PhotoSortType,
-} from '../constants/photoSort';
+import { photoSortToApiSorting } from '../constants/photoSort';
+import { useGetAlbumAvailableCount } from '../hooks/useGetAlbumAvailableCount';
 import { useGetAlbumInvitation } from '../hooks/useGetAlbumInvitation';
 import AlbumBottomActions from './AlbumBottomActions';
 import AlbumInfos from './AlbumInfos';
 import AlbumPhotoSection from './AlbumPhotoSection';
-import { type AlbumType } from './NavBarAlbumDetail';
 
 export type AlbumDetailMode = 'select' | 'default';
 
@@ -27,23 +31,46 @@ interface ScreenAlbumDetailProps {
   albumId: string;
 }
 
+const LOADING_MODAL_DURATION = 3500;
+
 export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
   const router = useRouter();
   const albumInfosRef = useRef<HTMLElement | null>(null);
   const [mode, setMode] = useState<AlbumDetailMode>('default');
   const [isAlbumInfosHidden, setIsAlbumInfosHidden] = useState(false);
   const [selectionResetKey, setSelectionResetKey] = useState(0);
-  const [sortType, setSortType] = useState<PhotoSortType>('liked');
-  const [albumType, setAlbumType] = useState<AlbumType>('all');
+  const { sortType, setSortType } = useAlbumSortStore(
+    useShallow((state) => ({
+      sortType: state.sortType,
+      setSortType: state.setSortType,
+    })),
+  );
+  const { albumType, setAlbumType } = useAlbumTypeStore(
+    useShallow((state) => ({
+      albumType: state.albumType,
+      setAlbumType: state.setAlbumType,
+    })),
+  );
   const sorting = photoSortToApiSorting[sortType];
-  const { selectedPhotoIds, togglePhotoSelection, clearSelectedPhotos } =
-    useSelectedPhotosStore(
-      useShallow((state) => ({
-        selectedPhotoIds: state.selectedPhotoIds,
-        togglePhotoSelection: state.togglePhotoSelection,
-        clearSelectedPhotos: state.clearSelectedPhotos,
-      })),
-    );
+  const {
+    selectedPhotos,
+    addSelectedPhoto,
+    deleteSelectedPhoto,
+    clearSelectedPhotos,
+  } = useSelectedPhotosStore(
+    useShallow((state) => ({
+      selectedPhotos: state.selectedPhotos,
+      addSelectedPhoto: state.addSelectedPhoto,
+      deleteSelectedPhoto: state.deleteSelectedPhoto,
+      clearSelectedPhotos: state.clearSelectedPhotos,
+    })),
+  );
+  const { isUploaded, setUploaded } = useUploadingStore(
+    useShallow((state) => ({
+      isUploaded: state.isUploaded,
+      setUploaded: state.setUploaded,
+    })),
+  );
 
   const {
     data: invitationData,
@@ -51,20 +78,30 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
     isError: isInvitationError,
   } = useGetAlbumInvitation(albumId);
   const isDeepAlbumType = albumType === 'deep';
-
+  const { data } = useGetAlbumAvailableCount(albumId);
+  const totalPhotoCount = data?.currentPhotoCount;
   const defaultPhotosQuery = useAlbumPhotosInfiniteQuery({
     code: albumId,
     sorting,
     enabled: albumType === 'all',
+    // 좋아요 누른것 실시간으로 반영되게 매번 호출
+    refetchOnMount: 'always',
   });
 
   const likedPhotosQuery = useAlbumPhotosLikedInfiniteQuery({
     code: albumId,
     enabled: isDeepAlbumType,
+    // 좋아요 누른것 실시간으로 반영되게 매번 호출
+    refetchOnMount: 'always',
   });
 
+  const likedPhotos = useMemo(
+    () => mapLikedPhotosToPhotoList(likedPhotosQuery.items),
+    [likedPhotosQuery.items],
+  );
+
   const photos: PhotoListResponseSchema[] = isDeepAlbumType
-    ? likedPhotosQuery.items
+    ? likedPhotos
     : defaultPhotosQuery.items;
   const fetchNextPage = isDeepAlbumType
     ? likedPhotosQuery.fetchNextPage
@@ -75,10 +112,7 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
   const isFetchingNextPage = isDeepAlbumType
     ? likedPhotosQuery.isFetchingNextPage
     : defaultPhotosQuery.isFetchingNextPage;
-  const isLoading = isDeepAlbumType
-    ? likedPhotosQuery.isLoading
-    : defaultPhotosQuery.isLoading;
-  const hasPhotos = photos.length > 0;
+  const isLoading = defaultPhotosQuery.isLoading;
 
   useEffect(() => {
     const target = albumInfosRef.current;
@@ -102,11 +136,11 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
 
   useEffect(() => {
     if (mode === 'select') return;
-    if (selectedPhotoIds.length === 0) return;
+    if (selectedPhotos.length === 0) return;
 
     clearSelectedPhotos();
     setSelectionResetKey((prev) => prev + 1);
-  }, [clearSelectedPhotos, photos.length, mode, selectedPhotoIds.length]);
+  }, [clearSelectedPhotos, photos.length, mode, selectedPhotos.length]);
 
   useEffect(() => {
     return () => {
@@ -114,20 +148,22 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
     };
   }, [clearSelectedPhotos]);
 
-  const handleTogglePhotoSelection = (photoId: number): void => {
-    togglePhotoSelection(photoId);
-  };
+  const handleChangeMode = (newMode: AlbumDetailMode) => setMode(newMode);
 
-  const handleDownload = (): void => {
-    setMode('default');
-    clearSelectedPhotos();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  const emoji = invitationData?.themeEmoji;
 
   return (
     <>
+      {isUploaded && (
+        <EmojiLoading
+          duration={LOADING_MODAL_DURATION}
+          emoji={emoji}
+          albumId={albumId}
+        />
+      )}
       <CustomHeader
         isShowBack
+        onBackClick={() => router.replace('/main')}
         isHidden={mode === 'select'}
         title={isAlbumInfosHidden ? (invitationData?.title ?? '') : ''}
         rightContent={
@@ -148,6 +184,7 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
           albumInfo={invitationData}
           isLoading={isInvitationLoading}
           isError={isInvitationError}
+          photoCount={totalPhotoCount}
         />
         <AlbumPhotoSection
           isLoading={isLoading}
@@ -155,25 +192,36 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
           selectionResetKey={selectionResetKey}
           albumId={albumId}
           mode={mode}
-          selectedPhotoIds={selectedPhotoIds}
-          onTogglePhoto={handleTogglePhotoSelection}
           onChangeMode={setMode}
           fetchNextPage={fetchNextPage}
           hasNextPage={!!hasNextPage}
           isFetchingNextPage={isFetchingNextPage}
+          totalPhotoCount={totalPhotoCount}
         />
       </div>
       <AlbumBottomActions
-        hasPhotos={hasPhotos}
         mode={mode}
         albumId={albumId}
-        sortType={sortType}
-        changeSortType={setSortType}
-        albumType={albumType}
-        changeAlbumType={setAlbumType}
-        selectedCount={selectedPhotoIds.length}
-        onDownload={handleDownload}
+        changeAlbumMode={handleChangeMode}
+        selectedCount={selectedPhotos.length}
+        totalPhotoCount={totalPhotoCount}
+        isLoading={isLoading}
       />
     </>
   );
+}
+
+function mapLikedPhotosToPhotoList(
+  items: AlbumPhotosLikedItem[],
+): PhotoListResponseSchema[] {
+  return items.map((item) => ({
+    name: item.name,
+    photoId: item.photoId,
+    imageUrl: item.imageUrl,
+    thumbnailUrl: item.thumbnailUrl,
+    likeCnt: item.likeCnt ?? 0,
+    isLiked: item.isLiked ?? false,
+    isDownloaded: item.isDownloaded,
+    isRecentlyDownloaded: item.isRecentlyDownloaded,
+  }));
 }

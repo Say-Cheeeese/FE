@@ -1,5 +1,5 @@
+import { useGetAlbumInform } from '@/feature/upload/hooks/useGetAlbumInform';
 import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
-import { useGetAlbumParticipants } from '../hooks/useGetAlbumParticipants';
 import BottomSheetContentShare from './BottomSheetContentShare';
 import ItemParticipant from './ItemParticipant';
 
@@ -8,7 +8,7 @@ interface AlbumParticipantsProps {
 }
 
 export default function AlbumParticipants({ albumId }: AlbumParticipantsProps) {
-  const { data, isPending, isError } = useGetAlbumParticipants(albumId);
+  const { data, isPending, isError } = useGetAlbumInform({ code: albumId });
 
   if (isPending) return null;
   if (isError) return null;

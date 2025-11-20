@@ -1,5 +1,8 @@
-import Toast from '@/global/components/toast/Toast';
+import { shareViaNavigator } from '@/global/utils/shareNavigator';
 import { Ellipsis } from 'lucide-react';
+
+const getAlbumEntryUrl = (albumId: string) =>
+  `${process.env.NEXT_PUBLIC_CLIENT_URL}/album/entry/${albumId}`;
 
 interface MoreShareButtonProps {
   albumId: string;
@@ -7,18 +10,16 @@ interface MoreShareButtonProps {
 
 export default function MoreShareButton({ albumId }: MoreShareButtonProps) {
   const handleClick = (): void => {
-    const albumEntryUrl = `${process.env.NEXT_PUBLIC_CLIENT_URL}/album/entry/${albumId}`;
     const shareData = {
       title: `우리 공유앨범에 초대합니다 - 치이이즈`,
       text: '일주일 뒤에는 앨범이 사라져요!',
-      url: albumEntryUrl,
+      url: getAlbumEntryUrl(albumId),
     };
 
-    if (navigator.share) {
-      navigator.share(shareData);
-    } else {
-      Toast.alert('이 기능을 지원하지 않는 브라우저입니다.');
-    }
+    shareViaNavigator({
+      data: shareData,
+      fallbackMessage: '이 기능을 지원하지 않는 브라우저입니다.',
+    });
   };
 
   return (

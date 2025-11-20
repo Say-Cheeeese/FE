@@ -2,6 +2,10 @@
 
 import { HEADER_HEIGHT } from '@/global/components/header/CustomHeader';
 import { convertUnicodeToEmoji } from '@/global/utils/convertEmoji';
+import {
+  formatExpirationTime,
+  getIsExpired,
+} from '@/global/utils/time/formatExpirationTime';
 import { X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useGetAlbumInfo } from '../../hooks/useGetAlbumInfo';
@@ -19,6 +23,8 @@ export default function ScreenAlbumSidebar({
 
   if (isPending) return null;
   if (isError) return null;
+
+  const isExpired = getIsExpired(data?.expiredAt);
 
   return (
     <>
@@ -43,10 +49,11 @@ export default function ScreenAlbumSidebar({
           <p className='typo-body-sm-regular text-text-subtler'>
             {data?.eventDate}
           </p>
-          <div className='typo-caption-sm-medium text-text-basic-inverse bg-element-alpha-dark mt-3 rounded-full px-2.5 py-1'>
-            {/* TODO : 삭제까지 얼마나 남았는지 백엔드로부터 받아야함. */}
-            앨범 소멸까지 2시간 5분
-          </div>
+          {isExpired && (
+            <div className='typo-caption-sm-medium text-text-basic-inverse bg-element-alpha-dark mt-3 rounded-full px-2.5 py-1'>
+              앨범 소멸까지 {formatExpirationTime(data?.expiredAt)}
+            </div>
+          )}
         </section>
 
         <AlbumParticipants albumId={albumId} />

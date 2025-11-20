@@ -27,7 +27,7 @@ export async function getPresignedUrl(
   try {
     const response = await api.post<ApiResponse>({
       path: '/v1/photo/presigned-url',
-      body: params,
+      body: { albumCode: params.albumCode, fileInfos: params.fileInfos },
     });
     return response.result.presignedUrlInfos;
   } catch (error) {

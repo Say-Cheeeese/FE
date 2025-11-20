@@ -34,14 +34,18 @@ export function shareKakao({
         mobileWebUrl: link,
       },
     },
-    buttons: [
-      {
-        title: buttonTitle,
-        link: {
-          webUrl: buttonLink,
-          mobileWebUrl: buttonLink,
-        },
-      },
-    ],
+
+    ...(buttonTitle &&
+      buttonLink && {
+        buttons: [
+          {
+            title: buttonTitle,
+            link: {
+              webUrl: buttonLink,
+              mobileWebUrl: buttonLink,
+            },
+          },
+        ],
+      }),
   });
 }

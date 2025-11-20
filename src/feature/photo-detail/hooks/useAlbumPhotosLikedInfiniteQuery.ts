@@ -2,6 +2,9 @@ import { ApiReturns, EP } from '@/global/api/ep';
 import { api } from '@/global/utils/api';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
+type AlbumPhotosLikedPage = NonNullable<ApiReturns['album.likedPhotos']>;
+type AlbumPhotosLikedItem = AlbumPhotosLikedPage['responses'][number];
+
 interface FetchPageParams {
   code: string;
   pageParam: number;
@@ -13,27 +16,42 @@ const fetchAlbumPhotosPage = async ({
   code,
   pageParam,
   size,
-}: FetchPageParams): Promise<
-  ApiReturns['album.likedPhotos'] & { page: number }
-> => {
+}: FetchPageParams): Promise<AlbumPhotosLikedPage & { page: number }> => {
   const res = await api.get<ApiReturns['album.likedPhotos']>({
     path: EP.album.likedPhotos(code),
     params: { page: pageParam, size },
   });
 
-  return { ...res.result, page: pageParam };
+  const result: AlbumPhotosLikedPage =
+    res.result ?? createEmptyPage({ pageParam });
+
+  return { ...result, page: pageParam };
 };
+
+const createEmptyPage = ({
+  pageParam,
+}: {
+  pageParam: number;
+}): AlbumPhotosLikedPage => ({
+  responses: [],
+  listSize: 0,
+  isFirst: pageParam === 0,
+  isLast: true,
+  hasNext: false,
+});
 
 interface UseAlbumPhotosLikedInfiniteQueryProps {
   code: string;
   size?: number;
   enabled?: boolean;
+  refetchOnMount?: boolean | 'always';
 }
 
 export function useAlbumPhotosLikedInfiniteQuery({
   code,
   size = 20,
   enabled = true,
+  refetchOnMount,
 }: UseAlbumPhotosLikedInfiniteQueryProps) {
   const query = useInfiniteQuery({
     queryKey: [EP.album.likedPhotos(code), size],
@@ -42,12 +60,16 @@ export function useAlbumPhotosLikedInfiniteQuery({
     queryFn: ({ pageParam }) => fetchAlbumPhotosPage({ code, pageParam, size }),
     getNextPageParam: (lastPage) =>
       lastPage.hasNext ? lastPage.page + 1 : undefined,
+    refetchOnMount,
   });
 
-  const items = query.data?.pages.flatMap((p) => p.responses ?? []) ?? [];
+  const items: AlbumPhotosLikedItem[] =
+    query.data?.pages.flatMap((p) => p.responses ?? []) ?? [];
 
   return {
     ...query,
     items,
   };
 }
+
+export type { AlbumPhotosLikedItem };

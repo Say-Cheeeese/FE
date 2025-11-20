@@ -1,70 +1,24 @@
 'use client';
+import { EP } from '@/global/api/ep';
 import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
 import Toast from '@/global/components/toast/Toast';
+import { shareImage } from '@/global/utils/image/shareImage';
 import { useQueryClient } from '@tanstack/react-query';
 import { Download, Heart, Info } from 'lucide-react';
 import { useState } from 'react';
-import { usePhotoExifQuery } from '../hooks/usePhotoExifQuery';
 import { usePhotoLikedMutation } from '../hooks/usePhotoLikedMutation';
 import { usePhotoUnlikedMutation } from '../hooks/usePhotoUnlikedMutation';
 import { updateCacheAlbumPhotosLike } from '../modules/updateCacheAlbumPhotosLike';
-import { downloadImageFromUrl } from '../util/downloadImageFromUrl';
-import ItemMemberData from './ItemMemberData';
+import ListPhotoLikers from './ListPhotoLikers';
 import SectionPhotoData from './SectionPhotoData';
-
-const mockMembers = [
-  {
-    id: 'member-1',
-    profileImageUrl: '/assets/onboarding/smile1.svg',
-    nickname: '테스트',
-    isMe: true,
-    isMaker: true,
-  },
-  {
-    id: 'member-2',
-    profileImageUrl: '/assets/onboarding/smile2.svg',
-    nickname: '코코',
-    isMe: true,
-    isMaker: false,
-  },
-  {
-    id: 'member-3',
-    profileImageUrl: '/assets/onboarding/smile3.svg',
-    nickname: '멜로',
-    isMe: false,
-    isMaker: false,
-  },
-  {
-    id: 'member-4',
-    profileImageUrl: '/assets/onboarding/smile4.svg',
-    nickname: '차차',
-    isMe: false,
-    isMaker: false,
-  },
-  {
-    id: 'member-5',
-    profileImageUrl: '/assets/onboarding/smile1.svg',
-    nickname: '도도',
-    isMe: false,
-    isMaker: false,
-  },
-  {
-    id: 'member-6',
-    profileImageUrl: '/assets/onboarding/smile2.svg',
-    nickname: '라라',
-    isMe: false,
-    isMaker: false,
-  },
-];
 
 interface FooterPhotoDetailProps {
   albumId: string;
   photoId: number;
   isLiked: boolean;
   likeCnt: number;
-  photoUploader: string;
   isRecentlyDownloaded: boolean;
-  imageUrl: string;
+  imageUrl: string | undefined;
 }
 
 export default function FooterPhotoDetail({
@@ -72,7 +26,6 @@ export default function FooterPhotoDetail({
   photoId,
   isLiked,
   likeCnt,
-  photoUploader,
   isRecentlyDownloaded,
   imageUrl,
 }: FooterPhotoDetailProps) {
@@ -82,7 +35,6 @@ export default function FooterPhotoDetail({
     usePhotoLikedMutation();
   const { mutateAsync: mutateAsyncUnlike, isPending: isUnliking } =
     usePhotoUnlikedMutation();
-  const { data } = usePhotoExifQuery(imageUrl);
 
   const handleDeepToggle = async (): Promise<void> => {
     try {
@@ -98,32 +50,33 @@ export default function FooterPhotoDetail({
         photoId,
         queryClient,
       });
+      queryClient.invalidateQueries({
+        queryKey: [EP.album.albumPhotosLikers(albumId, photoId)],
+      });
     } catch (e) {
       console.error(e);
       Toast.alert(`좋에요에 실패하였습니다.`);
     }
   };
 
-  const handleDownload = async () => {
+  const handleDownload = async (): Promise<void> => {
+    if (!imageUrl) return;
     if (isRecentlyDownloaded) {
       Toast.alert(`금방 다운받은 사진이에요.\n1시간 뒤에 다시 시도하세요.`);
       return;
     }
     if (isDownloading) return;
 
-    try {
-      setIsDownloading(true);
-      await downloadImageFromUrl(imageUrl, `cheese-${photoId}`);
-    } catch (e: unknown) {
-      console.error(e);
-
-      const message =
-        e instanceof Error ? e.message : '알 수 없는 오류가 발생했습니다.';
-
-      Toast.alert(`다운로드에 실패했어요.\n(${message})`);
-    } finally {
-      setIsDownloading(false);
-    }
+    setIsDownloading(true);
+    await shareImage({
+      imageUrls: imageUrl,
+      imageTitle: `IMG_${photoId}`,
+      onSuccess: () => {},
+      onError: () => {
+        Toast.alert('사진을 준비하는 중 오류가 발생했습니다.');
+      },
+    });
+    setIsDownloading(false);
   };
 
   return (
@@ -136,15 +89,7 @@ export default function FooterPhotoDetail({
           </button>
         }
       >
-        <SectionPhotoData
-          photoInfo={{
-            uploaderName: photoUploader,
-            takenAt: data?.takenAt ?? '',
-            uploadedAt: data?.createdAt ?? '',
-          }}
-          isShowDeleteButton
-          onDeleteClick={() => console.log('삭제 버튼 클릭!')}
-        />
+        <SectionPhotoData albumId={albumId} photoId={photoId} />
       </BottomSheetModal>
 
       <button
@@ -183,18 +128,7 @@ export default function FooterPhotoDetail({
             </button>
           }
         >
-          <div className='flex flex-col'>
-            {/* TODO : API 연동 */}
-            {mockMembers.map((member) => (
-              <ItemMemberData
-                key={member.id}
-                profileImageUrl={member.profileImageUrl}
-                nickname={member.nickname}
-                isMe={member.isMe}
-                isMaker={member.isMaker}
-              />
-            ))}
-          </div>
+          <ListPhotoLikers albumId={albumId} photoId={photoId} />
         </BottomSheetModal>
       </div>
     </section>

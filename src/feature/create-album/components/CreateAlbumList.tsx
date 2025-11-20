@@ -9,6 +9,7 @@ import {
   type CreateAlbumError,
 } from '../hook/useCreateAlbum';
 
+import Toast from '@/global/components/toast/Toast';
 import AlbumEmojiSelector from './AlbumEmojiSelector';
 import CreateInputList from './CreateInputList';
 
@@ -45,7 +46,8 @@ export default function CreateAlbumList() {
           }
         },
         onError: (err: CreateAlbumError) => {
-          alert(err.message);
+          Toast.alert(err.message || '앨범 생성에 실패했습니다.');
+          // router.push('/login');
           console.error('앨범 생성 실패:', err);
         },
       },

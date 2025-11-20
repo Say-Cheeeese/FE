@@ -46,6 +46,7 @@ export default function BottomSheetModal({
           'mx-auto flex max-w-[430px] flex-col border-none',
         )}
         showHandle={showHandle}
+        aria-describedby={undefined}
       >
         <div className={title ? 'px-4 py-6' : ''}>
           {/* 스크린리더용 제목 (항상 필요) */}

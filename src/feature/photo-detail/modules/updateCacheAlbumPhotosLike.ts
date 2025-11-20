@@ -21,29 +21,31 @@ export function updateCacheAlbumPhotosLike({
 
       return {
         ...old,
-        pages: old.pages.map((page) => ({
-          ...page,
-          ...(page?.responses !== undefined && {
-            responses:
-              page.responses?.map((res) => {
-                if (res.photoId !== photoId) return res;
+        pages: old.pages.map((page) => {
+          if (!page) return page;
+          if (!page.responses) return page;
 
-                const updated = { ...res };
+          return {
+            ...page,
+            responses: page.responses.map((res) => {
+              if (res.photoId !== photoId) return res;
 
-                if (res.isLiked !== undefined) {
-                  updated.isLiked = !res.isLiked;
-                }
+              const updated = { ...res };
 
-                if (res.likeCnt !== undefined) {
-                  updated.likeCnt = isCurrentlyLiked
-                    ? res.likeCnt - 1
-                    : res.likeCnt + 1;
-                }
+              if (res.isLiked !== undefined) {
+                updated.isLiked = !res.isLiked;
+              }
 
-                return updated;
-              }) ?? page.responses,
-          }),
-        })),
+              if (res.likeCnt !== undefined) {
+                updated.likeCnt = isCurrentlyLiked
+                  ? res.likeCnt - 1
+                  : res.likeCnt + 1;
+              }
+
+              return updated;
+            }),
+          };
+        }),
       };
     },
   );

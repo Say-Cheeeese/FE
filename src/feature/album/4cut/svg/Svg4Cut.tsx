@@ -25,17 +25,21 @@ export default function Svg4Cut({ photos, height, width }: Svg4CutProps) {
       xmlns='http://www.w3.org/2000/svg'
       xmlnsXlink='http://www.w3.org/1999/xlink'
     >
-      {PHOTO_SLOTS.map((pos, i) => (
-        <image
-          key={i}
-          href={photoSources[i] ?? ''}
-          x={pos.x}
-          y={pos.y}
-          width='463'
-          height='689'
-          preserveAspectRatio='xMidYMid slice'
-        />
-      ))}
+      {PHOTO_SLOTS.map((pos, i) => {
+        if (!photoSources[i]) return null;
+
+        return (
+          <image
+            key={i}
+            href={photoSources[i]}
+            x={pos.x}
+            y={pos.y}
+            width='463'
+            height='689'
+            preserveAspectRatio='xMidYMid slice'
+          />
+        );
+      })}
 
       <path
         d='M0 0V1920H1080V0H0ZM528 1478H65V789H528V1478ZM528 767H65V78H528V767ZM1015 1478H552V789H1015V1478ZM1015 767H552V78H1015V767Z'

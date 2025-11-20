@@ -1,13 +1,24 @@
 'use client';
+import { DEFAULT_PROFILE_IMAGE } from '@/global/constants/images';
 import { X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { usePhotoDetailQuery } from '../hooks/usePhotoDetailQuery';
 
 interface HeaderPhotoDetailProps {
-  title: string;
+  albumId: string;
+  photoId?: number;
 }
 
-export default function HeaderPhotoDetail({ title }: HeaderPhotoDetailProps) {
+export default function HeaderPhotoDetail({
+  albumId,
+  photoId,
+}: HeaderPhotoDetailProps) {
   const router = useRouter();
+  const { data } = usePhotoDetailQuery({
+    albumId,
+    photoId: photoId ?? 0,
+    options: { enabled: !!photoId },
+  });
 
   const handleClose = (): void => {
     router.back();
@@ -15,17 +26,17 @@ export default function HeaderPhotoDetail({ title }: HeaderPhotoDetailProps) {
 
   return (
     <section className='flex shrink-0 items-center justify-between gap-3 p-5'>
-      <div className='h-8 w-8 shrink-0'>
+      <div className='flex h-8 w-8 shrink-0 items-center justify-center text-3xl'>
         <img
-          src='/assets/onboarding/smile1.svg'
-          alt='프로필사진'
-          width='32'
-          height='32'
-          className='h-full w-full'
+          src={data?.profileImage || DEFAULT_PROFILE_IMAGE}
+          alt='프로필 사진'
+          width={32}
+          height={32}
+          className='rounded-full'
         />
       </div>
       <span className='typo-heading-sm-semibold text-text-basic-inverse flex-1 truncate'>
-        {title}
+        {data?.name}
       </span>
       <button type='button' onClick={handleClose}>
         <X width='24' height='24' color='white' />

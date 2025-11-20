@@ -15,9 +15,9 @@ export default function BubbleHint({
     align === 'center' ? 'mx-auto' : align === 'left' ? 'mr-auto' : 'ml-auto';
 
   return (
-    <div className={`relative ${className}`}>
+    <div className={`${className}`}>
       <div
-        className={`relative w-fit rounded-2xl bg-white px-4 py-[9px] shadow-[0_2px_8px_rgba(0,0,0,0.15)] ${alignClass}`}
+        className={`w-fit rounded-2xl bg-white px-4 py-[9px] shadow-[0_2px_8px_rgba(0,0,0,0.15)] ${alignClass}`}
       >
         <div className='typo-body-sm-semibold text-text-basic flex items-center space-x-2'>
           <span>{message}</span>

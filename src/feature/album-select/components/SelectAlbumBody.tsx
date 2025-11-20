@@ -6,6 +6,7 @@ import PhotoBox from '@/global/components/photo/PhotoBox';
 import { AlbumToastList } from '@/global/components/toast/AlbumToast';
 import { usePresignedAndUploadToNCP } from '@/global/hooks/usePresignedAndUploadToNCP';
 import { useImageStore } from '@/store/useImageStore';
+import { useUploadingStore } from '@/store/useUploadingStore';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 
@@ -66,9 +67,11 @@ export default function SelectAlbumBody() {
           showToast(`${result.failed}개 파일 업로드에 실패했어요`);
         } else {
           revokeAllObjectUrls();
-          showToast('모든 사진이 성공적으로 업로드되었어요!');
+          // 업로드 성공 시 전역 isUploaded true
+          useUploadingStore.getState().setUploaded(true);
           // 업로드 성공 시 detail로 이동
           router.replace(`/album/detail/${albumId}`);
+          showToast('모든 사진이 성공적으로 업로드되었어요!');
           // 라우팅 후 images 클리어 (useEffect 트리거 방지)
         }
       },
@@ -225,21 +228,20 @@ export default function SelectAlbumBody() {
           const isSelected = selectedIds.has(img.id);
           return (
             <div key={img.id} className='relative aspect-square w-full'>
-              <div className='absolute inset-0'>
-                <PhotoBox
-                  imageSrc={img.url}
-                  imageAlt={`이미지 ${img.id}`}
-                  pressed={isSelected}
-                  disabled={img.isOversized}
-                  onPress={(next) => {
-                    if (img.isOversized) {
-                      showToast('사진이 6MB를 초과해 업로드할 수 없어요.');
-                    } else {
-                      toggleSelect(img.id, img.isOversized, next);
-                    }
-                  }}
-                />
-              </div>
+              <PhotoBox
+                responsive={true}
+                imageSrc={img.url}
+                imageAlt={`이미지 ${img.id}`}
+                pressed={isSelected}
+                disabled={img.isOversized}
+                onPress={(next) => {
+                  if (img.isOversized) {
+                    showToast('사진이 6MB를 초과해 업로드할 수 없어요.');
+                  } else {
+                    toggleSelect(img.id, img.isOversized, next);
+                  }
+                }}
+              />
             </div>
           );
         })}
