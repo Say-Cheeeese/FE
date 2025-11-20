@@ -24,6 +24,7 @@ export default function AlbumSharePreviewSection({
 
   if (isPending || isItemsLoading) return null;
   if (isError) return null;
+  if (!data) return null;
 
   const isEmpty = items.length === 0;
 
@@ -31,17 +32,15 @@ export default function AlbumSharePreviewSection({
     <>
       <div className='bg-element-gray-lighter flex h-20 w-20 items-center justify-center rounded-full'>
         <span className='text-4xl'>
-          {data?.themeEmoji ? convertUnicodeToEmoji(data.themeEmoji) : '😀'}
+          {convertUnicodeToEmoji(data.themeEmoji)}
         </span>
       </div>
 
       <div className='mt-3 flex flex-col items-center px-6'>
         <h2 className='typo-heading-md-semibold text-text-basic'>
-          {data?.title ?? '앨범 제목'}
+          {data.title}
         </h2>
-        <p className='typo-body-md-medium text-text-subtle'>
-          {data?.eventDate ?? '-'}
-        </p>
+        <p className='typo-body-md-medium text-text-subtle'>{data.eventDate}</p>
       </div>
 
       <div className='my-8 w-full'>
