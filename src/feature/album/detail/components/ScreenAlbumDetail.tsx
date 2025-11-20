@@ -10,6 +10,7 @@ import { EP, PhotoListResponseSchema } from '@/global/api/ep';
 import CustomHeader, {
   HEADER_HEIGHT,
 } from '@/global/components/header/CustomHeader';
+import { useAlbumSortStore } from '@/store/useAlbumSortStore';
 import { useSelectedPhotosStore } from '@/store/useSelectedPhotosStore';
 import { useUploadingStore } from '@/store/useUploadingStore';
 import { useQueryClient } from '@tanstack/react-query';
@@ -17,10 +18,7 @@ import { Menu } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useShallow } from 'zustand/shallow';
-import {
-  photoSortToApiSorting,
-  type PhotoSortType,
-} from '../constants/photoSort';
+import { photoSortToApiSorting } from '../constants/photoSort';
 import { useGetAlbumAvailableCount } from '../hooks/useGetAlbumAvailableCount';
 import { useGetAlbumInvitation } from '../hooks/useGetAlbumInvitation';
 import AlbumBottomActions from './AlbumBottomActions';
@@ -44,8 +42,13 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
   const [mode, setMode] = useState<AlbumDetailMode>('default');
   const [isAlbumInfosHidden, setIsAlbumInfosHidden] = useState(false);
   const [selectionResetKey, setSelectionResetKey] = useState(0);
-  const [sortType, setSortType] = useState<PhotoSortType>('uploaded');
   const [albumType, setAlbumType] = useState<AlbumType>('all');
+  const { sortType, setSortType } = useAlbumSortStore(
+    useShallow((state) => ({
+      sortType: state.sortType,
+      setSortType: state.setSortType,
+    })),
+  );
   const sorting = photoSortToApiSorting[sortType];
   const {
     selectedPhotos,
@@ -201,8 +204,6 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
       <AlbumBottomActions
         mode={mode}
         albumId={albumId}
-        sortType={sortType}
-        changeSortType={setSortType}
         albumType={albumType}
         changeAlbumType={setAlbumType}
         changeAlbumMode={handleChangeMode}
