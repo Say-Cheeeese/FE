@@ -4,6 +4,7 @@ import ThreeTags_Fill_Album from '@/../public/assets/album/3Tags_Fill_Album.json
 import { useGetAlbumInvitation } from '@/feature/album/detail/hooks/useGetAlbumInvitation';
 import { useAlbumPhotosInfiniteQuery } from '@/feature/photo-detail/hooks/useAlbumPhotosInfiniteQuery';
 import MarqueeCarousel from '@/global/components/carousel/MarqueeCarousel';
+import { convertUnicodeToEmoji } from '@/global/utils/convertEmoji';
 import dynamic from 'next/dynamic';
 import AlbumPreviewCard from './AlbumPreviewCard';
 const Lottie = dynamic(() => import('lottie-react'), { ssr: false });
@@ -28,7 +29,9 @@ export default function AlbumSharePreviewSection({
   return (
     <>
       <div className='bg-element-gray-lighter flex h-20 w-20 items-center justify-center rounded-full'>
-        <span className='text-4xl'>😀</span>
+        <span className='text-4xl'>
+          {data?.themeEmoji ? convertUnicodeToEmoji(data.themeEmoji) : '😀'}
+        </span>
       </div>
 
       <div className='mt-3 flex flex-col items-center px-6'>
