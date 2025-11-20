@@ -11,6 +11,7 @@ import CustomHeader, {
   HEADER_HEIGHT,
 } from '@/global/components/header/CustomHeader';
 import { useAlbumSortStore } from '@/store/useAlbumSortStore';
+import { useAlbumTypeStore } from '@/store/useAlbumTypeStore';
 import { useSelectedPhotosStore } from '@/store/useSelectedPhotosStore';
 import { useUploadingStore } from '@/store/useUploadingStore';
 import { useQueryClient } from '@tanstack/react-query';
@@ -24,7 +25,6 @@ import { useGetAlbumInvitation } from '../hooks/useGetAlbumInvitation';
 import AlbumBottomActions from './AlbumBottomActions';
 import AlbumInfos from './AlbumInfos';
 import AlbumPhotoSection from './AlbumPhotoSection';
-import { type AlbumType } from './NavBarAlbumDetail';
 
 export type AlbumDetailMode = 'select' | 'default';
 
@@ -42,13 +42,15 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
   const [mode, setMode] = useState<AlbumDetailMode>('default');
   const [isAlbumInfosHidden, setIsAlbumInfosHidden] = useState(false);
   const [selectionResetKey, setSelectionResetKey] = useState(0);
-  const [albumType, setAlbumType] = useState<AlbumType>('all');
   const { sortType, setSortType } = useAlbumSortStore(
     useShallow((state) => ({
       sortType: state.sortType,
       setSortType: state.setSortType,
     })),
   );
+  const { albumType } = useAlbumTypeStore((state) => ({
+    albumType: state.albumType,
+  }));
   const sorting = photoSortToApiSorting[sortType];
   const {
     selectedPhotos,
@@ -204,8 +206,6 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
       <AlbumBottomActions
         mode={mode}
         albumId={albumId}
-        albumType={albumType}
-        changeAlbumType={setAlbumType}
         changeAlbumMode={handleChangeMode}
         selectedCount={selectedPhotos.length}
         totalPhotoCount={totalPhotoCount}

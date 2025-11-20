@@ -1,13 +1,11 @@
 import DownloadActionBar from './DownloadActionBar';
-import NavBarAlbumDetail, { AlbumType } from './NavBarAlbumDetail';
+import NavBarAlbumDetail from './NavBarAlbumDetail';
 import { AlbumDetailMode } from './ScreenAlbumDetail';
 import UploadButtonInDetail from './UploadButtonInDetail';
 
 interface AlbumBottomActionsProps {
   mode: AlbumDetailMode;
   albumId: string;
-  albumType: AlbumType;
-  changeAlbumType: (newType: AlbumType) => void;
   changeAlbumMode: (newMode: AlbumDetailMode) => void;
   selectedCount: number;
   totalPhotoCount?: number;
@@ -17,8 +15,6 @@ interface AlbumBottomActionsProps {
 export default function AlbumBottomActions({
   mode,
   albumId,
-  albumType,
-  changeAlbumType,
   changeAlbumMode,
   selectedCount,
   totalPhotoCount,
@@ -30,13 +26,7 @@ export default function AlbumBottomActions({
     return <UploadButtonInDetail buttonText='앨범 채우기' />;
 
   if (mode === 'default') {
-    return (
-      <NavBarAlbumDetail
-        albumId={albumId}
-        albumType={albumType}
-        changeAlbumType={changeAlbumType}
-      />
-    );
+    return <NavBarAlbumDetail albumId={albumId} />;
   }
 
   if (mode === 'select') {

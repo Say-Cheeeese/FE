@@ -4,6 +4,7 @@ import ToggleAlbumType from '@/feature/main/components/open-album/ToggleAlbumTyp
 import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
 import Toast from '@/global/components/toast/Toast';
 import { useAlbumSortStore } from '@/store/useAlbumSortStore';
+import { useAlbumTypeStore } from '@/store/useAlbumTypeStore';
 import { ArrowDownUp, Plus } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useRef } from 'react';
@@ -14,15 +15,9 @@ export type AlbumType = 'all' | 'deep';
 
 interface NavBarAlbumDetailProps {
   albumId: string;
-  albumType: AlbumType;
-  changeAlbumType: (value: AlbumType) => void;
 }
 
-export default function NavBarAlbumDetail({
-  albumId,
-  albumType,
-  changeAlbumType,
-}: NavBarAlbumDetailProps) {
+export default function NavBarAlbumDetail({ albumId }: NavBarAlbumDetailProps) {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { sortType, setSortType } = useAlbumSortStore(
@@ -31,9 +26,15 @@ export default function NavBarAlbumDetail({
       setSortType: state.setSortType,
     })),
   );
+  const { albumType, setAlbumType } = useAlbumTypeStore(
+    useShallow((state) => ({
+      albumType: state.albumType,
+      setAlbumType: state.setAlbumType,
+    })),
+  );
 
   const handleToggleChange = (value: AlbumType): void => {
-    changeAlbumType(value);
+    setAlbumType(value);
   };
 
   const handleButtonClick = (): void => {
