@@ -7,10 +7,10 @@ import ConfirmModal from '@/global/components/modal/ConfirmModal';
 import Toast from '@/global/components/toast/Toast';
 import BubbleHint from '@/global/components/tooltip/BubbleTooltip';
 import PersonSvg from '@/global/svg/PersonSvg';
+import { extractHtmlToBlob } from '@/global/utils/image/extractHtmlToBlob';
 import { shareImage } from '@/global/utils/image/shareImage';
 import { shareViaNavigator } from '@/global/utils/shareNavigator';
 import { useQueryClient } from '@tanstack/react-query';
-import { toBlob } from 'html-to-image';
 import { Download, LucideIcon, Menu, Send } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
@@ -19,19 +19,6 @@ import { use4CutFixed } from '../hooks/use4CutFixed';
 import { use4CutPreviewQuery } from '../hooks/use4CutPreviewQuery';
 import Container4Cut from './Container4Cut';
 
-const extracthtmlToBlob = async (node: HTMLElement): Promise<Blob> => {
-  const blob = await toBlob(node, {
-    cacheBust: true,
-    backgroundColor: '#ffffff',
-    pixelRatio: 2,
-  });
-
-  if (!blob) {
-    throw new Error('이미지 생성 실패');
-  }
-
-  return blob;
-};
 interface ScreenAlbum4CutProps {
   albumId: string;
 }
@@ -77,7 +64,7 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
     }
 
     try {
-      const blob = await extracthtmlToBlob(captureRef.current);
+      const blob = await extractHtmlToBlob(captureRef.current);
 
       await shareImage({
         imageBlobs: blob,
@@ -97,7 +84,7 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
     }
 
     try {
-      const blob = await extracthtmlToBlob(captureRef.current);
+      const blob = await extractHtmlToBlob(captureRef.current);
 
       const file = new File([blob], 'cheese-4cut.png', {
         type: blob.type ?? 'image/png',
