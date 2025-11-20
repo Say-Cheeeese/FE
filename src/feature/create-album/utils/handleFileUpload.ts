@@ -49,8 +49,6 @@ export async function handleFileUpload(
     const elapsed = Date.now() - startTime;
     const remainingTime = Math.max(0, 2000 - elapsed);
     await new Promise((resolve) => setTimeout(resolve, remainingTime));
-
-    useUploadingStore.getState().setUploaded(false);
     // input value 초기화(업로드 성공/실패 관계없이)
     if (e.target) e.target.value = '';
     // if (options?.stay && router) {

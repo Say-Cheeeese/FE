@@ -21,32 +21,36 @@ export default function ScreenRoot() {
       {/* 헤더 */}
       <LogoHeader showLogin={true} checkAuth={false} />
       {/* 본문 */}
-      <span className='typo-heading-md-bold mt-6 mb-[354px] text-center text-[#424349]'>
+      <span className='typo-heading-md-bold mt-6 mb-2 text-center text-[#424349]'>
         딱 7일만 열리는 특별한 <br />
         공유 앨범 서비스
       </span>
+
       <div
-        className='absolute flex justify-center'
-        style={{
-          width: '411px',
-          height: '411px',
-          top: '146px',
-          background:
-            'radial-gradient(55.18% 55.18% at 50% 50%, #FFDC5C 0%, rgba(255, 255, 255, 0) 100%)',
-          pointerEvents: 'none',
-        }}
+        className='relative flex w-full items-center justify-center'
+        style={{ height: 320 }}
       >
+        <Image
+          src='/assets/rending/blur.svg'
+          width={411}
+          height={411}
+          priority
+          alt='블러 배경'
+          className='pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 select-none'
+          style={{ zIndex: 1 }}
+        />
         <Image
           src='/assets/rending/phone.svg'
           width={294}
           height={288}
           priority
           alt='핸드폰 일러스트'
-          style={{ zIndex: 1, pointerEvents: 'auto' }}
-          className='-mt-10'
+          className='relative z-10'
+          style={{ pointerEvents: 'auto' }}
         />
       </div>
-      <span className='typo-body-sm-regular mt-[58px] mb-3 text-[#747681]'>
+
+      <span className='typo-body-sm-regular mt-[28px] mb-3 text-[#747681]'>
         1000개 모임에서 치이이즈를 사용했어요
       </span>
       <LongButton
