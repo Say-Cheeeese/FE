@@ -8,13 +8,13 @@ import { presignedAndUploadToNCP } from '../api/presignedAndUploadToNCP';
  */
 export function usePresignedAndUploadToNCP(
   options?: UseMutationOptions<
-    { success: number; failed: number },
+    { success: number; failed: number; failedPhotoIds: number[] },
     unknown,
     PresignedUrlRequest & { files: File[] }
   >,
 ) {
   return useMutation<
-    { success: number; failed: number },
+    { success: number; failed: number; failedPhotoIds: number[] },
     unknown,
     PresignedUrlRequest & { files: File[] }
   >({

@@ -5,6 +5,7 @@ import LongButton from '@/global/components/LongButton';
 import PhotoBox from '@/global/components/photo/PhotoBox';
 import { AlbumToastList } from '@/global/components/toast/AlbumToast';
 import { usePresignedAndUploadToNCP } from '@/global/hooks/usePresignedAndUploadToNCP';
+import { useReportFailed } from '@/global/hooks/useReportFailded';
 import { useImageStore } from '@/store/useImageStore';
 import { useUploadingStore } from '@/store/useUploadingStore';
 import { useParams, useRouter } from 'next/navigation';
@@ -59,28 +60,37 @@ export default function SelectAlbumBody() {
     });
   };
 
+  // 업로드 실패 보고 훅
+  const { mutate: reportFailed } = useReportFailed();
+
   // usePresignedAndUploadToNCP 훅 사용
-  const { mutate: uploadMutate, isPending: isUploading } =
-    usePresignedAndUploadToNCP({
-      onSuccess: (result) => {
-        if (result.failed > 0) {
-          showToast(`${result.failed}개 파일 업로드에 실패했어요`);
-        } else {
-          revokeAllObjectUrls();
-          // 업로드 성공 시 전역 isUploaded true
-          useUploadingStore.getState().setUploaded(true);
-          // 업로드 성공 시 detail로 이동
-          router.replace(`/album/detail/${albumId}`);
-          showToast('모든 사진이 성공적으로 업로드되었어요!');
-          // 라우팅 후 images 클리어 (useEffect 트리거 방지)
+  const { mutate: uploadMutate } = usePresignedAndUploadToNCP({
+    onSuccess: (result) => {
+      if (result.failed > 0) {
+        showToast(`${result.failed}개 파일 업로드에 실패했어요`);
+        // 실패한 photoId가 있으면 서버에 보고
+        if (
+          Array.isArray(result.failedPhotoIds) &&
+          result.failedPhotoIds.length > 0
+        ) {
+          reportFailed(result.failedPhotoIds);
         }
-      },
-      onError: (e) => {
+      } else {
         revokeAllObjectUrls();
-        console.error('에러 발생', e);
-        alert('사진을 업로드하는 중 오류가 발생했습니다. 다시 시도해주세요.');
-      },
-    });
+        // 업로드 성공 시 전역 isUploaded true
+        useUploadingStore.getState().setUploaded(true);
+        // 업로드 성공 시 detail로 이동
+        router.replace(`/album/detail/${albumId}`);
+        showToast('모든 사진이 성공적으로 업로드되었어요!');
+        // 라우팅 후 images 클리어 (useEffect 트리거 방지)
+      }
+    },
+    onError: (e) => {
+      revokeAllObjectUrls();
+      console.error('에러 발생', e);
+      alert('사진을 업로드하는 중 오류가 발생했습니다. 다시 시도해주세요.');
+    },
+  });
 
   const showToast = (message: string | string[]) => {
     // 이미 토스트가 떠있으면 무시
@@ -249,7 +259,7 @@ export default function SelectAlbumBody() {
       <LongButton
         text={`앨범에 ${selectedIds.size}장 채우기`}
         noFixed={false}
-        disabled={isUploading || isOverCount || selectedIds.size === 0}
+        disabled={isOverCount || selectedIds.size === 0}
         onClick={handleUpload}
       />
       {toasts.length > 0 && (

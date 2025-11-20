@@ -15,7 +15,6 @@ export async function handleFileUpload(
   const fl = e.target.files;
   if (!fl) return;
 
-  const setUploading = useUploadingStore.getState().setUploading;
   const startTime = Date.now();
 
   try {
@@ -28,7 +27,6 @@ export async function handleFileUpload(
     const result = await validateUpload(files, albumId);
     if (result.ok) {
       useUploadingStore.getState().setUploaded(true);
-      setUploading(true);
       if (!options?.stay && router) {
         router.push(`/album/${albumId}/waiting`);
       }
@@ -52,7 +50,7 @@ export async function handleFileUpload(
     const remainingTime = Math.max(0, 2000 - elapsed);
     await new Promise((resolve) => setTimeout(resolve, remainingTime));
 
-    setUploading(false);
+    useUploadingStore.getState().setUploaded(false);
     // input value 초기화(업로드 성공/실패 관계없이)
     if (e.target) e.target.value = '';
     // if (options?.stay && router) {
