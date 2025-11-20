@@ -1,5 +1,6 @@
 'use client';
 import { useGetAlbumInvitation } from '@/feature/album/detail/hooks/useGetAlbumInvitation';
+import Toast from '@/global/components/toast/Toast';
 import { convertUnicodeToEmoji } from '@/global/utils/convertEmoji';
 import { formatExpirationTime } from '@/global/utils/time/formatExpirationTime';
 import { useRouter } from 'next/navigation';
@@ -18,9 +19,13 @@ export default function FullSizeLetter({ albumId }: FullSizeLetterProps) {
   if (isError) return null;
   if (!data) return null;
 
-  const handleInviteAccept = () => {
-    mutateAsync(albumId);
-    router.push(`/photo-share-entry/${albumId}`);
+  const handleInviteAccept = async () => {
+    try {
+      await mutateAsync(albumId);
+      router.push(`/photo-share-entry/${albumId}`);
+    } catch (error) {
+      Toast.alert('앨범 입장에 실패하였습니다');
+    }
   };
 
   return (
