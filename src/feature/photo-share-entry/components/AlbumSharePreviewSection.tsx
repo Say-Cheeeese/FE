@@ -4,6 +4,7 @@ import ThreeTags_Fill_Album from '@/../public/assets/album/3Tags_Fill_Album.json
 import { useGetAlbumInvitation } from '@/feature/album/detail/hooks/useGetAlbumInvitation';
 import { useAlbumPhotosInfiniteQuery } from '@/feature/photo-detail/hooks/useAlbumPhotosInfiniteQuery';
 import MarqueeCarousel from '@/global/components/carousel/MarqueeCarousel';
+import { DEFAULT_PROFILE_IMAGE } from '@/global/constants/images';
 import { convertUnicodeToEmoji } from '@/global/utils/convertEmoji';
 import dynamic from 'next/dynamic';
 import AlbumPreviewCard from './AlbumPreviewCard';
@@ -49,11 +50,12 @@ export default function AlbumSharePreviewSection({
         ) : (
           <MarqueeCarousel
             items={items.map((item, i) => (
-              <div key={`${item.imageUrl ?? ''}-${i}`}>
+              <div key={`${item.imageUrl}-${i}`}>
                 <AlbumPreviewCard
                   imageUrl={item.imageUrl ?? ''}
                   nickname={item.name ?? ''}
-                  profileUrl={item.imageUrl ?? ''}
+                  // TODO : API에서 프사 받아야함.
+                  profileUrl={DEFAULT_PROFILE_IMAGE}
                 />
               </div>
             ))}
