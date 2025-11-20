@@ -4,6 +4,7 @@ import {
   FetchNextPageOptions,
   InfiniteQueryObserverResult,
 } from '@tanstack/react-query';
+import { useShallow } from 'zustand/shallow';
 import NoPhotoBody from './NoPhotoBody';
 import PhotoList from './PhotoList';
 import { AlbumDetailMode } from './ScreenAlbumDetail';
@@ -35,9 +36,12 @@ export default function AlbumPhotoSection({
   isFetchingNextPage,
   totalPhotoCount,
 }: AlbumPhotoSectionProps) {
-  const { albumType } = useAlbumTypeStore((state) => ({
-    albumType: state.albumType,
-  }));
+  const { albumType } = useAlbumTypeStore(
+    useShallow((state) => ({
+      albumType: state.albumType,
+      setAlbumType: state.setAlbumType,
+    })),
+  );
 
   if (isLoading) return null;
 

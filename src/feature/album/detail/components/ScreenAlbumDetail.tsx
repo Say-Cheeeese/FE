@@ -48,9 +48,12 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
       setSortType: state.setSortType,
     })),
   );
-  const { albumType } = useAlbumTypeStore((state) => ({
-    albumType: state.albumType,
-  }));
+  const { albumType, setAlbumType } = useAlbumTypeStore(
+    useShallow((state) => ({
+      albumType: state.albumType,
+      setAlbumType: state.setAlbumType,
+    })),
+  );
   const sorting = photoSortToApiSorting[sortType];
   const {
     selectedPhotos,
