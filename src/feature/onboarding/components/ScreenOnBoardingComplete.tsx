@@ -19,7 +19,9 @@ export default function ScreenOnboardingComplete() {
     }
     // entry 쿠키 삭제 (만료일을 과거로)
     if (typeof document !== 'undefined') {
-      document.cookie = 'entry=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+      const domain =
+        process.env.NODE_ENV === 'production' ? '.say-cheese.me' : undefined;
+      document.cookie = `entry=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT${domain ? `; domain=${domain}` : ''}`;
     }
   };
   return (

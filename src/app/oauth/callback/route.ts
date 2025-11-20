@@ -43,10 +43,8 @@ export async function GET(request: NextRequest) {
     const cookieDomain =
       process.env.NODE_ENV === 'production' ? '.say-cheese.me' : undefined;
 
-    // 쿠키 파싱
-    const cookieHeader = request.headers.get('cookie') || '';
-    const entryMatch = cookieHeader.match(/(?:^|; )entry=([^;]*)/);
-    const entry = entryMatch ? decodeURIComponent(entryMatch[1]) : null;
+    // 쿠키 파싱 (Next.js 13+ 방식)
+    const entry = request.cookies.get('entry')?.value ?? null;
 
     let redirectPath = '/main';
     if (data.result.isOnboarded) {
