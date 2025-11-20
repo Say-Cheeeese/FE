@@ -29,3 +29,11 @@ export function formatExpirationTime(expiredAt?: string) {
 
   return `${seconds}초`;
 }
+
+/** expiredAt 이 현재 시각 기준 만료됐는지 여부만 반환 */
+export function getIsExpired(expiredAt?: string): boolean {
+  if (!expiredAt) return true;
+  const expiresAt = new Date(expiredAt).getTime();
+  if (Number.isNaN(expiresAt)) return true;
+  return expiresAt - Date.now() <= 0;
+}
