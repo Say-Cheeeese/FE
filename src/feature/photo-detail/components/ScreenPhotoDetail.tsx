@@ -26,7 +26,7 @@ export default function ScreenPhotoDetail({
 
   return (
     <main className='bg-surface-inverse flex h-dvh w-full flex-col justify-between'>
-      <HeaderPhotoDetail albumId={albumId} />
+      <HeaderPhotoDetail albumId={albumId} photoId={photoId} />
       <MainPhotoDetail albumId={albumId} photoId={photoId} images={images} />
     </main>
   );

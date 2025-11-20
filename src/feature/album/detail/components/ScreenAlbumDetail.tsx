@@ -30,22 +30,15 @@ import { type AlbumType } from './NavBarAlbumDetail';
 
 export type AlbumDetailMode = 'select' | 'default';
 
+const LOADING_MODAL_DURATION = 3000;
+
 interface ScreenAlbumDetailProps {
   albumId: string;
 }
 
-const LOADING_MODAL_DURATION = 3000;
-
 export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
   const queryClient = useQueryClient();
-  const { isUploaded, setUploaded } = useUploadingStore(
-    useShallow((state) => ({
-      isUploaded: state.isUploaded,
-      setUploaded: state.setUploaded,
-    })),
-  );
-  // showLoading 상태 제거, isUploaded만으로 분기
-  // uploadDoneRef 제거
+
   const router = useRouter();
   const albumInfosRef = useRef<HTMLElement | null>(null);
   const [mode, setMode] = useState<AlbumDetailMode>('default');
@@ -67,9 +60,12 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
       clearSelectedPhotos: state.clearSelectedPhotos,
     })),
   );
-
-  // 업로드 완료 전에는 showLoading true, 완료 후에는 false
-  // showLoading 관련 useEffect 제거
+  const { isUploaded, setUploaded } = useUploadingStore(
+    useShallow((state) => ({
+      isUploaded: state.isUploaded,
+      setUploaded: state.setUploaded,
+    })),
+  );
 
   const {
     data: invitationData,
