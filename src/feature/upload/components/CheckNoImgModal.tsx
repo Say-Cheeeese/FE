@@ -2,6 +2,7 @@
 
 import { handleFileUpload } from '@/feature/create-album/utils/handleFileUpload';
 import ConfirmModal from '@/global/components/modal/ConfirmModal';
+import Toast from '@/global/components/toast/Toast';
 import { useUploadingStore } from '@/store/useUploadingStore';
 import { useRouter } from 'next/navigation';
 import { ReactNode, useRef } from 'react';
@@ -19,7 +20,6 @@ export default function CheckNoImgModal({
 }: CheckNoImgModalProps) {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { setUploading } = useUploadingStore();
 
   const handleCancel = () => {
     fileInputRef.current?.click();
@@ -35,11 +35,11 @@ export default function CheckNoImgModal({
   };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUploading(true);
     try {
       await handleFileUpload(e, albumId, router);
-    } finally {
-      setUploading(false);
+    } catch (e) {
+      console.error(e);
+      Toast.alert('사진 업로드 중 오류가 발생했습니다.');
     }
   };
 
