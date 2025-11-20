@@ -16,7 +16,7 @@ export async function generateMetadata(
 
     if (result?.makerName) makerName = result.makerName;
   } catch (e) {
-    console.log(e);
+    console.error(e);
   }
 
   return {
