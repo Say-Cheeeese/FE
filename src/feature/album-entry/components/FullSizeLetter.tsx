@@ -16,11 +16,6 @@ export default function FullSizeLetter({ albumId }: FullSizeLetterProps) {
   if (isError) return null;
   if (!data) return null;
 
-  const { data, isPending, isError } = useGetAlbumInvitation(albumId);
-
-  if (isPending) return null;
-  if (isError) return null;
-
   return (
     <>
       {/* 편지지 */}
