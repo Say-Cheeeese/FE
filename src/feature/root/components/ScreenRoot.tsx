@@ -5,8 +5,10 @@ import { useCheckAuth } from '@/global/hooks/useCheckAuth';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import RendingFooter from './RendingFooter';
 import SelectedList from './SelectedList';
 import SelectMenu from './SelectMenu';
+import SwipeList from './SwipeList';
 
 export default function ScreenRoot() {
   const router = useRouter();
@@ -108,8 +110,30 @@ export default function ScreenRoot() {
           selectedMenu={selectedMenu}
           setSelectedMenu={setSelectedMenu}
         />
-        <SelectedList selectedMenu={selectedMenu} />
       </div>
+      <div className='-mr-4 mb-25 -ml-4'>
+        <SelectedList
+          selectedMenu={selectedMenu}
+          setSelectedMenu={setSelectedMenu}
+        />
+      </div>
+      <div className='typo-body-sm-semibold text-text-basic mb-3 flex flex-col items-center gap-1'>
+        <span>서비스에 그대로 담긴</span>
+        <span className='text-[20px]'>사진 찍고 나눌 때의 감정</span>
+      </div>
+      <Image
+        src='/assets/rending/box.svg'
+        width={325}
+        height={330}
+        loading='lazy'
+        alt='박스 일러스트'
+      />
+      <div className='typo-body-sm-semibold text-text-basic mt-25 mb-8 flex flex-col items-center gap-1'>
+        <span>추억할 일이 있는 모든 곳에서</span>
+        <span className='text-[20px]'>모두 함께 치이이즈</span>
+      </div>
+      <SwipeList />
+      <RendingFooter />
     </div>
   );
 }

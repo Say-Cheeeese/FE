@@ -93,7 +93,7 @@ export function ProfileAgree({
               </span>
             </div>
             <Link
-              href={`/onboarding?term=${item.id}`}
+              href={`/term?type=${item.id}`}
               className='relative flex h-6 w-6 flex-shrink-0 items-center justify-center'
               aria-label={`${item.label} 상세보기`}
             >
