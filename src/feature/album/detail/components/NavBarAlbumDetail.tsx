@@ -1,12 +1,10 @@
 'use client';
 import { handleFileUpload } from '@/feature/create-album/utils/handleFileUpload';
 import ToggleAlbumType from '@/feature/main/components/open-album/ToggleAlbumType';
-import { EP } from '@/global/api/ep';
 import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
 import Toast from '@/global/components/toast/Toast';
 import { useAlbumSortStore } from '@/store/useAlbumSortStore';
 import { useAlbumTypeStore } from '@/store/useAlbumTypeStore';
-import { useQueryClient } from '@tanstack/react-query';
 import { ArrowDownUp, Plus } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useRef } from 'react';
@@ -20,7 +18,6 @@ interface NavBarAlbumDetailProps {
 }
 
 export default function NavBarAlbumDetail({ albumId }: NavBarAlbumDetailProps) {
-  const queryClient = useQueryClient();
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { sortType, setSortType } = useAlbumSortStore(
@@ -51,12 +48,6 @@ export default function NavBarAlbumDetail({ albumId }: NavBarAlbumDetailProps) {
       await handleFileUpload(e, albumId, router, {
         stay: true,
       });
-      // 백엔드에서 사진이 앨범에 추가되기까지 3초정도 걸림.
-      setTimeout(() => {
-        queryClient.invalidateQueries({
-          queryKey: [EP.album.photos(albumId)],
-        });
-      }, 3000);
     } catch (error: unknown) {
       if (error instanceof Error) {
         Toast.alert(error.message);
