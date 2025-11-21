@@ -11,6 +11,7 @@ interface PhotoBoxProps {
   responsive?: boolean;
   likeCount?: number;
   liked?: boolean;
+  mode?: 'default' | 'select';
   downloaded?: boolean;
   pressed?: boolean;
   disabled?: boolean;
@@ -28,6 +29,7 @@ export default function PhotoBox({
   liked = false,
   downloaded = false,
   pressed = false,
+  mode = 'default',
   disabled = false,
   imageSrc,
   imageAlt = '사진',
@@ -89,7 +91,7 @@ export default function PhotoBox({
       </div>
 
       {/* disabled  모드에서만 오버레이 */}
-      {disabled && (
+      {disabled && mode === 'select' && (
         <div className='bg-background-dim-darkest pointer-events-none absolute inset-0 z-10' />
       )}
 
