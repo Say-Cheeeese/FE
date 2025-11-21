@@ -135,7 +135,7 @@ export default function PhotoList({
       <div ref={anchorRef} className='invisible absolute top-[-72px] left-0' />
       <div className='mb-3 flex justify-between'>
         <span className='typo-body-lg-regular text-text-subtle'>
-          총 {totalPhotoCount || ''}장
+          총 {photos.length || 0}장
         </span>
         {mode === 'default' && (
           <button
