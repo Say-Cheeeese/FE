@@ -1,11 +1,21 @@
 'use client';
+import { buildQuery } from '@/global/utils/buildQuery';
 import Image from 'next/image';
+import { useSearchParams } from 'next/navigation';
+
+const KAKAO_AUTH_URL = 'https://dev.say-cheese.me/oauth2/authorization/kakao';
 
 export default function KakaoSignupButton() {
-  const KAKAO_AUTH_URL = 'https://dev.say-cheese.me/oauth2/authorization/kakao';
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get('redirect');
+
   const handleKakaoLogin = async () => {
     try {
-      window.location.href = KAKAO_AUTH_URL ?? '';
+      const kakaoUrl = redirect
+        ? `${KAKAO_AUTH_URL}${buildQuery({ redirect })}`
+        : KAKAO_AUTH_URL;
+
+      window.location.href = kakaoUrl;
     } catch (err) {
       console.error('카카오 인증 GET 요청 실패:', err);
     }
