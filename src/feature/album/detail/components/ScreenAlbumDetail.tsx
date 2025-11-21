@@ -31,7 +31,7 @@ interface ScreenAlbumDetailProps {
   albumId: string;
 }
 
-const LOADING_MODAL_DURATION = 3500;
+const LOADING_MODAL_DURATION = 5000;
 
 export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
   const router = useRouter();
