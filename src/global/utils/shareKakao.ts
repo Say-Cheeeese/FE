@@ -7,6 +7,10 @@ interface ShareKakaoProps {
   link: string;
   /** 공유에 사용할 썸네일 이미지 URL */
   imageUrl: string;
+  /** 공유에 사용할 썸네일 width */
+  imageWidth?: number;
+  /** 공유에 사용할 썸네일 height */
+  imageHeight?: number;
   /** 버튼에 들어갈 문구 */
   buttonTitle?: string;
   /** 버튼에 삽입 될 URL */
@@ -18,6 +22,8 @@ export function shareKakao({
   description,
   link,
   imageUrl,
+  imageWidth,
+  imageHeight,
   buttonTitle,
   buttonLink,
 }: ShareKakaoProps) {
@@ -29,12 +35,13 @@ export function shareKakao({
       title: title,
       description: description,
       imageUrl,
+      ...(imageWidth && { imageWidth }),
+      ...(imageHeight && { imageHeight }),
       link: {
         webUrl: link,
         mobileWebUrl: link,
       },
     },
-
     ...(buttonTitle &&
       buttonLink && {
         buttons: [

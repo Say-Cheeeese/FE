@@ -1,3 +1,4 @@
+import KakaoProvider from '@/global/context/KakaoProvider';
 import QueryProvider from '@/global/context/QueryProvider';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
@@ -75,7 +76,9 @@ export default function RootLayout({
           background: '#fff',
         }}
       >
-        <QueryProvider>{children}</QueryProvider>
+        <QueryProvider>
+          <KakaoProvider>{children}</KakaoProvider>
+        </QueryProvider>
       </body>
     </html>
   );

@@ -10,8 +10,10 @@ export default function KakaoShareButton({ albumId }: KakaoShareButtonProps) {
     shareKakao({
       title: '앨범에 초대해요',
       description: '치이이즈: 추억은 따끈할 때 제맛',
-      imageUrl: `${process.env.NEXT_PUBLIC_CLIENT_URL}/assets/og/og_kakao.png`,
-      link: `${process.env.NEXT_PUBLIC_CLIENT_URL}/album/entry/${albumId}`,
+      imageUrl: `https://say-cheese.me/assets/og/og_kakao.png`,
+      imageWidth: 1200,
+      imageHeight: 630,
+      link: `https://say-cheese.me/album/entry/${albumId}`,
     });
   };
 
