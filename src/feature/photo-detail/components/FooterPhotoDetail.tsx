@@ -6,6 +6,7 @@ import { shareImage } from '@/global/utils/image/shareImage';
 import { useQueryClient } from '@tanstack/react-query';
 import { Download, Heart, Info } from 'lucide-react';
 import { useState } from 'react';
+import { usePhotoDownloadMutation } from '../hooks/usePhotoDownloadMutation';
 import { usePhotoLikedMutation } from '../hooks/usePhotoLikedMutation';
 import { usePhotoUnlikedMutation } from '../hooks/usePhotoUnlikedMutation';
 import { updateCacheAlbumPhotosLike } from '../modules/updateCacheAlbumPhotosLike';
@@ -35,6 +36,7 @@ export default function FooterPhotoDetail({
     usePhotoLikedMutation();
   const { mutateAsync: mutateAsyncUnlike, isPending: isUnliking } =
     usePhotoUnlikedMutation();
+  const { mutateAsync: mutateAsyncDownload } = usePhotoDownloadMutation();
 
   const handleDeepToggle = async (): Promise<void> => {
     try {
@@ -68,14 +70,18 @@ export default function FooterPhotoDetail({
     if (isDownloading) return;
 
     setIsDownloading(true);
-    await shareImage({
-      imageUrls: imageUrl,
-      imageTitle: `IMG_${photoId}`,
-      onSuccess: () => {},
-      onError: () => {
-        Toast.alert('사진을 준비하는 중 오류가 발생했습니다.');
-      },
-    });
+    await Promise.all([
+      mutateAsyncDownload({ albumId, photoIds: [photoId] }),
+      shareImage({
+        imageUrls: imageUrl,
+        imageTitle: `IMG_${photoId}`,
+        onSuccess: () => {},
+        onError: () => {
+          Toast.alert('사진을 준비하는 중 오류가 발생했습니다.');
+        },
+      }),
+    ]);
+
     setIsDownloading(false);
   };
 
