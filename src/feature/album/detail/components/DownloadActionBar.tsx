@@ -53,7 +53,7 @@ export default function DownloadActionBar({
   const isDisabled = selectedCount === 0;
 
   return (
-    <section className='bg-background-dim-darkest fixed bottom-0 flex h-18 w-full items-center justify-between gap-3 px-4'>
+    <section className='bg-background-dim-darkest fixed bottom-0 flex h-18 w-full max-w-[430px] items-center justify-between gap-3 px-4'>
       <div className='typo-heading-sm-semibold text-white'>
         {selectedCount}장의 사진이 선택됨
       </div>
