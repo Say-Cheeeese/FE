@@ -1,68 +1,33 @@
 'use client';
 
 import { PhotoSorting } from '@/global/api/ep';
-import dynamic from 'next/dynamic';
-import { useState } from 'react';
 import { useAlbumPhotosInfiniteQuery } from '../hooks/useAlbumPhotosInfiniteQuery';
-import FooterPhotoDetail from './FooterPhotoDetail';
 import HeaderPhotoDetail from './HeaderPhotoDetail';
-const SwiperPhotoList = dynamic(() => import('./SwiperPhotoList'), {
-  ssr: false,
-  loading: () => (
-    <div className='flex h-full flex-1 items-center justify-center'>
-      <div className='h-6 w-6 animate-spin rounded-full border-2 border-white border-t-transparent' />
-    </div>
-  ),
-});
+import MainPhotoDetail from './MainPhotoDetail';
 
 interface ScreenPhotoDetailProps {
   albumId: string;
   sort: PhotoSorting;
+  photoId?: number;
 }
 
 export default function ScreenPhotoDetail({
   albumId,
   sort,
+  photoId,
 }: ScreenPhotoDetailProps) {
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  const changeActiveIndex = (newIndex: number): void => {
-    setActiveIndex(newIndex);
-  };
-
-  const {
-    items: images,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  } = useAlbumPhotosInfiniteQuery({
+  const { items: images } = useAlbumPhotosInfiniteQuery({
     code: albumId,
-    size: 30,
+    size: 2000,
     sorting: sort,
   });
 
-  const activeImage = images[activeIndex];
-  if (!activeImage) return null;
+  if (images.length === 0) return null;
 
   return (
     <main className='bg-surface-inverse flex h-dvh w-full flex-col justify-between'>
-      <HeaderPhotoDetail albumId={albumId} />
-      <SwiperPhotoList
-        activeIndex={activeIndex}
-        changeActiveIndex={changeActiveIndex}
-        fetchNextPage={fetchNextPage}
-        hasNextPage={hasNextPage}
-        isFetchingNextPage={isFetchingNextPage}
-        images={images}
-      />
-      <FooterPhotoDetail
-        albumId={albumId}
-        photoId={activeImage.photoId}
-        isLiked={activeImage.isLiked}
-        likeCnt={activeImage.likeCnt}
-        isRecentlyDownloaded={activeImage.isRecentlyDownloaded}
-        imageUrl={activeImage.imageUrl}
-      />
+      <HeaderPhotoDetail albumId={albumId} photoId={photoId} />
+      <MainPhotoDetail albumId={albumId} photoId={photoId} images={images} />
     </main>
   );
 }

@@ -1,12 +1,15 @@
 'use client';
 import { useGetUserMe } from '@/feature/main/hooks/useGetUserMe';
+import { EP } from '@/global/api/ep';
 import CustomHeader from '@/global/components/header/CustomHeader';
 import LongButton from '@/global/components/LongButton';
 import ConfirmModal from '@/global/components/modal/ConfirmModal';
 import Toast from '@/global/components/toast/Toast';
 import BubbleHint from '@/global/components/tooltip/BubbleTooltip';
 import PersonSvg from '@/global/svg/PersonSvg';
+import { shareImage } from '@/global/utils/image/shareImage';
 import { shareViaNavigator } from '@/global/utils/shareNavigator';
+import { useQueryClient } from '@tanstack/react-query';
 import { toBlob } from 'html-to-image';
 import { Download, LucideIcon, Menu, Send } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -35,6 +38,7 @@ interface ScreenAlbum4CutProps {
 
 export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [isConfirmed, setIsConfirmed] = useState(false);
   const captureRef = useRef<HTMLDivElement>(null);
   const { data } = useGetAlbumInfo(albumId);
@@ -58,6 +62,9 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
           photo.photoId,
       ),
     });
+    queryClient.invalidateQueries({
+      queryKey: [EP.cheese4cut.preview(albumId)],
+    });
     setIsConfirmed(true);
   };
 
@@ -72,18 +79,13 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
     try {
       const blob = await extracthtmlToBlob(captureRef.current);
 
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = data?.title
-        ? `${data.title}-cheese-4cut.png`
-        : 'cheese-4cut.png';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
+      await shareImage({
+        imageBlobs: blob,
+        imageTitle: data?.title
+          ? `${data.title}-cheese-4cut.png`
+          : `cheese-4cut.png`,
+      });
     } catch (error) {
-      console.error('Failed to download 4cut preview:', error);
       Toast.alert('이미지를 다운로드하지 못했습니다. 다시 시도해주세요.');
     }
   };
@@ -101,6 +103,7 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
         type: blob.type ?? 'image/png',
       });
 
+      // TODO : shareImage 함수로 리팩토링
       await shareViaNavigator({
         data: {
           files: [file],
@@ -134,9 +137,15 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
         }
       />
       <section className='absolute top-[46%] left-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center'>
-        <div className='typo-body-lg-semibold mb-2'>현재 TOP 4 사진</div>
+        {!isFinalized && (
+          <div className='typo-body-lg-semibold mb-2'>현재 TOP 4 사진</div>
+        )}
         <div ref={captureRef}>
-          <Container4Cut albumId={albumId} />
+          <Container4Cut
+            albumId={albumId}
+            eventName={data?.title}
+            eventDate={data?.eventDate}
+          />
         </div>
       </section>
 

@@ -16,7 +16,7 @@ export default function UploadButtonInDetail({
   buttonText,
 }: UploadButtonInDetailProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const isUploading = useUploadingStore((state) => state.isUploading);
+  const isUploaded = useUploadingStore((state) => state.isUploaded);
   const router = useRouter();
   const params = useParams();
   const queryClient = useQueryClient();
@@ -36,7 +36,7 @@ export default function UploadButtonInDetail({
   };
 
   const handleButtonClick = () => {
-    if (!isUploading) fileInputRef.current?.click();
+    if (!isUploaded) fileInputRef.current?.click();
   };
 
   return (
@@ -50,10 +50,10 @@ export default function UploadButtonInDetail({
         className='hidden'
       />
       <LongButton
-        text={isUploading ? '업로드중이에요.' : buttonText || '앨범 채우기'}
+        text={isUploaded ? '업로드중이에요.' : buttonText || '앨범 채우기'}
         noFixed={false}
         onClick={handleButtonClick}
-        disabled={isUploading}
+        disabled={isUploaded}
       />
     </>
   );

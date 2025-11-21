@@ -6,6 +6,7 @@ export type PresignedUrlRequest = {
     fileName: string;
     fileSize: number;
     contentType: string;
+    captureTime: string; // yyyy-MM-ddTHH:mm:ss
   }[];
 };
 
@@ -27,7 +28,7 @@ export async function getPresignedUrl(
   try {
     const response = await api.post<ApiResponse>({
       path: '/v1/photo/presigned-url',
-      body: params,
+      body: { albumCode: params.albumCode, fileInfos: params.fileInfos },
     });
     return response.result.presignedUrlInfos;
   } catch (error) {

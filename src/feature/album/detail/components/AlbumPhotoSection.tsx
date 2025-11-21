@@ -1,8 +1,10 @@
 import { PhotoListResponseSchema } from '@/global/api/ep';
+import { useAlbumTypeStore } from '@/store/useAlbumTypeStore';
 import {
   FetchNextPageOptions,
   InfiniteQueryObserverResult,
 } from '@tanstack/react-query';
+import { useShallow } from 'zustand/shallow';
 import NoPhotoBody from './NoPhotoBody';
 import PhotoList from './PhotoList';
 import { AlbumDetailMode } from './ScreenAlbumDetail';
@@ -34,10 +36,26 @@ export default function AlbumPhotoSection({
   isFetchingNextPage,
   totalPhotoCount,
 }: AlbumPhotoSectionProps) {
+  const { albumType } = useAlbumTypeStore(
+    useShallow((state) => ({
+      albumType: state.albumType,
+      setAlbumType: state.setAlbumType,
+    })),
+  );
+
   if (isLoading) return null;
 
   if (photos.length === 0) {
-    return <NoPhotoBody />;
+    return (
+      <NoPhotoBody
+        text={
+          albumType === 'all'
+            ? '앨범에 아직 사진이 없어요'
+            : '아직 띱한 사진이 없어요'
+        }
+        isRefresh={albumType === 'all'}
+      />
+    );
   }
 
   return (

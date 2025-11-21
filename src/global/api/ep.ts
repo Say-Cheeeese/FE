@@ -26,6 +26,7 @@ export const EP = {
     "albumInfo": (code: string) => `/v1/album/${code}/info`,
     "invitation": (code: string) => `/v1/album/${code}/invitation`,
     "participants": (code: string) => `/v1/album/${code}/participants`,
+    "albumPhoto": (code: string, photoId: number) => `/v1/album/${code}/photo/${photoId}`,
     "photos": (code: string) => `/v1/album/${code}/photos`,
     "photoDetail": (code: string, photoId: number) => `/v1/album/${code}/photos/${photoId}`,
     "albumPhotosLikers": (code: string, photoId: number) => `/v1/album/${code}/photos/${photoId}/likers`,
@@ -104,7 +105,7 @@ export interface CommonResponsePhotoPageResponseSchema { "isSuccess"?: boolean; 
 export interface PhotoListResponseSchema { "name"?: string; "photoId": number; "imageUrl"?: string; "thumbnailUrl": string; "likeCnt": number; "isLiked": boolean; "isDownloaded": boolean; "isRecentlyDownloaded": boolean; }
 export interface PhotoPageResponseSchema { "responses": PhotoListResponseSchema[]; "listSize": number; "isFirst": boolean; "isLast": boolean; "hasNext": boolean; }
 export interface CommonResponsePhotoDetailResponseSchema { "isSuccess"?: boolean; "code"?: number; "message"?: string; "result"?: PhotoDetailResponseSchema; }
-export interface PhotoDetailResponseSchema { "name": string; "photoId": number; "imageUrl": string; "thumbnailUrl": string; "likesCnt": number; "isLiked": boolean; "isDownloaded": boolean; "isRecentlyDownloaded": boolean; "captureTime"?: string; "createdAt"?: string; }
+export interface PhotoDetailResponseSchema { "name": string; "profileImage": string; "photoId": number; "imageUrl": string; "thumbnailUrl": string; "likesCnt": number; "isLiked": boolean; "isDownloaded": boolean; "isRecentlyDownloaded": boolean; "captureTime"?: string; "createdAt"?: string; }
 export interface CommonResponsePhotoLikedUserResponseSchema { "isSuccess"?: boolean; "code"?: number; "message"?: string; "result"?: PhotoLikedUserResponseSchema; }
 export interface PhotoLikedUserResponseSchema { "likeCnt"?: number; "photoLikers"?: PhotoLikerSchema[]; }
 export interface PhotoLikerSchema { "name"?: string; "profileImageUrl"?: string; "isMe"?: boolean; "role"?: "MAKER" | "GUEST" | "BLACK"; }
@@ -146,6 +147,7 @@ export type AlbumEnterResponse = CommonResponseAlbumEnterResponseSchema["result"
 export type AlbumAlbumInfoResponse = CommonResponseAlbumInfoResponseSchema["result"];
 export type AlbumInvitationResponse = CommonResponseAlbumInvitationResponseSchema["result"];
 export type AlbumParticipantsResponse = CommonResponseAlbumParticipantResponseSchema["result"];
+export type AlbumAlbumPhotoResponse = CommonResponseVoidSchema["result"];
 export type AlbumPhotosResponse = CommonResponsePhotoPageResponseSchema["result"];
 export type AlbumPhotoDetailResponse = CommonResponsePhotoDetailResponseSchema["result"];
 export type AlbumAlbumPhotosLikersResponse = CommonResponsePhotoLikedUserResponseSchema["result"];
@@ -180,6 +182,7 @@ export interface ApiReturns {
   "album.albumInfo": AlbumAlbumInfoResponse; // GET /v1/album/{code}/info
   "album.invitation": AlbumInvitationResponse; // GET /v1/album/{code}/invitation
   "album.participants": AlbumParticipantsResponse; // GET /v1/album/{code}/participants
+  "album.albumPhoto": AlbumAlbumPhotoResponse; // DELETE /v1/album/{code}/photo/{photoId}
   "album.photos": AlbumPhotosResponse; // GET /v1/album/{code}/photos
   "album.photoDetail": AlbumPhotoDetailResponse; // GET /v1/album/{code}/photos/{photoId}
   "album.albumPhotosLikers": AlbumAlbumPhotosLikersResponse; // GET /v1/album/{code}/photos/{photoId}/likers

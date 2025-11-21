@@ -2,6 +2,7 @@
 import { PhotoListResponseSchema } from '@/global/api/ep';
 import PhotoBox from '@/global/components/photo/PhotoBox';
 import { buildQuery } from '@/global/utils/buildQuery';
+import { useAlbumSortStore } from '@/store/useAlbumSortStore';
 import { useSelectedPhotosStore } from '@/store/useSelectedPhotosStore';
 import {
   type FetchNextPageOptions,
@@ -56,6 +57,12 @@ export default function PhotoList({
         isSelected: state.isSelected,
       })),
     );
+  const { sortType, setSortType } = useAlbumSortStore(
+    useShallow((state) => ({
+      sortType: state.sortType,
+      setSortType: state.setSortType,
+    })),
+  );
 
   useEffect(() => {
     if (!hasNextPage) return;
@@ -159,8 +166,9 @@ export default function PhotoList({
             <PhotoBox
               key={photoId}
               pressed={isSelected(photoId)}
-              likeCount={likeCnt}
-              liked={isLiked}
+              // 띱많은순이 아니면, 좋아요수가 있을때 의식하게되어 보여주지않음.
+              likeCount={sortType === 'liked' ? likeCnt : undefined}
+              liked={sortType === 'liked' ? isLiked : undefined}
               imageSrc={thumbnailUrl}
               responsive
               onPress={() => {

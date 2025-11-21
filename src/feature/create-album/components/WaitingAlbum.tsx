@@ -22,19 +22,15 @@ export default function WaitingAlbum({ albumId }: WaitingAlbumProps) {
       const startTime = Date.now();
 
       try {
-        // 최소 3초 대기 보장
+        // 최소 2.5초 대기 보장
         const elapsedTime = Date.now() - startTime;
-        const remainingTime = Math.max(0, 3000 - elapsedTime);
+        const remainingTime = Math.max(0, 2500 - elapsedTime);
         await new Promise((resolve) => setTimeout(resolve, remainingTime));
         // Zustand에 저장된 이미지가 있으면 → 일부 사진에 문제 → select로 이동
         if (images.length > 0) {
           router.replace(`/album/${albumId}/select`);
           return;
         }
-
-        // Zustand에 이미지가 없으면 → 모든 사진 정상 → NCP 업로드
-        // TODO: 실제 업로드 로직 구현 필요
-        // const files = ...; //  반환된 files 사용
 
         // 업로드 완료 후 detail 페이지로 이동
         router.replace(`/album/detail/${albumId}`);
