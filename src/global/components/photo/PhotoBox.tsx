@@ -50,7 +50,6 @@ export default function PhotoBox({
   };
 
   const handlePress = () => {
-    console.log('현재 상태', mode);
     if (disabled && mode === 'select') {
       onDisabledPress?.();
       return;
