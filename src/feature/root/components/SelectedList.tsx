@@ -29,7 +29,7 @@ export default function SelectedList({
 
   const containerRef = useRef<HTMLDivElement>(null);
   const isScrollingProgrammatically = useRef(false);
-  const ITEM_WIDTH = 'calc(100% - 68px)';
+  const ITEM_WIDTH = '100%'; // 각 아이템의 너비 (부모 컨테이너에서 좌우 패딩 및 간격 제외한 값)
 
   // 스크롤 시 중앙에 가장 가까운 이미지의 index 계산 및 상태 변경 (debounce 적용)
   // debounce 구현
@@ -103,10 +103,10 @@ export default function SelectedList({
   }, [selectedIdx]);
 
   return (
-    <div className='relative mt-8 w-full overflow-x-visible'>
+    <div className='relative mt-8 flex w-full flex-col items-center gap-5 overflow-x-visible'>
       <div
         ref={containerRef}
-        className='scrollbar-hide flex justify-start gap-4 overflow-x-scroll scroll-smooth pl-[26px]'
+        className='scrollbar-hide flex justify-start gap-4 overflow-x-scroll scroll-smooth px-[42px]'
         style={{ scrollSnapType: 'x mandatory' }}
         onScroll={handleScroll}
       >
@@ -126,6 +126,22 @@ export default function SelectedList({
               style={{ width: '100%', height: '326px' }}
             />
           </div>
+        ))}
+      </div>
+      <div className='flex gap-4'>
+        {MENU_IMAGES.map((image, idx) => (
+          <div
+            key={image.key}
+            className={
+              `h-2.5 w-2.5 cursor-pointer rounded-full ` +
+              (selectedIdx === idx
+                ? 'bg-element-gray'
+                : 'bg-element-gray-light')
+            }
+            onClick={() =>
+              setSelectedMenu(image.key as 'first' | 'second' | 'third')
+            }
+          />
         ))}
       </div>
     </div>
