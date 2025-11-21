@@ -87,6 +87,10 @@ export default function PhotoBox({
         <div className='bg-background-dim-darkest pointer-events-none absolute inset-0 z-20' />
       )}
 
+      {downloaded && (
+        <div className='absolute bottom-0 left-0 h-1/2 w-full bg-[linear-gradient(180deg,rgba(24,25,27,0)_0%,rgba(24,25,27,0.8)_60.1%)]' />
+      )}
+
       {pressed && (
         <>
           {/* 선택 시 사진 딤처리 */}
