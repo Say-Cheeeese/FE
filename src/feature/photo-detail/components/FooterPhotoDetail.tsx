@@ -69,20 +69,24 @@ export default function FooterPhotoDetail({
     }
     if (isDownloading) return;
 
-    setIsDownloading(true);
-    await Promise.all([
-      mutateAsyncDownload({ albumId, photoIds: [photoId] }),
-      shareImage({
-        imageUrls: imageUrl,
-        imageTitle: `IMG_${photoId}`,
-        onSuccess: () => {},
-        onError: () => {
-          Toast.alert('사진을 준비하는 중 오류가 발생했습니다.');
-        },
-      }),
-    ]);
-
-    setIsDownloading(false);
+    try {
+      setIsDownloading(true);
+      await Promise.all([
+        mutateAsyncDownload({ albumId, photoIds: [photoId] }),
+        shareImage({
+          imageUrls: imageUrl,
+          imageTitle: `IMG_${photoId}`,
+          onSuccess: () => {},
+          onError: () => {
+            Toast.alert('사진을 준비하는 중 오류가 발생했습니다.');
+          },
+        }),
+      ]);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setIsDownloading(false);
+    }
   };
 
   return (
