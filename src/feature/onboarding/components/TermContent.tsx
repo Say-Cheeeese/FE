@@ -179,7 +179,7 @@ const ThirdPartyComponent: FC = () => (
 
 // marketing 섹션 컴포넌트 – 스크롤 영역 포함
 const MarketingComponent: FC = () => (
-  <div className='overflow-y- scrollbar-hide max-h-[80vh]'>
+  <div className='scrollbar-hide max-h-[80vh] overflow-y-auto'>
     <div className='flex flex-col gap-8'>
       <div className='flex flex-col gap-1'>
         <div className='text-sm leading-5 font-bold text-[#424349]'>

@@ -1,5 +1,17 @@
 'use client';
 
+// 컴포넌트 외부에 debounce 함수 선언 (타입 안전하게)
+function debounce<T extends unknown[]>(
+  func: (...args: T) => void,
+  wait: number,
+) {
+  let timeout: ReturnType<typeof setTimeout>;
+  return (...args: T) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func(...args), wait);
+  };
+}
+
 import Image from 'next/image';
 import { useEffect, useRef } from 'react';
 
@@ -32,17 +44,6 @@ export default function SelectedList({
   const ITEM_WIDTH = '100%'; // 각 아이템의 너비 (부모 컨테이너에서 좌우 패딩 및 간격 제외한 값)
 
   // 스크롤 시 중앙에 가장 가까운 이미지의 index 계산 및 상태 변경 (debounce 적용)
-  // debounce 구현
-  const debounce = <T extends unknown[]>(
-    func: (...args: T) => void,
-    wait: number,
-  ) => {
-    let timeout: NodeJS.Timeout;
-    return (...args: T) => {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => func(...args), wait);
-    };
-  };
 
   const handleScrollCore = () => {
     if (!containerRef.current) return;
@@ -73,7 +74,6 @@ export default function SelectedList({
     }
   };
 
-  // 150ms 동안 스크롤이 멈추면 handleScrollCore 실행
   const handleScroll = debounce(handleScrollCore, 50);
 
   // selectedMenu가 바뀌면 해당 이미지로 스크롤 (애니메이션)
