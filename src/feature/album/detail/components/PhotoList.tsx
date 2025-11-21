@@ -96,6 +96,8 @@ export default function PhotoList({
     photoId: number;
     photoUrl: string;
   }): void => {
+    console.log('선택모드일때 클릭', mode);
+
     if (!selectable) return;
 
     if (isSelected(photoId)) {
@@ -183,6 +185,7 @@ export default function PhotoList({
                 liked={sortType === 'liked' ? isLiked : undefined}
                 imageSrc={thumbnailUrl}
                 responsive
+                mode={mode}
                 onPress={() => {
                   if (mode === 'default') {
                     router.push(
