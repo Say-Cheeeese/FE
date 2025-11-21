@@ -6,7 +6,7 @@ import { usePhotoDetailQuery } from '../hooks/usePhotoDetailQuery';
 
 interface HeaderPhotoDetailProps {
   albumId: string;
-  photoId?: number;
+  photoId: number;
 }
 
 export default function HeaderPhotoDetail({
@@ -16,7 +16,7 @@ export default function HeaderPhotoDetail({
   const router = useRouter();
   const { data } = usePhotoDetailQuery({
     albumId,
-    photoId: photoId ?? 0,
+    photoId: photoId,
     options: { enabled: !!photoId },
   });
 
@@ -32,7 +32,7 @@ export default function HeaderPhotoDetail({
           alt='프로필 사진'
           width={32}
           height={32}
-          className='rounded-full'
+          className='rounded-full text-xs'
         />
       </div>
       <span className='typo-heading-sm-semibold text-text-basic-inverse flex-1 truncate'>

@@ -1,6 +1,10 @@
 import { ApiReturns, EP } from '@/global/api/ep';
 import { api } from '@/global/utils/api';
-import { useQuery, UseQueryOptions } from '@tanstack/react-query';
+import {
+  keepPreviousData,
+  useQuery,
+  UseQueryOptions,
+} from '@tanstack/react-query';
 
 interface FetchDataProps {
   albumId: string;
@@ -32,6 +36,7 @@ export function usePhotoDetailQuery({
   const query = useQuery({
     queryKey: [EP.album.photoDetail(albumId, photoId)],
     queryFn: () => fetchData({ albumId, photoId }),
+    placeholderData: keepPreviousData,
     ...options,
   });
 
