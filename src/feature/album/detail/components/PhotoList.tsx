@@ -178,6 +178,7 @@ export default function PhotoList({
                 downloaded={isDownloaded}
                 disabled={isRecentlyDownloaded}
                 pressed={isSelected(photoId)}
+                mode={mode}
                 // 띱많은순이 아니면, 좋아요수가 있을때 의식하게되어 보여주지않음.
                 likeCount={sortType === 'liked' ? likeCnt : undefined}
                 liked={sortType === 'liked' ? isLiked : undefined}
