@@ -2,7 +2,7 @@
 import { EP } from '@/global/api/ep';
 import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
 import Toast from '@/global/components/toast/Toast';
-import { downloadFileFromUrl } from '@/global/utils/downloadFileFromUrl';
+import { downloadFile } from '@/global/utils/downloadFile';
 import { getDeviceType } from '@/global/utils/getDeviceType';
 import { shareImage } from '@/global/utils/image/shareImage';
 import { useQueryClient } from '@tanstack/react-query';
@@ -75,7 +75,7 @@ export default function FooterPhotoDetail({
     try {
       setIsDownloading(true);
       const deviceType = getDeviceType();
-      const fileName = `IMG_${photoId}.png`; // 필요하면 확장자 유추 로직 넣어도 됨
+      const fileName = `IMG_${photoId}`;
 
       if (deviceType === 'ios') {
         await Promise.all([
@@ -90,7 +90,7 @@ export default function FooterPhotoDetail({
           }),
         ]);
       } else {
-        downloadFileFromUrl(imageUrl, fileName);
+        downloadFile(imageUrl, fileName);
         await mutateAsyncDownload({ albumId, photoIds: [photoId] });
       }
     } catch (e) {

@@ -7,7 +7,7 @@ import ConfirmModal from '@/global/components/modal/ConfirmModal';
 import Toast from '@/global/components/toast/Toast';
 import BubbleHint from '@/global/components/tooltip/BubbleTooltip';
 import PersonSvg from '@/global/svg/PersonSvg';
-import { downloadBlobFile } from '@/global/utils/downloadBlobFile';
+import { downloadFile } from '@/global/utils/downloadFile';
 import { getDeviceType } from '@/global/utils/getDeviceType';
 import { shareImage } from '@/global/utils/image/shareImage';
 import { shareViaNavigator } from '@/global/utils/shareNavigator';
@@ -94,7 +94,7 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
           imageTitle: fileName,
         });
       } else {
-        downloadBlobFile(blob, fileName);
+        downloadFile(blob, fileName);
       }
     } catch (error) {
       console.error(error);
