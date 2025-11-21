@@ -183,7 +183,6 @@ export default function PhotoList({
                 liked={sortType === 'liked' ? isLiked : undefined}
                 imageSrc={thumbnailUrl}
                 responsive
-                mode={mode}
                 onPress={() => {
                   if (mode === 'default') {
                     router.push(

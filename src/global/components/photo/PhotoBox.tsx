@@ -19,7 +19,6 @@ interface PhotoBoxProps {
   onPress?: (pressed: boolean) => void;
   onDisabledPress?: () => void;
   pressable?: boolean;
-  mode?: 'select' | 'default';
 }
 
 export default function PhotoBox({
