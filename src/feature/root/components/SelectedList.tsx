@@ -1,10 +1,11 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import Image from 'next/image';
+import { useEffect, useRef } from 'react';
 
 interface SelectedListProps {
   selectedMenu: 'first' | 'second' | 'third';
+  setSelectedMenu: (menu: 'first' | 'second' | 'third') => void;
 }
 
 const MENU_IMAGES = [
@@ -13,7 +14,10 @@ const MENU_IMAGES = [
   { key: 'third', src: '/assets/rending/third.svg', alt: '치즈네컷 설명' },
 ];
 
-export default function SelectedList({ selectedMenu }: SelectedListProps) {
+export default function SelectedList({
+  selectedMenu,
+  setSelectedMenu,
+}: SelectedListProps) {
   const selectedIdx =
     selectedMenu === 'first'
       ? 0
@@ -23,35 +27,107 @@ export default function SelectedList({ selectedMenu }: SelectedListProps) {
           ? 2
           : 0;
 
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isScrollingProgrammatically = useRef(false);
+  const ITEM_WIDTH = 'calc(100% - 68px)';
+
+  // 스크롤 시 중앙에 가장 가까운 이미지의 index 계산 및 상태 변경 (debounce 적용)
+  // debounce 구현
+  const debounce = <T extends unknown[]>(
+    func: (...args: T) => void,
+    wait: number,
+  ) => {
+    let timeout: NodeJS.Timeout;
+    return (...args: T) => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func(...args), wait);
+    };
+  };
+
+  const handleScrollCore = () => {
+    if (!containerRef.current) return;
+    if (isScrollingProgrammatically.current) return;
+    const containerRect = containerRef.current.getBoundingClientRect();
+    const containerCenter = containerRect.left + containerRect.width / 2;
+    const children = containerRef.current.children;
+
+    let closestIndex = 0;
+    let minDistance = Infinity;
+
+    for (let i = 0; i < children.length; i++) {
+      const childRect = children[i].getBoundingClientRect();
+      const childCenter = childRect.left + childRect.width / 2;
+      const distance = Math.abs(childCenter - containerCenter);
+      if (distance < minDistance) {
+        minDistance = distance;
+        closestIndex = i;
+      }
+    }
+
+    const newMenu = MENU_IMAGES[closestIndex].key as
+      | 'first'
+      | 'second'
+      | 'third';
+    if (newMenu !== selectedMenu) {
+      setSelectedMenu(newMenu);
+    }
+  };
+
+  // 150ms 동안 스크롤이 멈추면 handleScrollCore 실행
+  const handleScroll = debounce(handleScrollCore, 50);
+
+  // selectedMenu가 바뀌면 해당 이미지로 스크롤 (애니메이션)
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const container = containerRef.current;
+    const children = container.children;
+
+    if (children[selectedIdx]) {
+      const targetChild = children[selectedIdx] as HTMLElement;
+      const containerRect = container.getBoundingClientRect();
+      const targetRect = targetChild.getBoundingClientRect();
+
+      const scrollLeft =
+        container.scrollLeft +
+        (targetRect.left - containerRect.left) -
+        (containerRect.width / 2 - targetRect.width / 2);
+
+      isScrollingProgrammatically.current = true;
+      container.scrollTo({ left: scrollLeft, behavior: 'smooth' });
+
+      setTimeout(() => {
+        isScrollingProgrammatically.current = false;
+      }, 500);
+    }
+  }, [selectedIdx]);
+
   return (
-    <div className='relative mt-8 w-full overflow-x-auto'>
-      <motion.div
-        className='flex w-full'
-        animate={{
-          x: `${-selectedIdx * 100}%`,
-        }}
-        transition={{
-          type: 'spring',
-          stiffness: 300,
-          damping: 30,
-        }}
+    <div className='relative mt-8 w-full overflow-x-visible'>
+      <div
+        ref={containerRef}
+        className='scrollbar-hide flex justify-start gap-4 overflow-x-scroll scroll-smooth pl-[26px]'
+        style={{ scrollSnapType: 'x mandatory' }}
+        onScroll={handleScroll}
       >
         {MENU_IMAGES.map((image) => (
           <div
             key={image.key}
-            className='flex w-full flex-shrink-0 items-center justify-center'
+            className='flex shrink-0 items-center justify-center'
+            style={{ width: ITEM_WIDTH, scrollSnapAlign: 'center' }}
           >
             <Image
               src={image.src}
-              width={375}
-              height={400}
+              width={0}
+              height={326}
               alt={image.alt}
               loading='lazy'
-              className='object-contain'
+              className='rounded-[12px] object-cover'
+              style={{ width: '100%', height: '326px' }}
             />
           </div>
         ))}
-      </motion.div>
+      </div>
     </div>
   );
 }

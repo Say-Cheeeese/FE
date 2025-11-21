@@ -104,7 +104,12 @@ export default function ScreenRoot() {
           selectedMenu={selectedMenu}
           setSelectedMenu={setSelectedMenu}
         />
-        <SelectedList selectedMenu={selectedMenu} />
+      </div>
+      <div className='-mr-4 -ml-4 pl-[26px]'>
+        <SelectedList
+          selectedMenu={selectedMenu}
+          setSelectedMenu={setSelectedMenu}
+        />
       </div>
     </div>
   );
