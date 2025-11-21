@@ -32,6 +32,7 @@ export default function FooterPhotoDetail({
 }: FooterPhotoDetailProps) {
   const queryClient = useQueryClient();
   const [isDownloading, setIsDownloading] = useState(false);
+  const [isPhotoInfoOpen, setIsPhotoInfoOpen] = useState(false);
   const { mutateAsync: mutateAsyncLike, isPending: isLiking } =
     usePhotoLikedMutation();
   const { mutateAsync: mutateAsyncUnlike, isPending: isUnliking } =
@@ -93,13 +94,19 @@ export default function FooterPhotoDetail({
     <section className='mx-10 flex shrink-0 justify-around py-5'>
       <BottomSheetModal
         title={'사진 정보'}
+        open={isPhotoInfoOpen}
+        onOpenChange={setIsPhotoInfoOpen}
         trigger={
           <button className='flex w-12 justify-center'>
             <Info width={24} height={24} color='white' />
           </button>
         }
       >
-        <SectionPhotoData albumId={albumId} photoId={photoId} />
+        <SectionPhotoData
+          albumId={albumId}
+          photoId={photoId}
+          onAfterDelete={() => setIsPhotoInfoOpen(false)}
+        />
       </BottomSheetModal>
 
       <button

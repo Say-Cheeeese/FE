@@ -105,7 +105,7 @@ export interface CommonResponsePhotoPageResponseSchema { "isSuccess"?: boolean; 
 export interface PhotoListResponseSchema { "name"?: string; "photoId": number; "imageUrl"?: string; "thumbnailUrl": string; "likeCnt": number; "isLiked": boolean; "isDownloaded": boolean; "isRecentlyDownloaded": boolean; }
 export interface PhotoPageResponseSchema { "responses": PhotoListResponseSchema[]; "listSize": number; "isFirst": boolean; "isLast": boolean; "hasNext": boolean; }
 export interface CommonResponsePhotoDetailResponseSchema { "isSuccess"?: boolean; "code"?: number; "message"?: string; "result"?: PhotoDetailResponseSchema; }
-export interface PhotoDetailResponseSchema { "name": string; "profileImage": string; "photoId": number; "imageUrl": string; "thumbnailUrl": string; "likesCnt": number; "isLiked": boolean; "isDownloaded": boolean; "isRecentlyDownloaded": boolean; "captureTime"?: string; "createdAt"?: string; }
+export interface PhotoDetailResponseSchema { "name": string; "profileImage": string; "photoId": number; "imageUrl": string; "thumbnailUrl": string; "likesCnt": number; "isLiked": boolean; "isDownloaded": boolean; "isRecentlyDownloaded": boolean; "canDelete"?: boolean; "captureTime"?: string; "createdAt"?: string; }
 export interface CommonResponsePhotoLikedUserResponseSchema { "isSuccess"?: boolean; "code"?: number; "message"?: string; "result"?: PhotoLikedUserResponseSchema; }
 export interface PhotoLikedUserResponseSchema { "likeCnt"?: number; "photoLikers"?: PhotoLikerSchema[]; }
 export interface PhotoLikerSchema { "name"?: string; "profileImageUrl"?: string; "isMe"?: boolean; "role"?: "MAKER" | "GUEST" | "BLACK"; }
