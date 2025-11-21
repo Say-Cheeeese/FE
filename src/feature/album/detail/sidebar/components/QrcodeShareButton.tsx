@@ -19,7 +19,7 @@ export default function QrcodeShareButton({ albumId }: QrcodeShareButtonProps) {
       className='flex flex-col items-center justify-center'
     >
       <div className='flex h-[58px] w-[58px] items-center justify-center rounded-full bg-[#fff2c2]'>
-        <QrCode width={24} height={24} color='var(--color-icon-basic)' />
+        <QrCode width={24} height={24} color='#E09900' />
       </div>
       <span>QR코드</span>
     </button>

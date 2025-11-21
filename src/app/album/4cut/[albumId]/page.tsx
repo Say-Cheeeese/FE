@@ -7,23 +7,23 @@ export async function generateMetadata(
   { params }: PageProps,
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  let makerName = '';
+  let title = '';
   const { albumId } = await params;
   try {
     const { result } = await serverApi.get<ApiReturns['album.invitation']>({
       path: EP.album.invitation(albumId),
     });
 
-    if (result?.makerName) makerName = result.makerName;
+    if (result?.title) title = result.title;
   } catch (e) {
     console.error(e);
   }
 
   return {
-    title: `치즈네컷이 궁금해요 | ${makerName}`,
+    title: `치즈네컷이 궁금해요 | ${title}`,
     description: '메이커님 네컷 확정해주세요 (*´ｰ`*人)',
     openGraph: {
-      title: `치즈네컷이 궁금해요 | ${makerName}`,
+      title: `치즈네컷이 궁금해요 | ${title}`,
       description: '메이커님 네컷 확정해주세요 (*´ｰ`*人)',
       url: `https://say-cheese.me/album/4cut/${albumId}`,
       siteName: '치이이즈',

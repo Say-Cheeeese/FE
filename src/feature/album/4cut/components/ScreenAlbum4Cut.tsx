@@ -108,7 +108,6 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
         data: {
           files: [file],
           title: data?.title ? `'${data.title}' 치즈네컷` : '치즈네컷 미리보기',
-          text: '확정된 치즈네컷을 공유해요.',
         },
         errorMessage: '공유에 실패하였습니다. 다시한번 시도해주세요.',
         fileNotSupportedMessage:

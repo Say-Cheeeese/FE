@@ -19,7 +19,7 @@ export default function CloseAlbum({
   return (
     <Link
       href={`/album/4cut/${code}`}
-      className='drop-shadow-25-5 flex items-center gap-5 overflow-hidden rounded-[20px] border border-white bg-white'
+      className='drop-shadow-25-5 flex items-center gap-5 overflow-hidden rounded-[20px]'
     >
       <div className='h-[100px] w-[100px] overflow-hidden'>
         {images.length < 4 ? (

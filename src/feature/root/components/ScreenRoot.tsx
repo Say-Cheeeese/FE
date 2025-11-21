@@ -1,6 +1,7 @@
 'use client';
 import LogoHeader from '@/global/components/header/LogoHeader';
 import LongButton from '@/global/components/LongButton';
+import { useCheckAuth } from '@/global/hooks/useCheckAuth';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -18,6 +19,9 @@ export default function ScreenRoot() {
     }
     router.push('/login');
   };
+
+  useCheckAuth({ onAuthed: () => router.push('/main') });
+
   return (
     <div className='scrollbar-hide flex w-full flex-col items-center overflow-y-auto px-4'>
       {/* 헤더 */}
