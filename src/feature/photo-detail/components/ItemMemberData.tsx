@@ -30,13 +30,13 @@ export default function ItemMemberData({
 
         <div className='flex items-center gap-1'>
           {isMe && (
-            <span className='typo-caption-sm-medium text-text-subtler bg-element-gray-light inline-flex items-center rounded-full px-1'>
+            <span className='typo-caption-sm-medium text-text-subtler bg-element-gray-light inline-flex items-center rounded-full px-1 py-0.5'>
               나
             </span>
           )}
 
           {isMaker && (
-            <span className='typo-caption-sm-medium bg-element-primary-lighter text-text-secondary inline-flex items-center rounded-full px-2'>
+            <span className='typo-caption-sm-medium bg-element-primary-lighter text-text-secondary inline-flex items-center rounded-full px-2 py-0.5'>
               메이커
             </span>
           )}

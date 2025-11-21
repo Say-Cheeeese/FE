@@ -1,6 +1,9 @@
+import { usePhotoDownloadMutation } from '@/feature/photo-detail/hooks/usePhotoDownloadMutation';
+import { EP } from '@/global/api/ep';
 import Toast from '@/global/components/toast/Toast';
 import { shareImage } from '@/global/utils/image/shareImage';
 import { useSelectedPhotosStore } from '@/store/useSelectedPhotosStore';
+import { useQueryClient } from '@tanstack/react-query';
 import { useShallow } from 'zustand/shallow';
 import { AlbumDetailMode } from './ScreenAlbumDetail';
 
@@ -15,6 +18,8 @@ export default function DownloadActionBar({
   selectedCount,
   changeAlbumMode,
 }: DownloadActionBarProps) {
+  const queryClient = useQueryClient();
+  const { mutateAsync } = usePhotoDownloadMutation();
   const { selectedPhotos, clearSelectedPhotos } = useSelectedPhotosStore(
     useShallow((state) => ({
       selectedPhotos: state.selectedPhotos,
@@ -26,23 +31,33 @@ export default function DownloadActionBar({
     if (selectedCount === 0) return;
 
     const photoUrls = selectedPhotos.map((photo) => photo.url);
-    await shareImage({
-      imageUrls: photoUrls,
-      onSuccess: () => {
-        changeAlbumMode('default');
-        clearSelectedPhotos();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      },
-      onError: () => {
-        Toast.alert('사진을 준비하는 중 오류가 발생했습니다.');
-      },
-    });
+    const photoIds = selectedPhotos.map((photo) => photo.id);
+    try {
+      await Promise.all([
+        mutateAsync({ albumId, photoIds }),
+        shareImage({
+          imageUrls: photoUrls,
+          onSuccess: () => {
+            changeAlbumMode('default');
+            clearSelectedPhotos();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          },
+          onError: () => {
+            Toast.alert('사진을 준비하는 중 오류가 발생했습니다.');
+          },
+        }),
+      ]);
+
+      queryClient.invalidateQueries({ queryKey: [EP.album.photos(albumId)] });
+    } catch (e) {
+      console.error('사진 다운로드 처리 중 오류 발생:', e);
+    }
   };
 
   const isDisabled = selectedCount === 0;
 
   return (
-    <section className='bg-background-dim-darkest fixed bottom-0 flex h-18 w-full items-center justify-between gap-3 px-4'>
+    <section className='bg-background-dim-darkest fixed bottom-0 flex h-18 w-full max-w-[430px] items-center justify-between gap-3 px-4'>
       <div className='typo-heading-sm-semibold text-white'>
         {selectedCount}장의 사진이 선택됨
       </div>

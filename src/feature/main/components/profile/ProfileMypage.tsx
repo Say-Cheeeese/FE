@@ -11,7 +11,7 @@ export default function ProfileMypage({}: ProfileMypageProps) {
   const { data } = useGetUserMe();
 
   return (
-    <section className='px-5 py-4'>
+    <section className='px-5 py-6'>
       <div className='flex gap-4'>
         <div className='flex items-center justify-center overflow-hidden rounded-full'>
           <img

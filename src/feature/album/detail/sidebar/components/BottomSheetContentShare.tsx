@@ -20,7 +20,7 @@ export default function BottomSheetContentShare({
           사진이 채워지는 동안 친구에게 앨범을 공유해보세요.
         </span>
       </div>
-      <div className='typo-body-sm-semibold flex justify-between'>
+      <div className='typo-body-sm-medium text-text-subtle flex justify-between'>
         <KakaoShareButton albumId={albumId} />
         <QrcodeShareButton albumId={albumId} />
         <CopyShareButton albumId={albumId} />
