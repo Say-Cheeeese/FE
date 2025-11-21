@@ -39,7 +39,7 @@ export default function MainPhotoDetail({
     const params = new URLSearchParams(searchParams.toString());
     params.set('photoId', String(newPhotoId));
 
-    router.replace(`?${params.toString()}`, { scroll: false });
+    // router.replace(`?${params.toString()}`, { scroll: false });
   };
 
   const activeImage = images[activeIndex];
