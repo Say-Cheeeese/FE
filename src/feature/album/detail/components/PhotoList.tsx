@@ -157,32 +157,42 @@ export default function PhotoList({
         )}
       </div>
       <div className='grid grid-cols-3 gap-0.5'>
-        {photos.map(({ photoId, likeCnt, isLiked, thumbnailUrl, imageUrl }) => {
-          if (!photoId || !thumbnailUrl || !imageUrl) {
-            return null;
-          }
+        {photos.map(
+          ({
+            photoId,
+            likeCnt,
+            isLiked,
+            thumbnailUrl,
+            imageUrl,
+            isDownloaded,
+          }) => {
+            if (!photoId || !thumbnailUrl || !imageUrl) {
+              return null;
+            }
 
-          return (
-            <PhotoBox
-              key={photoId}
-              pressed={isSelected(photoId)}
-              // 띱많은순이 아니면, 좋아요수가 있을때 의식하게되어 보여주지않음.
-              likeCount={sortType === 'liked' ? likeCnt : undefined}
-              liked={sortType === 'liked' ? isLiked : undefined}
-              imageSrc={thumbnailUrl}
-              responsive
-              onPress={() => {
-                if (mode === 'default') {
-                  router.push(
-                    `/photo/detail/${albumId}${buildQuery({ photoId: photoId })}`,
-                  );
-                } else {
-                  handlePhotoPress({ photoId, photoUrl: imageUrl });
-                }
-              }}
-            />
-          );
-        })}
+            return (
+              <PhotoBox
+                key={photoId}
+                downloaded={isDownloaded}
+                pressed={isSelected(photoId)}
+                // 띱많은순이 아니면, 좋아요수가 있을때 의식하게되어 보여주지않음.
+                likeCount={sortType === 'liked' ? likeCnt : undefined}
+                liked={sortType === 'liked' ? isLiked : undefined}
+                imageSrc={thumbnailUrl}
+                responsive
+                onPress={() => {
+                  if (mode === 'default') {
+                    router.push(
+                      `/photo/detail/${albumId}${buildQuery({ photoId: photoId })}`,
+                    );
+                  } else {
+                    handlePhotoPress({ photoId, photoUrl: imageUrl });
+                  }
+                }}
+              />
+            );
+          },
+        )}
       </div>
       <div ref={loadMoreRef} />
     </section>
