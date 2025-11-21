@@ -35,7 +35,6 @@ export default function PhotoBox({
   onPress,
   onDisabledPress,
   pressable = true,
-  mode = 'default',
 }: PhotoBoxProps) {
   const showLike = likeCount !== undefined;
   const [currentSrc, setCurrentSrc] = useState(imageSrc ?? FALLBACK_SRC);
@@ -50,7 +49,7 @@ export default function PhotoBox({
   };
 
   const handlePress = () => {
-    if (disabled && mode === 'select') {
+    if (disabled) {
       onDisabledPress?.();
       return;
     }
@@ -90,8 +89,8 @@ export default function PhotoBox({
         />
       </div>
 
-      {/* disabled + select 모드에서만 오버레이 */}
-      {disabled && mode === 'select' && (
+      {/* disabled  모드에서만 오버레이 */}
+      {disabled && (
         <div className='bg-background-dim-darkest pointer-events-none absolute inset-0 z-10' />
       )}
 

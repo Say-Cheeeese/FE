@@ -194,7 +194,11 @@ export default function PhotoList({
                   }
                 }}
                 onDisabledPress={() => {
-                  if (mode === 'select') {
+                  if (mode === 'default') {
+                    router.push(
+                      `/photo/detail/${albumId}${buildQuery({ photoId: photoId })}`,
+                    );
+                  } else {
                     Toast.alert(
                       `금방 다운받은 사진이에요.\n1시간 뒤에 다시 시도하세요.`,
                     );
