@@ -3,12 +3,13 @@ import { buildQuery } from '@/global/utils/buildQuery';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 
+const KAKAO_AUTH_URL = `https://dev.say-cheese.me/oauth2/authorization/kakao`;
+
 export default function KakaoSignupButton() {
   const searchParams = useSearchParams();
   const redirect = searchParams.get('redirect');
 
   const handleKakaoLogin = async () => {
-    const KAKAO_AUTH_URL = `https://dev.say-cheese.me/oauth2/authorization/kakao${redirect ? buildQuery({ redirect }) : ''}`;
     try {
       const kakaoUrl = redirect
         ? `${KAKAO_AUTH_URL}${buildQuery({ redirect })}`
