@@ -40,8 +40,8 @@ export default function LogoHeader({
           <Image
             src='/assets/login/cheese-logo.svg'
             width={88}
-            height={120}
-            alt='치즈 아이콘'
+            height={20}
+            alt='치이이즈'
           />
           {shouldShowLogin && (
             <Link href='/login' onClick={handleLoginClick}>
