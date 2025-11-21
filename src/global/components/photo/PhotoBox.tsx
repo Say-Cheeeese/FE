@@ -64,7 +64,7 @@ export default function PhotoBox({
         responsive && 'w-full',
         'relative shrink-0 overflow-hidden rounded-[8px] border-[3px] border-white',
         pressed
-          ? 'border-border-primary bg-background-dim-darker'
+          ? 'border-border-primary'
           : downloaded
             ? 'border-b-border-primary border-b-[3px]'
             : 'border-transparent',
@@ -87,16 +87,20 @@ export default function PhotoBox({
         <div className='bg-background-dim-darkest pointer-events-none absolute inset-0 z-20' />
       )}
 
-      {/* 선택 시 체크 */}
       {pressed && (
-        <div className='bg-element-primary absolute top-2.5 right-2.5 z-30 flex h-6 w-6 items-center justify-center rounded-full'>
-          <Check
-            width={12}
-            height={12}
-            strokeWidth={3}
-            color='var(--color-icon-basic)'
-          />
-        </div>
+        <>
+          {/* 선택 시 사진 딤처리 */}
+          <div className='bg-background-dim-darker absolute inset-0' />
+          {/* 선택 시 오른쪽상단 체크표시 */}
+          <div className='bg-element-primary absolute top-2.5 right-2.5 z-30 flex h-6 w-6 items-center justify-center rounded-full'>
+            <Check
+              width={12}
+              height={12}
+              strokeWidth={3}
+              color='var(--color-icon-basic)'
+            />
+          </div>
+        </>
       )}
 
       {/* 좋아요 오버레이 */}
