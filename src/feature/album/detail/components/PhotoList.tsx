@@ -96,7 +96,6 @@ export default function PhotoList({
     photoId: number;
     photoUrl: string;
   }): void => {
-
     if (!selectable) return;
 
     if (isSelected(photoId)) {
