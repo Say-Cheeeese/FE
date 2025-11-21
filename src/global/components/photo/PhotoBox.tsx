@@ -88,7 +88,7 @@ export default function PhotoBox({
         />
       </div>
 
-      {/* disabled 오버레이 */}
+      {/* disabled  모드에서만 오버레이 */}
       {disabled && (
         <div className='bg-background-dim-darkest pointer-events-none absolute inset-0 z-10' />
       )}

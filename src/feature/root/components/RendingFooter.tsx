@@ -16,7 +16,7 @@ export default function RendingFooter() {
         버그 및 불편사항 제보
       </a>
       <Link
-        href='/term?type=terms'
+        href='/term?type=privacy'
         className='cursor-pointer text-[7.54px] font-[600]'
       >
         개인정보처리방침 | 서비스 이용약관
