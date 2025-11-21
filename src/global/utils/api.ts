@@ -12,6 +12,8 @@ type RequestOptions = {
   headers?: Record<string, string>;
   body?: Record<string, unknown>;
   redirectOnAuthError?: boolean;
+  /** 401 발생 시 로그인 후 돌아올 경로를 명시적으로 지정 (없으면 현재 URL 사용) */
+  redirectUrlOnAuthError?: string;
 };
 
 const client = axios.create({
@@ -83,7 +85,14 @@ client.interceptors.response.use(
 
 async function request<T>(
   method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH',
-  { path, params, headers, body, redirectOnAuthError = true }: RequestOptions,
+  {
+    path,
+    params,
+    headers,
+    body,
+    redirectOnAuthError = true,
+    redirectUrlOnAuthError,
+  }: RequestOptions,
 ): Promise<{
   result: T;
   code: number;
@@ -123,8 +132,9 @@ async function request<T>(
 
     if (status === 401) {
       if (redirectOnAuthError) {
-        const currentUrl = encodeURIComponent(window.location.href);
-        window.location.href = `/login${buildQuery({ redirect: currentUrl })}`;
+        const redirectTarget = redirectUrlOnAuthError || window.location.href;
+        const encodedRedirect = encodeURIComponent(redirectTarget);
+        window.location.href = `/login${buildQuery({ redirect: encodedRedirect })}`;
       }
     }
 
