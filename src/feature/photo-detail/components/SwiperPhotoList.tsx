@@ -32,7 +32,7 @@ export default function SwiperPhotoList({
           activeWidth: 30,
           inactiveWidth: 15,
           inactiveMargin: 2,
-          index: 0,
+          index: activeIndex,
         }),
       );
     };
@@ -103,7 +103,6 @@ export default function SwiperPhotoList({
           </Swiper>
         </div>
 
-        {/* TODO : 이미지 스와이프 시 activeIndex가 빠르게바뀌면서 깜빡임현상 심한 이슈 있음. */}
         {/* 아래: 썸네일 컨트롤러 */}
         <div className='mx-auto w-full max-w-md'>
           <Swiper
@@ -114,6 +113,7 @@ export default function SwiperPhotoList({
             slidesOffsetBefore={thumbOffset}
             slidesOffsetAfter={thumbOffset}
             watchSlidesProgress
+            allowTouchMove={false}
             className='custom-thumb-swiper relative w-full px-3 py-2 backdrop-blur-md'
             onSlideChange={(sw) => {
               const idx = sw.activeIndex;
@@ -159,7 +159,6 @@ export default function SwiperPhotoList({
                   }}
                 >
                   {/* TODO : 이미지 아직 불러오는 중일때 스켈레톤 띄우기 */}
-
                   <img
                     src={thumbnailUrl}
                     loading='lazy'
