@@ -3,7 +3,6 @@
 import { handleFileUpload } from '@/feature/create-album/utils/handleFileUpload';
 import ConfirmModal from '@/global/components/modal/ConfirmModal';
 import Toast from '@/global/components/toast/Toast';
-import { useUploadingStore } from '@/store/useUploadingStore';
 import { useRouter } from 'next/navigation';
 import { ReactNode, useRef } from 'react';
 
