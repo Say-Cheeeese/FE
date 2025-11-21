@@ -1,6 +1,7 @@
 'use client';
 import { PhotoListResponseSchema } from '@/global/api/ep';
 import PhotoBox from '@/global/components/photo/PhotoBox';
+import Toast from '@/global/components/toast/Toast';
 import { buildQuery } from '@/global/utils/buildQuery';
 import { useAlbumSortStore } from '@/store/useAlbumSortStore';
 import { useSelectedPhotosStore } from '@/store/useSelectedPhotosStore';
@@ -165,6 +166,7 @@ export default function PhotoList({
             thumbnailUrl,
             imageUrl,
             isDownloaded,
+            isRecentlyDownloaded,
           }) => {
             if (!photoId || !thumbnailUrl || !imageUrl) {
               return null;
@@ -174,6 +176,7 @@ export default function PhotoList({
               <PhotoBox
                 key={photoId}
                 downloaded={isDownloaded}
+                disabled={isRecentlyDownloaded}
                 pressed={isSelected(photoId)}
                 // 띱많은순이 아니면, 좋아요수가 있을때 의식하게되어 보여주지않음.
                 likeCount={sortType === 'liked' ? likeCnt : undefined}
@@ -188,6 +191,11 @@ export default function PhotoList({
                   } else {
                     handlePhotoPress({ photoId, photoUrl: imageUrl });
                   }
+                }}
+                onDisabledPress={() => {
+                  Toast.alert(
+                    `금방 다운받은 사진이에요.\n1시간 뒤에 다시 시도하세요.`,
+                  );
                 }}
               />
             );

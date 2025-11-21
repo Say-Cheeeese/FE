@@ -58,7 +58,7 @@ export default function NavBarAlbumDetail({ albumId }: NavBarAlbumDetailProps) {
   };
 
   return (
-    <section className='fixed bottom-0 flex w-full max-w-[430px] items-center justify-between gap-3 bg-[linear-gradient(180deg,rgba(24,25,27,0)_0%,rgba(24,25,27,0.8)_60.1%)] px-4 py-5'>
+    <section className='fixed bottom-0 z-100 flex w-full max-w-[430px] items-center justify-between gap-3 bg-[linear-gradient(180deg,rgba(24,25,27,0)_0%,rgba(24,25,27,0.8)_60.1%)] px-4 py-5'>
       <BottomSheetModal
         trigger={
           <button
