@@ -193,9 +193,11 @@ export default function PhotoList({
                   }
                 }}
                 onDisabledPress={() => {
-                  Toast.alert(
-                    `금방 다운받은 사진이에요.\n1시간 뒤에 다시 시도하세요.`,
-                  );
+                  if (mode === 'select') {
+                    Toast.alert(
+                      `금방 다운받은 사진이에요.\n1시간 뒤에 다시 시도하세요.`,
+                    );
+                  }
                 }}
               />
             );
