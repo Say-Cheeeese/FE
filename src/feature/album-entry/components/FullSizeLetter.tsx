@@ -21,7 +21,10 @@ export default function FullSizeLetter({ albumId }: FullSizeLetterProps) {
 
   const handleInviteAccept = async () => {
     try {
-      await mutateAsync(albumId);
+      await mutateAsync({
+        albumId,
+        redirectUrlOnAuthError: `${process.env.NEXT_PUBLIC_CLIENT_URL}/photo-share-entry/${albumId}`,
+      });
       router.push(`/photo-share-entry/${albumId}`);
     } catch (error) {
       Toast.alert('앨범 입장에 실패하였습니다');
