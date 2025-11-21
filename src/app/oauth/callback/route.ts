@@ -7,6 +7,7 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const code = searchParams.get('code');
+  const redirectParam = searchParams.get('redirect');
 
   if (!code) {
     return NextResponse.json(
@@ -68,7 +69,7 @@ export async function GET(request: NextRequest) {
     }
 
     // redirect 응답 객체 생성
-    const res = NextResponse.redirect(redirectUrl);
+    const res = NextResponse.redirect(redirectParam || redirectUrl);
     res.cookies.set(ACCESS_TOKEN_KEY, data.result.accessToken, {
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
