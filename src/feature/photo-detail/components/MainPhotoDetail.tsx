@@ -1,6 +1,5 @@
 import { PhotoListResponseSchema } from '@/global/api/ep';
 import dynamic from 'next/dynamic';
-import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import FooterPhotoDetail from './FooterPhotoDetail';
 const SwiperPhotoList = dynamic(() => import('./SwiperPhotoList'), {
@@ -23,23 +22,12 @@ export default function MainPhotoDetail({
   images,
   photoId,
 }: MainPhotoDetailProps) {
-  const router = useRouter();
-  const searchParams = useSearchParams();
   const [activeIndex, setActiveIndex] = useState(
     findImageIndexByPhotoId(images, photoId),
   );
 
   const changeActiveIndex = (newIndex: number): void => {
     setActiveIndex(newIndex);
-
-    const newPhotoId = images[newIndex]?.photoId;
-    if (!newPhotoId) return;
-
-    // 기존 searchParams 복사 후 photoId만 갱신
-    const params = new URLSearchParams(searchParams.toString());
-    params.set('photoId', String(newPhotoId));
-
-    // router.replace(`?${params.toString()}`, { scroll: false });
   };
 
   const activeImage = images[activeIndex];
