@@ -15,7 +15,8 @@ export default function ScreenPhotoDetail({ albumId }: ScreenPhotoDetailProps) {
 
   const sort: PhotoSorting =
     (searchParams.get('sort') as PhotoSorting) || 'CREATED_AT';
-  const photoId = Number(searchParams.get('photoId')) ?? 0;
+  const photoIdParam = searchParams.get('photoId');
+  const photoId = photoIdParam === null ? null : Number(photoIdParam);
   const { items: images } = useAlbumPhotosInfiniteQuery({
     code: albumId,
     size: 2000,
@@ -24,9 +25,11 @@ export default function ScreenPhotoDetail({ albumId }: ScreenPhotoDetailProps) {
 
   if (images.length === 0) return null;
 
+  const currentPhotoId = photoId ?? images[0].photoId;
+
   return (
     <main className='bg-surface-inverse flex h-dvh w-full flex-col justify-between'>
-      <HeaderPhotoDetail albumId={albumId} photoId={photoId} />
+      <HeaderPhotoDetail albumId={albumId} photoId={currentPhotoId} />
       <MainPhotoDetail albumId={albumId} photoId={photoId} images={images} />
     </main>
   );
