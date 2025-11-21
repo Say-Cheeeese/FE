@@ -1,9 +1,7 @@
 'use client';
 import { ProfileAgree } from '@/feature/onboarding/components/ProfileAgree';
 import ProfileImage from '@/feature/onboarding/components/ProfileImage';
-import { TermContent } from '@/feature/onboarding/components/TermContent';
 import { useOnBoardingMutation } from '@/feature/onboarding/hooks/useOnBoardingMutation';
-import CustomHeader from '@/global/components/header/CustomHeader';
 import LogoHeader from '@/global/components/header/LogoHeader';
 import LongButton from '@/global/components/LongButton';
 import Toast from '@/global/components/toast/Toast';
@@ -14,12 +12,7 @@ import { useState } from 'react';
 export default function ScreenOnBoarding() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const termType = searchParams.get('term');
-  const currentTerm =
-    termType && Object.prototype.hasOwnProperty.call(TermContent, termType)
-      ? TermContent[termType as keyof typeof TermContent]
-      : null;
-  // 프로필 이미지 상태
+
   const [selectedImage, setSelectedImage] = useState<string>('P1');
 
   // 쿼리스트링에서 name 추출
@@ -90,18 +83,6 @@ export default function ScreenOnBoarding() {
       },
     );
   };
-
-  // 약관 상세가 있을 때 렌더링
-  if (currentTerm) {
-    return (
-      <div className='min-h-screen bg-white'>
-        <CustomHeader title={currentTerm.title} isShowBack={true} />
-        <div className='h-full px-5 pt-[24px] pb-20'>
-          <currentTerm.content />
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className='flex flex-col px-4'>

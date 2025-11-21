@@ -4,6 +4,7 @@ import LongButton from '@/global/components/LongButton';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import RendingFooter from './RendingFooter';
 import SelectedList from './SelectedList';
 import SelectMenu from './SelectMenu';
 import SwipeList from './SwipeList';
@@ -128,6 +129,7 @@ export default function ScreenRoot() {
         <span className='text-[20px]'>모두 함께 치이이즈</span>
       </div>
       <SwipeList />
+      <RendingFooter />
     </div>
   );
 }
