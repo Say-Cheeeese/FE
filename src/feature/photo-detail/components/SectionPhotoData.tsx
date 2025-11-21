@@ -1,3 +1,5 @@
+import ConfirmModal from '@/global/components/modal/ConfirmModal';
+import { useDeleteAlbumPhotoMutation } from '../hooks/useDeleteAlbumPhotoMutation';
 import { usePhotoDetailQuery } from '../hooks/usePhotoDetailQuery';
 
 interface SectionPhotoDataProps {
@@ -28,9 +30,14 @@ export default function SectionPhotoData({
     albumId,
     photoId,
   });
+  const { mutateAsync } = useDeleteAlbumPhotoMutation();
 
   if (isPending) return null;
   if (isError) return null;
+
+  const handleDeleteClick = async () => {
+    await mutateAsync({ albumId, photoId });
+  };
 
   return (
     <section className='typo-body-lg-medium flex flex-col gap-6 rounded-3xl bg-white px-3 py-2'>
@@ -53,14 +60,13 @@ export default function SectionPhotoData({
         </div>
       </dl>
 
-      {/* TODO : 사진삭제 api 개발 전까지 주석 */}
-      {/* <ConfirmModal
+      <ConfirmModal
         title='사진을 삭제할까요?'
         description='지운 사진은 다시 복구할 수 없어요.'
         cancelText='취소'
         confirmText='삭제하기'
         confirmClassName='text-text-basic-inverse bg-button-accent-fill'
-        onConfirm={onDeleteClick}
+        onConfirm={handleDeleteClick}
         trigger={
           <button
             type='button'
@@ -69,7 +75,7 @@ export default function SectionPhotoData({
             사진 삭제하기
           </button>
         }
-      /> */}
+      />
     </section>
   );
 }

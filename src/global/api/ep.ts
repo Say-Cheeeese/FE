@@ -62,7 +62,7 @@ export type PhotoSorting = 'POPULAR' | 'CAPTURED_AT' | 'CREATED_AT';
 export interface UserOnboardingRequestSchema { "name": string; "imageCode": string; "isServiceAgreement": boolean; "isUserInfoAgreement": boolean; "isMarketingAgreement"?: boolean; "isThirdPartyAgreement": boolean; }
 export interface CommonResponseVoidSchema { "isSuccess"?: boolean; "code"?: number; "message"?: string; "result"?: unknown; }
 export interface PhotoUploadReportRequestSchema { "failurePhotoIds": number[]; }
-export interface FileInfoSchema { "fileName": string; "fileSize"?: number; "contentType": string; }
+export interface FileInfoSchema { "fileName": string; "captureTime": string; "fileSize"?: number; "contentType": string; }
 export interface PhotoPresignedUrlRequestSchema { "albumCode": string; "fileInfos": FileInfoSchema[]; }
 export interface CommonResponsePhotoPresignedUrlResponseSchema { "isSuccess"?: boolean; "code"?: number; "message"?: string; "result"?: PhotoPresignedUrlResponseSchema; }
 export interface PhotoPresignedUrlResponseSchema { "presignedUrlInfos": PresignedUrlInfoSchema[]; }
