@@ -123,7 +123,8 @@ async function request<T>(
 
     if (status === 401) {
       if (redirectOnAuthError) {
-        window.location.href = '/login';
+        const currentUrl = encodeURIComponent(window.location.href);
+        window.location.href = `/login${buildQuery({ redirect: currentUrl })}`;
       }
     }
 

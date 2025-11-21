@@ -1,5 +1,6 @@
 import KakaoSignupButton from '@/feature/login/components/KakaoSignupButton';
 import Image from 'next/image';
+import { Suspense } from 'react';
 
 export default function LoginPage() {
   return (
@@ -22,6 +23,7 @@ export default function LoginPage() {
           우리가 특별한 순간을 기억하는 법
         </span>
       </div>
+
       <div className='mt-10 flex flex-col gap-2'>
         <div className='flex flex-col items-center justify-center'>
           <div className='bg-surface-inverse h-9 w-[177px] cursor-pointer rounded-full py-2 pl-[14px]'>
@@ -36,7 +38,10 @@ export default function LoginPage() {
             alt='삼각형'
           />
         </div>
-        <KakaoSignupButton />
+
+        <Suspense fallback={null}>
+          <KakaoSignupButton />
+        </Suspense>
       </div>
     </div>
   );
