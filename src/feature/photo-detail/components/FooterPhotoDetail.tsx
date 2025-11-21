@@ -2,6 +2,8 @@
 import { EP } from '@/global/api/ep';
 import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
 import Toast from '@/global/components/toast/Toast';
+import { downloadFile } from '@/global/utils/downloadFile';
+import { getDeviceType } from '@/global/utils/getDeviceType';
 import { shareImage } from '@/global/utils/image/shareImage';
 import { useQueryClient } from '@tanstack/react-query';
 import { Download, Heart, Info } from 'lucide-react';
@@ -72,17 +74,25 @@ export default function FooterPhotoDetail({
 
     try {
       setIsDownloading(true);
-      await Promise.all([
-        mutateAsyncDownload({ albumId, photoIds: [photoId] }),
-        shareImage({
-          imageUrls: imageUrl,
-          imageTitle: `IMG_${photoId}`,
-          onSuccess: () => {},
-          onError: () => {
-            Toast.alert('사진을 준비하는 중 오류가 발생했습니다.');
-          },
-        }),
-      ]);
+      const deviceType = getDeviceType();
+      const fileName = `IMG_${photoId}`;
+
+      if (deviceType === 'ios') {
+        await Promise.all([
+          mutateAsyncDownload({ albumId, photoIds: [photoId] }),
+          shareImage({
+            imageUrls: imageUrl,
+            imageTitle: fileName,
+            onSuccess: () => {},
+            onError: () => {
+              Toast.alert('사진을 준비하는 중 오류가 발생했습니다.');
+            },
+          }),
+        ]);
+      } else {
+        downloadFile(imageUrl, fileName);
+        await mutateAsyncDownload({ albumId, photoIds: [photoId] });
+      }
     } catch (e) {
       console.log(e);
     } finally {
