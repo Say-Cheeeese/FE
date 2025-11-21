@@ -39,7 +39,7 @@ export default function LogoHeader({
         <div className='mx-auto flex h-18 w-full max-w-[430px] items-center justify-between px-5'>
           <Image
             src='/assets/login/cheese-logo.svg'
-            width={120}
+            width={88}
             height={120}
             alt='치즈 아이콘'
           />

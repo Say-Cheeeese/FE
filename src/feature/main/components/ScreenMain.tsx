@@ -13,7 +13,7 @@ export default function ScreenMain({}: ScreenMainProps) {
 
   return (
     <main className=''>
-      <LogoHeader />
+      <LogoHeader border />
       <ProfileMypage />
       <OpenAlbumContainer />
       <CloseAlbumContainer />
