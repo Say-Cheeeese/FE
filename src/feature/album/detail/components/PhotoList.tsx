@@ -190,7 +190,7 @@ export default function PhotoList({
                       `/photo/detail/${albumId}${buildQuery({ photoId: photoId })}`,
                     );
                   } else {
-                    handlePhotoPress({ photoId, photoUrl: imageUrl });
+                    handlePhotoPress({ photoId, photoUrl: thumbnailUrl });
                   }
                 }}
                 onDisabledPress={() => {

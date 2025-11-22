@@ -46,7 +46,7 @@ export default function MainPhotoDetail({
         isLiked={activeImage.isLiked}
         likeCnt={activeImage.likeCnt}
         isRecentlyDownloaded={activeImage.isRecentlyDownloaded}
-        imageUrl={activeImage.imageUrl}
+        imageUrl={activeImage.thumbnailUrl}
       />
     </>
   );
