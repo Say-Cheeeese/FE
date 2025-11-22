@@ -34,7 +34,7 @@ export default function DownloadActionBar({
     const photoIds = selectedPhotos.map((photo) => photo.id);
     try {
       await Promise.all([
-        mutateAsync({ albumId, photoIds }),
+        // mutateAsync({ albumId, photoIds }),
         shareImage({
           imageUrls: photoUrls,
           onSuccess: () => {

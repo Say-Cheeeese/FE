@@ -79,7 +79,7 @@ export default function FooterPhotoDetail({
 
       if (deviceType === 'ios') {
         await Promise.all([
-          mutateAsyncDownload({ albumId, photoIds: [photoId] }),
+          // mutateAsyncDownload({ albumId, photoIds: [photoId] }),
           shareImage({
             imageUrls: imageUrl,
             imageTitle: fileName,
