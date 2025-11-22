@@ -92,6 +92,9 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
         await shareImage({
           imageBlobs: blob,
           imageTitle: fileName,
+          onError: () => {
+            downloadFile(blob, fileName);
+          },
         });
       } else {
         downloadFile(blob, fileName);

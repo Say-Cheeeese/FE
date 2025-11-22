@@ -85,13 +85,14 @@ export default function FooterPhotoDetail({
             imageTitle: fileName,
             onSuccess: () => {},
             onError: () => {
-              Toast.alert('사진을 준비하는 중 오류가 발생했습니다.');
+              // Toast.alert('사진을 준비하는 중 오류가 발생했습니다.');
+              downloadFile(imageUrl, fileName);
             },
           }),
         ]);
       } else {
         downloadFile(imageUrl, fileName);
-        await mutateAsyncDownload({ albumId, photoIds: [photoId] });
+        // await mutateAsyncDownload({ albumId, photoIds: [photoId] });
       }
     } catch (e) {
       console.log(e);
