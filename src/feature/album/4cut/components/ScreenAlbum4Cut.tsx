@@ -71,8 +71,6 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
   };
 
   const handleDownload = async () => {
-    const deviceType = getDeviceType();
-
     if (!captureRef.current) {
       Toast.alert(
         '다운로드할 이미지를 찾지 못했어요. 잠시 후 다시 시도해주세요.',
