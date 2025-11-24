@@ -5,6 +5,7 @@ import { useCheckAuth } from '@/global/hooks/useCheckAuth';
 import { buildQuery } from '@/global/utils/buildQuery';
 import { convertUnicodeToEmoji } from '@/global/utils/convertEmoji';
 import { formatExpirationTime } from '@/global/utils/time/formatExpirationTime';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 interface LetterContentProps {
@@ -39,7 +40,7 @@ export default function LetterContent({ albumId }: LetterContentProps) {
   return (
     <>
       <header className='border-border-gray-lighter flex items-center gap-2 border-b px-5 py-5'>
-        <img
+        <Image
           src={data.makerProfileImage}
           width={32}
           height={32}
