@@ -56,10 +56,7 @@ export default function EmojiLoading({
   }, [duration]);
 
   return (
-    <div
-      className='fixed inset-0 z-99 flex items-center justify-center'
-      style={{ backgroundColor: 'rgba(24, 25, 27, 0.50)' }}
-    >
+    <div className='bg-background-dim-darkest fixed inset-0 z-99 flex items-center justify-center'>
       <div className='relative flex h-40 w-40 items-center justify-center rounded-full'>
         <BubbleHint message='📸 이미지를 채우고 있어요' className='-top-18' />
         <motion.div
