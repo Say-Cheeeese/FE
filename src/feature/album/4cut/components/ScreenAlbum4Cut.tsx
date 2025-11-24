@@ -118,21 +118,17 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
     try {
       await showCaptureNode();
 
+      const fileName = data?.title
+        ? `${data.title}-cheese-4cut.png`
+        : 'cheese-4cut.png';
       const blob = await extractHtmlToBlob(captureRef.current);
 
-      const file = new File([blob], 'cheese-4cut.png', {
-        type: blob.type ?? 'image/png',
-      });
-
-      // TODO : shareImage 함수로 리팩토링
-      await shareViaNavigator({
-        data: {
-          files: [file],
-          title: data?.title ? `'${data.title}' 치즈네컷` : '치즈네컷 미리보기',
+      await shareImage({
+        imageBlobs: blob,
+        imageTitle: fileName,
+        onError: () => {
+          downloadFile(blob, fileName);
         },
-        errorMessage: '공유에 실패하였습니다. 다시한번 시도해주세요.',
-        fileNotSupportedMessage:
-          '이 브라우저는 파일 공유 기능을 지원하지 않습니다.',
       });
     } catch (error) {
       console.error('Failed to share 4cut preview:', error);
