@@ -5,7 +5,7 @@ import CustomHeader from '@/global/components/header/CustomHeader';
 import LongButton from '@/global/components/LongButton';
 import ConfirmModal from '@/global/components/modal/ConfirmModal';
 import Toast from '@/global/components/toast/Toast';
-import BubbleHint from '@/global/components/tooltip/BubbleTooltip';
+import BubbleTooltip from '@/global/components/tooltip/BubbleTooltip';
 import PersonSvg from '@/global/svg/PersonSvg';
 import { downloadFile } from '@/global/utils/downloadFile';
 import { getDeviceType } from '@/global/utils/getDeviceType';
@@ -211,7 +211,7 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
             </>
           ) : (
             <div className=''>
-              <BubbleHint
+              <BubbleTooltip
                 message='📸 사진 확정 권한은 메이커에게만 있어요'
                 className='absolute bottom-18 left-1/2 w-full -translate-x-1/2'
               />

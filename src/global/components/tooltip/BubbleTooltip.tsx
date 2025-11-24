@@ -1,4 +1,6 @@
-interface BubbleHintProps {
+import { cn } from '@/lib/utils';
+
+interface BubbleTooltipProps {
   /** 텍스트나 아이콘이 함께 포함된 문장 */
   message: string;
   /** 기본은 가운데 정렬 */
@@ -6,21 +8,21 @@ interface BubbleHintProps {
   className?: string;
 }
 
-export default function BubbleHint({
+export default function BubbleTooltip({
   message,
   align = 'center',
   className = '',
-}: BubbleHintProps) {
+}: BubbleTooltipProps) {
   const alignClass =
     align === 'center' ? 'mx-auto' : align === 'left' ? 'mr-auto' : 'ml-auto';
 
   return (
-    <div className={`${className}`}>
+    <div className={cn(className)}>
       <div
-        className={`w-fit rounded-2xl bg-white px-4 py-[9px] shadow-[0_2px_8px_rgba(0,0,0,0.15)] ${alignClass}`}
+        className={`relative w-fit rounded-2xl bg-white px-4 py-[9px] shadow-[0_2px_8px_rgba(0,0,0,0.15)] ${alignClass}`}
       >
         <div className='typo-body-sm-semibold text-text-basic flex items-center space-x-2'>
-          <span>{message}</span>
+          <span className='whitespace-nowrap'>{message}</span>
         </div>
 
         {/* 꼬다리 */}
