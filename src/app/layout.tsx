@@ -14,6 +14,7 @@ const pretendard = localFont({
 
 export const metadata: Metadata = {
   title: '치이이즈: 추억은 따끈할 때 제맛',
+  description: '딱 7일만 열리는 특별한 공유 앨범 서비스',
   openGraph: {
     title: '치이이즈: 추억은 따끈할 때 제맛',
     url: 'https://say-cheese.me/main',
