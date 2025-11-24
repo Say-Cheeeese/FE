@@ -14,8 +14,10 @@ const pretendard = localFont({
 
 export const metadata: Metadata = {
   title: '치이이즈: 추억은 따끈할 때 제맛',
+  description: '딱 7일만 열리는 특별한 공유 앨범 서비스',
   openGraph: {
     title: '치이이즈: 추억은 따끈할 때 제맛',
+
     url: 'https://say-cheese.me/main',
     siteName: '치이이즈',
     images: [
@@ -40,6 +42,10 @@ export default function RootLayout({
     <html lang='ko'>
       <head>
         <link rel='icon' href='/favicon.ico' sizes='any' />
+        <meta
+          name='description'
+          content='딱 7일만 열리는 특별한 공유 앨범 서비스'
+        />
       </head>
       <Script id='maze-snippet' strategy='afterInteractive'>
         {`(function (m, a, z, e) {

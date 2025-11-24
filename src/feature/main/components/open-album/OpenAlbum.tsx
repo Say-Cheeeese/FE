@@ -1,5 +1,6 @@
 import PersonSvg from '@/global/svg/PersonSvg';
 import { convertUnicodeToEmoji } from '@/global/utils/convertEmoji';
+import Image from 'next/image';
 import Link from 'next/link';
 import { getOpenAlbumGridConfig } from '../../utils/getOpenAlbumGridConfig';
 
@@ -50,11 +51,23 @@ export default function OpenAlbum({
                 style={{ gridArea: 'main' }}
                 className='overflow-hidden bg-neutral-200'
               >
-                <img
-                  src={main || defaultThumbnail}
-                  alt='main-thumbnail'
-                  className='h-full w-full object-cover'
-                />
+                {main ? (
+                  <img
+                    src={main}
+                    alt='메인 사진'
+                    className='h-full w-full object-cover'
+                    fetchPriority='high'
+                  />
+                ) : (
+                  <Image
+                    src={defaultThumbnail}
+                    alt='메인 사진'
+                    width={361}
+                    height={162}
+                    className='h-full w-full object-cover'
+                    fetchPriority='high'
+                  />
+                )}
               </div>
 
               {/* 썸네일 2개 이상일 때 side1 */}
@@ -69,8 +82,9 @@ export default function OpenAlbum({
                   {side1 && (
                     <img
                       src={side1}
-                      alt='side-thumbnail-1'
+                      alt='주요 사진'
                       className='h-full w-full object-cover'
+                      fetchPriority='high'
                     />
                   )}
                 </div>
@@ -85,8 +99,9 @@ export default function OpenAlbum({
                   {side2 && (
                     <img
                       src={side2}
-                      alt='side-thumbnail-2'
+                      alt='주요 사진'
                       className='h-full w-full object-cover'
+                      fetchPriority='high'
                     />
                   )}
                 </div>

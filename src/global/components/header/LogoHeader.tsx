@@ -1,8 +1,8 @@
 'use client';
 import { useGetUserMe } from '@/feature/main/hooks/useGetUserMe';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useCallback } from 'react';
+import SvgLogo from './svg/SvgLogo';
 
 interface LogoHeaderProps {
   showLogin?: boolean;
@@ -37,12 +37,7 @@ export default function LogoHeader({
         style={{ background: bgColor }}
       >
         <div className='mx-auto flex h-18 w-full max-w-[430px] items-center justify-between px-5'>
-          <Image
-            src='/assets/login/cheese-logo.svg'
-            width={88}
-            height={20}
-            alt='치이이즈'
-          />
+          <SvgLogo />
           {shouldShowLogin && (
             <Link href='/login' onClick={handleLoginClick}>
               <div className='cursor-pointer px-3 py-2.5'>

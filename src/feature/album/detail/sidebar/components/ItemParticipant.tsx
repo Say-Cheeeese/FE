@@ -1,3 +1,5 @@
+import { DEFAULT_PROFILE_IMAGE } from '@/global/constants/images';
+
 interface ItemParticipantProps {
   name: string;
   profileImage?: string;
@@ -15,7 +17,7 @@ export default function ItemParticipant({
     <div className={`flex items-center justify-between gap-3 py-2`}>
       <div className='flex items-center gap-3 overflow-hidden'>
         <img
-          src={profileImage ?? `/assets/onboarding/smile1.svg`}
+          src={profileImage ?? DEFAULT_PROFILE_IMAGE}
           width={36}
           height={36}
           alt='프로필사진'
