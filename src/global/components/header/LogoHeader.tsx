@@ -39,9 +39,9 @@ export default function LogoHeader({
         <div className='mx-auto flex h-18 w-full max-w-[430px] items-center justify-between px-5'>
           <Image
             src='/assets/login/cheese-logo.svg'
-            width={120}
-            height={120}
-            alt='치즈 아이콘'
+            width={88}
+            height={20}
+            alt='치이이즈'
           />
           {shouldShowLogin && (
             <Link href='/login' onClick={handleLoginClick}>

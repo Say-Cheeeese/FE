@@ -1,7 +1,7 @@
 'use client';
 
 import { PhotoListResponseSchema } from '@/global/api/ep';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/css';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -22,24 +22,34 @@ export default function SwiperPhotoList({
   const [thumbSwiper, setThumbSwiper] = useState<SwiperType | null>(null);
   const [thumbOffset, setThumbOffset] = useState(0);
 
+  const updateThumbOffset = useCallback(() => {
+    const vw = window.innerWidth;
+    setThumbOffset(
+      calcThumbSwiperCenterOffset({
+        viewportWidth: vw,
+        activeMargin: 12,
+        activeWidth: 30,
+        inactiveWidth: 15,
+        inactiveMargin: 2,
+        index: activeIndex,
+      }),
+    );
+  }, [activeIndex]);
+
   useEffect(() => {
-    const updateOffset = () => {
-      const vw = window.innerWidth;
-      setThumbOffset(
-        calcThumbSwiperCenterOffset({
-          viewportWidth: vw,
-          activeMargin: 12,
-          activeWidth: 30,
-          inactiveWidth: 15,
-          inactiveMargin: 2,
-          index: 0,
-        }),
-      );
-    };
-    updateOffset();
-    window.addEventListener('resize', updateOffset);
-    return () => window.removeEventListener('resize', updateOffset);
-  }, []);
+    updateThumbOffset();
+    window.addEventListener('resize', updateThumbOffset);
+    return () => window.removeEventListener('resize', updateThumbOffset);
+  }, [updateThumbOffset]);
+
+  useEffect(() => {
+    if (!thumbSwiper || thumbSwiper.destroyed) return;
+
+    thumbSwiper.slideTo(activeIndex);
+    requestAnimationFrame(() => {
+      thumbSwiper.setTranslate(thumbOffset);
+    });
+  }, [activeIndex, thumbOffset, thumbSwiper]);
 
   return (
     <>
@@ -103,7 +113,6 @@ export default function SwiperPhotoList({
           </Swiper>
         </div>
 
-        {/* TODO : 이미지 스와이프 시 activeIndex가 빠르게바뀌면서 깜빡임현상 심한 이슈 있음. */}
         {/* 아래: 썸네일 컨트롤러 */}
         <div className='mx-auto w-full max-w-md'>
           <Swiper
@@ -114,29 +123,8 @@ export default function SwiperPhotoList({
             slidesOffsetBefore={thumbOffset}
             slidesOffsetAfter={thumbOffset}
             watchSlidesProgress
+            allowTouchMove={false}
             className='custom-thumb-swiper relative w-full px-3 py-2 backdrop-blur-md'
-            onSlideChange={(sw) => {
-              const idx = sw.activeIndex;
-              changeActiveIndex(idx);
-              if (mainSwiper && !mainSwiper.destroyed) {
-                mainSwiper.slideTo(idx);
-              }
-
-              const vw = window.innerWidth;
-              const offset = calcThumbSwiperCenterOffset({
-                viewportWidth: vw,
-                activeMargin: 12,
-                activeWidth: 30,
-                inactiveWidth: 15,
-                inactiveMargin: 2,
-                index: idx,
-              });
-
-              // 한 프레임 늦게 + 음수로
-              requestAnimationFrame(() => {
-                sw.setTranslate(offset);
-              });
-            }}
           >
             {images.map(({ thumbnailUrl, photoId }, i) => {
               const isActive = activeIndex === i;
@@ -159,7 +147,6 @@ export default function SwiperPhotoList({
                   }}
                 >
                   {/* TODO : 이미지 아직 불러오는 중일때 스켈레톤 띄우기 */}
-
                   <img
                     src={thumbnailUrl}
                     loading='lazy'

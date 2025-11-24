@@ -86,6 +86,7 @@ export default function CreateAlbumList() {
             sideGap={16}
             noFixed={false}
             bottomGap={20}
+            safeArea={false}
           />
         }
         showCloseButton={false}

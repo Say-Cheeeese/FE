@@ -1,6 +1,7 @@
 'use client';
 import { PhotoListResponseSchema } from '@/global/api/ep';
 import PhotoBox from '@/global/components/photo/PhotoBox';
+import Toast from '@/global/components/toast/Toast';
 import { buildQuery } from '@/global/utils/buildQuery';
 import { useAlbumSortStore } from '@/store/useAlbumSortStore';
 import { useSelectedPhotosStore } from '@/store/useSelectedPhotosStore';
@@ -135,7 +136,7 @@ export default function PhotoList({
       <div ref={anchorRef} className='invisible absolute top-[-72px] left-0' />
       <div className='mb-3 flex justify-between'>
         <span className='typo-body-lg-regular text-text-subtle'>
-          총 {totalPhotoCount || ''}장
+          총 {totalPhotoCount || 0}장
         </span>
         {mode === 'default' && (
           <button
@@ -157,32 +158,56 @@ export default function PhotoList({
         )}
       </div>
       <div className='grid grid-cols-3 gap-0.5'>
-        {photos.map(({ photoId, likeCnt, isLiked, thumbnailUrl, imageUrl }) => {
-          if (!photoId || !thumbnailUrl || !imageUrl) {
-            return null;
-          }
+        {photos.map(
+          ({
+            photoId,
+            likeCnt,
+            isLiked,
+            thumbnailUrl,
+            imageUrl,
+            isDownloaded,
+            isRecentlyDownloaded,
+          }) => {
+            if (!photoId || !thumbnailUrl || !imageUrl) {
+              return null;
+            }
 
-          return (
-            <PhotoBox
-              key={photoId}
-              pressed={isSelected(photoId)}
-              // 띱많은순이 아니면, 좋아요수가 있을때 의식하게되어 보여주지않음.
-              likeCount={sortType === 'liked' ? likeCnt : undefined}
-              liked={sortType === 'liked' ? isLiked : undefined}
-              imageSrc={thumbnailUrl}
-              responsive
-              onPress={() => {
-                if (mode === 'default') {
-                  router.push(
-                    `/photo/detail/${albumId}${buildQuery({ photoId: photoId })}`,
-                  );
-                } else {
-                  handlePhotoPress({ photoId, photoUrl: imageUrl });
-                }
-              }}
-            />
-          );
-        })}
+            return (
+              <PhotoBox
+                key={photoId}
+                downloaded={isDownloaded}
+                disabled={isRecentlyDownloaded}
+                pressed={isSelected(photoId)}
+                mode={mode}
+                // 띱많은순이 아니면, 좋아요수가 있을때 의식하게되어 보여주지않음.
+                likeCount={sortType === 'liked' ? likeCnt : undefined}
+                liked={sortType === 'liked' ? isLiked : undefined}
+                imageSrc={thumbnailUrl}
+                responsive
+                onPress={() => {
+                  if (mode === 'default') {
+                    router.push(
+                      `/photo/detail/${albumId}${buildQuery({ photoId: photoId })}`,
+                    );
+                  } else {
+                    handlePhotoPress({ photoId, photoUrl: thumbnailUrl });
+                  }
+                }}
+                onDisabledPress={() => {
+                  if (mode === 'default') {
+                    router.push(
+                      `/photo/detail/${albumId}${buildQuery({ photoId: photoId })}`,
+                    );
+                  } else {
+                    Toast.alert(
+                      `금방 다운받은 사진이에요.\n1시간 뒤에 다시 시도하세요.`,
+                    );
+                  }
+                }}
+              />
+            );
+          },
+        )}
       </div>
       <div ref={loadMoreRef} />
     </section>

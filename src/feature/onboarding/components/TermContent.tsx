@@ -2,7 +2,7 @@ import { FC } from 'react'; // React 19+에서 타입 추론이 강력해졌지�
 
 // terms 섹션 컴포넌트 – 스크롤 영역 포함
 const TermsComponent: FC = () => (
-  <div className='max-h-[80vh] overflow-y-auto'>
+  <div className='scrollbar-hide max-h-[80vh] overflow-y-auto'>
     <div className='flex flex-col gap-8'>
       <div className='flex flex-col gap-1'>
         <div className='typo-body-sm-bold leading-5 text-[#424349]'>
@@ -83,7 +83,7 @@ const TermsComponent: FC = () => (
 
 // privacy 섹션 컴포넌트 – 스크롤 영역 포함
 const PrivacyComponent: FC = () => (
-  <div className='max-h-[80vh] overflow-y-auto'>
+  <div className='scrollbar-hide max-h-[80vh] overflow-y-auto'>
     <div className='flex flex-col gap-8'>
       <div className='flex flex-col gap-1'>
         <div className='text-sm leading-5 font-bold text-[#424349]'>
@@ -133,7 +133,7 @@ const PrivacyComponent: FC = () => (
 
 // thirdParty 섹션 컴포넌트 – 스크롤 영역 포함
 const ThirdPartyComponent: FC = () => (
-  <div className='max-h-[80vh] overflow-y-auto'>
+  <div className='scrollbar-hide max-h-[80vh] overflow-y-auto'>
     <div className='flex flex-col gap-8'>
       <div className='flex flex-col gap-1'>
         <div className='text-sm leading-5 font-bold text-[#424349]'>
@@ -179,7 +179,7 @@ const ThirdPartyComponent: FC = () => (
 
 // marketing 섹션 컴포넌트 – 스크롤 영역 포함
 const MarketingComponent: FC = () => (
-  <div className='max-h-[80vh] overflow-y-auto'>
+  <div className='scrollbar-hide max-h-[80vh] overflow-y-auto'>
     <div className='flex flex-col gap-8'>
       <div className='flex flex-col gap-1'>
         <div className='text-sm leading-5 font-bold text-[#424349]'>

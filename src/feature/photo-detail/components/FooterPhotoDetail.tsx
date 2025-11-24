@@ -2,10 +2,13 @@
 import { EP } from '@/global/api/ep';
 import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
 import Toast from '@/global/components/toast/Toast';
+import { downloadFile } from '@/global/utils/downloadFile';
+import { getDeviceType } from '@/global/utils/getDeviceType';
 import { shareImage } from '@/global/utils/image/shareImage';
 import { useQueryClient } from '@tanstack/react-query';
 import { Download, Heart, Info } from 'lucide-react';
 import { useState } from 'react';
+import { usePhotoDownloadMutation } from '../hooks/usePhotoDownloadMutation';
 import { usePhotoLikedMutation } from '../hooks/usePhotoLikedMutation';
 import { usePhotoUnlikedMutation } from '../hooks/usePhotoUnlikedMutation';
 import { updateCacheAlbumPhotosLike } from '../modules/updateCacheAlbumPhotosLike';
@@ -31,10 +34,12 @@ export default function FooterPhotoDetail({
 }: FooterPhotoDetailProps) {
   const queryClient = useQueryClient();
   const [isDownloading, setIsDownloading] = useState(false);
+  const [isPhotoInfoOpen, setIsPhotoInfoOpen] = useState(false);
   const { mutateAsync: mutateAsyncLike, isPending: isLiking } =
     usePhotoLikedMutation();
   const { mutateAsync: mutateAsyncUnlike, isPending: isUnliking } =
     usePhotoUnlikedMutation();
+  const { mutateAsync: mutateAsyncDownload } = usePhotoDownloadMutation();
 
   const handleDeepToggle = async (): Promise<void> => {
     try {
@@ -67,29 +72,52 @@ export default function FooterPhotoDetail({
     }
     if (isDownloading) return;
 
-    setIsDownloading(true);
-    await shareImage({
-      imageUrls: imageUrl,
-      imageTitle: `IMG_${photoId}`,
-      onSuccess: () => {},
-      onError: () => {
-        Toast.alert('사진을 준비하는 중 오류가 발생했습니다.');
-      },
-    });
-    setIsDownloading(false);
+    try {
+      setIsDownloading(true);
+      const deviceType = getDeviceType();
+      const fileName = `IMG_${photoId}`;
+
+      if (deviceType === 'ios') {
+        await Promise.all([
+          // mutateAsyncDownload({ albumId, photoIds: [photoId] }),
+          shareImage({
+            imageUrls: imageUrl,
+            imageTitle: fileName,
+            onSuccess: () => {},
+            onError: () => {
+              // Toast.alert('사진을 준비하는 중 오류가 발생했습니다.');
+              downloadFile(imageUrl, fileName);
+            },
+          }),
+        ]);
+      } else {
+        downloadFile(imageUrl, fileName);
+        // await mutateAsyncDownload({ albumId, photoIds: [photoId] });
+      }
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setIsDownloading(false);
+    }
   };
 
   return (
     <section className='mx-10 flex shrink-0 justify-around py-5'>
       <BottomSheetModal
         title={'사진 정보'}
+        open={isPhotoInfoOpen}
+        onOpenChange={setIsPhotoInfoOpen}
         trigger={
           <button className='flex w-12 justify-center'>
             <Info width={24} height={24} color='white' />
           </button>
         }
       >
-        <SectionPhotoData albumId={albumId} photoId={photoId} />
+        <SectionPhotoData
+          albumId={albumId}
+          photoId={photoId}
+          onAfterDelete={() => setIsPhotoInfoOpen(false)}
+        />
       </BottomSheetModal>
 
       <button

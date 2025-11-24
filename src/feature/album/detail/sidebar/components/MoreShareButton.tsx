@@ -29,7 +29,7 @@ export default function MoreShareButton({ albumId }: MoreShareButtonProps) {
       className='flex flex-col items-center justify-center'
     >
       <div className='flex h-[58px] w-[58px] items-center justify-center rounded-full bg-[#fff2c2]'>
-        <Ellipsis width={24} height={24} color='var(--color-icon-basic)' />
+        <Ellipsis width={24} height={24} color='#E09900' />
       </div>
       <span>더보기</span>
     </button>

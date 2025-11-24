@@ -25,6 +25,10 @@ type BottomSheetModalProps = {
   dismissible?: boolean;
   /** 상단 드래그 바 표시 여부 (기본값: true) */
   showHandle?: boolean;
+  /** 외부에서 열림 상태를 제어하고 싶을 때 사용 */
+  open?: boolean;
+  defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
 };
 
 export default function BottomSheetModal({
@@ -35,9 +39,18 @@ export default function BottomSheetModal({
   title,
   dismissible = true,
   showHandle = true,
+  open,
+  defaultOpen,
+  onOpenChange,
 }: BottomSheetModalProps) {
   return (
-    <Drawer dismissible={dismissible} shouldScaleBackground={false}>
+    <Drawer
+      dismissible={dismissible}
+      shouldScaleBackground={false}
+      open={open}
+      defaultOpen={defaultOpen}
+      onOpenChange={onOpenChange}
+    >
       <DrawerTrigger asChild>{trigger}</DrawerTrigger>
 
       <DrawerContent

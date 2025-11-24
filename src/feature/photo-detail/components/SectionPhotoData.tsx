@@ -1,8 +1,13 @@
+import { EP } from '@/global/api/ep';
+import ConfirmModal from '@/global/components/modal/ConfirmModal';
+import { useQueryClient } from '@tanstack/react-query';
+import { useDeleteAlbumPhotoMutation } from '../hooks/useDeleteAlbumPhotoMutation';
 import { usePhotoDetailQuery } from '../hooks/usePhotoDetailQuery';
 
 interface SectionPhotoDataProps {
   albumId: string;
   photoId: number;
+  onAfterDelete?: () => void;
 }
 
 const formatKoreanDateTime = (isoString?: string): string => {
@@ -23,14 +28,26 @@ const formatKoreanDateTime = (isoString?: string): string => {
 export default function SectionPhotoData({
   albumId,
   photoId,
+  onAfterDelete,
 }: SectionPhotoDataProps) {
+  const queryClient = useQueryClient();
   const { data, isPending, isError } = usePhotoDetailQuery({
     albumId,
     photoId,
   });
+  const { mutateAsync } = useDeleteAlbumPhotoMutation();
 
   if (isPending) return null;
   if (isError) return null;
+
+  const handleDeleteClick = async () => {
+    try {
+      await mutateAsync({ albumId, photoId });
+      queryClient.invalidateQueries({ queryKey: [EP.album.photos(albumId)] });
+    } finally {
+      onAfterDelete?.();
+    }
+  };
 
   return (
     <section className='typo-body-lg-medium flex flex-col gap-6 rounded-3xl bg-white px-3 py-2'>
@@ -53,23 +70,24 @@ export default function SectionPhotoData({
         </div>
       </dl>
 
-      {/* TODO : 사진삭제 api 개발 전까지 주석 */}
-      {/* <ConfirmModal
-        title='사진을 삭제할까요?'
-        description='지운 사진은 다시 복구할 수 없어요.'
-        cancelText='취소'
-        confirmText='삭제하기'
-        confirmClassName='text-text-basic-inverse bg-button-accent-fill'
-        onConfirm={onDeleteClick}
-        trigger={
-          <button
-            type='button'
-            className='bg-element-gray-lighter typo-body-1xl-semibold text-text-error w-full rounded-xl py-4'
-          >
-            사진 삭제하기
-          </button>
-        }
-      /> */}
+      {data?.canDelete && (
+        <ConfirmModal
+          title='사진을 삭제할까요?'
+          description='지운 사진은 다시 복구할 수 없어요.'
+          cancelText='취소'
+          confirmText='삭제하기'
+          confirmClassName='text-text-basic-inverse bg-button-accent-fill'
+          onConfirm={handleDeleteClick}
+          trigger={
+            <button
+              type='button'
+              className='bg-element-gray-lighter typo-body-1xl-semibold text-text-error w-full rounded-xl py-4'
+            >
+              사진 삭제하기
+            </button>
+          }
+        />
+      )}
     </section>
   );
 }

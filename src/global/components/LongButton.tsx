@@ -6,6 +6,7 @@ interface LongButtonProps {
   bottomGap?: number; // 하단 여백(px)
   noFixed?: boolean; // true면 fixed 해제하고 가로 100% 채움
   height?: number; // 버튼 세로(px)
+  safeArea?: boolean; // false면 safe-area-inset-bottom 미적용
 }
 
 export default function LongButton({
@@ -16,6 +17,7 @@ export default function LongButton({
   bottomGap = 20,
   noFixed = false,
   height,
+  safeArea = true,
 }: LongButtonProps) {
   // noFixed가 true면 스타일 속성 없음, false면 left/right/bottom 값 적용
   const buttonStyle = {
@@ -24,7 +26,9 @@ export default function LongButton({
       : {
           left: `${sideGap}px`,
           right: `${sideGap}px`,
-          bottom: `calc(${bottomGap}px + env(safe-area-inset-bottom))`,
+          bottom: safeArea
+            ? `calc(${bottomGap}px + env(safe-area-inset-bottom))`
+            : `${bottomGap}px`,
         }),
     ...(height ? { height: `${height}px` } : {}),
   };

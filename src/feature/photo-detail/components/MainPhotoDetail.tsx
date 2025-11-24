@@ -14,7 +14,7 @@ const SwiperPhotoList = dynamic(() => import('./SwiperPhotoList'), {
 interface MainPhotoDetailProps {
   images: PhotoListResponseSchema[];
   albumId: string;
-  photoId?: number;
+  photoId: number | null;
 }
 
 export default function MainPhotoDetail({
@@ -46,7 +46,7 @@ export default function MainPhotoDetail({
         isLiked={activeImage.isLiked}
         likeCnt={activeImage.likeCnt}
         isRecentlyDownloaded={activeImage.isRecentlyDownloaded}
-        imageUrl={activeImage.imageUrl}
+        imageUrl={activeImage.thumbnailUrl}
       />
     </>
   );
@@ -54,7 +54,7 @@ export default function MainPhotoDetail({
 
 function findImageIndexByPhotoId(
   images: PhotoListResponseSchema[],
-  targetPhotoId?: number,
+  targetPhotoId: number | null,
 ): number {
   if (!targetPhotoId) return -1;
 

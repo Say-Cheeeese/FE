@@ -11,12 +11,14 @@ interface PhotoBoxProps {
   responsive?: boolean;
   likeCount?: number;
   liked?: boolean;
+  mode?: 'default' | 'select';
   downloaded?: boolean;
   pressed?: boolean;
   disabled?: boolean;
   imageSrc?: string;
   imageAlt?: string;
   onPress?: (pressed: boolean) => void;
+  onDisabledPress?: () => void;
   pressable?: boolean;
 }
 
@@ -27,10 +29,12 @@ export default function PhotoBox({
   liked = false,
   downloaded = false,
   pressed = false,
+  mode = 'default',
   disabled = false,
   imageSrc,
   imageAlt = '사진',
   onPress,
+  onDisabledPress,
   pressable = true,
 }: PhotoBoxProps) {
   const showLike = likeCount !== undefined;
@@ -46,7 +50,12 @@ export default function PhotoBox({
   };
 
   const handlePress = () => {
-    if (disabled || !pressable) return;
+    if (disabled) {
+      onDisabledPress?.();
+      return;
+    }
+
+    if (!pressable) return;
 
     const next = !pressed;
     onPress?.(next);
@@ -64,11 +73,10 @@ export default function PhotoBox({
         responsive && 'w-full',
         'relative shrink-0 overflow-hidden rounded-[8px] border-[3px] border-white',
         pressed
-          ? 'border-border-primary bg-background-dim-darker'
+          ? 'border-border-primary'
           : downloaded
             ? 'border-b-border-primary border-b-[3px]'
             : 'border-transparent',
-        disabled && 'pointer-events-none opacity-60',
         !disabled && !pressable && 'cursor-default',
       )}
     >
@@ -82,21 +90,29 @@ export default function PhotoBox({
         />
       </div>
 
-      {/* disabled 오버레이 */}
-      {disabled && (
-        <div className='bg-background-dim-darkest pointer-events-none absolute inset-0 z-20' />
+      {/* disabled  모드에서만 오버레이 */}
+      {disabled && mode === 'select' && (
+        <div className='bg-background-dim-darkest pointer-events-none absolute inset-0 z-10' />
       )}
 
-      {/* 선택 시 체크 */}
+      {downloaded && (
+        <div className='absolute bottom-0 left-0 h-1/2 w-full bg-[linear-gradient(180deg,rgba(24,25,27,0)_0%,rgba(24,25,27,0.8)_60.1%)]' />
+      )}
+
       {pressed && (
-        <div className='bg-element-primary absolute top-2.5 right-2.5 z-30 flex h-6 w-6 items-center justify-center rounded-full'>
-          <Check
-            width={12}
-            height={12}
-            strokeWidth={3}
-            color='var(--color-icon-basic)'
-          />
-        </div>
+        <>
+          {/* 선택 시 사진 딤처리 */}
+          <div className='bg-background-dim-darker absolute inset-0' />
+          {/* 선택 시 오른쪽상단 체크표시 */}
+          <div className='bg-element-primary absolute top-2.5 right-2.5 z-30 flex h-6 w-6 items-center justify-center rounded-full'>
+            <Check
+              width={12}
+              height={12}
+              strokeWidth={3}
+              color='var(--color-icon-basic)'
+            />
+          </div>
+        </>
       )}
 
       {/* 좋아요 오버레이 */}

@@ -7,6 +7,8 @@ import ConfirmModal from '@/global/components/modal/ConfirmModal';
 import Toast from '@/global/components/toast/Toast';
 import BubbleHint from '@/global/components/tooltip/BubbleTooltip';
 import PersonSvg from '@/global/svg/PersonSvg';
+import { downloadFile } from '@/global/utils/downloadFile';
+import { getDeviceType } from '@/global/utils/getDeviceType';
 import { extractHtmlToBlob } from '@/global/utils/image/extractHtmlToBlob';
 import { shareImage } from '@/global/utils/image/shareImage';
 import { shareViaNavigator } from '@/global/utils/shareNavigator';
@@ -30,6 +32,7 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
   const captureRef = useRef<HTMLDivElement>(null);
   const { data } = useGetAlbumInfo(albumId);
   const { data: { name } = {} } = useGetUserMe();
+
   // TODO : openapi type이 이상해서 임시 any처리. 백엔드랑 협의 필요
 
   const {
@@ -56,6 +59,8 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
   };
 
   const handleDownload = async () => {
+    const deviceType = getDeviceType();
+
     if (!captureRef.current) {
       Toast.alert(
         '다운로드할 이미지를 찾지 못했어요. 잠시 후 다시 시도해주세요.',
@@ -64,15 +69,24 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
     }
 
     try {
+      const fileName = data?.title
+        ? `${data.title}-cheese-4cut.png`
+        : 'cheese-4cut.png';
       const blob = await extractHtmlToBlob(captureRef.current);
 
-      await shareImage({
-        imageBlobs: blob,
-        imageTitle: data?.title
-          ? `${data.title}-cheese-4cut.png`
-          : `cheese-4cut.png`,
-      });
+      if (deviceType === 'ios') {
+        await shareImage({
+          imageBlobs: blob,
+          imageTitle: fileName,
+          onError: () => {
+            downloadFile(blob, fileName);
+          },
+        });
+      } else {
+        downloadFile(blob, fileName);
+      }
     } catch (error) {
+      console.error(error);
       Toast.alert('이미지를 다운로드하지 못했습니다. 다시 시도해주세요.');
     }
   };
@@ -95,7 +109,6 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
         data: {
           files: [file],
           title: data?.title ? `'${data.title}' 치즈네컷` : '치즈네컷 미리보기',
-          text: '확정된 치즈네컷을 공유해요.',
         },
         errorMessage: '공유에 실패하였습니다. 다시한번 시도해주세요.',
         fileNotSupportedMessage:
