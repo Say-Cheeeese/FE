@@ -4,6 +4,7 @@ import ThreeTags_Fill_Album from '@/../public/assets/album/3Tags_Fill_Album.json
 import { useGetAlbumInvitation } from '@/feature/album/detail/hooks/useGetAlbumInvitation';
 import { useAlbumPhotosInfiniteQuery } from '@/feature/photo-detail/hooks/useAlbumPhotosInfiniteQuery';
 import MarqueeCarousel from '@/global/components/carousel/MarqueeCarousel';
+import { DEFAULT_PROFILE_IMAGE } from '@/global/constants/images';
 import { convertUnicodeToEmoji } from '@/global/utils/convertEmoji';
 import dynamic from 'next/dynamic';
 import AlbumPreviewCard from './AlbumPreviewCard';
@@ -53,9 +54,7 @@ export default function AlbumSharePreviewSection({
                   imageUrl={thumbnailUrl}
                   nickname={name ?? '사용자'}
                   // TODO : API에서 프사 받아야함.
-                  profileUrl={
-                    'https://say-cheese.edge.naverncp.com/album/1f0c3cb7-5eb6-6f81-b301-31ed2129d735/original/359_signup_profile_1.jpg'
-                  }
+                  profileUrl={DEFAULT_PROFILE_IMAGE}
                 />
               </div>
             ))}

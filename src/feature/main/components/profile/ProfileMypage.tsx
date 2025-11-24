@@ -19,6 +19,7 @@ export default function ProfileMypage({}: ProfileMypageProps) {
             alt='프로필사진'
             width={80}
             height={80}
+            fetchPriority='low'
           />
         </div>
 

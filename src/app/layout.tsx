@@ -42,6 +42,10 @@ export default function RootLayout({
     <html lang='ko'>
       <head>
         <link rel='icon' href='/favicon.ico' sizes='any' />
+        <meta
+          name='description'
+          content='딱 7일만 열리는 특별한 공유 앨범 서비스'
+        />
       </head>
       <Script id='maze-snippet' strategy='afterInteractive'>
         {`(function (m, a, z, e) {

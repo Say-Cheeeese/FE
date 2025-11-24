@@ -8,10 +8,10 @@ import { mapOpenAlbumItems } from '../../utils/mapOpenAlbumItems';
 import EmptyAlbum from '../EmptyAlbum';
 import ButtonMore from './ButtonMore';
 import OpenAlbum from './OpenAlbum';
+import SkeletonOpenAlbum from './SkeletonOpenAlbum';
 import ToggleAlbumType from './ToggleAlbumType';
 
 const MIN_VISIBLE_COUNT = 2;
-const LOADING_TEXT = '불러오는 중...';
 
 interface OpenAlbumContainerProps {}
 
@@ -92,6 +92,12 @@ export default function OpenAlbumContainer({}: OpenAlbumContainerProps) {
       <div className='mt-4 mb-5 flex flex-col gap-5'>
         {!showLoadingState &&
           showing.map((album) => <OpenAlbum key={album.code} {...album} />)}
+        {showLoadingState && (
+          <>
+            <SkeletonOpenAlbum />
+            <SkeletonOpenAlbum />
+          </>
+        )}
         {!showLoadingState && showEmptyState && (
           <EmptyAlbum
             title={
@@ -108,11 +114,7 @@ export default function OpenAlbumContainer({}: OpenAlbumContainerProps) {
           onClick={() => setIsMoreOpened(true)}
         />
       )}
-      {isMoreOpened && isFetchingNextPage && (
-        <div className='typo-body-sm-medium text-text-subtle py-4 text-center'>
-          {LOADING_TEXT}
-        </div>
-      )}
+
       <div ref={loadMoreRef} />
     </section>
   );
