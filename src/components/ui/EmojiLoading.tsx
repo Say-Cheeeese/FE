@@ -5,6 +5,7 @@ import { useUploadingStore } from '@/store/useUploadingStore';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 
+import BubbleHint from '@/global/components/tooltip/BubbleTooltip';
 import { useQueryClient } from '@tanstack/react-query';
 
 interface EmojiLoadingProps {
@@ -60,6 +61,7 @@ export default function EmojiLoading({
       style={{ backgroundColor: 'rgba(24, 25, 27, 0.50)' }}
     >
       <div className='relative flex h-40 w-40 items-center justify-center rounded-full'>
+        <BubbleHint message='📸 이미지를 채우고 있어요' className='-top-18' />
         <motion.div
           className='absolute rounded-full'
           style={{

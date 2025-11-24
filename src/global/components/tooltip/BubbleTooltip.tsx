@@ -1,3 +1,5 @@
+import { cn } from '@/lib/utils';
+
 interface BubbleHintProps {
   /** 텍스트나 아이콘이 함께 포함된 문장 */
   message: string;
@@ -15,12 +17,12 @@ export default function BubbleHint({
     align === 'center' ? 'mx-auto' : align === 'left' ? 'mr-auto' : 'ml-auto';
 
   return (
-    <div className={`${className}`}>
+    <div className={cn('absolute', className)}>
       <div
-        className={`w-fit rounded-2xl bg-white px-4 py-[9px] shadow-[0_2px_8px_rgba(0,0,0,0.15)] ${alignClass}`}
+        className={`relative w-fit rounded-2xl bg-white px-4 py-[9px] shadow-[0_2px_8px_rgba(0,0,0,0.15)] ${alignClass}`}
       >
-        <div className='typo-body-sm-semibold text-text-basic flex items-center space-x-2'>
-          <span>{message}</span>
+        <div className='typo-body-sm-semibold text-text-basic flex items-center space-x-2 whitespace-nowrap'>
+          <span className='whitespace-nowrap'>{message}</span>
         </div>
 
         {/* 꼬다리 */}
