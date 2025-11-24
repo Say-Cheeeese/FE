@@ -9,31 +9,22 @@ import BubbleHint from '@/global/components/tooltip/BubbleTooltip';
 import PersonSvg from '@/global/svg/PersonSvg';
 import { downloadFile } from '@/global/utils/downloadFile';
 import { getDeviceType } from '@/global/utils/getDeviceType';
+import { extractHtmlToBlob } from '@/global/utils/image/extractHtmlToBlob';
 import { shareImage } from '@/global/utils/image/shareImage';
 import { shareViaNavigator } from '@/global/utils/shareNavigator';
 import { useQueryClient } from '@tanstack/react-query';
-import { toBlob } from 'html-to-image';
-import { Download, LucideIcon, Menu, Send } from 'lucide-react';
+import { Download, Loader2, LucideIcon, Menu, Send } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 import { useGetAlbumInfo } from '../../detail/hooks/useGetAlbumInfo';
 import { use4CutFixed } from '../hooks/use4CutFixed';
 import { use4CutPreviewQuery } from '../hooks/use4CutPreviewQuery';
 import Container4Cut from './Container4Cut';
+const Capture4CutPortal = dynamic(() => import('./Capture4CutPortal'), {
+  ssr: false,
+});
 
-const extracthtmlToBlob = async (node: HTMLElement): Promise<Blob> => {
-  const blob = await toBlob(node, {
-    cacheBust: true,
-    backgroundColor: '#ffffff',
-    pixelRatio: 2,
-  });
-
-  if (!blob) {
-    throw new Error('이미지 생성 실패');
-  }
-
-  return blob;
-};
 interface ScreenAlbum4CutProps {
   albumId: string;
 }
@@ -42,6 +33,8 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
   const router = useRouter();
   const queryClient = useQueryClient();
   const [isConfirmed, setIsConfirmed] = useState(false);
+  const [isCaptureVisible, setIsCaptureVisible] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
   const captureRef = useRef<HTMLDivElement>(null);
   const { data } = useGetAlbumInfo(albumId);
   const { data: { name } = {} } = useGetUserMe();
@@ -56,6 +49,12 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
   const { mutateAsync } = use4CutFixed();
 
   const isMaker = myRole === 'MAKER';
+
+  const showCaptureNode = async () =>
+    new Promise<void>((resolve) => {
+      setIsCaptureVisible(true);
+      requestAnimationFrame(() => resolve());
+    });
 
   const handleConfirm = async (): Promise<void> => {
     await mutateAsync({
@@ -82,11 +81,13 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
     }
 
     try {
+      setIsDownloading(true);
+      await showCaptureNode();
+
       const fileName = data?.title
         ? `${data.title}-cheese-4cut.png`
         : 'cheese-4cut.png';
-
-      const blob = await extracthtmlToBlob(captureRef.current);
+      const blob = await extractHtmlToBlob(captureRef.current);
 
       if (deviceType === 'ios') {
         await shareImage({
@@ -102,6 +103,9 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
     } catch (error) {
       console.error(error);
       Toast.alert('이미지를 다운로드하지 못했습니다. 다시 시도해주세요.');
+    } finally {
+      setIsCaptureVisible(false);
+      setIsDownloading(false);
     }
   };
 
@@ -112,7 +116,9 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
     }
 
     try {
-      const blob = await extracthtmlToBlob(captureRef.current);
+      await showCaptureNode();
+
+      const blob = await extractHtmlToBlob(captureRef.current);
 
       const file = new File([blob], 'cheese-4cut.png', {
         type: blob.type ?? 'image/png',
@@ -131,6 +137,8 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
     } catch (error) {
       console.error('Failed to share 4cut preview:', error);
       Toast.alert('이미지를 생성하지 못했습니다. 다시 시도해주세요.');
+    } finally {
+      setIsCaptureVisible(false);
     }
   };
 
@@ -154,11 +162,12 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
         {!isFinalized && (
           <div className='typo-body-lg-semibold mb-2'>현재 TOP 4 사진</div>
         )}
-        <div ref={captureRef}>
+        <div>
           <Container4Cut
             albumId={albumId}
             eventName={data?.title}
             eventDate={data?.eventDate}
+            scale={1}
           />
         </div>
       </section>
@@ -230,6 +239,23 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
           )}
         </div>
       )}
+      {isDownloading && (
+        <div className='fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-[2px]'>
+          <div className='flex items-center gap-3 rounded-2xl bg-white px-4 py-3 shadow-lg'>
+            <Loader2 className='text-primary h-5 w-5 animate-spin' />
+            <span className='typo-body-lg-semibold text-text-basic'>
+              다운로드 중...
+            </span>
+          </div>
+        </div>
+      )}
+      <Capture4CutPortal
+        captureRef={captureRef}
+        visible={isCaptureVisible}
+        albumId={albumId}
+        eventName={data?.title}
+        eventDate={data?.eventDate}
+      />
     </>
   );
 }

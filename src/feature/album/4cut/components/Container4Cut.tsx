@@ -7,12 +7,14 @@ interface Container4CutProps {
   albumId: string;
   eventName?: string;
   eventDate?: string;
+  scale?: number;
 }
 
 export default function Container4Cut({
   albumId,
   eventDate,
   eventName,
+  scale = 1,
 }: Container4CutProps) {
   // TODO : openapi type이 이상해서 임시 any처리. 백엔드랑 협의 필요
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -30,18 +32,37 @@ export default function Container4Cut({
 
   const { base64List } = useBase64Images({ imageUrls: images });
 
+  const scaledFontSize = 7.963 * scale;
+  const scaledNamePosition = {
+    bottom: `${7.4 * scale}px`,
+    left: `${9.6 * scale}px`,
+  };
+  const scaledDatePosition = {
+    bottom: `${7.4 * scale}px`,
+    right: `${10.4 * scale}px`,
+  };
+
   return (
-    <div className='border-border-primary text-text-secondary relative border text-[7.963px] font-medium'>
-      <Svg4Cut width={216} height={384} photos={base64List} />
+    <div
+      className='border-border-primary text-text-secondary relative border font-medium'
+      style={{ fontSize: scaledFontSize }}
+    >
+      <Svg4Cut width={216 * scale} height={384 * scale} photos={base64List} />
 
       {eventName && (
-        <span className='paperozi-font absolute bottom-[7.4px] left-[9.6px]'>
+        <span
+          className='paperozi-font absolute'
+          style={{ ...scaledNamePosition, fontSize: scaledFontSize }}
+        >
           {eventName}
         </span>
       )}
 
       {eventDate && (
-        <span className='paperozi-font absolute right-[10.4px] bottom-[7.4px] text-[7.963px]'>
+        <span
+          className='paperozi-font absolute'
+          style={{ ...scaledDatePosition, fontSize: scaledFontSize }}
+        >
           {eventDate}
         </span>
       )}

@@ -68,17 +68,15 @@ export default function RootLayout({
       </Script>
 
       <body
-        className={`${pretendard.className} max-w-[430px] antialiased`}
-        style={{
-          maxWidth: '430px',
-          width: '100vw',
-          margin: '0 auto',
-          background: '#fff',
-        }}
+        className={`${pretendard.className} min-h-screen w-full antialiased`}
       >
-        <QueryProvider>
-          <KakaoProvider>{children}</KakaoProvider>
-        </QueryProvider>
+        <div className='min-h-screen w-full bg-white'>
+          <div className='mx-auto flex min-h-screen w-full max-w-[430px] flex-col'>
+            <QueryProvider>
+              <KakaoProvider>{children}</KakaoProvider>
+            </QueryProvider>
+          </div>
+        </div>
       </body>
     </html>
   );
