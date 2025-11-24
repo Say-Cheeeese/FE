@@ -48,10 +48,12 @@ export default function ScreenPhotoShareEntry({
 
         <div className='mb-5 flex w-full flex-1 flex-col items-center justify-end'>
           <div className='relative w-full px-6'>
-            <BubbleTooltip
-              className='absolute -top-14 left-1/2 -translate-x-1/2'
-              message={`📸 지금 ${data?.availableCount}장 더 올릴 수 있어요`}
-            />
+            {data?.availableCount && (
+              <BubbleTooltip
+                className='absolute -top-14 left-1/2 -translate-x-1/2'
+                message={`📸 지금 ${data.availableCount}장 더 올릴 수 있어요`}
+              />
+            )}
             <input
               ref={fileInputRef}
               type='file'
