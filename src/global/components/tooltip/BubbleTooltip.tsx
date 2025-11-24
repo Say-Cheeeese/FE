@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 
-interface BubbleHintProps {
+interface BubbleTooltipProps {
   /** 텍스트나 아이콘이 함께 포함된 문장 */
   message: string;
   /** 기본은 가운데 정렬 */
@@ -8,11 +8,11 @@ interface BubbleHintProps {
   className?: string;
 }
 
-export default function BubbleHint({
+export default function BubbleTooltip({
   message,
   align = 'center',
   className = '',
-}: BubbleHintProps) {
+}: BubbleTooltipProps) {
   const alignClass =
     align === 'center' ? 'mx-auto' : align === 'left' ? 'mr-auto' : 'ml-auto';
 

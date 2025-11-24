@@ -4,7 +4,7 @@ import { handleFileUpload } from '@/feature/create-album/utils/handleFileUpload'
 import CheckNoImgModal from '@/feature/upload/components/CheckNoImgModal';
 import CustomHeader from '@/global/components/header/CustomHeader';
 import LongButton from '@/global/components/LongButton';
-import BubbleHint from '@/global/components/tooltip/BubbleTooltip';
+import BubbleTooltip from '@/global/components/tooltip/BubbleTooltip';
 import { useRouter } from 'next/navigation';
 import { useRef } from 'react';
 import AlbumSharePreviewSection from './AlbumSharePreviewSection';
@@ -36,12 +36,11 @@ export default function ScreenPhotoShareEntry({
         <AlbumSharePreviewSection albumId={albumId} />
 
         <div className='mb-5 flex w-full flex-1 flex-col items-center justify-end'>
-          <BubbleHint
-            className='mb-6'
-            message={`📸 지금 ${data?.availableCount}장 더 올릴 수 있어요`}
-          />
-
-          <div className='w-full px-6'>
+          <div className='relative w-full px-6'>
+            <BubbleTooltip
+              className='absolute -top-14 left-1/2 -translate-x-1/2'
+              message={`📸 지금 ${data?.availableCount}장 더 올릴 수 있어요`}
+            />
             <input
               ref={fileInputRef}
               type='file'
