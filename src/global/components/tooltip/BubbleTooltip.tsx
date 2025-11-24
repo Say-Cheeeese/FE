@@ -21,7 +21,7 @@ export default function BubbleTooltip({
       <div
         className={`relative w-fit rounded-2xl bg-white px-4 py-[9px] shadow-[0_2px_8px_rgba(0,0,0,0.15)] ${alignClass}`}
       >
-        <div className='typo-body-sm-semibold text-text-basic flex items-center space-x-2 whitespace-nowrap'>
+        <div className='typo-body-sm-semibold text-text-basic flex items-center space-x-2'>
           <span className='whitespace-nowrap'>{message}</span>
         </div>
 
