@@ -13,7 +13,7 @@ import { extractHtmlToBlob } from '@/global/utils/image/extractHtmlToBlob';
 import { shareImage } from '@/global/utils/image/shareImage';
 import { shareViaNavigator } from '@/global/utils/shareNavigator';
 import { useQueryClient } from '@tanstack/react-query';
-import { Download, LucideIcon, Menu, Send } from 'lucide-react';
+import { Download, Loader2, LucideIcon, Menu, Send } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
@@ -34,6 +34,7 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
   const queryClient = useQueryClient();
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [isCaptureVisible, setIsCaptureVisible] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
   const captureRef = useRef<HTMLDivElement>(null);
   const { data } = useGetAlbumInfo(albumId);
   const { data: { name } = {} } = useGetUserMe();
@@ -80,6 +81,7 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
     }
 
     try {
+      setIsDownloading(true);
       await showCaptureNode();
 
       const fileName = data?.title
@@ -103,6 +105,7 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
       Toast.alert('이미지를 다운로드하지 못했습니다. 다시 시도해주세요.');
     } finally {
       setIsCaptureVisible(false);
+      setIsDownloading(false);
     }
   };
 
@@ -234,6 +237,16 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
               />
             </div>
           )}
+        </div>
+      )}
+      {isDownloading && (
+        <div className='fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-[2px]'>
+          <div className='flex items-center gap-3 rounded-2xl bg-white px-4 py-3 shadow-lg'>
+            <Loader2 className='text-primary h-5 w-5 animate-spin' />
+            <span className='typo-body-lg-semibold text-text-basic'>
+              다운로드 준비중...
+            </span>
+          </div>
         </div>
       )}
       <Capture4CutPortal
