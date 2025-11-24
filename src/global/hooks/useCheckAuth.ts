@@ -1,7 +1,7 @@
 'use client';
 
 import { EP } from '@/global/api/ep';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { api } from '../utils/api';
 
 interface UseCheckAuthOptions {
@@ -11,7 +11,14 @@ interface UseCheckAuthOptions {
   onUnauthed?: () => void;
 }
 
-export function useCheckAuth({ onAuthed, onUnauthed }: UseCheckAuthOptions) {
+export function useCheckAuth({
+  onAuthed,
+  onUnauthed,
+}: UseCheckAuthOptions = {}): {
+  isAuthed: boolean | null;
+} {
+  const [isAuthed, setIsAuthed] = useState<boolean | null>(null);
+
   useEffect(() => {
     let cancelled = false;
 
@@ -25,6 +32,7 @@ export function useCheckAuth({ onAuthed, onUnauthed }: UseCheckAuthOptions) {
         if (cancelled) return;
 
         if (res.code === 200) {
+          setIsAuthed(true);
           onAuthed?.();
         }
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -34,6 +42,7 @@ export function useCheckAuth({ onAuthed, onUnauthed }: UseCheckAuthOptions) {
         const status = err?.response?.status;
 
         if (status === 401) {
+          setIsAuthed(false);
           onUnauthed?.();
           return;
         }
@@ -48,4 +57,6 @@ export function useCheckAuth({ onAuthed, onUnauthed }: UseCheckAuthOptions) {
       cancelled = true;
     };
   }, [onAuthed, onUnauthed]);
+
+  return { isAuthed };
 }

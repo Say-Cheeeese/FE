@@ -1,11 +1,12 @@
 import ScreenPhotoShareEntry from '@/feature/photo-share-entry/components/ScreenPhotoShareEntry';
+import { Suspense } from 'react';
 
-export default async function Page({
-  params,
-}: {
-  params: Promise<{ albumId: string }>;
-}) {
-  const { albumId } = await params;
+export default function Page({ params }: { params: { albumId: string } }) {
+  const { albumId } = params;
 
-  return <ScreenPhotoShareEntry albumId={albumId} />;
+  return (
+    <Suspense fallback={null}>
+      <ScreenPhotoShareEntry albumId={albumId} />
+    </Suspense>
+  );
 }

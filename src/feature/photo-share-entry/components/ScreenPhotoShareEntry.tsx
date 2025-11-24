@@ -1,12 +1,13 @@
 'use client';
+import { useAlbumEnterMutation } from '@/feature/album-entry/hooks/useAlbumEnterMutation';
 import { useGetAlbumAvailableCount } from '@/feature/album/detail/hooks/useGetAlbumAvailableCount';
 import { handleFileUpload } from '@/feature/create-album/utils/handleFileUpload';
 import CheckNoImgModal from '@/feature/upload/components/CheckNoImgModal';
 import CustomHeader from '@/global/components/header/CustomHeader';
 import LongButton from '@/global/components/LongButton';
 import BubbleTooltip from '@/global/components/tooltip/BubbleTooltip';
-import { useRouter } from 'next/navigation';
-import { useRef } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useRef } from 'react';
 import AlbumSharePreviewSection from './AlbumSharePreviewSection';
 
 interface ScreenPhotoShareEntryProps {
@@ -17,8 +18,18 @@ export default function ScreenPhotoShareEntry({
   albumId,
 }: ScreenPhotoShareEntryProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const isInvite = searchParams.get('isInvite');
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const { mutateAsync } = useAlbumEnterMutation();
   const { data } = useGetAlbumAvailableCount(albumId);
+
+  useEffect(() => {
+    if (!isInvite) return;
+
+    mutateAsync({ albumId });
+  }, []);
 
   const handleUpload = () => {
     fileInputRef.current?.click();

@@ -1,10 +1,11 @@
 'use client';
 import { useGetAlbumInvitation } from '@/feature/album/detail/hooks/useGetAlbumInvitation';
 import Toast from '@/global/components/toast/Toast';
+import { useCheckAuth } from '@/global/hooks/useCheckAuth';
+import { buildQuery } from '@/global/utils/buildQuery';
 import { convertUnicodeToEmoji } from '@/global/utils/convertEmoji';
 import { formatExpirationTime } from '@/global/utils/time/formatExpirationTime';
 import { useRouter } from 'next/navigation';
-import { useAlbumEnterMutation } from '../hooks/useAlbumEnterMutation';
 
 interface LetterContentProps {
   albumId: string;
@@ -13,7 +14,7 @@ interface LetterContentProps {
 export default function LetterContent({ albumId }: LetterContentProps) {
   const router = useRouter();
   const { data, isPending, isError } = useGetAlbumInvitation(albumId);
-  const { mutateAsync } = useAlbumEnterMutation();
+  const { isAuthed } = useCheckAuth();
 
   if (isPending) return null;
   if (isError) return null;
@@ -21,11 +22,15 @@ export default function LetterContent({ albumId }: LetterContentProps) {
 
   const handleInviteAccept = async () => {
     try {
-      await mutateAsync({
-        albumId,
-        redirectUrlOnAuthError: `${process.env.NEXT_PUBLIC_CLIENT_URL}/photo-share-entry/${albumId}`,
-      });
-      router.push(`/photo-share-entry/${albumId}`);
+      if (isAuthed) {
+        router.push(
+          `/photo-share-entry/${albumId}${buildQuery({ isInvite: true })}`,
+        );
+      } else {
+        router.push(
+          `/login${buildQuery({ redirect: encodeURIComponent(`/photo-share-entry/${albumId}${buildQuery({ isInvite: true })}`) })}`,
+        );
+      }
     } catch (error) {
       Toast.alert('앨범 입장에 실패하였습니다');
     }
