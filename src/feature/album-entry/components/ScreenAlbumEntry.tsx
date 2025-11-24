@@ -1,5 +1,6 @@
 import LogoHeader from '@/global/components/header/LogoHeader';
 import FullSizeLetter from './FullSizeLetter';
+import LetterContent from './LetterContent';
 
 interface ScreenAlbumEntryProps {
   albumId: string;
@@ -15,7 +16,9 @@ export default function ScreenAlbumEntry({ albumId }: ScreenAlbumEntryProps) {
         style={{ backgroundImage: "url('/assets/album/bg-album-entry.png')" }}
       />
 
-      <FullSizeLetter albumId={albumId} />
+      <FullSizeLetter>
+        <LetterContent albumId={albumId} />
+      </FullSizeLetter>
     </main>
   );
 }
