@@ -17,7 +17,7 @@ export default function BubbleTooltip({
     align === 'center' ? 'mx-auto' : align === 'left' ? 'mr-auto' : 'ml-auto';
 
   return (
-    <div className={cn('absolute', className)}>
+    <div className={cn(className)}>
       <div
         className={`relative w-fit rounded-2xl bg-white px-4 py-[9px] shadow-[0_2px_8px_rgba(0,0,0,0.15)] ${alignClass}`}
       >

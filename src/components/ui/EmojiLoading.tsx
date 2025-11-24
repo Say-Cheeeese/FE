@@ -60,7 +60,7 @@ export default function EmojiLoading({
       <div className='relative flex h-40 w-40 items-center justify-center rounded-full'>
         <BubbleTooltip
           message='📸 이미지를 채우고 있어요'
-          className='-top-18'
+          className='absolute -top-18'
         />
         <motion.div
           className='absolute rounded-full'
