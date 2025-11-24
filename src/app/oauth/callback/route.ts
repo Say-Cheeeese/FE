@@ -6,9 +6,23 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
+  const protocol = request.headers.get('x-forwarded-proto') || 'https';
+  const host =
+    request.headers.get('x-forwarded-host') ||
+    request.headers.get('host') ||
+    'localhost:3000';
   const code = searchParams.get('code');
   const redirectParam = searchParams.get('redirect');
-  const redirect = redirectParam ? decodeURIComponent(redirectParam) : null;
+  let redirect: string | null = null;
+
+  if (redirectParam) {
+    const decodedRedirect = decodeURIComponent(redirectParam);
+    try {
+      redirect = new URL(decodedRedirect, `${protocol}://${host}`).toString();
+    } catch {
+      redirect = null;
+    }
+  }
 
   if (!code) {
     return NextResponse.json(
@@ -34,12 +48,6 @@ export async function GET(request: NextRequest) {
     }
 
     const data = await response.json();
-
-    const protocol = request.headers.get('x-forwarded-proto') || 'https';
-    const host =
-      request.headers.get('x-forwarded-host') ||
-      request.headers.get('host') ||
-      'localhost:3000';
 
     // ----- entry 쿠키 기준 서버 분기 -----
     const cookieDomain =

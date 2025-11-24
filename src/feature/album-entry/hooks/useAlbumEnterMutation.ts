@@ -12,7 +12,7 @@ const fetchData = async (albumId: string, redirectUrlOnAuthError?: string) => {
 
 interface AlbumEnterProps {
   albumId: string;
-  redirectUrlOnAuthError: string;
+  redirectUrlOnAuthError?: string;
 }
 
 export function useAlbumEnterMutation() {

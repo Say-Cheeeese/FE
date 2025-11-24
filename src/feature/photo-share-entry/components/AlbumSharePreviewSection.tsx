@@ -47,11 +47,11 @@ export default function AlbumSharePreviewSection({
           <Lottie animationData={ThreeTags_Fill_Album} />
         ) : (
           <MarqueeCarousel
-            items={items.map((item, i) => (
-              <div key={`${item.imageUrl}-${i}`}>
+            items={items.map(({ thumbnailUrl, name }, i) => (
+              <div key={`${thumbnailUrl}-${i}`}>
                 <AlbumPreviewCard
-                  imageUrl={item.imageUrl ?? ''}
-                  nickname={item.name ?? ''}
+                  imageUrl={thumbnailUrl}
+                  nickname={name ?? '사용자'}
                   // TODO : API에서 프사 받아야함.
                   profileUrl={
                     'https://say-cheese.edge.naverncp.com/album/1f0c3cb7-5eb6-6f81-b301-31ed2129d735/original/359_signup_profile_1.jpg'
