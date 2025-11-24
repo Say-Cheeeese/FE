@@ -244,7 +244,7 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
           <div className='flex items-center gap-3 rounded-2xl bg-white px-4 py-3 shadow-lg'>
             <Loader2 className='text-primary h-5 w-5 animate-spin' />
             <span className='typo-body-lg-semibold text-text-basic'>
-              다운로드 준비중...
+              다운로드 중...
             </span>
           </div>
         </div>
