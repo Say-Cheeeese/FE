@@ -122,7 +122,7 @@ export default function ScreenRoot() {
         <span className='text-[20px]'>사진 찍고 나눌 때의 감정</span>
       </div>
       <Image
-        src='/assets/rending/box.svg'
+        src='/assets/rending/box.png'
         width={325}
         height={330}
         loading='lazy'
