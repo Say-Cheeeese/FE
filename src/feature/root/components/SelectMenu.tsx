@@ -15,14 +15,13 @@ function MenuItem({ title, selected, onClick }: MenuItemProps) {
       style={{
         backgroundColor: selected ? '#fff' : '#F1F2F3',
         color: selected ? '#18191B' : '#94969E',
-        boxShadow: selected ? '0px 0px 10px 5px rgba(0,0,0,0.05)' : 'none',
+        boxShadow: selected ? '0px 0px 3px 1px rgba(0,0,0,0.05)' : 'none',
       }}
       animate={{
         opacity: 1,
         scale: 1,
         backgroundColor: selected ? '#fff' : '#F1F2F3',
         color: selected ? '#18191B' : '#94969E',
-        boxShadow: selected ? '0px 0px 10px 5px rgba(0,0,0,0.05)' : 'none',
       }}
       transition={{
         duration: 0.3,
