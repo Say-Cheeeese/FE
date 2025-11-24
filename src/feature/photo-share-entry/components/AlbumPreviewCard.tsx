@@ -17,6 +17,7 @@ export default function AlbumPreviewCard({
         width={180}
         height={180}
         className='h-[180px] w-[180px] rounded-3xl object-cover'
+        fetchPriority='high'
       />
       <div className='mt-2 flex items-center gap-2'>
         <img
