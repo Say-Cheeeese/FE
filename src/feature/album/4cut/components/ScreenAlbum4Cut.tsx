@@ -29,6 +29,7 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
   const router = useRouter();
   const queryClient = useQueryClient();
   const [isConfirmed, setIsConfirmed] = useState(false);
+  const [isCaptureVisible, setIsCaptureVisible] = useState(false);
   const captureRef = useRef<HTMLDivElement>(null);
   const { data } = useGetAlbumInfo(albumId);
   const { data: { name } = {} } = useGetUserMe();
@@ -43,6 +44,12 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
   const { mutateAsync } = use4CutFixed();
 
   const isMaker = myRole === 'MAKER';
+
+  const showCaptureNode = async () =>
+    new Promise<void>((resolve) => {
+      setIsCaptureVisible(true);
+      requestAnimationFrame(() => resolve());
+    });
 
   const handleConfirm = async (): Promise<void> => {
     await mutateAsync({
@@ -69,6 +76,8 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
     }
 
     try {
+      await showCaptureNode();
+
       const fileName = data?.title
         ? `${data.title}-cheese-4cut.png`
         : 'cheese-4cut.png';
@@ -88,6 +97,8 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
     } catch (error) {
       console.error(error);
       Toast.alert('이미지를 다운로드하지 못했습니다. 다시 시도해주세요.');
+    } finally {
+      setIsCaptureVisible(false);
     }
   };
 
@@ -98,6 +109,8 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
     }
 
     try {
+      await showCaptureNode();
+
       const blob = await extractHtmlToBlob(captureRef.current);
 
       const file = new File([blob], 'cheese-4cut.png', {
@@ -117,6 +130,8 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
     } catch (error) {
       console.error('Failed to share 4cut preview:', error);
       Toast.alert('이미지를 생성하지 못했습니다. 다시 시도해주세요.');
+    } finally {
+      setIsCaptureVisible(false);
     }
   };
 
@@ -140,11 +155,24 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
         {!isFinalized && (
           <div className='typo-body-lg-semibold mb-2'>현재 TOP 4 사진</div>
         )}
-        <div ref={captureRef}>
+        <div>
           <Container4Cut
             albumId={albumId}
             eventName={data?.title}
             eventDate={data?.eventDate}
+            scale={1}
+          />
+        </div>
+        <div
+          ref={captureRef}
+          className={`pointer-events-none fixed top-0 left-0 select-none ${isCaptureVisible ? 'opacity-100' : 'opacity-0'}`}
+          aria-hidden
+        >
+          <Container4Cut
+            albumId={albumId}
+            eventName={data?.title}
+            eventDate={data?.eventDate}
+            scale={3}
           />
         </div>
       </section>
