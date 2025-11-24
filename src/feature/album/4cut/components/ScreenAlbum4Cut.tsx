@@ -14,12 +14,16 @@ import { shareImage } from '@/global/utils/image/shareImage';
 import { shareViaNavigator } from '@/global/utils/shareNavigator';
 import { useQueryClient } from '@tanstack/react-query';
 import { Download, LucideIcon, Menu, Send } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 import { useGetAlbumInfo } from '../../detail/hooks/useGetAlbumInfo';
 import { use4CutFixed } from '../hooks/use4CutFixed';
 import { use4CutPreviewQuery } from '../hooks/use4CutPreviewQuery';
 import Container4Cut from './Container4Cut';
+const Capture4CutPortal = dynamic(() => import('./Capture4CutPortal'), {
+  ssr: false,
+});
 
 interface ScreenAlbum4CutProps {
   albumId: string;
@@ -163,18 +167,6 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
             scale={1}
           />
         </div>
-        <div
-          ref={captureRef}
-          className={`pointer-events-none fixed top-0 left-0 select-none ${isCaptureVisible ? 'opacity-100' : 'opacity-0'}`}
-          aria-hidden
-        >
-          <Container4Cut
-            albumId={albumId}
-            eventName={data?.title}
-            eventDate={data?.eventDate}
-            scale={3}
-          />
-        </div>
       </section>
 
       {!is4CutPreviewPending && (
@@ -244,6 +236,13 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
           )}
         </div>
       )}
+      <Capture4CutPortal
+        captureRef={captureRef}
+        visible={isCaptureVisible}
+        albumId={albumId}
+        eventName={data?.title}
+        eventDate={data?.eventDate}
+      />
     </>
   );
 }
