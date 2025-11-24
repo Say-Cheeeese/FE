@@ -5,7 +5,8 @@ import { heicTo } from 'heic-to';
 export async function convertHeicFilesToJpeg(files: File[]): Promise<File[]> {
   // HEIC 파일 개수 체크
   const heicFiles = files.filter(
-    (file) => /heic|heif/i.test(file.type) || /\.heic$|\.heif$/i.test(file.name)
+    (file) =>
+      /heic|heif/i.test(file.type) || /\.heic$|\.heif$/i.test(file.name),
   );
 
   // HEIC 파일이 있으면 변환 중 Toast 표시
@@ -38,8 +39,6 @@ export async function convertHeicFilesToJpeg(files: File[]): Promise<File[]> {
       return file;
     }),
   );
-
-
 
   return convertedFiles;
 }
