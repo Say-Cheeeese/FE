@@ -4,7 +4,13 @@ const DAY = 24 * HOUR;
 
 export function formatExpirationTime(expiredAt?: string) {
   if (!expiredAt) return '만료됨';
-  const expiresAt = new Date(expiredAt).getTime();
+
+  // 타임존 정보가 없으면 UTC로 강제 파싱
+  const utcTime = expiredAt.endsWith('Z') || expiredAt.includes('+') || expiredAt.includes('-', 10)
+    ? expiredAt
+    : expiredAt + 'Z';
+
+  const expiresAt = new Date(utcTime).getTime();
   if (Number.isNaN(expiresAt)) return '만료됨';
 
   const diff = expiresAt - Date.now();
