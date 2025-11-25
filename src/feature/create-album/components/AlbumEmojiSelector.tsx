@@ -1,7 +1,15 @@
 'use client';
-import EmojiPicker from 'emoji-picker-react';
 import { Pencil } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import { useEffect, useRef, useState } from 'react';
+
+// TBT 개선: emoji-picker-react를 dynamic import (약 200KB 절약)
+const EmojiPicker = dynamic(() => import('emoji-picker-react'), {
+  ssr: false,
+  loading: () => (
+    <div className='h-[300px] w-[310px] animate-pulse rounded-lg bg-gray-200' />
+  ),
+});
 
 interface EmojiClickData {
   emoji: string;
@@ -73,7 +81,7 @@ export default function AlbumEmojiSelector({
             searchDisabled
             skinTonesDisabled
             previewConfig={{ showPreview: false }}
-            lazyLoadEmojis={false}
+            lazyLoadEmojis={true}
           />
         </div>
       )}

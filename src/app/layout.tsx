@@ -10,6 +10,7 @@ const pretendard = localFont({
   display: 'swap',
   weight: '100 900',
   variable: '--font-pretendard',
+  preload: true,
 });
 
 export const metadata: Metadata = {
@@ -47,7 +48,7 @@ export default function RootLayout({
           content='딱 7일만 열리는 특별한 공유 앨범 서비스'
         />
       </head>
-      <Script id='maze-snippet' strategy='afterInteractive'>
+      {/* <Script id='maze-snippet' strategy='lazyOnload'>
         {`(function (m, a, z, e) {
   var s, t, u, v;
   try {
@@ -71,7 +72,7 @@ export default function RootLayout({
   a.getElementsByTagName('head')[0].appendChild(s);
   m.mazeUniversalSnippetApiKey = e;
 })(window, document, 'https://snippet.maze.co/maze-universal-loader.js', '65a6039c-2384-4c2d-a8e1-546a4f859a08');`}
-      </Script>
+      </Script> */}
 
       <body
         className={`${pretendard.className} min-h-screen w-full antialiased`}

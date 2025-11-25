@@ -2,25 +2,28 @@
 import LogoHeader from '@/global/components/header/LogoHeader';
 import LongButton from '@/global/components/LongButton';
 import { useCheckAuth } from '@/global/hooks/useCheckAuth';
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import RendingFooter from './RendingFooter';
-import SelectedList from './SelectedList';
-import SelectMenu from './SelectMenu';
-import SwipeList from './SwipeList';
+import { useCallback, useState } from 'react';
+import SelectMenu from './SelectMenu'; // ✅ 화면에 보이므로 일반 import
+
+// SI 개선: 스크롤 아래만 dynamic import (화면에 안 보이는 것만!)
+const RendingFooter = dynamic(() => import('./RendingFooter'), { ssr: false });
+const SelectedList = dynamic(() => import('./SelectedList'), { ssr: false });
+const SwipeList = dynamic(() => import('./SwipeList'), { ssr: false });
 
 export default function ScreenRoot() {
   const router = useRouter();
   const [selectedMenu, setSelectedMenu] = useState<
     'first' | 'second' | 'third'
   >('first');
-  const handleCreateAlbumClick = () => {
+  const handleCreateAlbumClick = useCallback(() => {
     if (typeof document !== 'undefined') {
       document.cookie = 'entry=create-album; path=/;';
     }
     router.push('/login');
-  };
+  }, [router]);
 
   useCheckAuth({ onAuthed: () => router.push('/main') });
 
@@ -44,7 +47,7 @@ export default function ScreenRoot() {
           height={411}
           alt='블러 배경'
           className='pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 select-none'
-          style={{ zIndex: -1 }}
+          style={{ zIndex: 0 }}
         />
         <Image
           src='/assets/rending/phone.png'
@@ -63,7 +66,6 @@ export default function ScreenRoot() {
       <LongButton
         text='우리 앨범 만들기'
         noFixed={true}
-        height={56}
         onClick={handleCreateAlbumClick}
       />
 

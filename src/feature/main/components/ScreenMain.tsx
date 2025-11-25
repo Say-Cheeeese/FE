@@ -21,7 +21,6 @@ export default function ScreenMain({}: ScreenMainProps) {
         <LongButton
           text='앨범 만들기'
           onClick={() => router.push('/create-album')}
-          height={56}
         />
       </div>
     </main>

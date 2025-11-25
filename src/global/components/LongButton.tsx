@@ -39,7 +39,7 @@ export default function LongButton({
       disabled={disabled}
       onClick={onClick}
       style={buttonStyle}
-      className={`typo-body-lg-semibold ${height ? '' : 'h-12'} rounded-lg transition-colors duration-100 ${
+      className={`typo-body-lg-semibold ${height ? '' : 'h-14'} rounded-lg transition-colors duration-100 ${
         noFixed ? 'w-full' : 'fixed z-50 mx-auto max-w-[430px]'
       } ${
         disabled
