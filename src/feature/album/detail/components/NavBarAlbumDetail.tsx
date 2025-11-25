@@ -72,6 +72,7 @@ export default function NavBarAlbumDetail({ albumId }: NavBarAlbumDetailProps) {
           <button
             type='button'
             className='bg-element-gray-light rounded-full p-2.5'
+            aria-label='사진 정렬'
           >
             <ArrowDownUp
               width={24}
@@ -104,6 +105,7 @@ export default function NavBarAlbumDetail({ albumId }: NavBarAlbumDetailProps) {
         type='button'
         onClick={handleButtonClick}
         className='bg-element-gray-light rounded-full p-2.5'
+        aria-label='사진 추가'
       >
         <Plus width={24} height={24} color={'var(--color-icon-basic)'} />
       </button>
