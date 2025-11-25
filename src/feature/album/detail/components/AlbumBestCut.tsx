@@ -30,6 +30,7 @@ export default function AlbumBestCut({
         onClick={() => router.push(`/album/4cut/${albumId}`)}
         noFixed
         disabled={photoCount < 4}
+        height={48}
       />
     </section>
   );

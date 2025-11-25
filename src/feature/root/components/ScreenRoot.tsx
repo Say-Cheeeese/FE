@@ -63,7 +63,6 @@ export default function ScreenRoot() {
       <LongButton
         text='우리 앨범 만들기'
         noFixed={true}
-        height={56}
         onClick={handleCreateAlbumClick}
       />
 
