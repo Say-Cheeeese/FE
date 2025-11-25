@@ -57,7 +57,7 @@ export default function NavBarAlbumDetail({ albumId }: NavBarAlbumDetailProps) {
         );
       }
     } catch (error: unknown) {
-      console.log("error",typeof(error));
+      console.log('error', typeof error);
     }
   };
 
