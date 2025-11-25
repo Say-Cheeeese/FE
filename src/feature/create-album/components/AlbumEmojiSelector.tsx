@@ -6,7 +6,9 @@ import { useEffect, useRef, useState } from 'react';
 // TBT 개선: emoji-picker-react를 dynamic import (약 200KB 절약)
 const EmojiPicker = dynamic(() => import('emoji-picker-react'), {
   ssr: false,
-  loading: () => <div className="h-[300px] w-[310px] animate-pulse bg-gray-200 rounded-lg" />,
+  loading: () => (
+    <div className='h-[300px] w-[310px] animate-pulse rounded-lg bg-gray-200' />
+  ),
 });
 
 interface EmojiClickData {
