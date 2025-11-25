@@ -54,8 +54,7 @@ export default function EmojiLoading({
           }
 
           // 상태 초기화
-          useUploadingStore.getState().setUploaded(false);
-          useUploadingStore.getState().setUploadedCount(0);
+          useUploadingStore.getState().reset();
         }
       };
       frame = requestAnimationFrame(animate);
