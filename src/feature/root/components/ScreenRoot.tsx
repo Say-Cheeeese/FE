@@ -58,7 +58,7 @@ export default function ScreenRoot() {
       </div>
 
       <span className='typo-body-sm-regular mt-7 mb-3 text-[#747681]'>
-        1000개 모임에서 치이이즈를 사용했어요
+        92개 모임에서 치이이즈를 사용했어요
       </span>
       <LongButton
         text='우리 앨범 만들기'
@@ -122,7 +122,7 @@ export default function ScreenRoot() {
         <span className='text-[20px]'>사진 찍고 나눌 때의 감정</span>
       </div>
       <Image
-        src='/assets/rending/box.svg'
+        src='/assets/rending/box.png'
         width={325}
         height={330}
         loading='lazy'
