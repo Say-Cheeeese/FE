@@ -40,7 +40,11 @@ export async function handleFileUpload(
         contentType: file.type,
         captureTime,
       }));
-      uploadResult = await presignedAndUploadToNCP({ albumCode: albumId, files, fileInfos });
+      uploadResult = await presignedAndUploadToNCP({
+        albumCode: albumId,
+        files,
+        fileInfos,
+      });
 
       // 업로드 성공 개수 저장
       if (uploadResult.success > 0) {
@@ -48,7 +52,6 @@ export async function handleFileUpload(
       }
 
       // stay 모드일 때 만 토스트 표시
-
     } else {
       // 검증 실패 시 Zustand 스토어에 저장
       saveFilesToStore(files);
@@ -67,6 +70,5 @@ export async function handleFileUpload(
 
     // input value 초기화(업로드 성공/실패 관계없이)
     if (e.target) e.target.value = '';
-
   }
 }

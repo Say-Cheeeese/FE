@@ -9,7 +9,7 @@ interface MenuItemProps {
 function MenuItem({ title, selected, onClick }: MenuItemProps) {
   return (
     <div
-      className='typo-body-md-medium flex flex-1 cursor-pointer items-center justify-center rounded-full select-none transition-all duration-300 ease-out'
+      className='typo-body-md-medium flex flex-1 cursor-pointer items-center justify-center rounded-full transition-all duration-300 ease-out select-none'
       style={{
         backgroundColor: selected ? '#fff' : '#F1F2F3',
         color: selected ? '#18191B' : '#94969E',

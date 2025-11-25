@@ -95,7 +95,6 @@ export default function SelectAlbumBody() {
     },
   });
 
-
   const processedImages = useMemo<ImageWithUrl[]>(() => {
     const validation = validateImages(images.map((img) => img.file));
     const oversizedSet = new Set(validation.oversizedFiles);
