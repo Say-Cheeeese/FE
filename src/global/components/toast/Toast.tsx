@@ -1,3 +1,4 @@
+import { CircleCheck } from 'lucide-react';
 import React from 'react';
 import { createRoot, Root } from 'react-dom/client';
 
@@ -48,15 +49,22 @@ const unmountToast = (
 };
 
 const Toast = {
-  alert: async (
-    message: string,
-    lucideIcon?: React.ReactNode,
-  ): Promise<void> => {
+  alert: async (message: string): Promise<void> => {
+    const toastContainer = getContainer(TOAST_CONTAINER_ID);
+    const { default: ToastView } = await import('./ToastView');
+
+    renderToast(<ToastView message={message} />, toastContainer);
+    unmountToast(toastContainer);
+  },
+  check: async (message: string): Promise<void> => {
     const toastContainer = getContainer(TOAST_CONTAINER_ID);
     const { default: ToastView } = await import('./ToastView');
 
     renderToast(
-      <ToastView message={message} lucideIcon={lucideIcon} />,
+      <ToastView
+        message={message}
+        lucideIcon={<CircleCheck width={20} height={20} />}
+      />,
       toastContainer,
     );
     unmountToast(toastContainer);
