@@ -1,6 +1,4 @@
-'use client'; // Next.js 15 Client Component (PPR 호환)
-
-import { motion } from 'framer-motion'; // v11 (2025, React 19 Transitions 통합 – AI 제스처 지원으로 터치 fade 더 부드러움)
+'use client';
 
 interface MenuItemProps {
   title: string;
@@ -10,28 +8,17 @@ interface MenuItemProps {
 
 function MenuItem({ title, selected, onClick }: MenuItemProps) {
   return (
-    <motion.div
-      className='typo-body-md-medium flex flex-1 cursor-pointer items-center justify-center rounded-full select-none'
+    <div
+      className='typo-body-md-medium flex flex-1 cursor-pointer items-center justify-center rounded-full select-none transition-all duration-300 ease-out'
       style={{
         backgroundColor: selected ? '#fff' : '#F1F2F3',
         color: selected ? '#18191B' : '#94969E',
         boxShadow: selected ? '0px 0px 3px 1px rgba(0,0,0,0.05)' : 'none',
       }}
-      animate={{
-        opacity: 1,
-        scale: 1,
-        backgroundColor: selected ? '#fff' : '#F1F2F3',
-        color: selected ? '#18191B' : '#94969E',
-      }}
-      transition={{
-        duration: 0.3,
-        ease: [0.4, 0, 0.2, 1],
-        opacity: { duration: 0.2 },
-      }}
       onClick={onClick}
     >
       {title}
-    </motion.div>
+    </div>
   );
 }
 
