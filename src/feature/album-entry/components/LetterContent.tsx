@@ -23,12 +23,10 @@ export default function LetterContent({ albumId }: LetterContentProps) {
   const handleInviteAccept = async () => {
     try {
       if (isAuthed) {
-        router.push(
-          `/photo-share-entry/${albumId}${buildQuery({ isInvite: true })}`,
-        );
+        router.push(`/photo/entry/${albumId}${buildQuery({ isInvite: true })}`);
       } else {
         router.push(
-          `/login${buildQuery({ redirect: encodeURIComponent(`/photo-share-entry/${albumId}${buildQuery({ isInvite: true })}`) })}`,
+          `/login${buildQuery({ redirect: encodeURIComponent(`/photo/entry/${albumId}${buildQuery({ isInvite: true })}`) })}`,
         );
       }
     } catch (error) {
