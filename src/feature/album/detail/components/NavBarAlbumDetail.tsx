@@ -57,11 +57,7 @@ export default function NavBarAlbumDetail({ albumId }: NavBarAlbumDetailProps) {
         );
       }
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        Toast.alert(error.message);
-      } else {
-        Toast.alert('알 수 없는 오류가 발생했습니다.');
-      }
+      console.log("error",typeof(error));
     }
   };
 

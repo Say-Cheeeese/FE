@@ -1,4 +1,5 @@
 import { api } from '@/global/utils/api';
+import Toast from '../components/toast/Toast';
 
 export type PresignedUrlRequest = {
   albumCode: string;
@@ -31,8 +32,18 @@ export async function getPresignedUrl(
       body: { albumCode: params.albumCode, fileInfos: params.fileInfos },
     });
     return response.result.presignedUrlInfos;
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Presigned URL 조회 실패:', error);
-    throw { stage: 'presigned', error };
+
+    // 서버 에러 객체 체크 (plain object with message)
+    if (error && typeof error === 'object' && 'message' in error) {
+      Toast.alert(error.message as string);
+    } else if (error instanceof Error) {
+      Toast.alert(error.message);
+    } else {
+      Toast.alert('오류가 발생했습니다.');
+    }
+
+    throw error;
   }
 }
