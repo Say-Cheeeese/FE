@@ -4,7 +4,7 @@ import { getFilesWithCaptureTime } from '@/feature/create-album/utils/getFilesWi
 import { validateImages } from '@/feature/create-album/utils/validateImages';
 import LongButton from '@/global/components/LongButton';
 import PhotoBox from '@/global/components/photo/PhotoBox';
-import { AlbumToastList } from '@/global/components/toast/AlbumToast';
+import Toast from '@/global/components/toast/Toast';
 import { usePresignedAndUploadToNCP } from '@/global/hooks/usePresignedAndUploadToNCP';
 import { useReportFailed } from '@/global/hooks/useReportFailed';
 import { useImageStore } from '@/store/useImageStore';
@@ -55,7 +55,6 @@ export default function SelectAlbumBody() {
   }, [images, albumId, router]);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [availableCount, setAvailableCount] = useState<number | null>(null);
-  const [toasts, setToasts] = useState<string[]>([]);
   const { mutate: checkImagesMutate } = useCheckImages();
 
   // object URL 해제 함수
@@ -72,7 +71,7 @@ export default function SelectAlbumBody() {
   const { mutate: uploadMutate } = usePresignedAndUploadToNCP({
     onSuccess: (result) => {
       if (result.failed > 0) {
-        showToast(`${result.failed}개 파일 업로드에 실패했어요`);
+        Toast.alert(`${result.failed}개 파일 업로드에 실패했어요`);
         // 실패한 photoId가 있으면 서버에 보고
         if (
           Array.isArray(result.failedPhotoIds) &&
@@ -82,12 +81,11 @@ export default function SelectAlbumBody() {
         }
       } else {
         revokeAllObjectUrls();
-        // 업로드 성공 시 전역 isUploaded true
+        // 업로드 성공 시 전역 상태 업데이트
         useUploadingStore.getState().setUploaded(true);
+        useUploadingStore.getState().setUploadedCount(result.success);
         // 업로드 성공 시 detail로 이동
         router.replace(`/album/detail/${albumId}`);
-        showToast('모든 사진이 성공적으로 업로드되었어요!');
-        // 라우팅 후 images 클리어 (useEffect 트리거 방지)
       }
     },
     onError: (e) => {
@@ -96,22 +94,6 @@ export default function SelectAlbumBody() {
       alert('사진을 업로드하는 중 오류가 발생했습니다. 다시 시도해주세요.');
     },
   });
-
-  const showToast = (message: string | string[]) => {
-    // 이미 토스트가 떠있으면 무시
-    if (toasts.length > 0) return;
-
-    const messages = Array.isArray(message) ? message : [message];
-    setToasts((prev) => [...prev, ...messages]);
-  };
-
-  const removeToast = (message: string) => {
-    setToasts((prev) => {
-      const idx = prev.indexOf(message);
-      if (idx === -1) return prev;
-      return prev.filter((_, i) => i !== idx);
-    });
-  };
 
   const processedImages = useMemo<ImageWithUrl[]>(() => {
     const validation = validateImages(images.map((img) => img.file));
@@ -185,10 +167,10 @@ export default function SelectAlbumBody() {
           if (files.length > availableCount) {
             msgs.push('지금 앨범에 담을 수 있는 만큼만 선택되었어요.');
           }
-          if (msgs.length) showToast(msgs);
+          if (msgs.length) Toast.alert(msgs.join('\n'));
         },
         onError: () => {
-          showToast('이미지 검증 중 오류가 발생했어요.');
+          Toast.alert('이미지 검증 중 오류가 발생했어요.');
         },
       },
     );
@@ -249,12 +231,12 @@ export default function SelectAlbumBody() {
                 imageAlt={`이미지 ${img.id}`}
                 pressed={isSelected}
                 disabled={img.isOversized}
+                mode='select'
                 onPress={(next) => {
-                  if (img.isOversized) {
-                    showToast('사진이 6MB를 초과해 업로드할 수 없어요.');
-                  } else {
-                    toggleSelect(img.id, img.isOversized, next);
-                  }
+                  toggleSelect(img.id, img.isOversized, next);
+                }}
+                onDisabledPress={() => {
+                  Toast.alert('사진이 6MB를 초과해 업로드할 수 없어요.');
                 }}
               />
             </div>
@@ -267,9 +249,6 @@ export default function SelectAlbumBody() {
         disabled={isUploaded || isOverCount || selectedIds.size === 0}
         onClick={handleUpload}
       />
-      {toasts.length > 0 && (
-        <AlbumToastList toasts={toasts} onRemove={removeToast} />
-      )}
     </div>
   );
 }

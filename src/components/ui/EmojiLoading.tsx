@@ -5,6 +5,7 @@ import { useUploadingStore } from '@/store/useUploadingStore';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 
+import Toast from '@/global/components/toast/Toast';
 import BubbleTooltip from '@/global/components/tooltip/BubbleTooltip';
 import { useQueryClient } from '@tanstack/react-query';
 
@@ -45,7 +46,15 @@ export default function EmojiLoading({
               queryKey: [EP.album.availableCount(albumId)],
             });
           }
-          useUploadingStore.getState().setUploaded(false);
+
+          // 업로드된 사진 개수 토스트
+          const uploadedCount = useUploadingStore.getState().uploadedCount;
+          if (uploadedCount > 0) {
+            Toast.alert(`총 ${uploadedCount}장을 앨범에 채웠어요.`);
+          }
+
+          // 상태 초기화
+          useUploadingStore.getState().reset();
         }
       };
       frame = requestAnimationFrame(animate);

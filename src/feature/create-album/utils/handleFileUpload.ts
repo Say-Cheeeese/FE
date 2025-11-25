@@ -21,6 +21,7 @@ export async function handleFileUpload(
   if (!fl) return {};
 
   const startTime = Date.now();
+  let uploadResult: { success: number; failed: number } | null = null;
 
   try {
     let files = Array.from(fl).filter((f) => f.type.startsWith('image/'));
@@ -29,8 +30,8 @@ export async function handleFileUpload(
     // heic/heif 이미지는 jpeg로 변환
     files = await convertHeicFilesToJpeg(files);
 
-    const result = await validateUpload(files, albumId);
-    if (result.ok) {
+    const validationResult = await validateUpload(files, albumId);
+    if (validationResult.ok) {
       useUploadingStore.getState().setUploaded(true);
       if (!options?.stay && router) {
         router.push(`/album/${albumId}/waiting`);
@@ -42,13 +43,16 @@ export async function handleFileUpload(
         contentType: file.type,
         captureTime,
       }));
-      const uploadResult = await presignedAndUploadToNCP({
+      uploadResult = await presignedAndUploadToNCP({
         albumCode: albumId,
         files,
         fileInfos,
       });
 
-      return uploadResult;
+      // 업로드 성공 개수 저장
+      if (uploadResult.success > 0) {
+        useUploadingStore.getState().setUploadedCount(uploadResult.success);
+      }
     } else {
       // 검증 실패 시 Zustand 스토어에 저장
       saveFilesToStore(files);
@@ -59,14 +63,10 @@ export async function handleFileUpload(
       return {};
     }
   } finally {
-    // 최소 2초 보장
-    const elapsed = Date.now() - startTime;
-    const remainingTime = Math.max(0, 2000 - elapsed);
-    await new Promise((resolve) => setTimeout(resolve, remainingTime));
     // input value 초기화(업로드 성공/실패 관계없이)
     if (e.target) e.target.value = '';
-    // if (options?.stay && router) {
-    //   // window.location.reload();
-    // }
   }
+
+  // 업로드 결과 반환
+  return uploadResult || {};
 }
