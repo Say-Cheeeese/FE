@@ -92,7 +92,7 @@ export default function PhotoBox({
 
       {/* disabled  모드에서만 오버레이 */}
       {disabled && mode === 'select' && (
-        <div className='bg-background-dim-darkest pointer-events-none absolute inset-0 z-10' />
+        <div className='bg-background-dim-darkest pointer-events-none absolute inset-0 z-10' onClick={onDisabledPress} />
       )}
 
       {downloaded && (
