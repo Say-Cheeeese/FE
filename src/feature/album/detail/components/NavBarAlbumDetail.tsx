@@ -45,9 +45,17 @@ export default function NavBarAlbumDetail({ albumId }: NavBarAlbumDetailProps) {
     e: React.ChangeEvent<HTMLInputElement>,
   ): Promise<void> => {
     try {
-      await handleFileUpload(e, albumId, router, {
+      const result = await handleFileUpload(e, albumId, router, {
         stay: true,
       });
+      const success = result?.success ?? 0;
+
+      if (success) {
+        setTimeout(
+          () => Toast.check(`총 ${success}장을 앨범에 채웠어요.`),
+          2000,
+        );
+      }
     } catch (error: unknown) {
       if (error instanceof Error) {
         Toast.alert(error.message);
@@ -64,6 +72,7 @@ export default function NavBarAlbumDetail({ albumId }: NavBarAlbumDetailProps) {
           <button
             type='button'
             className='bg-element-gray-light rounded-full p-2.5'
+            aria-label='사진 정렬'
           >
             <ArrowDownUp
               width={24}
@@ -96,6 +105,7 @@ export default function NavBarAlbumDetail({ albumId }: NavBarAlbumDetailProps) {
         type='button'
         onClick={handleButtonClick}
         className='bg-element-gray-light rounded-full p-2.5'
+        aria-label='사진 추가'
       >
         <Plus width={24} height={24} color={'var(--color-icon-basic)'} />
       </button>

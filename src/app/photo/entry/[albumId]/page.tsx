@@ -1,4 +1,4 @@
-import ScreenPhotoShareEntry from '@/feature/photo-share-entry/components/ScreenPhotoShareEntry';
+import ScreenPhotoShareEntry from '@/feature/photo-entry/components/ScreenPhotoShareEntry';
 import { Suspense } from 'react';
 
 export default function Page({ params }: { params: { albumId: string } }) {

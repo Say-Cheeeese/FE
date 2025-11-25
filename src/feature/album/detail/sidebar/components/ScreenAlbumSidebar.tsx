@@ -49,7 +49,7 @@ export default function ScreenAlbumSidebar({
           <p className='typo-body-sm-regular text-text-subtler'>
             {data?.eventDate}
           </p>
-          {isExpired && (
+          {!isExpired && (
             <div className='typo-caption-sm-medium text-text-basic-inverse bg-element-alpha-dark mt-3 rounded-full px-2.5 py-1'>
               앨범 소멸까지 {formatExpirationTime(data?.expiredAt)}
             </div>

@@ -11,7 +11,7 @@ export default function CopyShareButton({ albumId }: CopyShareButtonProps) {
     copyToClipboard(
       `${process.env.NEXT_PUBLIC_CLIENT_URL}/album/entry/${albumId}`,
     );
-    Toast.alert('링크가 복사되었습니다.');
+    Toast.check('링크를 복사했어요');
   };
 
   return (

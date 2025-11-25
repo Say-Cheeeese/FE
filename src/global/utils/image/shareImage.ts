@@ -86,7 +86,15 @@ export async function shareImage({
   } catch (error) {
     console.error('Failed to share photos:', error);
 
-    if (onError) onError(error);
-    return false;
+    if (onError) {
+      try {
+        onError(error);
+        return false;
+      } catch (error) {
+        throw error;
+      }
+    }
+
+    throw error;
   }
 }

@@ -13,9 +13,13 @@ export async function handleFileUpload(
   albumId: string,
   router?: { push: (path: string) => void; replace: (path: string) => void },
   options?: { stay?: boolean },
-) {
+): Promise<{
+  success?: number;
+  failed?: number;
+  failedPhotoIds?: number[];
+}> {
   const fl = e.target.files;
-  if (!fl) return;
+  if (!fl) return {};
 
   const startTime = Date.now();
   let uploadResult: { success: number; failed: number } | null = null; // finally에서 사용하기 위해 선언
@@ -40,7 +44,7 @@ export async function handleFileUpload(
         contentType: file.type,
         captureTime,
       }));
-      uploadResult = await presignedAndUploadToNCP({
+      const uploadResult = await presignedAndUploadToNCP({
         albumCode: albumId,
         files,
         fileInfos,
@@ -59,6 +63,7 @@ export async function handleFileUpload(
       if (router) {
         router.push(`/album/${albumId}/waiting`);
       }
+      return {};
     }
   } finally {
     // waiting 페이지로 이동했을 때만 최소 2초 보장
