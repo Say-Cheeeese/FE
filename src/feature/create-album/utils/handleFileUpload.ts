@@ -12,9 +12,13 @@ export async function handleFileUpload(
   albumId: string,
   router?: { push: (path: string) => void; replace: (path: string) => void },
   options?: { stay?: boolean },
-) {
+): Promise<{
+  success?: number;
+  failed?: number;
+  failedPhotoIds?: number[];
+}> {
   const fl = e.target.files;
-  if (!fl) return;
+  if (!fl) return {};
 
   const startTime = Date.now();
 
@@ -38,7 +42,13 @@ export async function handleFileUpload(
         contentType: file.type,
         captureTime,
       }));
-      await presignedAndUploadToNCP({ albumCode: albumId, files, fileInfos });
+      const uploadResult = await presignedAndUploadToNCP({
+        albumCode: albumId,
+        files,
+        fileInfos,
+      });
+
+      return uploadResult;
     } else {
       // 검증 실패 시 Zustand 스토어에 저장
       saveFilesToStore(files);
@@ -46,6 +56,7 @@ export async function handleFileUpload(
       if (router) {
         router.push(`/album/${albumId}/waiting`);
       }
+      return {};
     }
   } finally {
     // 최소 2초 보장

@@ -50,8 +50,8 @@ export default function SectionPhotoData({
   };
 
   return (
-    <section className='typo-body-lg-medium flex flex-col gap-6 rounded-3xl bg-white px-3 py-2'>
-      <dl className='flex flex-col gap-4'>
+    <section className='typo-body-lg-medium flex flex-col gap-6 rounded-3xl bg-white py-2'>
+      <dl className='flex flex-col gap-4 px-2'>
         <div className='flex items-center justify-between'>
           <dt className='text-text-subtle w-1/3'>업로드한 사람</dt>
           <dd className='text-text-subtler flex-1'>{data?.name}</dd>
@@ -81,7 +81,7 @@ export default function SectionPhotoData({
           trigger={
             <button
               type='button'
-              className='bg-element-gray-lighter typo-body-1xl-semibold text-text-error w-full rounded-xl py-4'
+              className='bg-element-gray-lighter typo-body-1xl-semibold text-text-error w-full rounded-[8px] py-4'
             >
               사진 삭제하기
             </button>

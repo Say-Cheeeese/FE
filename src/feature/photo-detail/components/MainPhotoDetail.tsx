@@ -1,7 +1,9 @@
 import { PhotoListResponseSchema } from '@/global/api/ep';
+import { DEFAULT_PROFILE_IMAGE } from '@/global/constants/images';
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
 import FooterPhotoDetail from './FooterPhotoDetail';
+import HeaderPhotoDetail from './HeaderPhotoDetail';
 const SwiperPhotoList = dynamic(() => import('./SwiperPhotoList'), {
   ssr: false,
   loading: () => (
@@ -35,6 +37,10 @@ export default function MainPhotoDetail({
 
   return (
     <>
+      <HeaderPhotoDetail
+        name={activeImage.name}
+        profileImageUrl={DEFAULT_PROFILE_IMAGE}
+      />
       <SwiperPhotoList
         activeIndex={activeIndex}
         changeActiveIndex={changeActiveIndex}

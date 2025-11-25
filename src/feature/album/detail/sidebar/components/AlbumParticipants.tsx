@@ -23,18 +23,20 @@ export default function AlbumParticipants({ albumId }: AlbumParticipantsProps) {
             <span>{`${data.currentParticipantCount}/${data.maxParticipantCount}`}</span>
           </p>
         </div>
-        <BottomSheetModal
-          trigger={
-            <button
-              type='button'
-              className='typo-body-sm-medium text-text-primary bg-button-primary-fill rounded-[4px] px-3 py-1.5'
-            >
-              친구 초대
-            </button>
-          }
-        >
-          <BottomSheetContentShare albumId={albumId} />
-        </BottomSheetModal>
+        {!data.isExpired && (
+          <BottomSheetModal
+            trigger={
+              <button
+                type='button'
+                className='typo-body-sm-medium text-text-primary bg-button-primary-fill rounded-[4px] px-3 py-1.5'
+              >
+                친구 초대
+              </button>
+            }
+          >
+            <BottomSheetContentShare albumId={albumId} />
+          </BottomSheetModal>
+        )}
       </div>
       <div>
         {data.participants?.map(({ isMe, name, profileImage, role }, index) => (

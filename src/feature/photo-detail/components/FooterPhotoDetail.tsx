@@ -76,26 +76,23 @@ export default function FooterPhotoDetail({
       setIsDownloading(true);
       const deviceType = getDeviceType();
       const fileName = `IMG_${photoId}`;
+      mutateAsyncDownload({ albumId, photoIds: [photoId] });
 
       if (deviceType === 'ios') {
-        await Promise.all([
-          // mutateAsyncDownload({ albumId, photoIds: [photoId] }),
-          shareImage({
-            imageUrls: imageUrl,
-            imageTitle: fileName,
-            onSuccess: () => {},
-            onError: () => {
-              // Toast.alert('사진을 준비하는 중 오류가 발생했습니다.');
-              downloadFile(imageUrl, fileName);
-            },
-          }),
-        ]);
+        shareImage({
+          imageUrls: imageUrl,
+          imageTitle: fileName,
+          onSuccess: () => {},
+          onError: () => {
+            downloadFile(imageUrl, fileName);
+          },
+        });
       } else {
         downloadFile(imageUrl, fileName);
-        // await mutateAsyncDownload({ albumId, photoIds: [photoId] });
       }
     } catch (e) {
       console.log(e);
+      Toast.alert('사진을 준비하는 중 오류가 발생했습니다.');
     } finally {
       setIsDownloading(false);
     }
@@ -125,9 +122,13 @@ export default function FooterPhotoDetail({
         onClick={handleDownload}
         disabled={isDownloading}
         aria-label='사진 다운로드'
-        className='flex w-12 justify-center'
+        className={`flex w-12 justify-center`}
       >
-        <Download width={24} height={24} color='white' />
+        <Download
+          width={24}
+          height={24}
+          color={`${isRecentlyDownloaded ? 'var(--color-neutral-400)' : 'white'}`}
+        />
       </button>
 
       <div className='typo-body-lg-semibold flex w-12 justify-center gap-1'>
