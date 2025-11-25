@@ -48,11 +48,17 @@ const unmountToast = (
 };
 
 const Toast = {
-  alert: async (message: string): Promise<void> => {
+  alert: async (
+    message: string,
+    lucideIcon?: React.ReactNode,
+  ): Promise<void> => {
     const toastContainer = getContainer(TOAST_CONTAINER_ID);
     const { default: ToastView } = await import('./ToastView');
 
-    renderToast(<ToastView message={message} />, toastContainer);
+    renderToast(
+      <ToastView message={message} lucideIcon={lucideIcon} />,
+      toastContainer,
+    );
     unmountToast(toastContainer);
   },
 };

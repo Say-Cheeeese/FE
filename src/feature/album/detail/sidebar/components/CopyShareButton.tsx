@@ -1,6 +1,6 @@
 import Toast from '@/global/components/toast/Toast';
 import { copyToClipboard } from '@/global/utils/copyToClipboard';
-import { Copy } from 'lucide-react';
+import { CircleCheck, Copy } from 'lucide-react';
 
 interface CopyShareButtonProps {
   albumId: string;
@@ -11,7 +11,7 @@ export default function CopyShareButton({ albumId }: CopyShareButtonProps) {
     copyToClipboard(
       `${process.env.NEXT_PUBLIC_CLIENT_URL}/album/entry/${albumId}`,
     );
-    Toast.alert('링크가 복사되었습니다.');
+    Toast.alert('링크를 복사했어요', <CircleCheck width={20} height={20} />);
   };
 
   return (
