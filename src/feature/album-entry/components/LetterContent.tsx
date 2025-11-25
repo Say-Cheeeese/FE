@@ -62,10 +62,11 @@ export default function LetterContent({ albumId }: LetterContentProps) {
         <p className='typo-body-sm-regular text-text-subtler pt-1'>
           {data.eventDate}
         </p>
-
-        <span className='typo-caption-sm-medium text-text-basic-inverse bg-element-primary mt-3 inline-flex items-center rounded-full px-2.5 py-1'>
-          앨범 소멸까지 {formatExpirationTime(data.expiredAt)}
-        </span>
+        {!data.isExpired && (
+          <span className='typo-caption-sm-medium text-text-basic-inverse bg-element-primary mt-3 inline-flex items-center rounded-full px-2.5 py-1'>
+            앨범 소멸까지 {formatExpirationTime(data.expiredAt)}
+          </span>
+        )}
 
         <button
           onClick={handleInviteAccept}
