@@ -3,7 +3,6 @@
 import { PhotoSorting } from '@/global/api/ep';
 import { useSearchParams } from 'next/navigation';
 import { useAlbumPhotosInfiniteQuery } from '../hooks/useAlbumPhotosInfiniteQuery';
-import HeaderPhotoDetail from './HeaderPhotoDetail';
 import MainPhotoDetail from './MainPhotoDetail';
 
 interface ScreenPhotoDetailProps {
@@ -30,7 +29,6 @@ export default function ScreenPhotoDetail({ albumId }: ScreenPhotoDetailProps) {
 
   return (
     <main className='bg-surface-inverse flex h-dvh w-full flex-col justify-between'>
-      <HeaderPhotoDetail albumId={albumId} photoId={photoId} />
       <MainPhotoDetail albumId={albumId} photoId={photoId} images={images} />
     </main>
   );
