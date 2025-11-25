@@ -81,7 +81,7 @@ export default function SectionPhotoData({
           trigger={
             <button
               type='button'
-              className='bg-element-gray-lighter typo-body-1xl-semibold text-text-error w-full rounded-xl py-4'
+              className='bg-element-gray-lighter typo-body-1xl-semibold text-text-error w-full rounded-[8px] py-4'
             >
               사진 삭제하기
             </button>
