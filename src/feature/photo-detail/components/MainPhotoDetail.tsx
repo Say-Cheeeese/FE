@@ -1,5 +1,6 @@
 import { PhotoListResponseSchema } from '@/global/api/ep';
 import { DEFAULT_PROFILE_IMAGE } from '@/global/constants/images';
+import Spinner from '@/components/ui/Spinner';
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
 import FooterPhotoDetail from './FooterPhotoDetail';
@@ -8,7 +9,7 @@ const SwiperPhotoList = dynamic(() => import('./SwiperPhotoList'), {
   ssr: false,
   loading: () => (
     <div className='flex h-full flex-1 items-center justify-center'>
-      <div className='h-6 w-6 animate-spin rounded-full border-2 border-white border-t-transparent' />
+      <Spinner size={24} />
     </div>
   ),
 });
