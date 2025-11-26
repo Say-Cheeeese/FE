@@ -76,13 +76,14 @@ export default function FooterPhotoDetail({
       setIsDownloading(true);
       const deviceType = getDeviceType();
       const fileName = `IMG_${photoId}`;
-      mutateAsyncDownload({ albumId, photoIds: [photoId] });
 
       if (deviceType === 'ios') {
         shareImage({
           imageUrls: imageUrl,
           imageTitle: fileName,
-          onSuccess: () => {},
+          onSuccess: () => {
+            mutateAsyncDownload({ albumId, photoIds: [photoId] });
+          },
           onError: () => {
             downloadFile(imageUrl, fileName);
           },

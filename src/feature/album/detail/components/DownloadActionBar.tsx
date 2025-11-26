@@ -30,20 +30,20 @@ export default function DownloadActionBar({
     const photoUrls = selectedPhotos.map((photo) => photo.url);
     const photoIds = selectedPhotos.map((photo) => photo.id);
     try {
-      mutateAsync({ albumId, photoIds });
       shareImage({
         imageUrls: photoUrls,
         onSuccess: () => {
           changeAlbumMode('default');
           clearSelectedPhotos();
           window.scrollTo({ top: 0, behavior: 'smooth' });
+          mutateAsync({ albumId, photoIds });
         },
         onError: () => {
           Toast.alert('사진을 준비하는 중 오류가 발생했습니다.');
         },
       });
     } catch (e) {
-      console.error('사진 다운로드 처리 중 오류 발생:', e);
+      console.log('사진 다운로드 처리 중 오류 발생:', e);
     }
   };
 
