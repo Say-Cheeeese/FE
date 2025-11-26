@@ -89,7 +89,8 @@ export default function FooterPhotoDetail({
           },
         });
       } else {
-        downloadFile(imageUrl, fileName);
+        await downloadFile(imageUrl, fileName);
+        mutateAsyncDownload({ albumId, photoIds: [photoId] });
       }
     } catch (e) {
       console.log(e);
