@@ -15,6 +15,7 @@ import { shareViaNavigator } from '@/global/utils/shareNavigator';
 import { useQueryClient } from '@tanstack/react-query';
 import { Download, Loader2, LucideIcon, Menu, Send } from 'lucide-react';
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 import { useGetAlbumInfo } from '../../detail/hooks/useGetAlbumInfo';
@@ -145,12 +146,9 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
         title={data?.title ?? ''}
         rightContent={
           <div className='flex gap-4'>
-            <button
-              type='button'
-              onClick={() => router.push(`/album/detail/${albumId}/sidebar`)}
-            >
+            <Link href={`/album/detail/${albumId}/sidebar`} aria-label='메뉴'>
               <Menu width={24} height={24} color='var(--color-icon-basic)' />
-            </button>
+            </Link>
           </div>
         }
       />

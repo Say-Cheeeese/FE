@@ -15,6 +15,7 @@ import { useAlbumTypeStore } from '@/store/useAlbumTypeStore';
 import { useSelectedPhotosStore } from '@/store/useSelectedPhotosStore';
 import { useUploadingStore } from '@/store/useUploadingStore';
 import { Menu } from 'lucide-react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useShallow } from 'zustand/shallow';
@@ -168,12 +169,9 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
         title={isAlbumInfosHidden ? (invitationData?.title ?? '') : ''}
         rightContent={
           <div className='flex gap-4'>
-            <button
-              type='button'
-              onClick={() => router.push(`/album/detail/${albumId}/sidebar`)}
-            >
+            <Link href={`/album/detail/${albumId}/sidebar`}>
               <Menu width={24} height={24} color='var(--color-icon-basic)' />
-            </button>
+            </Link>
           </div>
         }
       />
