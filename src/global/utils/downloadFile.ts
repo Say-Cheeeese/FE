@@ -1,7 +1,8 @@
 import JSZip from 'jszip';
+import { guessExtension } from './guessExtension';
 
-type DownloadSource = string | Blob;
-type DownloadSources = DownloadSource | DownloadSource[];
+export type DownloadSource = string | Blob;
+export type DownloadSources = DownloadSource | DownloadSource[];
 
 export async function downloadFile(
   urlOrBlobs: DownloadSources,
@@ -74,20 +75,4 @@ export async function downloadFile(
   document.body.removeChild(link);
 
   URL.revokeObjectURL(objectUrl);
-}
-
-/** 확장자 유추 */
-function guessExtension(source: DownloadSource, blob: Blob): string {
-  if (blob.type.startsWith('image/')) {
-    const subtype = blob.type.split('/')[1] || '';
-    if (subtype === 'jpeg') return 'jpg';
-    if (subtype) return subtype;
-  }
-
-  if (typeof source === 'string') {
-    const match = /\.([a-zA-Z0-9]+)(?:\?|#|$)/.exec(source);
-    if (match?.[1]) return match[1].toLowerCase();
-  }
-
-  return 'bin';
 }
