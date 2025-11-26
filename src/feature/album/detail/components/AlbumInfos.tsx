@@ -25,6 +25,7 @@ const AlbumInfos = forwardRef<HTMLElement, AlbumInfosProps>(
     );
 
     if (albumType === 'deep') return null;
+    if (photoCount === 0 || photoCount === undefined) return null;
 
     return (
       <section
