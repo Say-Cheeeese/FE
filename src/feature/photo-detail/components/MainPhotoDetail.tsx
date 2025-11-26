@@ -1,6 +1,6 @@
+import Spinner from '@/components/ui/Spinner';
 import { PhotoListResponseSchema } from '@/global/api/ep';
 import { DEFAULT_PROFILE_IMAGE } from '@/global/constants/images';
-import Spinner from '@/components/ui/Spinner';
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
 import FooterPhotoDetail from './FooterPhotoDetail';
@@ -53,7 +53,7 @@ export default function MainPhotoDetail({
         isLiked={activeImage.isLiked}
         likeCnt={activeImage.likeCnt}
         isRecentlyDownloaded={activeImage.isRecentlyDownloaded}
-        imageUrl={activeImage.thumbnailUrl}
+        imageUrl={activeImage.imageUrl}
       />
     </>
   );
