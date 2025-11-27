@@ -6,9 +6,8 @@ import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useCallback, useState } from 'react';
-import SelectMenu from './SelectMenu'; // ✅ 화면에 보이므로 일반 import
+import SelectMenu from './SelectMenu';
 
-// SI 개선: 스크롤 아래만 dynamic import (화면에 안 보이는 것만!)
 const RendingFooter = dynamic(() => import('./RendingFooter'), { ssr: false });
 const SelectedList = dynamic(() => import('./SelectedList'), { ssr: false });
 const SwipeList = dynamic(() => import('./SwipeList'), { ssr: false });
@@ -29,9 +28,7 @@ export default function ScreenRoot() {
 
   return (
     <div className='scrollbar-hide flex w-full flex-col items-center overflow-y-auto px-4'>
-      {/* 헤더 */}
       <LogoHeader showLogin={true} checkAuth={false} />
-      {/* 본문 */}
       <span className='typo-heading-md-bold mt-6 mb-4 text-center text-[#424349]'>
         딱 7일만 열리는 특별한 <br />
         공유 앨범 서비스

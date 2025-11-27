@@ -47,7 +47,6 @@ export default function CreateAlbumList() {
         },
         onError: (err: CreateAlbumError) => {
           Toast.alert(err.message || '앨범 생성에 실패했습니다.');
-          // router.push('/login');
           console.error('앨범 생성 실패:', err);
         },
       },

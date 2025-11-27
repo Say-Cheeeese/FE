@@ -1,9 +1,9 @@
 'use client';
 import { DrawerClose } from '@/components/ui/drawer';
 import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
-import { motion } from 'framer-motion';
 import { Pencil } from 'lucide-react';
 import Image from 'next/image';
+import { memo, useState } from 'react';
 import { useGetAllProfiles } from '../hooks/useGetAllProfile';
 
 interface ProfileImageProps {
@@ -11,49 +11,71 @@ interface ProfileImageProps {
   onImageSelect: (image: string) => void;
 }
 
-export default function ProfileImage({
-  selectedImage,
-  onImageSelect,
-}: ProfileImageProps) {
-  const { data, isLoading, isError } = useGetAllProfiles();
-  // 서버에서 받아온 이미지 리스트 (string[])
+function ProfileImage({ selectedImage, onImageSelect }: ProfileImageProps) {
+  const [shouldFetchProfiles, setShouldFetchProfiles] = useState(false);
+
+  const { data, isLoading, isError } = useGetAllProfiles(shouldFetchProfiles);
+
+  const PROFILE_IMAGES: Record<string, string> = {
+    P1: 'https://say-cheese-profile.edge.naverncp.com/profile/sign_up_profile_1.jpg',
+  };
+
   const imageList =
     data?.opts?.filter((img) => img.imageCode && img.profileImageUrl) ?? [];
-  // imageCode에 따라 profileImageUrl을 보여줌
-  const currentImage =
-    (selectedImage
-      ? imageList.find((img) => img.imageCode === selectedImage)
-          ?.profileImageUrl
-      : imageList[0]?.profileImageUrl) ||
-    'https://say-cheese-profile.edge.naverncp.com/profile/signup_profile_1.jpg';
+
+  const getCurrentImageUrl = (): string => {
+    if (imageList.length > 0 && selectedImage) {
+      const foundImage = imageList.find(
+        (img) => img.imageCode === selectedImage,
+      );
+      if (foundImage?.profileImageUrl) {
+        return foundImage.profileImageUrl;
+      }
+    }
+
+    if (selectedImage && PROFILE_IMAGES[selectedImage]) {
+      return PROFILE_IMAGES[selectedImage];
+    }
+
+    return PROFILE_IMAGES['P1'];
+  };
+
+  const currentImage = getCurrentImageUrl();
+
   return (
     <div className='mt-4 mb-10 flex flex-col items-center'>
-      {/* 프로필 이미지 */}
       <div className='relative'>
         <BottomSheetModal
           trigger={
-            <div className='group relative cursor-pointer'>
+            <button
+              className='group relative'
+              type='button'
+              aria-label='프로필 이미지 수정'
+            >
               <Image
                 src={currentImage}
                 width={100}
                 height={100}
                 alt='프로필 이미지'
                 className='rounded-full'
+                priority
+                fetchPriority='high'
               />
-              <button
-                className='absolute right-0 bottom-0 flex h-8 w-8 items-center justify-center rounded-full bg-[#94969E] transition-transform group-hover:scale-110'
-                tabIndex={-1}
-                type='button'
-                aria-label='프로필 이미지 선택'
-              >
+              <div className='absolute right-0 bottom-0 flex h-8 w-8 items-center justify-center rounded-full bg-[#94969E] transition-transform group-hover:scale-110'>
                 <Pencil width={18.6} height={18.6} color='#fff' />
-              </button>
-            </div>
+              </div>
+            </button>
           }
           showCloseButton={false}
           className='h-90 px-5'
           showHandle={true}
           dismissible={true}
+          onOpenChange={(isOpen) => {
+            // 모달이 열리면 API fetch 활성화 (한번만)
+            if (isOpen && !shouldFetchProfiles) {
+              setShouldFetchProfiles(true);
+            }
+          }}
         >
           {isLoading ? null : isError ? (
             <div className='py-8 text-center text-red-500'>
@@ -66,19 +88,18 @@ export default function ProfileImage({
                 const key = img.imageCode || url;
                 return (
                   <DrawerClose key={key} asChild>
-                    <motion.button
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: index * 0.03, duration: 0.2 }}
-                      whileTap={{ scale: 0.8 }}
+                    <button
                       onClick={() =>
                         img.imageCode && onImageSelect(img.imageCode)
                       }
-                      className={`box-content shrink-0 rounded-full p-1 transition-all ${
+                      className={`box-content shrink-0 rounded-full p-1 transition-all active:scale-90 ${
                         url === currentImage
                           ? 'ring-element-primary ring-3'
                           : ''
                       }`}
+                      style={{
+                        animation: `fadeInScale 0.2s ease-out ${index * 0.03}s both`,
+                      }}
                     >
                       <Image
                         src={url || ''}
@@ -87,7 +108,7 @@ export default function ProfileImage({
                         alt={img.imageCode || 'profile'}
                         className='rounded-full'
                       />
-                    </motion.button>
+                    </button>
                   </DrawerClose>
                 );
               })}
@@ -95,6 +116,22 @@ export default function ProfileImage({
           )}
         </BottomSheetModal>
       </div>
+
+      {/* CSS 애니메이션 정의 */}
+      <style jsx>{`
+        @keyframes fadeInScale {
+          from {
+            opacity: 0;
+            transform: scale(0.8);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+      `}</style>
     </div>
   );
 }
+
+export default memo(ProfileImage);

@@ -14,29 +14,23 @@ export async function validateUpload(
   files: File[],
   albumId: string,
 ): Promise<ValidateUploadResult> {
-  // 1. 용량 검증 (개수만 체크)
   const oversizedCount = validateImageCount(files);
   const sizeValid = oversizedCount === 0;
 
-  // 2. 업로드 가능 개수 검증
   const availableCount = await checkAvailableCount(albumId);
   const countValid = files.length <= availableCount;
 
-  // 3. 둘 다 실패
   if (!sizeValid && !countValid) {
     return { ok: false, reason: 'both' };
   }
 
-  // 4. 용량만 실패
   if (!sizeValid) {
     return { ok: false, reason: 'size' };
   }
 
-  // 5. 개수만 실패
   if (!countValid) {
     return { ok: false, reason: 'count' };
   }
 
-  // 모두 통과
   return { ok: true };
 }
