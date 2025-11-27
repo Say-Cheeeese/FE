@@ -49,7 +49,10 @@ export default function DownloadActionBar({
         });
       } else {
         await downloadFile(photoUrls);
-        mutateAsync({ albumId, photoIds: photoIds });
+        changeAlbumMode('default');
+        clearSelectedPhotos();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        mutateAsync({ albumId, photoIds });
       }
     } catch (e) {
       console.log('사진 다운로드 처리 중 오류 발생:', e);
