@@ -49,13 +49,6 @@ export default function NavBarAlbumDetail({ albumId }: NavBarAlbumDetailProps) {
         stay: true,
       });
       const success = result?.success ?? 0;
-
-      if (success) {
-        setTimeout(
-          () => Toast.check(`총 ${success}장을 앨범에 채웠어요.`),
-          2000,
-        );
-      }
     } catch (error: unknown) {
       console.log('error', typeof error);
     }

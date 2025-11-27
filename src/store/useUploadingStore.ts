@@ -13,5 +13,8 @@ export const useUploadingStore = create<UploadingStore>((set) => ({
   uploadedCount: 0,
   setUploaded: (isUploaded) => set({ isUploaded }),
   setUploadedCount: (count) => set({ uploadedCount: count }),
-  reset: () => set({ isUploaded: false, uploadedCount: 0 }), // 한 번에 초기화
+  reset: () => {
+    console.log('uploaded 초기화');
+    set({ isUploaded: false, uploadedCount: 0 });
+  }, // 한 번에 초기화
 }));
