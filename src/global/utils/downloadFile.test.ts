@@ -122,6 +122,18 @@ describe('downloadFile', () => {
     expect(link.download).toBe('my-photo.jpg');
   });
 
+  it('replaces provided extension with guessed one when they differ', async () => {
+    const imageBlob = new Blob(['jpg data'], { type: 'image/jpeg' });
+
+    await downloadFile(imageBlob, 'my-photo.png');
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const appendCall = (document.body.appendChild as any).mock.calls[0];
+    const link = appendCall[0] as FakeAnchor;
+
+    expect(link.download).toBe('my-photo.jpg');
+  });
+
   it('downloads a single Blob with fileName without extension (appends guessed ext)', async () => {
     const imageBlob = new Blob(['jpg data'], { type: 'image/jpeg' });
 
@@ -197,7 +209,7 @@ describe('downloadFile', () => {
     expect(link.click).toHaveBeenCalled();
   });
 
-  it('keeps .zip suffix if fileName already ends with .zip', async () => {
+  it('overrides provided .zip suffix for single file and uses guessed extension', async () => {
     const b1 = new Blob(['img1'], { type: 'image/png' });
 
     await downloadFile([b1], 'album.zip');
@@ -206,7 +218,7 @@ describe('downloadFile', () => {
     const appendCall = (document.body.appendChild as any).mock.calls[0];
     const link = appendCall[0] as FakeAnchor;
 
-    expect(link.download).toBe('album.zip');
+    expect(link.download).toBe('album.png');
   });
 
   it('handles mixed URLs and Blobs and zips them together', async () => {
@@ -232,5 +244,18 @@ describe('downloadFile', () => {
     const link = appendCall[0] as FakeAnchor;
 
     expect(link.download).toBe('mix.zip');
+  });
+
+  it('keeps provided .zip name when creating a zip for multiple files', async () => {
+    const b1 = new Blob(['img1'], { type: 'image/png' });
+    const b2 = new Blob(['img2'], { type: 'image/jpeg' });
+
+    await downloadFile([b1, b2], 'album.zip');
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const appendCall = (document.body.appendChild as any).mock.calls[0];
+    const link = appendCall[0] as FakeAnchor;
+
+    expect(link.download).toBe('album.zip');
   });
 });
