@@ -1,4 +1,5 @@
 import { PhotoListResponseSchema } from '@/global/api/ep';
+import Spinner from '@/global/components/Spinner';
 import { useAlbumTypeStore } from '@/store/useAlbumTypeStore';
 import {
   FetchNextPageOptions,
@@ -43,7 +44,12 @@ export default function AlbumPhotoSection({
     })),
   );
 
-  if (isLoading) return null;
+  if (isLoading)
+    return (
+      <div>
+        <Spinner />
+      </div>
+    );
 
   if (photos.length === 0) {
     return (
