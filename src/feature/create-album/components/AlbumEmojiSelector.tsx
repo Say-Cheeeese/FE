@@ -60,6 +60,7 @@ export default function AlbumEmojiSelector({
         <button
           className='bg-element-gray-darker absolute right-0 bottom-0 flex h-8 w-8 items-center justify-center rounded-full'
           onClick={() => setShowPicker(!showPicker)}
+          aria-label='이모지 수정'
         >
           <Pencil width={18.6} height={18.6} color='#fff' />
         </button>
