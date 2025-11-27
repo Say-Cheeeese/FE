@@ -13,7 +13,13 @@ interface SectionPhotoDataProps {
 const formatKoreanDateTime = (isoString?: string): string => {
   if (!isoString) return '';
 
-  const date = new Date(isoString);
+  // If the string doesn't end with Z and doesn't have a timezone offset, assume it's UTC
+  const targetDate =
+    !isoString.endsWith('Z') && !/[+-]\d{2}:\d{2}$/.test(isoString)
+      ? `${isoString}Z`
+      : isoString;
+
+  const date = new Date(targetDate);
   if (Number.isNaN(date.getTime())) return '정보 없음';
 
   const year = date.getFullYear();
