@@ -15,9 +15,10 @@ const pretendard = localFont({
 export const metadata: Metadata = {
   title: '치이이즈: 추억은 따끈할 때 제맛',
   description: '딱 7일만 열리는 특별한 공유 앨범 서비스',
+  metadataBase: new URL('https://say-cheese.me'),
   openGraph: {
     title: '치이이즈: 추억은 따끈할 때 제맛',
-
+    description: '딱 7일만 열리는 특별한 공유 앨범 서비스',
     url: 'https://say-cheese.me/main',
     siteName: '치이이즈',
     images: [
@@ -45,6 +46,19 @@ export default function RootLayout({
         <meta
           name='description'
           content='딱 7일만 열리는 특별한 공유 앨범 서비스'
+        />
+        <script
+          type='application/ld+json'
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'WebApplication',
+              name: '치이이즈',
+              description: '딱 7일만 열리는 특별한 공유 앨범 서비스',
+              url: 'https://say-cheese.me',
+              applicationCategory: 'PhotographyApplication',
+            }),
+          }}
         />
       </head>
       {/* <Script id='maze-snippet' strategy='lazyOnload'>
