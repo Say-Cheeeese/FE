@@ -99,9 +99,10 @@ export default function ConfirmModal({
             onClick={handleCancel}
             className={cn(
               'flex h-12 items-center justify-center px-5 py-2.5',
-              'bg-button-tertiary-fill hover:bg-neutral-200',
+              'bg-button-tertiary-fill hover:bg-neutral-200 active:bg-button-tertiary-fill-pressed',
               'typo-body-lg-semibold! text-text-subtle',
               'border-none',
+              'transition-colors duration-100',
               cancelClassName,
             )}
           >
@@ -112,7 +113,7 @@ export default function ConfirmModal({
             onClick={handleConfirm}
             className={cn(
               'flex h-12 items-center justify-center px-5 py-2.5',
-              'bg-button-primary-fill active:bg-button-primary-fill-pressed active:text-text-primary',
+              'bg-button-primary-fill hover:bg-button-primary-fill-pressed active:bg-button-primary-fill-pressed active:text-text-primary',
               'typo-body-lg-semibold! text-text-primary',
               'transition-colors duration-100',
               confirmClassName,
