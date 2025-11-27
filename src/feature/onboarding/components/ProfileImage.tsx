@@ -1,9 +1,9 @@
 'use client';
 import { DrawerClose } from '@/components/ui/drawer';
 import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
-import { motion } from 'framer-motion';
 import { Pencil } from 'lucide-react';
 import Image from 'next/image';
+import { memo, useState } from 'react';
 import { useGetAllProfiles } from '../hooks/useGetAllProfile';
 
 interface ProfileImageProps {
@@ -11,11 +11,15 @@ interface ProfileImageProps {
   onImageSelect: (image: string) => void;
 }
 
-export default function ProfileImage({
+function ProfileImage({
   selectedImage,
   onImageSelect,
 }: ProfileImageProps) {
-  const { data, isLoading, isError } = useGetAllProfiles();
+  // 프로필 목록을 fetch할지 여부 (한번 true가 되면 계속 유지)
+  const [shouldFetchProfiles, setShouldFetchProfiles] = useState(false);
+
+  // 모달이 열릴 때만 API 호출 (React Query 캐싱으로 한번만 호출됨)
+  const { data, isLoading, isError } = useGetAllProfiles(shouldFetchProfiles);
 
   // P1 이미지 URL 하드코딩 (selectedImage 초기값이 'P1'이므로)
   // 이렇게 하면 API 응답 전후로 이미지 URL이 동일하여 재로드 방지
@@ -77,6 +81,12 @@ export default function ProfileImage({
           className='h-90 px-5'
           showHandle={true}
           dismissible={true}
+          onOpenChange={(isOpen) => {
+            // 모달이 열리면 API fetch 활성화 (한번만)
+            if (isOpen && !shouldFetchProfiles) {
+              setShouldFetchProfiles(true);
+            }
+          }}
         >
           {isLoading ? null : isError ? (
             <div className='py-8 text-center text-red-500'>
@@ -89,19 +99,18 @@ export default function ProfileImage({
                 const key = img.imageCode || url;
                 return (
                   <DrawerClose key={key} asChild>
-                    <motion.button
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: index * 0.03, duration: 0.2 }}
-                      whileTap={{ scale: 0.8 }}
+                    <button
                       onClick={() =>
                         img.imageCode && onImageSelect(img.imageCode)
                       }
-                      className={`box-content shrink-0 rounded-full p-1 transition-all ${
+                      className={`box-content shrink-0 rounded-full p-1 transition-all active:scale-90 ${
                         url === currentImage
                           ? 'ring-element-primary ring-3'
                           : ''
                       }`}
+                      style={{
+                        animation: `fadeInScale 0.2s ease-out ${index * 0.03}s both`,
+                      }}
                     >
                       <Image
                         src={url || ''}
@@ -110,7 +119,7 @@ export default function ProfileImage({
                         alt={img.imageCode || 'profile'}
                         className='rounded-full'
                       />
-                    </motion.button>
+                    </button>
                   </DrawerClose>
                 );
               })}
@@ -118,6 +127,23 @@ export default function ProfileImage({
           )}
         </BottomSheetModal>
       </div>
+
+      {/* CSS 애니메이션 정의 */}
+      <style jsx>{`
+        @keyframes fadeInScale {
+          from {
+            opacity: 0;
+            transform: scale(0.8);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+      `}</style>
     </div>
   );
 }
+
+// React.memo로 감싸서 불필요한 리렌더링 방지
+export default memo(ProfileImage);

@@ -8,10 +8,11 @@ const getAllProfile = async () => {
   return data.result;
 };
 
-export function useGetAllProfiles() {
+export function useGetAllProfiles(enabled: boolean = true) {
   return useQuery({
     queryKey: [EP.user.userProfileImages()],
     queryFn: getAllProfile,
     staleTime: 3600000, //1시간
+    enabled, // 모달이 열릴 때만 API 호출
   });
 }
