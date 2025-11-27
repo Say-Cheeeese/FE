@@ -21,12 +21,15 @@ interface AlbumEmojiSelectorProps {
   onEmojiSelect: (emoji: string) => void;
 }
 
-export default function AlbumEmojiSelector({
+import React from 'react';
+
+const AlbumEmojiSelector = React.memo(function AlbumEmojiSelector({
   selectedEmoji,
   onEmojiSelect,
 }: AlbumEmojiSelectorProps) {
   const [showPicker, setShowPicker] = useState(false);
   const pickerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const handleEmojiClick = (emojiData: EmojiClickData) => {
     onEmojiSelect(emojiData.emoji);
@@ -36,9 +39,14 @@ export default function AlbumEmojiSelector({
   useEffect(() => {
     if (!showPicker) return;
     const handleClick = (e: MouseEvent) => {
-      if (pickerRef.current && !pickerRef.current.contains(e.target as Node)) {
-        setShowPicker(false);
+      if (
+        (pickerRef.current && pickerRef.current.contains(e.target as Node)) ||
+        (containerRef.current &&
+          containerRef.current.contains(e.target as Node))
+      ) {
+        return;
       }
+      setShowPicker(false);
     };
     document.addEventListener('mousedown', handleClick);
     return () => {
@@ -49,17 +57,19 @@ export default function AlbumEmojiSelector({
   return (
     <div className='relative mt-10 mb-10 flex flex-col items-center'>
       {/* 이모지 표시 */}
-      <div className='relative'>
-        <div
-          className='bg-element-gray-lighter flex h-[100px] w-[100px] cursor-pointer items-center justify-center rounded-full text-[50px]'
-          onClick={() => setShowPicker(true)}
-        >
+      <div
+        className='relative'
+        ref={containerRef}
+        onClick={(e) => {
+          e.stopPropagation();
+          setShowPicker((v) => !v);
+        }}
+      >
+        <div className='bg-element-gray-lighter flex h-[100px] w-[100px] cursor-pointer items-center justify-center rounded-full text-[50px]'>
           {selectedEmoji}
         </div>
-        {/* 연필 아이콘 (수정 버튼) */}
         <button
           className='bg-element-gray-darker absolute right-0 bottom-0 flex h-8 w-8 items-center justify-center rounded-full'
-          onClick={() => setShowPicker(!showPicker)}
           aria-label='이모지 수정'
         >
           <Pencil width={18.6} height={18.6} color='#fff' />
@@ -88,4 +98,6 @@ export default function AlbumEmojiSelector({
       )}
     </div>
   );
-}
+});
+
+export default AlbumEmojiSelector;

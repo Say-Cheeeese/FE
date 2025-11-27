@@ -1,6 +1,9 @@
 'use client';
 import LongButton from '@/global/components/LongButton';
-import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
+import dynamic from 'next/dynamic';
+const BottomSheetModal = dynamic(
+  () => import('@/global/components/modal/BottomSheetModal'),
+);
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import {
