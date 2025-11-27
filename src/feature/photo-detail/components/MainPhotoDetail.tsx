@@ -1,6 +1,5 @@
 import { PhotoListResponseSchema } from '@/global/api/ep';
 import Spinner from '@/global/components/Spinner';
-import { DEFAULT_PROFILE_IMAGE } from '@/global/constants/images';
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
 import FooterPhotoDetail from './FooterPhotoDetail';
@@ -40,7 +39,8 @@ export default function MainPhotoDetail({
     <>
       <HeaderPhotoDetail
         name={activeImage.name}
-        profileImageUrl={DEFAULT_PROFILE_IMAGE}
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        profileImageUrl={(activeImage as any)?.profileImage} // TODO : 백엔드 스웨거에 필드추가 아직안됨.
       />
       <SwiperPhotoList
         activeIndex={activeIndex}
