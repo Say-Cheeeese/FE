@@ -319,17 +319,6 @@ function buildTypographyUtilitiesCssFromToken(token) {
 
         lines.push('}');
         lines.push(''); // 줄바꿈
-
-        // 추가: typo-{size}-{weight} 형태의 단순 버전도 생성
-        const simpleUtility = `@utility typo-${actualSize}-${weightValue} {`;
-        lines.push(simpleUtility);
-        if (value.fontFamily) {
-          lines.push(`  font-family: var(--font-primary);`);
-        }
-        lines.push(`  font-weight: ${weightValue};`);
-        lines.push(`  font-size: var(--font-size-${actualSize});`);
-        lines.push('}');
-        lines.push('');
       }
     }
   }

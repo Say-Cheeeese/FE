@@ -4,11 +4,11 @@
  * 사용 예:
  *   formatEventDate("2025-01-03T10:20:30Z") // "2025.01.03"
  */
-export function formatEventDate(date?: string) {
+export function formatEventDate(date?: string): string {
   if (!date) return '';
   const parsed = new Date(date);
   if (Number.isNaN(parsed.getTime())) {
-    return date;
+    return '';
   }
 
   const year = parsed.getFullYear();

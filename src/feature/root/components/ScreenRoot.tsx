@@ -54,6 +54,7 @@ export default function ScreenRoot() {
           width={294}
           height={288}
           priority
+          fetchPriority='high'
           alt='핸드폰 일러스트'
           className='relative z-10'
           style={{ pointerEvents: 'auto' }}

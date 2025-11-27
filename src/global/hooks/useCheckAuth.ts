@@ -46,8 +46,6 @@ export function useCheckAuth({
           onUnauthed?.();
           return;
         }
-
-        console.log(err);
       }
     };
 

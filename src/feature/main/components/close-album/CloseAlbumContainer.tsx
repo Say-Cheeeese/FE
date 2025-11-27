@@ -44,16 +44,18 @@ export default function CloseAlbumContainer() {
   return (
     <section className='mb-20 px-5'>
       {albums.length > 0 ? (
-        <Link href='/main/closed-album'>
-          <h3 className='typo-heading-md-semibold text-text-subtle mb-4 flex items-center'>
-            닫힌 앨범 {albums.length}
-            <ChevronRight
-              width={24}
-              height={24}
-              color='var(--color-icon-basic)'
-            />
-          </h3>
-        </Link>
+        <div className='mb-4 flex'>
+          <Link href='/main/closed-album'>
+            <h3 className='typo-heading-md-semibold text-text-subtle flex items-center'>
+              닫힌 앨범 {albums.length}
+              <ChevronRight
+                width={24}
+                height={24}
+                color='var(--color-icon-basic)'
+              />
+            </h3>
+          </Link>
+        </div>
       ) : (
         <h3 className='typo-heading-md-semibold text-text-subtle mb-4'>
           닫힌 앨범 0

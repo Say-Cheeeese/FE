@@ -241,7 +241,7 @@
   --leading-36: var(--line-height-36);
   --text-40: var(--font-size-40);
   --text-44: var(--font-size-44);
-  --color-sidebar-ring: var(--sidebar-ring);
+   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-accent: var(--sidebar-accent);
@@ -270,7 +270,7 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
-  /* generated-typography-tokens:end */
+/* generated-typography-tokens:end */
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -302,23 +302,11 @@ body {
   line-height: var(--line-height-58);
 }
 
-@utility typo-44-700 {
-  font-family: var(--font-primary);
-  font-weight: 700;
-  font-size: var(--font-size-44);
-}
-
 @utility typo-title-lg-semibold {
   font-family: var(--font-primary);
   font-weight: 600;
   font-size: var(--font-size-44);
   line-height: var(--line-height-58);
-}
-
-@utility typo-44-600 {
-  font-family: var(--font-primary);
-  font-weight: 600;
-  font-size: var(--font-size-44);
 }
 
 @utility typo-title-md-bold {
@@ -328,23 +316,11 @@ body {
   line-height: var(--line-height-52);
 }
 
-@utility typo-40-700 {
-  font-family: var(--font-primary);
-  font-weight: 700;
-  font-size: var(--font-size-40);
-}
-
 @utility typo-title-md-semibold {
   font-family: var(--font-primary);
   font-weight: 600;
   font-size: var(--font-size-40);
   line-height: var(--line-height-52);
-}
-
-@utility typo-40-600 {
-  font-family: var(--font-primary);
-  font-weight: 600;
-  font-size: var(--font-size-40);
 }
 
 @utility typo-title-sm-bold {
@@ -354,23 +330,11 @@ body {
   line-height: var(--line-height-50);
 }
 
-@utility typo-36-700 {
-  font-family: var(--font-primary);
-  font-weight: 700;
-  font-size: var(--font-size-36);
-}
-
 @utility typo-title-sm-semibold {
   font-family: var(--font-primary);
   font-weight: 600;
   font-size: var(--font-size-36);
   line-height: var(--line-height-50);
-}
-
-@utility typo-36-600 {
-  font-family: var(--font-primary);
-  font-weight: 600;
-  font-size: var(--font-size-36);
 }
 
 @utility typo-heading-2xl-bold {
@@ -380,23 +344,11 @@ body {
   line-height: var(--line-height-48);
 }
 
-@utility typo-32-700 {
-  font-family: var(--font-primary);
-  font-weight: 700;
-  font-size: var(--font-size-32);
-}
-
 @utility typo-heading-2xl-semibold {
   font-family: var(--font-primary);
   font-weight: 600;
   font-size: var(--font-size-32);
   line-height: var(--line-height-48);
-}
-
-@utility typo-32-600 {
-  font-family: var(--font-primary);
-  font-weight: 600;
-  font-size: var(--font-size-32);
 }
 
 @utility typo-heading-2xl-medium {
@@ -406,23 +358,11 @@ body {
   line-height: var(--line-height-48);
 }
 
-@utility typo-32-500 {
-  font-family: var(--font-primary);
-  font-weight: 500;
-  font-size: var(--font-size-32);
-}
-
 @utility typo-heading-2xl-regular {
   font-family: var(--font-primary);
   font-weight: 400;
   font-size: var(--font-size-32);
   line-height: var(--line-height-48);
-}
-
-@utility typo-32-400 {
-  font-family: var(--font-primary);
-  font-weight: 400;
-  font-size: var(--font-size-32);
 }
 
 @utility typo-heading-1xl-bold {
@@ -432,23 +372,11 @@ body {
   line-height: var(--line-height-42);
 }
 
-@utility typo-28-700 {
-  font-family: var(--font-primary);
-  font-weight: 700;
-  font-size: var(--font-size-28);
-}
-
 @utility typo-heading-1xl-semibold {
   font-family: var(--font-primary);
   font-weight: 600;
   font-size: var(--font-size-28);
   line-height: var(--line-height-42);
-}
-
-@utility typo-28-600 {
-  font-family: var(--font-primary);
-  font-weight: 600;
-  font-size: var(--font-size-28);
 }
 
 @utility typo-heading-1xl-medium {
@@ -458,23 +386,11 @@ body {
   line-height: var(--line-height-42);
 }
 
-@utility typo-28-500 {
-  font-family: var(--font-primary);
-  font-weight: 500;
-  font-size: var(--font-size-28);
-}
-
 @utility typo-heading-1xl-regular {
   font-family: var(--font-primary);
   font-weight: 400;
   font-size: var(--font-size-28);
   line-height: var(--line-height-42);
-}
-
-@utility typo-28-400 {
-  font-family: var(--font-primary);
-  font-weight: 400;
-  font-size: var(--font-size-28);
 }
 
 @utility typo-heading-lg-bold {
@@ -484,23 +400,11 @@ body {
   line-height: var(--line-height-36);
 }
 
-@utility typo-24-700 {
-  font-family: var(--font-primary);
-  font-weight: 700;
-  font-size: var(--font-size-24);
-}
-
 @utility typo-heading-lg-semibold {
   font-family: var(--font-primary);
   font-weight: 600;
   font-size: var(--font-size-24);
   line-height: var(--line-height-36);
-}
-
-@utility typo-24-600 {
-  font-family: var(--font-primary);
-  font-weight: 600;
-  font-size: var(--font-size-24);
 }
 
 @utility typo-heading-lg-medium {
@@ -510,23 +414,11 @@ body {
   line-height: var(--line-height-36);
 }
 
-@utility typo-24-500 {
-  font-family: var(--font-primary);
-  font-weight: 500;
-  font-size: var(--font-size-24);
-}
-
 @utility typo-heading-lg-regular {
   font-family: var(--font-primary);
   font-weight: 400;
   font-size: var(--font-size-24);
   line-height: var(--line-height-36);
-}
-
-@utility typo-24-400 {
-  font-family: var(--font-primary);
-  font-weight: 400;
-  font-size: var(--font-size-24);
 }
 
 @utility typo-heading-md-bold {
@@ -536,23 +428,11 @@ body {
   line-height: var(--line-height-30);
 }
 
-@utility typo-20-700 {
-  font-family: var(--font-primary);
-  font-weight: 700;
-  font-size: var(--font-size-20);
-}
-
 @utility typo-heading-md-semibold {
   font-family: var(--font-primary);
   font-weight: 600;
   font-size: var(--font-size-20);
   line-height: var(--line-height-30);
-}
-
-@utility typo-20-600 {
-  font-family: var(--font-primary);
-  font-weight: 600;
-  font-size: var(--font-size-20);
 }
 
 @utility typo-heading-md-medium {
@@ -562,23 +442,11 @@ body {
   line-height: var(--line-height-30);
 }
 
-@utility typo-20-500 {
-  font-family: var(--font-primary);
-  font-weight: 500;
-  font-size: var(--font-size-20);
-}
-
 @utility typo-heading-md-regular {
   font-family: var(--font-primary);
   font-weight: 400;
   font-size: var(--font-size-20);
   line-height: var(--line-height-30);
-}
-
-@utility typo-20-400 {
-  font-family: var(--font-primary);
-  font-weight: 400;
-  font-size: var(--font-size-20);
 }
 
 @utility typo-heading-sm-bold {
@@ -588,23 +456,11 @@ body {
   line-height: var(--line-height-28);
 }
 
-@utility typo-18-700 {
-  font-family: var(--font-primary);
-  font-weight: 700;
-  font-size: var(--font-size-18);
-}
-
 @utility typo-heading-sm-semibold {
   font-family: var(--font-primary);
   font-weight: 600;
   font-size: var(--font-size-18);
   line-height: var(--line-height-28);
-}
-
-@utility typo-18-600 {
-  font-family: var(--font-primary);
-  font-weight: 600;
-  font-size: var(--font-size-18);
 }
 
 @utility typo-heading-sm-medium {
@@ -614,23 +470,11 @@ body {
   line-height: var(--line-height-28);
 }
 
-@utility typo-18-500 {
-  font-family: var(--font-primary);
-  font-weight: 500;
-  font-size: var(--font-size-18);
-}
-
 @utility typo-heading-sm-regular {
   font-family: var(--font-primary);
   font-weight: 400;
   font-size: var(--font-size-18);
   line-height: var(--line-height-28);
-}
-
-@utility typo-18-400 {
-  font-family: var(--font-primary);
-  font-weight: 400;
-  font-size: var(--font-size-18);
 }
 
 @utility typo-body-1xl-bold {
@@ -640,23 +484,11 @@ body {
   line-height: var(--line-height-26);
 }
 
-@utility typo-17-700 {
-  font-family: var(--font-primary);
-  font-weight: 700;
-  font-size: var(--font-size-17);
-}
-
 @utility typo-body-1xl-semibold {
   font-family: var(--font-primary);
   font-weight: 600;
   font-size: var(--font-size-17);
   line-height: var(--line-height-26);
-}
-
-@utility typo-17-600 {
-  font-family: var(--font-primary);
-  font-weight: 600;
-  font-size: var(--font-size-17);
 }
 
 @utility typo-body-1xl-medium {
@@ -666,23 +498,11 @@ body {
   line-height: var(--line-height-26);
 }
 
-@utility typo-17-500 {
-  font-family: var(--font-primary);
-  font-weight: 500;
-  font-size: var(--font-size-17);
-}
-
 @utility typo-body-1xl-regular {
   font-family: var(--font-primary);
   font-weight: 400;
   font-size: var(--font-size-17);
   line-height: var(--line-height-26);
-}
-
-@utility typo-17-400 {
-  font-family: var(--font-primary);
-  font-weight: 400;
-  font-size: var(--font-size-17);
 }
 
 @utility typo-body-lg-bold {
@@ -692,23 +512,11 @@ body {
   line-height: var(--line-height-24);
 }
 
-@utility typo-16-700 {
-  font-family: var(--font-primary);
-  font-weight: 700;
-  font-size: var(--font-size-16);
-}
-
 @utility typo-body-lg-semibold {
   font-family: var(--font-primary);
   font-weight: 600;
   font-size: var(--font-size-16);
   line-height: var(--line-height-24);
-}
-
-@utility typo-16-600 {
-  font-family: var(--font-primary);
-  font-weight: 600;
-  font-size: var(--font-size-16);
 }
 
 @utility typo-body-lg-medium {
@@ -718,23 +526,11 @@ body {
   line-height: var(--line-height-24);
 }
 
-@utility typo-16-500 {
-  font-family: var(--font-primary);
-  font-weight: 500;
-  font-size: var(--font-size-16);
-}
-
 @utility typo-body-lg-regular {
   font-family: var(--font-primary);
   font-weight: 400;
   font-size: var(--font-size-16);
   line-height: var(--line-height-24);
-}
-
-@utility typo-16-400 {
-  font-family: var(--font-primary);
-  font-weight: 400;
-  font-size: var(--font-size-16);
 }
 
 @utility typo-body-md-bold {
@@ -744,23 +540,11 @@ body {
   line-height: var(--line-height-24);
 }
 
-@utility typo-15-700 {
-  font-family: var(--font-primary);
-  font-weight: 700;
-  font-size: var(--font-size-15);
-}
-
 @utility typo-body-md-semibold {
   font-family: var(--font-primary);
   font-weight: 600;
   font-size: var(--font-size-15);
   line-height: var(--line-height-24);
-}
-
-@utility typo-15-600 {
-  font-family: var(--font-primary);
-  font-weight: 600;
-  font-size: var(--font-size-15);
 }
 
 @utility typo-body-md-medium {
@@ -770,23 +554,11 @@ body {
   line-height: var(--line-height-24);
 }
 
-@utility typo-15-500 {
-  font-family: var(--font-primary);
-  font-weight: 500;
-  font-size: var(--font-size-15);
-}
-
 @utility typo-body-md-regular {
   font-family: var(--font-primary);
   font-weight: 400;
   font-size: var(--font-size-15);
   line-height: var(--line-height-24);
-}
-
-@utility typo-15-400 {
-  font-family: var(--font-primary);
-  font-weight: 400;
-  font-size: var(--font-size-15);
 }
 
 @utility typo-body-sm-bold {
@@ -796,23 +568,11 @@ body {
   line-height: var(--line-height-20);
 }
 
-@utility typo-14-700 {
-  font-family: var(--font-primary);
-  font-weight: 700;
-  font-size: var(--font-size-14);
-}
-
 @utility typo-body-sm-semibold {
   font-family: var(--font-primary);
   font-weight: 600;
   font-size: var(--font-size-14);
   line-height: var(--line-height-20);
-}
-
-@utility typo-14-600 {
-  font-family: var(--font-primary);
-  font-weight: 600;
-  font-size: var(--font-size-14);
 }
 
 @utility typo-body-sm-medium {
@@ -822,23 +582,11 @@ body {
   line-height: var(--line-height-20);
 }
 
-@utility typo-14-500 {
-  font-family: var(--font-primary);
-  font-weight: 500;
-  font-size: var(--font-size-14);
-}
-
 @utility typo-body-sm-regular {
   font-family: var(--font-primary);
   font-weight: 400;
   font-size: var(--font-size-14);
   line-height: var(--line-height-20);
-}
-
-@utility typo-14-400 {
-  font-family: var(--font-primary);
-  font-weight: 400;
-  font-size: var(--font-size-14);
 }
 
 @utility typo-caption-md-medium {
@@ -848,23 +596,11 @@ body {
   line-height: var(--line-height-20);
 }
 
-@utility typo-13-500 {
-  font-family: var(--font-primary);
-  font-weight: 500;
-  font-size: var(--font-size-13);
-}
-
 @utility typo-caption-md-regular {
   font-family: var(--font-primary);
   font-weight: 400;
   font-size: var(--font-size-13);
   line-height: var(--line-height-20);
-}
-
-@utility typo-13-400 {
-  font-family: var(--font-primary);
-  font-weight: 400;
-  font-size: var(--font-size-13);
 }
 
 @utility typo-caption-sm-medium {
@@ -874,23 +610,11 @@ body {
   line-height: var(--line-height-18);
 }
 
-@utility typo-12-500 {
-  font-family: var(--font-primary);
-  font-weight: 500;
-  font-size: var(--font-size-12);
-}
-
 @utility typo-caption-sm-regular {
   font-family: var(--font-primary);
   font-weight: 400;
   font-size: var(--font-size-12);
   line-height: var(--line-height-18);
-}
-
-@utility typo-12-400 {
-  font-family: var(--font-primary);
-  font-weight: 400;
-  font-size: var(--font-size-12);
 }
 
 @utility drop-shadow-25-5 {
@@ -938,6 +662,10 @@ body {
 }
 
 @layer base {
+  a {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1); /* a tag 누르면 살짝 회색 배경 보이게 */
+  }
+
   * {
     @apply border-border outline-ring/50;
   }
@@ -953,6 +681,10 @@ body {
   to {
     transform: translateX(-50%);
   }
+}
+
+.tab-highlight {
+ -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
 }
 
 .animate-marquee {
