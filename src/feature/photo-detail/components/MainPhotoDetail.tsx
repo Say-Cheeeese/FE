@@ -1,4 +1,3 @@
-import Spinner from '@/components/ui/Spinner';
 import { PhotoListResponseSchema } from '@/global/api/ep';
 import Spinner from '@/global/components/Spinner';
 import { DEFAULT_PROFILE_IMAGE } from '@/global/constants/images';
