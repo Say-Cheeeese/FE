@@ -11,10 +11,7 @@ interface ProfileImageProps {
   onImageSelect: (image: string) => void;
 }
 
-function ProfileImage({
-  selectedImage,
-  onImageSelect,
-}: ProfileImageProps) {
+function ProfileImage({ selectedImage, onImageSelect }: ProfileImageProps) {
   // 프로필 목록을 fetch할지 여부 (한번 true가 되면 계속 유지)
   const [shouldFetchProfiles, setShouldFetchProfiles] = useState(false);
 
@@ -24,7 +21,7 @@ function ProfileImage({
   // P1 이미지 URL 하드코딩 (selectedImage 초기값이 'P1'이므로)
   // 이렇게 하면 API 응답 전후로 이미지 URL이 동일하여 재로드 방지
   const PROFILE_IMAGES: Record<string, string> = {
-    'P1': 'https://say-cheese-profile.edge.naverncp.com/profile/sign_up_profile_1.jpg',
+    P1: 'https://say-cheese-profile.edge.naverncp.com/profile/sign_up_profile_1.jpg',
   };
 
   // 서버에서 받아온 이미지 리스트 (string[])
@@ -35,7 +32,9 @@ function ProfileImage({
   const getCurrentImageUrl = (): string => {
     // 1. API에서 선택한 이미지 찾기
     if (imageList.length > 0 && selectedImage) {
-      const foundImage = imageList.find((img) => img.imageCode === selectedImage);
+      const foundImage = imageList.find(
+        (img) => img.imageCode === selectedImage,
+      );
       if (foundImage?.profileImageUrl) {
         return foundImage.profileImageUrl;
       }
