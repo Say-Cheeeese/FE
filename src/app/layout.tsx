@@ -2,7 +2,6 @@ import KakaoProvider from '@/global/context/KakaoProvider';
 import QueryProvider from '@/global/context/QueryProvider';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
-import Script from 'next/script';
 import './globals.css';
 
 const pretendard = localFont({
@@ -10,7 +9,7 @@ const pretendard = localFont({
   display: 'swap',
   weight: '100 900',
   variable: '--font-pretendard',
-  preload: true,
+  preload: false,
 });
 
 export const metadata: Metadata = {
