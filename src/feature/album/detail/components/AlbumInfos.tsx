@@ -25,12 +25,11 @@ const AlbumInfos = forwardRef<HTMLElement, AlbumInfosProps>(
     );
 
     if (albumType === 'deep') return null;
-    if (photoCount === 0 || photoCount === undefined) return null;
 
     return (
       <section
         ref={ref}
-        className='border-divider-gray-light border-b-[6px] px-5 py-4'
+        className='border-divider-gray-light flex flex-col gap-6 border-b-[6px] px-5 py-4'
       >
         <AlbumInfoSummary {...rest} />
         <AlbumBestCut albumId={albumId} photoCount={photoCount} />
