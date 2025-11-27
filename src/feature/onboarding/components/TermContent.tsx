@@ -1,6 +1,5 @@
 import { FC } from 'react'; // React 19+에서 타입 추론이 강력해졌지만, FC로 명시해서 타입 안전성 강화
 
-// terms 섹션 컴포넌트 – 스크롤 영역 포함
 const TermsComponent: FC = () => (
   <div className='scrollbar-hide max-h-[80vh] overflow-y-auto'>
     <div className='flex flex-col gap-8'>
@@ -81,7 +80,6 @@ const TermsComponent: FC = () => (
   </div>
 );
 
-// privacy 섹션 컴포넌트 – 스크롤 영역 포함
 const PrivacyComponent: FC = () => (
   <div className='scrollbar-hide max-h-[80vh] overflow-y-auto'>
     <div className='flex flex-col gap-8'>
@@ -131,7 +129,6 @@ const PrivacyComponent: FC = () => (
   </div>
 );
 
-// thirdParty 섹션 컴포넌트 – 스크롤 영역 포함
 const ThirdPartyComponent: FC = () => (
   <div className='scrollbar-hide max-h-[80vh] overflow-y-auto'>
     <div className='flex flex-col gap-8'>
@@ -177,7 +174,6 @@ const ThirdPartyComponent: FC = () => (
   </div>
 );
 
-// marketing 섹션 컴포넌트 – 스크롤 영역 포함
 const MarketingComponent: FC = () => (
   <div className='scrollbar-hide max-h-[80vh] overflow-y-auto'>
     <div className='flex flex-col gap-8'>
@@ -198,7 +194,6 @@ const MarketingComponent: FC = () => (
   </div>
 );
 
-// termContent 객체 – 모든 content가 컴포넌트로 변환됨
 export const TermContent = {
   terms: {
     title: '이용약관 동의',

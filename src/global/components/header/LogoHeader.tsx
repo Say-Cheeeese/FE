@@ -23,7 +23,6 @@ export default function LogoHeader({
   const shouldShowLogin =
     showLogin && (!checkAuth || (!isLoading && !isLoggedIn));
 
-  // 로그인 버튼 클릭 시 entry를 main으로 쿠키에 저장
   const handleLoginClick = useCallback(() => {
     if (typeof document !== 'undefined') {
       document.cookie = 'entry=main; path=/;';

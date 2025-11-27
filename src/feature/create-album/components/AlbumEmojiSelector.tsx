@@ -3,7 +3,6 @@ import { Pencil } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { useEffect, useRef, useState } from 'react';
 
-// TBT 개선: emoji-picker-react를 dynamic import (약 200KB 절약)
 const EmojiPicker = dynamic(() => import('emoji-picker-react'), {
   ssr: false,
   loading: () => (

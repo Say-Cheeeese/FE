@@ -48,10 +48,8 @@ export default function ConfirmModal({
   const handleConfirm = useCallback(async () => {
     try {
       await onConfirm?.();
-      // AlertDialogAction 사용 시 기본적으로 닫히므로 별도 close 처리 불필요
     } catch (e) {
       console.error(e);
-      // 실패 시 닫히는 걸 막고 싶다면 AlertDialog를 controlled로 전환 필요
     }
   }, [onConfirm]);
 
@@ -68,7 +66,6 @@ export default function ConfirmModal({
       }
     };
 
-    // 컴포넌트 마운트 시와 주기적으로 체크
     removeScrollLock();
     const interval = setInterval(removeScrollLock, 100);
 

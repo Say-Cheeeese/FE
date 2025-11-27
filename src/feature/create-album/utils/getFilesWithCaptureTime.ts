@@ -1,6 +1,5 @@
 import exifr from 'exifr';
 
-// 파일별로 captureTime(ms) 추출 (EXIF > lastModified)
 export async function getFilesWithCaptureTime(
   files: File[],
 ): Promise<Array<{ file: File; captureTime: string }>> {
