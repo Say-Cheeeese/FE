@@ -34,9 +34,10 @@ export async function downloadFile(
 
     // 확장자가 없으면 blob 타입 기준으로 자동 유추
     const ext = guessExtension(sources[0], blob);
-    const downloadName = finalName.includes('.')
-      ? finalName
-      : `${finalName}.${ext}`;
+    const dotIndex = finalName.lastIndexOf('.');
+    const baseName =
+      dotIndex > -1 ? finalName.substring(0, dotIndex) : finalName;
+    const downloadName = `${baseName}.${ext}`;
 
     link.download = downloadName;
 
