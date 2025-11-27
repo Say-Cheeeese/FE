@@ -47,14 +47,11 @@ export default function EmojiLoading({
             });
           }
 
-          // 업로드된 사진 개수 토스트
           const uploadedCount = useUploadingStore.getState().uploadedCount;
+          useUploadingStore.getState().reset();
           if (uploadedCount > 0) {
             Toast.alert(`총 ${uploadedCount}장을 앨범에 채웠어요.`);
           }
-
-          // 상태 초기화
-          useUploadingStore.getState().reset();
         }
       };
       frame = requestAnimationFrame(animate);
