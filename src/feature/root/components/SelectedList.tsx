@@ -1,6 +1,5 @@
 'use client';
 
-// 컴포넌트 외부에 debounce 함수 선언 (타입 안전하게)
 function debounce<T extends unknown[]>(
   func: (...args: T) => void,
   wait: number,
@@ -76,7 +75,6 @@ export default function SelectedList({
 
   const handleScroll = debounce(handleScrollCore, 50);
 
-  // selectedMenu가 바뀌면 해당 이미지로 스크롤 (애니메이션)
   useEffect(() => {
     if (!containerRef.current) return;
 

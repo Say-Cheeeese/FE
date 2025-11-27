@@ -37,8 +37,6 @@ export default function WaitingAlbum({ albumId }: WaitingAlbumProps) {
       } catch (err) {
         console.error('Image processing error:', err);
         Toast.alert('사진 처리 중 에러가 발생했습니다.');
-        // Toast가 최소 1초는 보이도록 대기 후 이동
-        await new Promise((resolve) => setTimeout(resolve, 1000));
         router.replace(`/album/detail/${albumId}`);
       }
     };

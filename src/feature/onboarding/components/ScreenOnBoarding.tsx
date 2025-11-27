@@ -15,17 +15,13 @@ export default function ScreenOnBoarding() {
 
   const [selectedImage, setSelectedImage] = useState<string>('P1');
 
-  // 쿼리스트링에서 name 추출
   const nameFromQuery = searchParams.get('name') || '';
-  // 닉네임 상태 (쿼리 name이 있으면 기본값으로)
   const [nickname, setNickname] = useState<string>(
     decodeURIComponent(nameFromQuery),
   );
 
-  // 닉네임 에러 상태
   const [nicknameError, setNicknameError] = useState<string>('');
 
-  // 닉네임 변경 핸들러 (validation 포함)
   const handleNicknameChange = (value: string) => {
     // 한글(완성형+자음+모음), 영문, 숫자, 공백만 허용하는 정규식
     const validPattern = /^[가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9 ]*$/;
@@ -39,7 +35,6 @@ export default function ScreenOnBoarding() {
     setNickname(value);
   };
 
-  // 동의 상태
   const [agreements, setAgreements] = useState<Record<string, boolean>>({
     terms: false,
     privacy: false,
@@ -47,11 +42,9 @@ export default function ScreenOnBoarding() {
     marketing: false,
   });
 
-  // 필수 동의 항목 체크
   const requiredAgreements = ['terms', 'privacy', 'thirdParty'];
   const isRequiredAgreed = requiredAgreements.every((key) => agreements[key]);
 
-  // 모든 필수 입력 완료 확인
   const isFormComplete =
     selectedImage &&
     nickname.trim() !== '' &&

@@ -41,9 +41,7 @@ export default function CreateInputList({
     onEventNameChange(value);
   };
 
-  // 참여 인원 검증: 1~64명
   const handleParticipantCountChange = (value: string) => {
-    // 빈 문자열이면 허용
     if (value === '') {
       setParticipantCountError('');
       onErrorChange?.(eventNameError !== '');
@@ -51,8 +49,7 @@ export default function CreateInputList({
       return;
     }
 
-    // 숫자만 허용 (앞의 0 제거)
-    const sanitizedValue = value.replace(/\D/g, ''); // 숫자가 아닌 것 제거
+    const sanitizedValue = value.replace(/\D/g, '');
     const numberValue =
       sanitizedValue === '' ? '' : String(parseInt(sanitizedValue, 10));
 

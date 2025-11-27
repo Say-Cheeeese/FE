@@ -1,5 +1,4 @@
 'use client';
-// 1. 필요한 라이브러리 import
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 
@@ -19,7 +18,6 @@ interface CountdownTimerProps {
   albumId: string;
 }
 
-// 2. 남은 시간을 계산하는 헬퍼 함수
 function calculateTimeLeft(targetDate: Date): TimeLeft {
   const difference = +new Date(targetDate) - +new Date();
   let timeLeft: TimeLeft = {
@@ -41,9 +39,7 @@ function calculateTimeLeft(targetDate: Date): TimeLeft {
   return timeLeft;
 }
 
-// 3. 숫자가 바뀔 때 애니메이션을 적용할 컴포넌트
 function AnimatedNumber({ number, label }: AnimatedNumberProps) {
-  // 숫자가 10보다 작을 때 (e.g., 9초) "09"로 보이도록 포맷팅
   const formattedNumber = String(number).padStart(2, '0');
 
   return (
@@ -71,9 +67,7 @@ function AnimatedNumber({ number, label }: AnimatedNumberProps) {
   );
 }
 
-// 4. 메인 카운트다운 타이머 컴포넌트
 export function CountdownTimer({ albumId }: CountdownTimerProps) {
-  // targetDate는 Date 객체입니다 (예: new Date('2025-11-10T12:00:00'))
   const [targetDate, setTargetDate] = useState<Date | null>(null);
   const [timeLeft, setTimeLeft] = useState<TimeLeft>({
     days: 0,
@@ -83,21 +77,16 @@ export function CountdownTimer({ albumId }: CountdownTimerProps) {
   });
 
   useEffect(() => {
-    // localStorage 키: 앨범 ID별로 고유하게 저장
     const storageKey = `album_${albumId}_created_date`;
 
-    // localStorage에서 해당 앨범의 만료일을 불러오기
     const storedDate = localStorage.getItem(storageKey);
 
     let calculatedDate: Date;
 
     if (storedDate) {
-      // 이미 저장된 만료일이 있으면 사용
       calculatedDate = new Date(storedDate);
     } else {
-      // 없으면 새로 계산 (오늘로부터 7일 뒤)
       calculatedDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-      // localStorage에 저장
       localStorage.setItem(storageKey, calculatedDate.toISOString());
     }
 
@@ -105,7 +94,6 @@ export function CountdownTimer({ albumId }: CountdownTimerProps) {
     setTimeLeft(calculateTimeLeft(calculatedDate));
   }, [albumId]);
 
-  // 1초마다 시간을 다시 계산
   useEffect(() => {
     if (!targetDate) return;
 
@@ -113,7 +101,6 @@ export function CountdownTimer({ albumId }: CountdownTimerProps) {
       const newTimeLeft = calculateTimeLeft(targetDate);
       setTimeLeft(newTimeLeft);
 
-      // 시간이 다 되면 타이머 중지
       if (
         newTimeLeft.days === 0 &&
         newTimeLeft.hours === 0 &&
@@ -124,7 +111,6 @@ export function CountdownTimer({ albumId }: CountdownTimerProps) {
       }
     }, 1000);
 
-    // 컴포넌트가 언마운트될 때 타이머 정리
     return () => clearInterval(timer);
   }, [targetDate]);
 

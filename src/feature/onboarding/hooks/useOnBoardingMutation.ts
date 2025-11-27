@@ -2,7 +2,6 @@ import { ApiReturns, EP } from '@/global/api/ep';
 import { api } from '@/global/utils/api';
 import { useMutation } from '@tanstack/react-query';
 
-// 온보딩 API에 필요한 전체 파라미터 타입 정의
 type OnboardingPayload = {
   name: string;
   imageCode: string;

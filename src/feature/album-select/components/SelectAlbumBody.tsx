@@ -21,13 +21,11 @@ type ImageWithUrl = {
 
 export default function SelectAlbumBody() {
   const isUploaded = useUploadingStore((state) => state.isUploaded);
-  // LongButton 업로드 핸들러 함수 (captureTime 포함)
   const handleUpload = async () => {
     const selectedFiles = processedImages.filter((img) =>
       selectedIds.has(img.id),
     );
     const files = selectedFiles.map((img) => img.file);
-    // captureTime 포함 fileInfos 생성
     const filesWithCapture = await getFilesWithCaptureTime(files);
     const fileInfos = filesWithCapture.map(({ file, captureTime }) => ({
       fileName: file.name,
@@ -42,12 +40,10 @@ export default function SelectAlbumBody() {
       files,
     });
   };
-  // presignedAndUploadToNCP를 직접 사용
   const { albumId } = useParams() as { albumId: string };
   const { images } = useImageStore();
   const router = useRouter();
 
-  // images가 없으면 업로드 페이지로 이동
   useEffect(() => {
     if (images.length === 0 && albumId) {
       router.push(`/album/upload/${albumId}`);
@@ -57,22 +53,18 @@ export default function SelectAlbumBody() {
   const [availableCount, setAvailableCount] = useState<number | null>(null);
   const { mutate: checkImagesMutate } = useCheckImages();
 
-  // object URL 해제 함수
   const revokeAllObjectUrls = () => {
     processedImages.forEach((img) => {
       URL.revokeObjectURL(img.url);
     });
   };
 
-  // 업로드 실패 보고 훅
   const { mutate: reportFailed } = useReportFailed();
 
-  // usePresignedAndUploadToNCP 훅 사용
   const { mutate: uploadMutate } = usePresignedAndUploadToNCP({
     onSuccess: (result) => {
       if (result.failed > 0) {
         Toast.alert(`${result.failed}개 파일 업로드에 실패했어요`);
-        // 실패한 photoId가 있으면 서버에 보고
         if (
           Array.isArray(result.failedPhotoIds) &&
           result.failedPhotoIds.length > 0
@@ -81,10 +73,8 @@ export default function SelectAlbumBody() {
         }
       } else {
         revokeAllObjectUrls();
-        // 업로드 성공 시 전역 상태 업데이트
         useUploadingStore.getState().setUploaded(true);
         useUploadingStore.getState().setUploadedCount(result.success);
-        // 업로드 성공 시 detail로 이동
         router.replace(`/album/detail/${albumId}`);
       }
     },
@@ -126,29 +116,20 @@ export default function SelectAlbumBody() {
     [processedImages],
   );
 
-  // const oversizedImages = useMemo(
-  //   () => processedImages.filter((img) => img.isOversized),
-  //   [processedImages],
-  // );
-
-  // 초기 선택: 유효한 이미지 중 availableCount만큼만 선택
   useEffect(() => {
     if (!validImages.length) {
       setSelectedIds(new Set());
       return;
     }
-    // availableCount가 없거나 validImages가 availableCount 이하면 전체 선택
     if (!availableCount || validImages.length <= availableCount) {
       setSelectedIds(new Set(validImages.map((img) => img.id)));
     } else {
-      // availableCount보다 많으면 앞에서부터 availableCount개만 선택
       setSelectedIds(
         new Set(validImages.slice(0, availableCount).map((img) => img.id)),
       );
     }
   }, [validImages, availableCount]);
 
-  // 서버 검증: oversizedFiles + availableCount 확인 후 토스트 표시
   useEffect(() => {
     const files = images.map((img) => img.file);
     if (!files.length || !albumId) return;
@@ -190,14 +171,12 @@ export default function SelectAlbumBody() {
         else updated.delete(id);
         return updated;
       }
-      // fallback: toggle
       if (updated.has(id)) updated.delete(id);
       else updated.add(id);
       return updated;
     });
   };
 
-  // 선택 개수 초과 여부 함수
   const isOverCount =
     availableCount !== null && selectedIds.size > availableCount;
 

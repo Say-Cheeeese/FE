@@ -13,13 +13,10 @@ import { reportFailedPhotoIds } from '@/global/hooks/useReportFailed';
 export async function presignedAndUploadToNCP(
   params: PresignedUrlRequest & { files: File[] },
 ): Promise<{ success: number; failed: number; failedPhotoIds: number[] }> {
-  // 1. Presigned URL 발급
   const presignedUrlInfos = await getPresignedUrl(params);
 
-  // 2. 파일 업로드
   const uploadResult = await uploadFilesToNCP(params.files, presignedUrlInfos);
 
-  // 3. 실패한 파일이 있으면 서버에 보고
   if (uploadResult.failedPhotoIds.length > 0) {
     try {
       await reportFailedPhotoIds(uploadResult.failedPhotoIds);

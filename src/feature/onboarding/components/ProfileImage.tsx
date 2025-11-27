@@ -12,25 +12,18 @@ interface ProfileImageProps {
 }
 
 function ProfileImage({ selectedImage, onImageSelect }: ProfileImageProps) {
-  // 프로필 목록을 fetch할지 여부 (한번 true가 되면 계속 유지)
   const [shouldFetchProfiles, setShouldFetchProfiles] = useState(false);
 
-  // 모달이 열릴 때만 API 호출 (React Query 캐싱으로 한번만 호출됨)
   const { data, isLoading, isError } = useGetAllProfiles(shouldFetchProfiles);
 
-  // P1 이미지 URL 하드코딩 (selectedImage 초기값이 'P1'이므로)
-  // 이렇게 하면 API 응답 전후로 이미지 URL이 동일하여 재로드 방지
   const PROFILE_IMAGES: Record<string, string> = {
     P1: 'https://say-cheese-profile.edge.naverncp.com/profile/sign_up_profile_1.jpg',
   };
 
-  // 서버에서 받아온 이미지 리스트 (string[])
   const imageList =
     data?.opts?.filter((img) => img.imageCode && img.profileImageUrl) ?? [];
 
-  // 현재 이미지 URL 결정 로직 (가독성 개선)
   const getCurrentImageUrl = (): string => {
-    // 1. API에서 선택한 이미지 찾기
     if (imageList.length > 0 && selectedImage) {
       const foundImage = imageList.find(
         (img) => img.imageCode === selectedImage,
@@ -40,12 +33,10 @@ function ProfileImage({ selectedImage, onImageSelect }: ProfileImageProps) {
       }
     }
 
-    // 2. 하드코딩된 프로필 이미지 사용
     if (selectedImage && PROFILE_IMAGES[selectedImage]) {
       return PROFILE_IMAGES[selectedImage];
     }
 
-    // 3. 기본값: P1 이미지
     return PROFILE_IMAGES['P1'];
   };
 
@@ -53,7 +44,6 @@ function ProfileImage({ selectedImage, onImageSelect }: ProfileImageProps) {
 
   return (
     <div className='mt-4 mb-10 flex flex-col items-center'>
-      {/* 프로필 이미지 */}
       <div className='relative'>
         <BottomSheetModal
           trigger={
@@ -144,5 +134,4 @@ function ProfileImage({ selectedImage, onImageSelect }: ProfileImageProps) {
   );
 }
 
-// React.memo로 감싸서 불필요한 리렌더링 방지
 export default memo(ProfileImage);

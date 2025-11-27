@@ -35,7 +35,6 @@ export async function getPresignedUrl(
   } catch (error: unknown) {
     console.error('Presigned URL 조회 실패:', error);
 
-    // 서버 에러 객체 체크 (plain object with message)
     if (error && typeof error === 'object' && 'message' in error) {
       Toast.alert(error.message as string);
     } else if (error instanceof Error) {
