@@ -1,3 +1,4 @@
+import Spinner from '@/components/ui/Spinner';
 import { PhotoListResponseSchema } from '@/global/api/ep';
 import Spinner from '@/global/components/Spinner';
 import { DEFAULT_PROFILE_IMAGE } from '@/global/constants/images';
@@ -53,7 +54,7 @@ export default function MainPhotoDetail({
         isLiked={activeImage.isLiked}
         likeCnt={activeImage.likeCnt}
         isRecentlyDownloaded={activeImage.isRecentlyDownloaded}
-        imageUrl={activeImage.thumbnailUrl}
+        imageUrl={activeImage.imageUrl}
       />
     </>
   );
