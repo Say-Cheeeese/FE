@@ -26,7 +26,6 @@ export async function uploadFileToNCP(
       return false;
     }
 
-    console.log(`파일 업로드 성공 (photoId: ${photoId})`);
     return true;
   } catch (error) {
     console.error(`파일 업로드 중 오류 발생 (photoId: ${photoId}):`, error);
@@ -68,11 +67,6 @@ export async function uploadFilesToNCP(
   const failedPhotoIds = uploadResults
     .filter((r) => !r.ok)
     .map((r) => r.photoId);
-
-  console.log(
-    `업로드 완료: 성공 ${success}개, 실패 ${failed}개`,
-    failedPhotoIds.length ? `실패 photoId: ${failedPhotoIds.join(',')}` : '',
-  );
 
   return { success, failed, failedPhotoIds };
 }

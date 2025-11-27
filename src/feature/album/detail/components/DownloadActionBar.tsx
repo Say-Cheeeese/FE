@@ -55,7 +55,7 @@ export default function DownloadActionBar({
         mutateAsync({ albumId, photoIds });
       }
     } catch (e) {
-      console.log('사진 다운로드 처리 중 오류 발생:', e);
+      console.error('사진 다운로드 처리 중 오류 발생:', e);
     }
   };
 
