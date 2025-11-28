@@ -32,6 +32,7 @@ describe('useOnBoardingMutation', () => {
 
   it('should call api.post when mutationFn is executed', async () => {
     // Capture the mutationFn passed to useMutation
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let capturedMutationFn: any;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useMutation as any).mockImplementation(({ mutationFn }: any) => {
