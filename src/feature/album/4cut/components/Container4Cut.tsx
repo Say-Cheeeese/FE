@@ -8,13 +8,28 @@ interface Container4CutProps {
   eventName?: string;
   eventDate?: string;
   scale?: number;
+  width?: number;
 }
+
+const BASE_WIDTH = 216;
+const BASE_HEIGHT = 384;
+const BASE_ASPECT_RATIO = BASE_HEIGHT / BASE_WIDTH;
+const BASE_FONT_SIZE = 7.963;
+const BASE_NAME_POSITION = {
+  bottom: 7.4,
+  left: 9.6,
+};
+const BASE_DATE_POSITION = {
+  bottom: 7.4,
+  right: 10.4,
+};
 
 export default function Container4Cut({
   albumId,
   eventDate,
   eventName,
   scale = 1,
+  width,
 }: Container4CutProps) {
   // TODO : openapi type이 이상해서 임시 any처리. 백엔드랑 협의 필요
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -32,14 +47,18 @@ export default function Container4Cut({
 
   const { base64List } = useBase64Images({ imageUrls: images });
 
-  const scaledFontSize = 7.963 * scale;
+  const calculatedWidth = width ?? BASE_WIDTH * scale;
+  const calculatedHeight = calculatedWidth * BASE_ASPECT_RATIO;
+  const calculatedScale = calculatedWidth / BASE_WIDTH;
+
+  const scaledFontSize = BASE_FONT_SIZE * calculatedScale;
   const scaledNamePosition = {
-    bottom: `${7.4 * scale}px`,
-    left: `${9.6 * scale}px`,
+    bottom: `${BASE_NAME_POSITION.bottom * calculatedScale}px`,
+    left: `${BASE_NAME_POSITION.left * calculatedScale}px`,
   };
   const scaledDatePosition = {
-    bottom: `${7.4 * scale}px`,
-    right: `${10.4 * scale}px`,
+    bottom: `${BASE_DATE_POSITION.bottom * calculatedScale}px`,
+    right: `${BASE_DATE_POSITION.right * calculatedScale}px`,
   };
 
   return (
@@ -47,7 +66,11 @@ export default function Container4Cut({
       className='border-border-primary text-text-secondary relative border font-medium'
       style={{ fontSize: scaledFontSize }}
     >
-      <Svg4Cut width={216 * scale} height={384 * scale} photos={base64List} />
+      <Svg4Cut
+        width={calculatedWidth}
+        height={calculatedHeight}
+        photos={base64List}
+      />
 
       {eventName && (
         <span

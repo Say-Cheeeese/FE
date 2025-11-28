@@ -160,7 +160,7 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
           <Container4Cut
             albumId={albumId}
             eventName={data?.title}
-            eventDate={data?.eventDate}
+            eventDate={data?.eventDate ? data.eventDate.replace(/-/g, '.') : ''}
             scale={1}
           />
         </div>
@@ -248,7 +248,7 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
         visible={isCaptureVisible}
         albumId={albumId}
         eventName={data?.title}
-        eventDate={data?.eventDate}
+        eventDate={data?.eventDate ? data.eventDate.replace(/-/g, '.') : ''}
       />
     </>
   );
