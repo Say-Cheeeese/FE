@@ -12,7 +12,7 @@ export default function FullSizeLetter({ children }: FullSizeLetterProps) {
 
       {/* 뒷편지봉투 svg */}
       <svg
-        className='fixed bottom-0 left-1/2 z-0 w-full max-w-[430px] -translate-x-1/2 transform'
+        className='pointer-events-none fixed bottom-0 left-1/2 z-0 w-full max-w-[430px] -translate-x-1/2 transform'
         viewBox='0 0 393 400'
         preserveAspectRatio='none'
         xmlns='http://www.w3.org/2000/svg'
@@ -25,7 +25,7 @@ export default function FullSizeLetter({ children }: FullSizeLetterProps) {
 
       {/* 앞편지봉투 svg */}
       <svg
-        className='fixed bottom-[-10px] z-20 w-full max-w-[430px] object-cover'
+        className='pointer-events-none fixed bottom-[-10px] z-20 w-full max-w-[430px] object-cover'
         width='393'
         height='178'
         viewBox='0 0 393 178'
