@@ -62,12 +62,17 @@ client.interceptors.response.use(
 
         const { accessToken, refreshToken: newRefreshToken } =
           response.data.result;
-
-        // 쿠키 갱신
-        setCookie(ACCESS_TOKEN_KEY, accessToken, { path: '/' });
-        setCookie(REFRESH_TOKEN_KEY, newRefreshToken, {
+        // 쿠키 갱신 - 서버와 동일한 도메인 설정 사용
+        const cookieOptions = {
           path: '/',
-        });
+          domain:
+            process.env.NODE_ENV === 'production'
+              ? '.say-cheese.me'
+              : undefined,
+        };
+
+        setCookie(ACCESS_TOKEN_KEY, accessToken, cookieOptions);
+        setCookie(REFRESH_TOKEN_KEY, newRefreshToken, cookieOptions);
 
         originalRequest.headers.Authorization = `Bearer ${accessToken}`;
         return client(originalRequest);
