@@ -3,6 +3,7 @@ import LongButton from '@/global/components/LongButton';
 import dynamic from 'next/dynamic';
 const BottomSheetModal = dynamic(
   () => import('@/global/components/modal/BottomSheetModal'),
+  { ssr: false },
 );
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';

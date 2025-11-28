@@ -1,7 +1,7 @@
 'use client';
 import { Pencil } from 'lucide-react';
 import dynamic from 'next/dynamic';
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 const EmojiPicker = dynamic(() => import('emoji-picker-react'), {
   ssr: false,
@@ -19,8 +19,6 @@ interface AlbumEmojiSelectorProps {
   selectedEmoji: string;
   onEmojiSelect: (emoji: string) => void;
 }
-
-import React from 'react';
 
 const AlbumEmojiSelector = React.memo(function AlbumEmojiSelector({
   selectedEmoji,
