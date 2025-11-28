@@ -24,9 +24,11 @@ describe('checkImages', () => {
     const mockOversizedFiles = ['oversized.jpg'];
     const mockAvailableCount = 10;
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (validateImages as any).mockReturnValue({
       oversizedFiles: mockOversizedFiles,
     });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (checkAvailableCount as any).mockResolvedValue(mockAvailableCount);
 
     const result = await checkImages(mockFiles, albumId);

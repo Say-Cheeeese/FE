@@ -22,8 +22,10 @@ describe('validateUpload', () => {
 
   it('should return ok: true when validation passes', async () => {
     // Mock validateImageCount to return 0 (no oversized files)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (validateImageCount as any).mockReturnValue(0);
     // Mock checkAvailableCount to return enough space
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (checkAvailableCount as any).mockResolvedValue(5);
 
     const result = await validateUpload(mockFiles, albumId);
@@ -33,8 +35,10 @@ describe('validateUpload', () => {
 
   it('should return ok: false with reason: size when files are oversized', async () => {
     // Mock validateImageCount to return 1 (1 oversized file)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (validateImageCount as any).mockReturnValue(1);
     // Mock checkAvailableCount to return enough space
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (checkAvailableCount as any).mockResolvedValue(5);
 
     const result = await validateUpload(mockFiles, albumId);
@@ -44,8 +48,10 @@ describe('validateUpload', () => {
 
   it('should return ok: false with reason: count when file count exceeds limit', async () => {
     // Mock validateImageCount to return 0
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (validateImageCount as any).mockReturnValue(0);
     // Mock checkAvailableCount to return less than file count
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (checkAvailableCount as any).mockResolvedValue(1);
 
     const result = await validateUpload(mockFiles, albumId);
@@ -55,8 +61,10 @@ describe('validateUpload', () => {
 
   it('should return ok: false with reason: both when both checks fail', async () => {
     // Mock validateImageCount to return 1
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (validateImageCount as any).mockReturnValue(1);
     // Mock checkAvailableCount to return less than file count
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (checkAvailableCount as any).mockResolvedValue(1);
 
     const result = await validateUpload(mockFiles, albumId);

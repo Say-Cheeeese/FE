@@ -51,17 +51,23 @@ describe('handleFileUpload', () => {
       files: [mockFile],
       value: 'some-value',
     },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } as any;
 
   beforeEach(() => {
     vi.clearAllMocks();
     // Default mock implementations
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (sortImagesByDate as any).mockResolvedValue([mockFile]);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (convertHeicFilesToJpeg as any).mockResolvedValue([mockFile]);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (validateUpload as any).mockResolvedValue({ ok: true });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (getFilesWithCaptureTime as any).mockResolvedValue([
       { file: mockFile, captureTime: '2023-01-01' },
     ]);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (presignedAndUploadToNCP as any).mockResolvedValue({
       success: 1,
       failed: 0,
@@ -84,6 +90,7 @@ describe('handleFileUpload', () => {
   });
 
   it('should handle validation failure', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (validateUpload as any).mockResolvedValue({ ok: false, reason: 'size' });
 
     await handleFileUpload(mockEvent, albumId, mockRouter);

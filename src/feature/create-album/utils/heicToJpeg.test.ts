@@ -56,6 +56,7 @@ describe('convertHeicFilesToJpeg', () => {
 
   it('should handle conversion failure gracefully', async () => {
     const { heicTo } = await import('heic-to');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (heicTo as any).mockRejectedValueOnce(new Error('Conversion failed'));
 
     const files = [
