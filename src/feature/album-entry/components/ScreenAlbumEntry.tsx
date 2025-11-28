@@ -9,7 +9,7 @@ interface ScreenAlbumEntryProps {
 export default function ScreenAlbumEntry({ albumId }: ScreenAlbumEntryProps) {
   return (
     <main className='bg-background-brand relative min-h-screen overflow-hidden'>
-      <LogoHeader bgColor='var(--color-background-brand)' checkAuth={false} />
+      <LogoHeader bgColor='var(--color-background-brand)' />
 
       <div
         className='absolute inset-0 z-0 bg-cover bg-center bg-no-repeat'
