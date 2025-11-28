@@ -15,7 +15,9 @@ const formatCaptureTime = (isoString?: string): string => {
   if (!isoString) return '';
 
   // ISO 문자열에서 직접 파싱 (타임존 변환 없이)
-  const match = isoString.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/);
+  const match = isoString.match(
+    /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/,
+  );
   if (!match) return '정보 없음';
 
   const [, year, month, day, hour, minute] = match;
