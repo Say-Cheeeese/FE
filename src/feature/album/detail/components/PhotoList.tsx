@@ -4,6 +4,7 @@ import PhotoBox from '@/global/components/photo/PhotoBox';
 import Toast from '@/global/components/toast/Toast';
 import { buildQuery } from '@/global/utils/buildQuery';
 import { useAlbumSortStore } from '@/store/useAlbumSortStore';
+import { useAlbumTypeStore } from '@/store/useAlbumTypeStore';
 import { useSelectedPhotosStore } from '@/store/useSelectedPhotosStore';
 import {
   type FetchNextPageOptions,
@@ -62,6 +63,12 @@ export default function PhotoList({
     useShallow((state) => ({
       sortType: state.sortType,
       setSortType: state.setSortType,
+    })),
+  );
+  const { albumType, setAlbumType } = useAlbumTypeStore(
+    useShallow((state) => ({
+      albumType: state.albumType,
+      setAlbumType: state.setAlbumType,
     })),
   );
 
@@ -136,7 +143,7 @@ export default function PhotoList({
       <div ref={anchorRef} className='invisible absolute top-[-72px] left-0' />
       <div className='mb-3 flex justify-between'>
         <span className='typo-body-lg-regular text-text-subtle'>
-          총 {totalPhotoCount || 0}장
+          총 {(albumType === 'all' ? totalPhotoCount : photos.length) || 0}장
         </span>
         {mode === 'default' && (
           <button
@@ -180,8 +187,16 @@ export default function PhotoList({
                 pressed={isSelected(photoId)}
                 mode={mode}
                 // 띱많은순이 아니면, 좋아요수가 있을때 의식하게되어 보여주지않음.
-                likeCount={sortType === 'liked' ? likeCnt : undefined}
-                liked={sortType === 'liked' ? isLiked : undefined}
+                likeCount={
+                  sortType === 'liked' || albumType === 'deep'
+                    ? likeCnt
+                    : undefined
+                }
+                liked={
+                  sortType === 'liked' || albumType === 'deep'
+                    ? isLiked
+                    : undefined
+                }
                 imageSrc={thumbnailUrl}
                 responsive
                 onPress={() => {
