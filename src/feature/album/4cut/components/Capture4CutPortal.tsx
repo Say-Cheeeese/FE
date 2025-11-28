@@ -33,7 +33,7 @@ const Capture4CutPortal = ({
         albumId={albumId}
         eventName={eventName}
         eventDate={eventDate}
-        scale={3}
+        width={500}
       />
     </div>
   </BodyPortal>
