@@ -39,8 +39,7 @@ export default function MainPhotoDetail({
     <>
       <HeaderPhotoDetail
         name={activeImage.name}
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        profileImageUrl={(activeImage as any)?.profileImage} // TODO : 백엔드 스웨거에 필드추가 아직안됨.
+        profileImageUrl={activeImage.profileImage}
       />
       <SwiperPhotoList
         activeIndex={activeIndex}
