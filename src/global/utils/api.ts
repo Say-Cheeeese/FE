@@ -24,6 +24,9 @@ const client = axios.create({
   timeout: 60000,
 });
 
+// 토큰 갱신 중복 방지를 위한 Promise 저장소
+let refreshTokenPromise: Promise<string> | null = null;
+
 client.interceptors.request.use(
   async (config) => {
     const accessToken = getCookie(ACCESS_TOKEN_KEY);
@@ -49,34 +52,51 @@ client.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        const refreshToken = getCookie(REFRESH_TOKEN_KEY);
-        if (!refreshToken) {
-          removeCookie(ACCESS_TOKEN_KEY);
-          removeCookie(REFRESH_TOKEN_KEY);
-          return Promise.reject(error);
+        // 이미 토큰 갱신 중이면 해당 Promise를 재사용
+        if (!refreshTokenPromise) {
+          refreshTokenPromise = (async () => {
+            const refreshToken = getCookie(REFRESH_TOKEN_KEY);
+            if (!refreshToken) {
+              removeCookie(ACCESS_TOKEN_KEY);
+              removeCookie(REFRESH_TOKEN_KEY);
+              throw new Error('No refresh token');
+            }
+
+            const response = await axios.post(`${API_URL}/v1/auth/reissue`, {
+              refreshToken,
+            });
+
+            const { accessToken, refreshToken: newRefreshToken } =
+              response.data.result;
+
+            // 쿠키 갱신 - 서버와 동일한 도메인 설정 사용
+            const cookieOptions = {
+              path: '/',
+              domain:
+                process.env.NODE_ENV === 'production'
+                  ? '.say-cheese.me'
+                  : undefined,
+            };
+
+            setCookie(ACCESS_TOKEN_KEY, accessToken, cookieOptions);
+            setCookie(REFRESH_TOKEN_KEY, newRefreshToken, cookieOptions);
+
+            return accessToken;
+          })();
         }
 
-        const response = await axios.post(`${API_URL}/v1/auth/reissue`, {
-          refreshToken,
-        });
+        // 토큰 갱신 완료 대기 (모든 요청이 같은 Promise를 기다림)
+        const accessToken = await refreshTokenPromise;
 
-        const { accessToken, refreshToken: newRefreshToken } =
-          response.data.result;
-        // 쿠키 갱신 - 서버와 동일한 도메인 설정 사용
-        const cookieOptions = {
-          path: '/',
-          domain:
-            process.env.NODE_ENV === 'production'
-              ? '.say-cheese.me'
-              : undefined,
-        };
-
-        setCookie(ACCESS_TOKEN_KEY, accessToken, cookieOptions);
-        setCookie(REFRESH_TOKEN_KEY, newRefreshToken, cookieOptions);
+        // 갱신 완료 후 Promise 초기화
+        refreshTokenPromise = null;
 
         originalRequest.headers.Authorization = `Bearer ${accessToken}`;
         return client(originalRequest);
       } catch (refreshError) {
+        // 갱신 실패 시 Promise 초기화
+        refreshTokenPromise = null;
+
         removeCookie(ACCESS_TOKEN_KEY);
         removeCookie(REFRESH_TOKEN_KEY);
         console.error('Token refresh failed:', refreshError);
