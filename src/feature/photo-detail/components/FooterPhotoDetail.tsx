@@ -58,6 +58,9 @@ export default function FooterPhotoDetail({
       queryClient.invalidateQueries({
         queryKey: [EP.album.albumPhotosLikers(albumId, photoId)],
       });
+      queryClient.invalidateQueries({
+        queryKey: [EP.album.likedPhotos(albumId)],
+      });
     } catch (e) {
       console.error(e);
       Toast.alert(`좋에요에 실패하였습니다.`);
