@@ -50,7 +50,7 @@ export default function EmojiLoading({
           const uploadedCount = useUploadingStore.getState().uploadedCount;
           useUploadingStore.getState().reset();
           if (uploadedCount > 0) {
-            Toast.alert(`총 ${uploadedCount}장을 앨범에 채웠어요.`);
+            Toast.check(`총 ${uploadedCount}장을 앨범에 채웠어요.`);
           }
         }
       };
