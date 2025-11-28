@@ -26,6 +26,7 @@ export const EP = {
     "albumInfo": (code: string) => `/v1/album/${code}/info`,
     "invitation": (code: string) => `/v1/album/${code}/invitation`,
     "participants": (code: string) => `/v1/album/${code}/participants`,
+    "albumParticipantsMe": (code: string) => `/v1/album/${code}/participants/me`,
     "albumPhoto": (code: string, photoId: number) => `/v1/album/${code}/photo/${photoId}`,
     "photos": (code: string) => `/v1/album/${code}/photos`,
     "photoDetail": (code: string, photoId: number) => `/v1/album/${code}/photos/${photoId}`,
@@ -102,7 +103,7 @@ export interface PreviewPhotoInfoSchema { "photoId": number; "imageUrl": string;
 export interface AuthExchangeResponseSchema { "accessToken": string; "refreshToken": string; "isOnboarded": boolean; "userId": number; "name": string; "email": string; }
 export interface CommonResponseAuthExchangeResponseSchema { "isSuccess"?: boolean; "code"?: number; "message"?: string; "result"?: AuthExchangeResponseSchema; }
 export interface CommonResponsePhotoPageResponseSchema { "isSuccess"?: boolean; "code"?: number; "message"?: string; "result"?: PhotoPageResponseSchema; }
-export interface PhotoListResponseSchema { "name"?: string; "photoId": number; "imageUrl"?: string; "thumbnailUrl": string; "likeCnt": number; "isLiked": boolean; "isDownloaded": boolean; "isRecentlyDownloaded": boolean; }
+export interface PhotoListResponseSchema { "name"?: string; "photoId": number; "profileImage": string; "imageUrl"?: string; "thumbnailUrl": string; "likeCnt": number; "isLiked": boolean; "isDownloaded": boolean; "isRecentlyDownloaded": boolean; }
 export interface PhotoPageResponseSchema { "responses": PhotoListResponseSchema[]; "listSize": number; "isFirst": boolean; "isLast": boolean; "hasNext": boolean; }
 export interface CommonResponsePhotoDetailResponseSchema { "isSuccess"?: boolean; "code"?: number; "message"?: string; "result"?: PhotoDetailResponseSchema; }
 export interface PhotoDetailResponseSchema { "name": string; "profileImage": string; "photoId": number; "imageUrl": string; "thumbnailUrl": string; "likesCnt": number; "isLiked": boolean; "isDownloaded": boolean; "isRecentlyDownloaded": boolean; "canDelete"?: boolean; "captureTime"?: string; "createdAt"?: string; }
@@ -147,6 +148,7 @@ export type AlbumEnterResponse = CommonResponseAlbumEnterResponseSchema["result"
 export type AlbumAlbumInfoResponse = CommonResponseAlbumInfoResponseSchema["result"];
 export type AlbumInvitationResponse = CommonResponseAlbumInvitationResponseSchema["result"];
 export type AlbumParticipantsResponse = CommonResponseAlbumParticipantResponseSchema["result"];
+export type AlbumAlbumParticipantsMeResponse = CommonResponseVoidSchema["result"];
 export type AlbumAlbumPhotoResponse = CommonResponseVoidSchema["result"];
 export type AlbumPhotosResponse = CommonResponsePhotoPageResponseSchema["result"];
 export type AlbumPhotoDetailResponse = CommonResponsePhotoDetailResponseSchema["result"];
@@ -182,6 +184,7 @@ export interface ApiReturns {
   "album.albumInfo": AlbumAlbumInfoResponse; // GET /v1/album/{code}/info
   "album.invitation": AlbumInvitationResponse; // GET /v1/album/{code}/invitation
   "album.participants": AlbumParticipantsResponse; // GET /v1/album/{code}/participants
+  "album.albumParticipantsMe": AlbumAlbumParticipantsMeResponse; // DELETE /v1/album/{code}/participants/me
   "album.albumPhoto": AlbumAlbumPhotoResponse; // DELETE /v1/album/{code}/photo/{photoId}
   "album.photos": AlbumPhotosResponse; // GET /v1/album/{code}/photos
   "album.photoDetail": AlbumPhotoDetailResponse; // GET /v1/album/{code}/photos/{photoId}
