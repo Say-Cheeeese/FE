@@ -1,6 +1,8 @@
 'use client';
 
 import { HEADER_HEIGHT } from '@/global/components/header/CustomHeader';
+import ConfirmModal from '@/global/components/modal/ConfirmModal';
+import Toast from '@/global/components/toast/Toast';
 import { convertUnicodeToEmoji } from '@/global/utils/convertEmoji';
 import {
   formatExpirationTime,
@@ -9,6 +11,7 @@ import {
 import { X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useGetAlbumInfo } from '../../hooks/useGetAlbumInfo';
+import { useAlbumExitMutation } from '../hooks/useAlbumExitMutation';
 import AlbumParticipants from './AlbumParticipants';
 
 interface ScreenAlbumSidebarProps {
@@ -20,10 +23,21 @@ export default function ScreenAlbumSidebar({
 }: ScreenAlbumSidebarProps) {
   const router = useRouter();
   const { data, isPending, isError } = useGetAlbumInfo(albumId);
+  const { mutateAsync } = useAlbumExitMutation();
 
   if (isPending) return null;
   if (isError) return null;
 
+  const handleExit = async (): Promise<void> => {
+    try {
+      await mutateAsync(albumId);
+      router.replace('/main');
+      Toast.check(`${data?.title ? `${data.title} ` : ''}앨범이 삭제됐어요.`);
+    } catch (e) {
+      console.log(e);
+      Toast.alert(`앨범 삭제를 실패하였어요.\n다시한번 시도해주세요.`);
+    }
+  };
   const isExpired = getIsExpired(data?.expiredAt);
 
   return (
@@ -57,8 +71,8 @@ export default function ScreenAlbumSidebar({
         </section>
 
         <AlbumParticipants albumId={albumId} />
-        {/* TODO : 백엔드 앨범나가기기능 구현 전까지 주석 */}
-        {/* <div className='mt-auto w-full px-5'>
+
+        <div className='mt-auto w-full px-5'>
           <ConfirmModal
             trigger={
               <button
@@ -72,9 +86,10 @@ export default function ScreenAlbumSidebar({
             description='나가더라도 내가 올린 사진은 앨범에 남아요.'
             cancelText='다음에'
             confirmText='앨범 나가기'
-            confirmClassName='bg-button-accent-fill text-white'
+            confirmClassName='bg-button-accent-fill text-white active:bg-button-accent-pressed active:text-basic-inverse'
+            onConfirm={handleExit}
           />
-        </div> */}
+        </div>
       </main>
     </>
   );

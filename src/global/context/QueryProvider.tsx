@@ -11,12 +11,12 @@ function createQueryClient() {
   return new QueryClient({
     defaultOptions: {
       queries: {
-        retry: 1,
+        retry: 0, // 실패 피드백을 빠르게 주기위해 retry를 하지않음.
         refetchOnWindowFocus: false,
         staleTime: 1000 * 30,
       },
       mutations: {
-        retry: 1,
+        retry: 0,
       },
     },
   });

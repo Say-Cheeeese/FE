@@ -82,7 +82,7 @@ export default function SectionPhotoData({
           description='지운 사진은 다시 복구할 수 없어요.'
           cancelText='취소'
           confirmText='삭제하기'
-          confirmClassName='text-text-basic-inverse bg-button-accent-fill'
+          confirmClassName='text-text-basic-inverse bg-button-accent-fill active:bg-button-accent-pressed active:text-basic-inverse'
           onConfirm={handleDeleteClick}
           trigger={
             <button
