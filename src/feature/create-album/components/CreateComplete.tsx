@@ -3,6 +3,7 @@ import { CountdownTimer } from '@/global/components/CountdownTimer';
 import LongButton from '@/global/components/LongButton';
 import { Check } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useCallback } from 'react';
 
 interface CreateCompleteProps {
   albumId: string;
@@ -11,9 +12,9 @@ interface CreateCompleteProps {
 export default function CreateComplete({ albumId }: CreateCompleteProps) {
   const router = useRouter();
 
-  const handleClick = () => {
+  const handleClick = useCallback(() => {
     router.push(`/album/upload/${albumId}`);
-  };
+  }, [router, albumId]);
 
   return (
     <div className='mt-[200px] flex flex-col items-center gap-4'>
