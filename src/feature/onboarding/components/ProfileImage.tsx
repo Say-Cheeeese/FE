@@ -1,10 +1,14 @@
 'use client';
 import { DrawerClose } from '@/components/ui/drawer';
-import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
+const BottomSheetModal = dynamic(
+  () => import('@/global/components/modal/BottomSheetModal'),
+  { ssr: false },
+);
 import { Pencil } from 'lucide-react';
 import Image from 'next/image';
 import { memo, useState } from 'react';
 import { useGetAllProfiles } from '../hooks/useGetAllProfile';
+import dynamic from 'next/dynamic';
 
 interface ProfileImageProps {
   selectedImage: string | null;

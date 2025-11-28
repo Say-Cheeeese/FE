@@ -75,7 +75,7 @@ export default function XInput({
             onBlur={() => setIsFocused(false)}
             disabled={disabled}
             maxLength={maxLength}
-            className={`bg-element-gray-lighter typo-body-lg-medium text-text-basic placeholder:text-text-subtier w-full rounded-[8px] p-4 disabled:cursor-not-allowed disabled:opacity-50 ${
+            className={`bg-element-gray-lighter typo-body-lg-medium text-text-basic placeholder:text-text-subtler w-full rounded-[8px] p-4 disabled:cursor-not-allowed disabled:opacity-50 ${
               error
                 ? 'outline-text-error outline-1'
                 : 'focus:outline-border-primary focus:outline-1'

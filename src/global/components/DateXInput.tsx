@@ -58,17 +58,17 @@ export default function DateXInput({
               type='button'
               disabled={disabled}
               className={cn(
-                'bg-element-gray-lighter typo-body-lg-medium text-text-basic placeholder:text-text-subtier flex w-full items-center justify-between rounded-[8px] p-4',
+                'bg-element-gray-lighter typo-body-lg-regular text-text-basic placeholder:text-text-subtier flex w-full items-center justify-between rounded-[8px] p-4',
                 error
                   ? 'outline-text-error outline-1'
                   : 'focus:outline-border-primary focus:outline-1',
                 disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer',
               )}
             >
-              <span className={parsedDate ? '' : 'text-gray-400'}>
+              <span className={parsedDate ? '' : 'text-text-subtler'}>
                 {parsedDate ? format(parsedDate, 'yyyy-MM-dd') : placeholder}
               </span>
-              <CalendarIcon className='ml-2 h-5 w-5 text-gray-400' />
+              <CalendarIcon className='text-text-subtler ml-2 h-5 w-5' />
             </button>
           </PopoverTrigger>
           <PopoverContent

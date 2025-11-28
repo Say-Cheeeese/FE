@@ -48,3 +48,13 @@ export const removeCookie = (
 ): void => {
   setCookie(name, '', { ...opts, days: -1 });
 };
+
+export const getEntryCookie = (): string | null => {
+  return getCookie('entry') || null;
+};
+
+export const clearEntryCookie = (): void => {
+  const domain =
+    process.env.NODE_ENV === 'production' ? '.say-cheese.me' : undefined;
+  removeCookie('entry', { path: '/', domain });
+};
