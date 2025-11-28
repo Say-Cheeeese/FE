@@ -1,6 +1,5 @@
 import { PhotoListResponseSchema } from '@/global/api/ep';
 import Spinner from '@/global/components/Spinner';
-import { DEFAULT_PROFILE_IMAGE } from '@/global/constants/images';
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
 import FooterPhotoDetail from './FooterPhotoDetail';
@@ -40,7 +39,7 @@ export default function MainPhotoDetail({
     <>
       <HeaderPhotoDetail
         name={activeImage.name}
-        profileImageUrl={DEFAULT_PROFILE_IMAGE}
+        profileImageUrl={activeImage.profileImage}
       />
       <SwiperPhotoList
         activeIndex={activeIndex}

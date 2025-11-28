@@ -28,7 +28,7 @@ export default function ScreenRoot() {
 
   return (
     <div className='scrollbar-hide flex w-full flex-col items-center overflow-y-auto px-4'>
-      <LogoHeader showLogin={true} checkAuth={false} />
+      <LogoHeader showLogin={true} />
       <span className='typo-heading-md-bold mt-6 mb-4 text-center text-[#424349]'>
         딱 7일만 열리는 특별한 <br />
         공유 앨범 서비스

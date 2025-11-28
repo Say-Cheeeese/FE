@@ -10,6 +10,7 @@ import { PhotoListResponseSchema } from '@/global/api/ep';
 import CustomHeader, {
   HEADER_HEIGHT,
 } from '@/global/components/header/CustomHeader';
+import { DEFAULT_PROFILE_IMAGE } from '@/global/constants/images';
 import { useAlbumSortStore } from '@/store/useAlbumSortStore';
 import { useAlbumTypeStore } from '@/store/useAlbumTypeStore';
 import { useSelectedPhotosStore } from '@/store/useSelectedPhotosStore';
@@ -217,6 +218,7 @@ function mapLikedPhotosToPhotoList(
     photoId: item.photoId,
     imageUrl: item.imageUrl,
     thumbnailUrl: item.thumbnailUrl,
+    profileImage: DEFAULT_PROFILE_IMAGE, // 사용되지 않는필드. 타입을위해 임시 DEFAULT 프사 넣음.
     likeCnt: item.likeCnt ?? 0,
     isLiked: item.isLiked ?? false,
     isDownloaded: item.isDownloaded,

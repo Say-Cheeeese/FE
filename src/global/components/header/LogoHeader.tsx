@@ -1,5 +1,5 @@
 'use client';
-import { useGetUserMe } from '@/feature/main/hooks/useGetUserMe';
+import { useCheckAuth } from '@/global/hooks/useCheckAuth';
 import Link from 'next/link';
 import { useCallback } from 'react';
 import SvgLogo from './svg/SvgLogo';
@@ -8,26 +8,21 @@ interface LogoHeaderProps {
   showLogin?: boolean;
   bgColor?: string;
   border?: boolean;
-  checkAuth?: boolean;
 }
 
 export default function LogoHeader({
   showLogin = true,
   bgColor = 'white',
   border = false,
-  checkAuth = true,
 }: LogoHeaderProps) {
-  const { isSuccess: isLoggedIn, isLoading } = useGetUserMe({
-    enabled: checkAuth && showLogin,
-  });
-  const shouldShowLogin =
-    showLogin && (!checkAuth || (!isLoading && !isLoggedIn));
+  const { isAuthed } = useCheckAuth();
 
   const handleLoginClick = useCallback(() => {
     if (typeof document !== 'undefined') {
       document.cookie = 'entry=main; path=/;';
     }
   }, []);
+  const shouldShowLogin = showLogin && !isAuthed;
 
   return (
     <>

@@ -25,7 +25,7 @@ export function AlbumInfoSummary({
   const emoji = convertUnicodeToEmoji(albumInfo.themeEmoji ?? DEFAULT_EMOJI);
 
   return (
-    <div className='mb-6 flex items-center gap-5'>
+    <div className='flex items-center gap-5'>
       <div className='bg-element-gray-lighter flex h-[74px] w-[74px] items-center justify-center rounded-full text-[28px]'>
         {emoji}
       </div>
