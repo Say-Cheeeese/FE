@@ -42,14 +42,15 @@ export default function SwiperPhotoList({
     return () => window.removeEventListener('resize', updateThumbOffset);
   }, [updateThumbOffset]);
 
-  useEffect(() => {
-    if (!thumbSwiper || thumbSwiper.destroyed) return;
+  // TODO : activeIndex위치 구하는 로직 고도화 필요
+  // useEffect(() => {
+  //   if (!thumbSwiper || thumbSwiper.destroyed) return;
 
-    thumbSwiper.slideTo(activeIndex);
-    requestAnimationFrame(() => {
-      thumbSwiper.setTranslate(thumbOffset);
-    });
-  }, [activeIndex, thumbOffset, thumbSwiper]);
+  //   thumbSwiper.slideTo(activeIndex);
+  //   requestAnimationFrame(() => {
+  //     thumbSwiper.setTranslate(thumbOffset);
+  //   });
+  // }, [activeIndex, thumbOffset, thumbSwiper]);
 
   return (
     <>
@@ -120,9 +121,8 @@ export default function SwiperPhotoList({
             initialSlide={activeIndex}
             slidesPerView='auto'
             spaceBetween={2}
-            slidesOffsetBefore={thumbOffset}
-            slidesOffsetAfter={thumbOffset}
             watchSlidesProgress
+            centeredSlides
             allowTouchMove={false}
             className='custom-thumb-swiper relative w-full px-3 py-2 backdrop-blur-md'
           >
