@@ -1,0 +1,233 @@
+'use client';
+import { useCheckImages } from '@/feature/create-album/hook/useCheckImages';
+import { getFilesWithCaptureTime } from '@/feature/create-album/utils/getFilesWithCaptureTime';
+import { validateImages } from '@/feature/create-album/utils/validateImages';
+import LongButton from '@/global/components/LongButton';
+import PhotoBox from '@/global/components/photo/PhotoBox';
+import Toast from '@/global/components/toast/Toast';
+import { usePresignedAndUploadToNCP } from '@/global/hooks/usePresignedAndUploadToNCP';
+import { useReportFailed } from '@/global/hooks/useReportFailed';
+import { useImageStore } from '@/store/useImageStore';
+import { useUploadingStore } from '@/store/useUploadingStore';
+import { useParams, useRouter } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
+
+type ImageWithUrl = {
+  id: string;
+  file: File;
+  url: string;
+  isOversized: boolean;
+};
+
+export default function SelectAlbumBody() {
+  const isUploaded = useUploadingStore((state) => state.isUploaded);
+  const handleUpload = async () => {
+    const selectedFiles = processedImages.filter((img) =>
+      selectedIds.has(img.id),
+    );
+    const files = selectedFiles.map((img) => img.file);
+    const filesWithCapture = await getFilesWithCaptureTime(files);
+    const fileInfos = filesWithCapture.map(({ file, captureTime }) => ({
+      fileName: file.name,
+      fileSize: file.size,
+      contentType: file.type,
+      captureTime,
+    }));
+
+    uploadMutate({
+      albumCode: albumId,
+      fileInfos,
+      files,
+    });
+  };
+  const { albumId } = useParams() as { albumId: string };
+  const { images } = useImageStore();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (images.length === 0 && albumId) {
+      router.push(`/album/upload/${albumId}`);
+    }
+  }, [images, albumId, router]);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [availableCount, setAvailableCount] = useState<number | null>(null);
+  const { mutate: checkImagesMutate } = useCheckImages();
+
+  const revokeAllObjectUrls = () => {
+    processedImages.forEach((img) => {
+      URL.revokeObjectURL(img.url);
+    });
+  };
+
+  const { mutate: reportFailed } = useReportFailed();
+
+  const { mutate: uploadMutate } = usePresignedAndUploadToNCP({
+    onSuccess: (result) => {
+      if (result.failed > 0) {
+        Toast.alert(`${result.failed}개 파일 업로드에 실패했어요`);
+        if (
+          Array.isArray(result.failedPhotoIds) &&
+          result.failedPhotoIds.length > 0
+        ) {
+          reportFailed(result.failedPhotoIds);
+        }
+      } else {
+        revokeAllObjectUrls();
+        useUploadingStore.getState().setUploaded(true);
+        useUploadingStore.getState().setUploadedCount(result.success);
+        router.replace(`/album/detail/${albumId}`);
+      }
+    },
+    onError: (e) => {
+      revokeAllObjectUrls();
+      console.error('에러 발생', e);
+      alert('사진을 업로드하는 중 오류가 발생했습니다. 다시 시도해주세요.');
+    },
+  });
+
+  const processedImages = useMemo<ImageWithUrl[]>(() => {
+    const validation = validateImages(images.map((img) => img.file));
+    const oversizedSet = new Set(validation.oversizedFiles);
+
+    return images.map((img) => ({
+      id: img.id,
+      file: img.file,
+      url: URL.createObjectURL(img.file),
+      isOversized: oversizedSet.has(img.file.name),
+    }));
+  }, [images]);
+
+  // 뒤로가기(나가기) 또는 페이지 이탈 시 object URL 해제
+  useEffect(() => {
+    const handleRevoke = () => {
+      revokeAllObjectUrls();
+    };
+    window.addEventListener('pagehide', handleRevoke);
+    window.addEventListener('popstate', handleRevoke);
+    return () => {
+      window.removeEventListener('pagehide', handleRevoke);
+      window.removeEventListener('popstate', handleRevoke);
+      revokeAllObjectUrls();
+    };
+  }, [processedImages]);
+
+  const validImages = useMemo(
+    () => processedImages.filter((img) => !img.isOversized),
+    [processedImages],
+  );
+
+  useEffect(() => {
+    if (!validImages.length) {
+      setSelectedIds(new Set());
+      return;
+    }
+    if (!availableCount || validImages.length <= availableCount) {
+      setSelectedIds(new Set(validImages.map((img) => img.id)));
+    } else {
+      setSelectedIds(
+        new Set(validImages.slice(0, availableCount).map((img) => img.id)),
+      );
+    }
+  }, [validImages, availableCount]);
+
+  useEffect(() => {
+    const files = images.map((img) => img.file);
+    if (!files.length || !albumId) return;
+
+    checkImagesMutate(
+      { files, albumId },
+      {
+        onSuccess: ({ oversizedFiles, availableCount }) => {
+          setAvailableCount(availableCount);
+          const msgs: string[] = [];
+          if (oversizedFiles.length > 0) {
+            msgs.push(
+              `6MB를 초과한 사진 ${oversizedFiles.length}장이 제외되었어요.`,
+            );
+          }
+          if (files.length > availableCount) {
+            msgs.push('지금 앨범에 담을 수 있는 만큼만 선택되었어요.');
+          }
+          if (msgs.length) Toast.alert(msgs.join('\n'));
+        },
+        onError: () => {
+          Toast.alert('이미지 검증 중 오류가 발생했어요.');
+        },
+      },
+    );
+  }, [images, albumId, checkImagesMutate]);
+
+  const toggleSelect = (
+    id: string,
+    isOversized: boolean,
+    nextSelected?: boolean,
+  ) => {
+    if (isOversized) return; // 6MB 초과는 선택 불가
+
+    setSelectedIds((prev) => {
+      const updated = new Set(prev);
+      if (typeof nextSelected === 'boolean') {
+        if (nextSelected) updated.add(id);
+        else updated.delete(id);
+        return updated;
+      }
+      if (updated.has(id)) updated.delete(id);
+      else updated.add(id);
+      return updated;
+    });
+  };
+
+  const isOverCount =
+    availableCount !== null && selectedIds.size > availableCount;
+
+  return (
+    <div className='w-full px-4'>
+      <div className='sticky top-[72px] z-40 flex justify-between bg-white pt-4 pb-3'>
+        <span className='typo-body-lg-regular text-text-subtle'>
+          총 {images.length}장
+        </span>
+        <span
+          className={`typo-body-lg-medium ${isOverCount ? 'text-text-error' : 'text-text-subtle'}`}
+        >
+          {selectedIds.size}/{availableCount}
+        </span>
+      </div>
+      <div
+        className='scrollbar-hide mb-[calc(76px+env(safe-area-inset-bottom))] grid grid-cols-3 gap-[3.5px] overflow-y-auto'
+        style={{
+          maxHeight: 'calc(100vh - 96px)',
+          touchAction: 'pan-y',
+          WebkitOverflowScrolling: 'touch',
+        }}
+      >
+        {processedImages.map((img) => {
+          const isSelected = selectedIds.has(img.id);
+          return (
+            <div key={img.id} className='relative aspect-square w-full'>
+              <PhotoBox
+                responsive={true}
+                imageSrc={img.url}
+                imageAlt={`이미지 ${img.id}`}
+                pressed={isSelected}
+                disabled={img.isOversized}
+                mode='select'
+                onPress={(next) => {
+                  toggleSelect(img.id, img.isOversized, next);
+                }}
+                onDisabledPress={() => {
+                  Toast.alert('사진이 6MB를 초과해 업로드할 수 없어요.');
+                }}
+              />
+            </div>
+          );
+        })}
+      </div>
+      <LongButton
+        text={`앨범에 ${selectedIds.size}장 채우기`}
+        noFixed={false}
+        disabled={isUploaded || isOverCount || selectedIds.size === 0}
+        onClick={handleUpload}
+      />
+    </div>
+  );
+}
