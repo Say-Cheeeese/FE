@@ -87,7 +87,9 @@ export default function RootLayout({
   m.mazeUniversalSnippetApiKey = e;
 })(window, document, 'https://snippet.maze.co/maze-universal-loader.js', '65a6039c-2384-4c2d-a8e1-546a4f859a08');`}
       </Script> */}
-      <GoogleTagManager gtmId='GTM-PH2N3NWM' />
+      {process.env.NODE_ENV === 'production' && (
+        <GoogleTagManager gtmId='GTM-PH2N3NWM' />
+      )}
       <body
         className={`${pretendard.className} min-h-screen w-full antialiased`}
       >
