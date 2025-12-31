@@ -1,5 +1,6 @@
 import KakaoProvider from '@/global/context/KakaoProvider';
 import QueryProvider from '@/global/context/QueryProvider';
+import { GoogleTagManager } from '@next/third-parties/google';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';
@@ -86,7 +87,7 @@ export default function RootLayout({
   m.mazeUniversalSnippetApiKey = e;
 })(window, document, 'https://snippet.maze.co/maze-universal-loader.js', '65a6039c-2384-4c2d-a8e1-546a4f859a08');`}
       </Script> */}
-
+      <GoogleTagManager gtmId='GTM-PH2N3NWM' />
       <body
         className={`${pretendard.className} min-h-screen w-full antialiased`}
       >
