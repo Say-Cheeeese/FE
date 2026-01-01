@@ -60,6 +60,12 @@ export default function RootLayout({
             }),
           }}
         />
+        {process.env.NODE_ENV === 'production' && (
+          <meta
+            name='google-site-verification'
+            content='1mgjA-uwRMiKC5wK5856E1uwWcuUl0UTZRuDcpfG214'
+          />
+        )}
       </head>
       {/* <Script id='maze-snippet' strategy='lazyOnload'>
         {`(function (m, a, z, e) {
