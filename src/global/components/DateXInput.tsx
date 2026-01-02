@@ -1,10 +1,13 @@
 'use client';
-import { Calendar } from '@/components/ui/calendar';
+
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from '@/components/ui/drawer';
+import { ScrollableDatePicker } from '@/components/ui/scrollable-date-picker';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
@@ -52,8 +55,8 @@ export default function DateXInput({
             {label}
           </div>
         )}
-        <Popover open={open} onOpenChange={setOpen}>
-          <PopoverTrigger asChild>
+        <Drawer open={open} onOpenChange={setOpen}>
+          <DrawerTrigger asChild>
             <button
               type='button'
               disabled={disabled}
@@ -70,25 +73,25 @@ export default function DateXInput({
               </span>
               <CalendarIcon className='text-text-subtler ml-2 h-5 w-5' />
             </button>
-          </PopoverTrigger>
-          <PopoverContent
-            align='start'
-            className='border-none bg-transparent p-0 shadow-none'
-          >
-            <Calendar
-              mode='single'
-              selected={parsedDate}
-              onSelect={(date: Date | undefined) => {
-                if (date) {
-                  onChange(format(date, 'yyyy-MM-dd'));
-                  setOpen(false);
-                }
-              }}
-              fromDate={minDate}
-              toDate={maxDate}
-            />
-          </PopoverContent>
-        </Popover>
+          </DrawerTrigger>
+          <DrawerContent className='bg-background-white'>
+            <div className='mx-auto w-full max-w-sm'>
+              <DrawerHeader>
+                <DrawerTitle className='text-center'>날짜 선택</DrawerTitle>
+              </DrawerHeader>
+              <div className='p-4 pb-8' data-vaul-no-drag>
+                <ScrollableDatePicker
+                  value={parsedDate}
+                  onChange={(date: Date) => {
+                    onChange(format(date, 'yyyy-MM-dd'));
+                  }}
+                  minDate={minDate}
+                  maxDate={maxDate}
+                />
+              </div>
+            </div>
+          </DrawerContent>
+        </Drawer>
         {(error || helperText) && (
           <div
             className={`typo-caption-sm-medium px-2 ${
