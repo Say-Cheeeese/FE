@@ -4,8 +4,7 @@ import { cn } from '@/lib/utils';
 import * as React from 'react';
 
 const ITEM_HEIGHT = 32;
-const VISIBLE_ITEMS = 7;
-const CONTAINER_HEIGHT = ITEM_HEIGHT * VISIBLE_ITEMS; // 224px
+const CONTAINER_HEIGHT = 236;
 
 interface PickerColumnProps {
   items: number[];
@@ -19,8 +18,8 @@ function PickerColumn({ items, value, label, onChange }: PickerColumnProps) {
   const isScrollingRef = React.useRef(false);
   const scrollTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
 
-  // Calculate padding to center first/last items
-  const paddingItems = Math.floor(VISIBLE_ITEMS / 2); // 3 items padding top/bottom
+  // Calculate padding to center items in selection indicator
+  const paddingTop = (CONTAINER_HEIGHT - ITEM_HEIGHT) / 2; // 102px
 
   // Scroll to value on mount and when value changes externally
   React.useEffect(() => {
@@ -72,7 +71,7 @@ function PickerColumn({ items, value, label, onChange }: PickerColumnProps) {
   };
 
   return (
-    <div className='relative h-[224px] overflow-hidden'>
+    <div className='relative h-[236px] overflow-hidden'>
       <div
         ref={containerRef}
         className='scrollbar-hide h-full overflow-y-auto scroll-smooth'
@@ -82,7 +81,7 @@ function PickerColumn({ items, value, label, onChange }: PickerColumnProps) {
         }}
       >
         {/* Top padding spacer */}
-        <div style={{ height: paddingItems * ITEM_HEIGHT }} />
+        <div style={{ height: paddingTop }} />
 
         {items.map((item, index) => (
           <div
@@ -107,7 +106,7 @@ function PickerColumn({ items, value, label, onChange }: PickerColumnProps) {
         ))}
 
         {/* Bottom padding spacer */}
-        <div style={{ height: paddingItems * ITEM_HEIGHT }} />
+        <div style={{ height: paddingTop }} />
       </div>
     </div>
   );
@@ -177,7 +176,7 @@ export function ScrollableDatePicker({
   };
 
   return (
-    <div className='relative mx-auto flex h-[224px] w-full max-w-sm items-center justify-center overflow-hidden'>
+    <div className='relative mx-auto flex h-[236px] w-full max-w-sm items-center justify-center overflow-hidden'>
       {/* Selection Indicator */}
       <div
         className='pointer-events-none absolute inset-x-4 top-1/2 z-0 h-[32px] -translate-y-1/2 rounded-[6px]'
@@ -185,7 +184,7 @@ export function ScrollableDatePicker({
       />
 
       {/* Columns Container */}
-      <div className='z-10 flex h-full w-full justify-center px-4'>
+      <div className='z-10 flex h-[236px] w-full justify-center px-6'>
         <div className='relative h-full min-w-0 flex-1'>
           <PickerColumn
             items={years}
@@ -211,6 +210,22 @@ export function ScrollableDatePicker({
           />
         </div>
       </div>
+
+      {/* Top fade gradient */}
+      <div
+        className='pointer-events-none absolute inset-x-0 top-0 z-20 h-24'
+        style={{
+          background: 'linear-gradient(to bottom, white 0%, transparent 100%)',
+        }}
+      />
+
+      {/* Bottom fade gradient */}
+      <div
+        className='pointer-events-none absolute inset-x-0 bottom-0 z-20 h-24'
+        style={{
+          background: 'linear-gradient(to top, white 0%, transparent 100%)',
+        }}
+      />
     </div>
   );
 }
