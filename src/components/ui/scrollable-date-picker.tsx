@@ -74,11 +74,8 @@ function PickerColumn({ items, value, label, onChange }: PickerColumnProps) {
     <div className='relative h-[236px] overflow-hidden'>
       <div
         ref={containerRef}
-        className='scrollbar-hide h-full overflow-y-auto scroll-smooth'
+        className='scrollbar-hide h-full snap-y snap-mandatory overflow-y-auto scroll-smooth'
         onScroll={handleScroll}
-        style={{
-          scrollSnapType: 'y mandatory',
-        }}
       >
         {/* Top padding spacer */}
         <div style={{ height: paddingTop }} />
@@ -86,11 +83,7 @@ function PickerColumn({ items, value, label, onChange }: PickerColumnProps) {
         {items.map((item, index) => (
           <div
             key={item}
-            className='flex cursor-pointer items-center justify-center'
-            style={{
-              height: ITEM_HEIGHT,
-              scrollSnapAlign: 'center',
-            }}
+            className='flex h-8 cursor-pointer snap-center items-center justify-center'
             onClick={() => handleItemClick(index)}
           >
             <div
@@ -133,7 +126,7 @@ export function ScrollableDatePicker({
 
   // Generate years
   const currentYear = new Date().getFullYear();
-  const minYear = minDate?.getFullYear() || currentYear - 50;
+  const minYear = minDate?.getFullYear() || 2020;
   const maxYear = maxDate?.getFullYear() || currentYear + 50;
 
   const years = React.useMemo(
@@ -178,10 +171,7 @@ export function ScrollableDatePicker({
   return (
     <div className='relative mx-auto flex h-[236px] w-full max-w-sm items-center justify-center overflow-hidden'>
       {/* Selection Indicator */}
-      <div
-        className='pointer-events-none absolute inset-x-4 top-1/2 z-0 h-[32px] -translate-y-1/2 rounded-[6px]'
-        style={{ backgroundColor: 'var(--color-element-gray-light, #F1F2F3)' }}
-      />
+      <div className='bg-element-gray-light pointer-events-none absolute inset-x-4 top-1/2 z-0 h-8 -translate-y-1/2 rounded-[6px]' />
 
       {/* Columns Container */}
       <div className='z-10 flex h-[236px] w-full justify-center px-6'>
@@ -212,20 +202,10 @@ export function ScrollableDatePicker({
       </div>
 
       {/* Top fade gradient */}
-      <div
-        className='pointer-events-none absolute inset-x-0 top-0 z-20 h-24'
-        style={{
-          background: 'linear-gradient(to bottom, white 0%, transparent 100%)',
-        }}
-      />
+      <div className='pointer-events-none absolute inset-x-0 top-0 z-20 h-24 bg-gradient-to-b from-white to-transparent' />
 
       {/* Bottom fade gradient */}
-      <div
-        className='pointer-events-none absolute inset-x-0 bottom-0 z-20 h-24'
-        style={{
-          background: 'linear-gradient(to top, white 0%, transparent 100%)',
-        }}
-      />
+      <div className='pointer-events-none absolute inset-x-0 bottom-0 z-20 h-24 bg-gradient-to-t from-white to-transparent' />
     </div>
   );
 }
