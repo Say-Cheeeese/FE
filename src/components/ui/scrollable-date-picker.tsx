@@ -16,7 +16,15 @@ interface PickerColumnProps {
 function PickerColumn({ items, value, label, onChange }: PickerColumnProps) {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const isScrollingRef = React.useRef(false);
-  const scrollTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
+  const scrollTimeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
+  const valueRef = React.useRef(value);
+
+  // Keep valueRef in sync with the latest value prop
+  React.useEffect(() => {
+    valueRef.current = value;
+  }, [value]);
 
   // Calculate padding to center items in selection indicator
   const paddingTop = (CONTAINER_HEIGHT - ITEM_HEIGHT) / 2; // 102px
@@ -53,7 +61,7 @@ function PickerColumn({ items, value, label, onChange }: PickerColumnProps) {
       containerRef.current.scrollTop = clampedIndex * ITEM_HEIGHT;
 
       const newValue = items[clampedIndex];
-      if (newValue !== undefined && newValue !== value) {
+      if (newValue !== undefined && newValue !== valueRef.current) {
         onChange(newValue);
       }
 
