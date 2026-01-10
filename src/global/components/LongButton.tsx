@@ -7,6 +7,7 @@ interface LongButtonProps {
   noFixed?: boolean; // true면 fixed 해제하고 가로 100% 채움
   height?: number; // 버튼 세로(px)
   safeArea?: boolean; // false면 safe-area-inset-bottom 미적용
+  className?: string; // 추가 className
 }
 
 export default function LongButton({
@@ -18,6 +19,7 @@ export default function LongButton({
   noFixed = false,
   height,
   safeArea = true,
+  className = '',
 }: LongButtonProps) {
   // noFixed가 true면 스타일 속성 없음, false면 left/right/bottom 값 적용
   const buttonStyle = {
@@ -45,7 +47,7 @@ export default function LongButton({
         disabled
           ? 'bg-button-disabled-fill text-text-disabled cursor-not-allowed'
           : 'bg-button-primary-fill text-text-primary active:bg-button-primary-fill-pressed active:text-text-primary'
-      } `}
+      } ${className}`}
     >
       {text}
     </button>
