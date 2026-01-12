@@ -1,5 +1,6 @@
 import KakaoProvider from '@/global/context/KakaoProvider';
 import QueryProvider from '@/global/context/QueryProvider';
+import GlobalClientEffects from '@/global/components/GlobalClientEffects';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';
@@ -99,6 +100,7 @@ export default function RootLayout({
         <div className='min-h-screen w-full bg-white'>
           <div className='mx-auto flex min-h-screen w-full max-w-[430px] flex-col'>
             <QueryProvider>
+              <GlobalClientEffects />
               <KakaoProvider>{children}</KakaoProvider>
             </QueryProvider>
           </div>
