@@ -16,16 +16,18 @@ import { useAlbumTypeStore } from '@/store/useAlbumTypeStore';
 import { useSelectedPhotosStore } from '@/store/useSelectedPhotosStore';
 import { useUploadingStore } from '@/store/useUploadingStore';
 import { Menu } from 'lucide-react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useShallow } from 'zustand/shallow';
 import { photoSortToApiSorting } from '../constants/photoSort';
 import { useGetAlbumAvailableCount } from '../hooks/useGetAlbumAvailableCount';
 import { useGetAlbumInvitation } from '../hooks/useGetAlbumInvitation';
+import sidebarComponent from '../sidebar/components/ScreenAlbumSidebar';
 import AlbumBottomActions from './AlbumBottomActions';
 import AlbumInfos from './AlbumInfos';
 import AlbumPhotoSection from './AlbumPhotoSection';
+
+const ScreenAlbumSidebar = sidebarComponent;
 
 export type AlbumDetailMode = 'select' | 'default';
 
@@ -41,6 +43,7 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
   const [mode, setMode] = useState<AlbumDetailMode>('default');
   const [isAlbumInfosHidden, setIsAlbumInfosHidden] = useState(false);
   const [selectionResetKey, setSelectionResetKey] = useState(0);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { sortType, setSortType } = useAlbumSortStore(
     useShallow((state) => ({
       sortType: state.sortType,
@@ -170,9 +173,9 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
         title={isAlbumInfosHidden ? (invitationData?.title ?? '') : ''}
         rightContent={
           <div className='flex gap-4'>
-            <Link href={`/album/detail/${albumId}/sidebar`}>
+            <button onClick={() => setIsSidebarOpen(true)} type='button'>
               <Menu width={24} height={24} color='var(--color-icon-basic)' />
-            </Link>
+            </button>
           </div>
         }
       />
@@ -205,6 +208,11 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
         selectedCount={selectedPhotos.length}
         totalPhotoCount={totalPhotoCount}
         isLoading={isLoading}
+      />
+      <ScreenAlbumSidebar
+        albumId={albumId}
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
       />
     </>
   );
