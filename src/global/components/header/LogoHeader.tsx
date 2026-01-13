@@ -1,6 +1,8 @@
 'use client';
+import { GA_EVENTS } from '@/global/constants/gaEvents';
 import { useCheckAuth } from '@/global/hooks/useCheckAuth';
-import Link from 'next/link';
+import { trackGaEvent } from '@/global/utils/trackGaEvent';
+import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
 import SvgLogo from './svg/SvgLogo';
 
@@ -15,13 +17,18 @@ export default function LogoHeader({
   bgColor = 'white',
   border = false,
 }: LogoHeaderProps) {
+  const router = useRouter();
   const { isAuthed } = useCheckAuth();
 
   const handleLoginClick = useCallback(() => {
     if (typeof document !== 'undefined') {
       document.cookie = 'entry=main; path=/;';
     }
-  }, []);
+
+    trackGaEvent(GA_EVENTS.click_login, { entry_source: 'landing_header' });
+    router.push('/login');
+  }, [router]);
+
   const shouldShowLogin = showLogin && !isAuthed;
 
   return (
@@ -33,13 +40,15 @@ export default function LogoHeader({
         <div className='mx-auto flex h-18 w-full max-w-[430px] items-center justify-between px-5'>
           <SvgLogo />
           {shouldShowLogin && (
-            <Link href='/login' onClick={handleLoginClick}>
-              <div className='cursor-pointer px-3 py-2.5'>
-                <span className='typo-body-sm-medium text-text-basic'>
-                  로그인
-                </span>
-              </div>
-            </Link>
+            <button
+              type='button'
+              className='cursor-pointer px-3 py-2.5'
+              onClick={handleLoginClick}
+            >
+              <span className='typo-body-sm-medium text-text-basic'>
+                로그인
+              </span>
+            </button>
           )}
         </div>
       </div>

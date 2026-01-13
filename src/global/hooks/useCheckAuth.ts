@@ -1,6 +1,7 @@
 'use client';
 
-import { EP } from '@/global/api/ep';
+import { ApiReturns, EP } from '@/global/api/ep';
+import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { api } from '../utils/api';
 
@@ -17,6 +18,7 @@ export function useCheckAuth({
 }: UseCheckAuthOptions = {}): {
   isAuthed: boolean | null;
 } {
+  const queryClient = useQueryClient();
   const [isAuthed, setIsAuthed] = useState<boolean | null>(null);
 
   useEffect(() => {
@@ -24,10 +26,12 @@ export function useCheckAuth({
 
     const checkAuth = async () => {
       try {
-        const res = await api.get({
+        const res = await api.get<ApiReturns['user.userMe']>({
           path: EP.user.userMe(),
           redirectOnAuthError: false,
         });
+
+        queryClient.setQueryData([EP.user.userMe()], res.result);
 
         if (cancelled) return;
 

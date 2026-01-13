@@ -1,7 +1,9 @@
 'use client';
 import LogoHeader from '@/global/components/header/LogoHeader';
 import LongButton from '@/global/components/LongButton';
+import { GA_EVENTS } from '@/global/constants/gaEvents';
 import { useCheckAuth } from '@/global/hooks/useCheckAuth';
+import { trackGaEvent } from '@/global/utils/trackGaEvent';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -21,6 +23,8 @@ export default function ScreenRoot() {
     if (typeof document !== 'undefined') {
       document.cookie = 'entry=create-album; path=/;';
     }
+
+    trackGaEvent(GA_EVENTS.landing_footer, { entry_source: 'landing_header' });
     router.push('/login');
   }, [router]);
 

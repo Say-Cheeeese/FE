@@ -6,11 +6,14 @@ import {
   useAlbumPhotosLikedInfiniteQuery,
   type AlbumPhotosLikedItem,
 } from '@/feature/photo-detail/hooks/useAlbumPhotosLikedInfiniteQuery';
+import { useGetAlbumInform } from '@/feature/upload/hooks/useGetAlbumInform';
 import { PhotoListResponseSchema } from '@/global/api/ep';
 import CustomHeader, {
   HEADER_HEIGHT,
 } from '@/global/components/header/CustomHeader';
+import { GA_EVENTS } from '@/global/constants/gaEvents';
 import { DEFAULT_PROFILE_IMAGE } from '@/global/constants/images';
+import { trackGaEvent } from '@/global/utils/trackGaEvent';
 import { useAlbumSortStore } from '@/store/useAlbumSortStore';
 import { useAlbumTypeStore } from '@/store/useAlbumTypeStore';
 import { useSelectedPhotosStore } from '@/store/useSelectedPhotosStore';
@@ -89,6 +92,7 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
     // 좋아요 누른것 실시간으로 반영되게 매번 호출
     refetchOnMount: 'always',
   });
+  const { data: albumInformData } = useGetAlbumInform({ code: albumId });
 
   const likedPhotosQuery = useAlbumPhotosLikedInfiniteQuery({
     code: albumId,
@@ -115,6 +119,14 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
     ? likedPhotosQuery.isFetchingNextPage
     : defaultPhotosQuery.isFetchingNextPage;
   const isLoading = defaultPhotosQuery.isLoading;
+
+  useEffect(() => {
+    if (albumInformData?.myRole === 'MAKER') {
+      trackGaEvent(GA_EVENTS.complete_album_joined, { access_type: 'creator' });
+    } else if (albumInformData?.myRole === 'GUEST') {
+      trackGaEvent(GA_EVENTS.complete_album_joined, { access_type: 'member' });
+    }
+  }, [albumInformData?.myRole]);
 
   useEffect(() => {
     const target = albumInfosRef.current;
