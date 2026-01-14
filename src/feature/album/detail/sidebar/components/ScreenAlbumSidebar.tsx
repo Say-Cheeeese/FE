@@ -3,13 +3,16 @@
 import { HEADER_HEIGHT } from '@/global/components/header/CustomHeader';
 import ConfirmModal from '@/global/components/modal/ConfirmModal';
 import Toast from '@/global/components/toast/Toast';
+import { GA_EVENTS } from '@/global/constants/gaEvents';
 import { convertUnicodeToEmoji } from '@/global/utils/convertEmoji';
 import {
   formatExpirationTime,
   getIsExpired,
 } from '@/global/utils/time/formatExpirationTime';
+import { trackGaEvent } from '@/global/utils/trackGaEvent';
 import { X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 import { useGetAlbumInfo } from '../../hooks/useGetAlbumInfo';
 import { useAlbumExitMutation } from '../hooks/useAlbumExitMutation';
 import AlbumParticipants from './AlbumParticipants';
@@ -24,6 +27,10 @@ export default function ScreenAlbumSidebar({
   const router = useRouter();
   const { data, isPending, isError } = useGetAlbumInfo(albumId);
   const { mutateAsync } = useAlbumExitMutation();
+
+  useEffect(() => {
+    trackGaEvent(GA_EVENTS.view_albumsidebar);
+  }, []);
 
   if (isPending) return null;
   if (isError) return null;

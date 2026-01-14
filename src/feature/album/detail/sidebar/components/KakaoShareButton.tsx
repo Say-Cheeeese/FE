@@ -1,12 +1,25 @@
+import { AlbumParticipantResponseSchema } from '@/global/api/ep';
+import { GA_EVENTS } from '@/global/constants/gaEvents';
 import { shareKakao } from '@/global/utils/shareKakao';
+import { trackGaEvent } from '@/global/utils/trackGaEvent';
 import Image from 'next/image';
 
 interface KakaoShareButtonProps {
   albumId: string;
+  accessType: AlbumParticipantResponseSchema['myRole'];
 }
 
-export default function KakaoShareButton({ albumId }: KakaoShareButtonProps) {
+export default function KakaoShareButton({
+  albumId,
+  accessType,
+}: KakaoShareButtonProps) {
   const handleClick = (): void => {
+    trackGaEvent(GA_EVENTS.click_invite_complete, {
+      album_id: albumId,
+      access_type: accessType === 'MAKER' ? 'creator' : 'member',
+      button_type: 'kakaotalk',
+    });
+
     shareKakao({
       title: '앨범에 초대해요',
       description: '치이이즈: 추억은 따끈할 때 제맛',

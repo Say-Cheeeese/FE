@@ -9,6 +9,7 @@ import { formatExpirationTime } from '@/global/utils/time/formatExpirationTime';
 import { trackGaEvent } from '@/global/utils/trackGaEvent';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 interface LetterContentProps {
   albumId: string;
@@ -18,6 +19,10 @@ export default function LetterContent({ albumId }: LetterContentProps) {
   const router = useRouter();
   const { data, isPending, isError } = useGetAlbumInvitation(albumId);
   const { isAuthed } = useCheckAuth();
+
+  useEffect(() => {
+    trackGaEvent(GA_EVENTS.view_invited);
+  }, []);
 
   if (isPending) return null;
   if (isError) return null;

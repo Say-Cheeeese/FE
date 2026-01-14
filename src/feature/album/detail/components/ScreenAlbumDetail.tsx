@@ -121,10 +121,17 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
   const isLoading = defaultPhotosQuery.isLoading;
 
   useEffect(() => {
+    // albumInformData 를 받고 이벤트 로깅을 해야함.
     if (albumInformData?.myRole === 'MAKER') {
-      trackGaEvent(GA_EVENTS.complete_album_joined, { access_type: 'creator' });
+      trackGaEvent(GA_EVENTS.view_album, {
+        album_id: albumId,
+        access_type: 'creator',
+      });
     } else if (albumInformData?.myRole === 'GUEST') {
-      trackGaEvent(GA_EVENTS.complete_album_joined, { access_type: 'member' });
+      trackGaEvent(GA_EVENTS.view_album, {
+        album_id: albumId,
+        access_type: 'member',
+      });
     }
   }, [albumInformData?.myRole]);
 
@@ -147,6 +154,8 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
       observer.disconnect();
     };
   }, []);
+
+  useEffect(() => {}, []);
 
   useEffect(() => {
     if (mode === 'select') return;

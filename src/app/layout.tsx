@@ -1,6 +1,6 @@
+import GlobalClientEffects from '@/global/components/GlobalClientEffects';
 import KakaoProvider from '@/global/context/KakaoProvider';
 import QueryProvider from '@/global/context/QueryProvider';
-import GlobalClientEffects from '@/global/components/GlobalClientEffects';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';

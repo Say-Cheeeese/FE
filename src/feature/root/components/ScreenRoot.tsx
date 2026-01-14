@@ -7,7 +7,7 @@ import { trackGaEvent } from '@/global/utils/trackGaEvent';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import SelectMenu from './SelectMenu';
 
 const RendingFooter = dynamic(() => import('./RendingFooter'), { ssr: false });
@@ -24,11 +24,15 @@ export default function ScreenRoot() {
       document.cookie = 'entry=create-album; path=/;';
     }
 
-    trackGaEvent(GA_EVENTS.landing_footer, { entry_source: 'landing_header' });
+    trackGaEvent(GA_EVENTS.click_login, { entry_source: 'landing_header' });
     router.push('/login');
   }, [router]);
 
   useCheckAuth({ onAuthed: () => router.push('/main') });
+
+  useEffect(() => {
+    trackGaEvent(GA_EVENTS.view_landing);
+  }, []);
 
   return (
     <div className='scrollbar-hide flex w-full flex-col items-center overflow-y-auto px-4'>
