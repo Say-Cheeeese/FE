@@ -155,8 +155,6 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
     };
   }, []);
 
-  useEffect(() => {}, []);
-
   useEffect(() => {
     if (mode === 'select') return;
     if (selectedPhotos.length === 0) return;

@@ -19,7 +19,7 @@ export default function AlbumParticipants({ albumId }: AlbumParticipantsProps) {
   const accessType = data.myRole;
 
   const handleClick = () => {
-    if (!accessType) {
+    if (accessType) {
       trackGaEvent(GA_EVENTS.click_invite, {
         album_id: albumId,
         access_type: accessType === 'MAKER' ? 'creator' : 'member',
