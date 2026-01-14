@@ -17,9 +17,12 @@ export function useCheckAuth({
   onUnauthed,
 }: UseCheckAuthOptions = {}): {
   isAuthed: boolean | null;
+  userId: number | null;
 } {
   const queryClient = useQueryClient();
+
   const [isAuthed, setIsAuthed] = useState<boolean | null>(null);
+  const [userId, setUserId] = useState<number | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -35,8 +38,11 @@ export function useCheckAuth({
 
         if (cancelled) return;
 
-        if (res.code === 200) {
+        if (res.code === 200 && res.result) {
+          const _userId = res.result.userId;
+
           setIsAuthed(true);
+          setUserId(_userId);
           onAuthed?.();
         }
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -47,8 +53,8 @@ export function useCheckAuth({
 
         if (status === 401) {
           setIsAuthed(false);
+          setUserId(null);
           onUnauthed?.();
-          return;
         }
       }
     };
@@ -60,5 +66,5 @@ export function useCheckAuth({
     };
   }, [onAuthed, onUnauthed]);
 
-  return { isAuthed };
+  return { isAuthed, userId };
 }

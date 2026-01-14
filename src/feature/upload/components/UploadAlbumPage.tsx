@@ -28,6 +28,7 @@ export default function UploadAlbumPage({ albumId }: UploadAlbumPageProps) {
   const cards = MOCK_CARDS; // ✅ 나중에 API 결과로 교체 예정
   const availableCount =
     (data?.maxParticipantCount ?? 0) - (data?.currentParticipantCount ?? 0);
+
   return (
     <div className='flex flex-col'>
       <CustomHeader title='앨범 채우기' border={false} />

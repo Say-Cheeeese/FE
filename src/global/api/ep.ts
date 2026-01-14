@@ -22,6 +22,7 @@ export const EP = {
     "create": () => `/v1/album`,
     "availableCount": (code: string) => `/v1/album/${code}/available-count`,
     "albumBest-4cut": (code: string) => `/v1/album/${code}/best-4cut`,
+    "albumBlacklist": (code: string) => `/v1/album/${code}/blacklist/${targetUserId}`,
     "enter": (code: string) => `/v1/album/${code}/enter`,
     "albumInfo": (code: string) => `/v1/album/${code}/info`,
     "invitation": (code: string) => `/v1/album/${code}/invitation`,
@@ -77,7 +78,7 @@ export interface AuthReissueRequestSchema { "refreshToken": string; }
 export interface AuthReissueResponseSchema { "accessToken": string; "refreshToken": string; }
 export interface CommonResponseAuthReissueResponseSchema { "isSuccess"?: boolean; "code"?: number; "message"?: string; "result"?: AuthReissueResponseSchema; }
 export interface AlbumCreationRequestSchema { "themeEmoji": string; "title": string; "participant": number; "eventDate": string; }
-export interface AlbumCreationResponseSchema { "themeEmoji": string; "title": string; "eventDate": string; "currentPhotoCnt": number; "code": string; }
+export interface AlbumCreationResponseSchema { "themeEmoji": string; "title": string; "eventDate": string; "createdAt": string; "isFirst": boolean; "currentPhotoCnt": number; "code": string; }
 export interface CommonResponseAlbumCreationResponseSchema { "isSuccess"?: boolean; "code"?: number; "message"?: string; "result"?: AlbumCreationResponseSchema; }
 export type AlbumEnterResponseSchema = unknown;
 export interface AlbumMakerInfoSchema { "makerName": string; "makerProfileImage": string; }
@@ -92,7 +93,7 @@ export interface CommonResponseUserProfileImageResponseSchema { "isSuccess"?: bo
 export interface ProfileImageOptSchema { "imageCode"?: string; "profileImageUrl"?: string; }
 export interface UserProfileImageResponseSchema { "opts"?: ProfileImageOptSchema[]; }
 export interface CommonResponseUserInfoResponseSchema { "isSuccess"?: boolean; "code"?: number; "message"?: string; "result"?: UserInfoResponseSchema; }
-export interface UserInfoResponseSchema { "profileImage": string; "email": string; "name": string; "albumCount": number; "photoCount": number; "likesCount": number; }
+export interface UserInfoResponseSchema { "userId": number; "profileImage": string; "email": string; "name": string; "albumCount": number; "photoCount": number; "likesCount": number; }
 export interface CommonResponseStringSchema { "isSuccess"?: boolean; "code"?: number; "message"?: string; "result"?: string; }
 export type Cheese4cutFinalResponseSchema = Cheese4cutResponseSchema & { "isFinalized"?: boolean; "photos"?: FinalPhotoInfoSchema[]; };
 export type Cheese4cutPreviewResponseSchema = Cheese4cutResponseSchema & { "isFinalized"?: boolean; "previewPhotos"?: PreviewPhotoInfoSchema[]; "uniqueLikesCount"?: number; "participant"?: number; "myRole"?: "MAKER" | "GUEST" | "BLACK"; };
@@ -115,7 +116,7 @@ export interface PhotoLikedPageResponseSchema { "responses": PhotoLikedResponseS
 export interface PhotoLikedResponseSchema { "name"?: string; "photoId": number; "imageUrl"?: string; "thumbnailUrl": string; "likeCnt"?: number; "isLiked"?: boolean; "isDownloaded": boolean; "isRecentlyDownloaded": boolean; }
 export interface AlbumParticipantResponseSchema { "isExpired": boolean; "title": string; "themeEmoji": string; "eventDate": string; "expiredAt": string; "maxParticipantCount": number; "currentParticipantCount": number; "participants": ParticipantInfoSchema[]; "myRole"?: "MAKER" | "GUEST" | "BLACK"; }
 export interface CommonResponseAlbumParticipantResponseSchema { "isSuccess"?: boolean; "code"?: number; "message"?: string; "result"?: AlbumParticipantResponseSchema; }
-export interface ParticipantInfoSchema { "name": string; "profileImage": string; "role": "MAKER" | "GUEST" | "BLACK"; "isMe": boolean; }
+export interface ParticipantInfoSchema { "userId": number; "name": string; "profileImage": string; "role": "MAKER" | "GUEST" | "BLACK"; "isMe": boolean; }
 export interface AlbumInvitationResponseSchema { "title": string; "themeEmoji": string; "eventDate": string; "expiredAt": string; "makerName": string; "makerProfileImage": string; "isExpired": boolean; }
 export interface CommonResponseAlbumInvitationResponseSchema { "isSuccess"?: boolean; "code"?: number; "message"?: string; "result"?: AlbumInvitationResponseSchema; }
 export interface AlbumInfoResponseSchema { "makerId"?: number; "name"?: string; "title"?: string; "themeEmoji"?: string; "participant"?: number; "currentParticipant"?: number; "eventDate"?: string; "currentPhotoCnt"?: number; "expiredAt"?: string; }
@@ -144,6 +145,7 @@ export type UserUserProfileImagesResponse = CommonResponseUserProfileImageRespon
 export type AlbumCreateResponse = CommonResponseAlbumCreationResponseSchema["result"];
 export type AlbumAvailableCountResponse = CommonResponseUploadAvailableCountResponseSchema["result"];
 export type AlbumAlbumBest4cutResponse = CommonResponseListAlbumBest4CutResponseSchema["result"];
+export type AlbumAlbumBlacklistResponse = CommonResponseVoidSchema["result"];
 export type AlbumEnterResponse = CommonResponseAlbumEnterResponseSchema["result"];
 export type AlbumAlbumInfoResponse = CommonResponseAlbumInfoResponseSchema["result"];
 export type AlbumInvitationResponse = CommonResponseAlbumInvitationResponseSchema["result"];
@@ -180,6 +182,7 @@ export interface ApiReturns {
   "album.create": AlbumCreateResponse; // POST /v1/album
   "album.availableCount": AlbumAvailableCountResponse; // GET /v1/album/{code}/available-count
   "album.albumBest-4cut": AlbumAlbumBest4cutResponse; // GET /v1/album/{code}/best-4cut
+  "album.albumBlacklist": AlbumAlbumBlacklistResponse; // POST /v1/album/{code}/blacklist/{targetUserId}
   "album.enter": AlbumEnterResponse; // POST /v1/album/{code}/enter
   "album.albumInfo": AlbumAlbumInfoResponse; // GET /v1/album/{code}/info
   "album.invitation": AlbumInvitationResponse; // GET /v1/album/{code}/invitation

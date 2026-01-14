@@ -2,10 +2,18 @@
 
 import { useEffect } from 'react';
 import { GA_EVENTS } from '../constants/gaEvents';
-import { trackGaEvent } from '../utils/trackGaEvent';
+import { useCheckAuth } from '../hooks/useCheckAuth';
+import { trackGaEvent, trackGaSet } from '../utils/trackGaEvent';
 
 export default function GlobalClientEffects() {
+  const { userId } = useCheckAuth();
+
   useEffect(() => {
+    // user_id 전역적으로 세팅
+    if (userId) {
+      trackGaSet('user_id', `${userId}`);
+    }
+
     const url = new URL(window.location.href);
     const authType = url.searchParams.get('authType');
 
