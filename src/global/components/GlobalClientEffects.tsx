@@ -9,11 +9,6 @@ export default function GlobalClientEffects() {
   const { userId } = useCheckAuth();
 
   useEffect(() => {
-    // user_id 전역적으로 세팅
-    if (userId) {
-      trackGaSet('user_id', `${userId}`);
-    }
-
     const url = new URL(window.location.href);
     const authType = url.searchParams.get('authType');
 
@@ -29,6 +24,12 @@ export default function GlobalClientEffects() {
     url.searchParams.delete('authType');
     window.history.replaceState({}, '', url.toString());
   }, []);
+
+  useEffect(() => {
+    if (userId) {
+      trackGaSet('user_id', `${userId}`);
+    }
+  }, [userId]);
 
   return null;
 }
