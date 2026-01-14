@@ -1,12 +1,15 @@
 'use client';
 import { useGetAlbumInvitation } from '@/feature/album/detail/hooks/useGetAlbumInvitation';
 import Toast from '@/global/components/toast/Toast';
+import { GA_EVENTS } from '@/global/constants/gaEvents';
 import { useCheckAuth } from '@/global/hooks/useCheckAuth';
 import { buildQuery } from '@/global/utils/buildQuery';
 import { convertUnicodeToEmoji } from '@/global/utils/convertEmoji';
 import { formatExpirationTime } from '@/global/utils/time/formatExpirationTime';
+import { trackGaEvent } from '@/global/utils/trackGaEvent';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 interface LetterContentProps {
   albumId: string;
@@ -17,11 +20,17 @@ export default function LetterContent({ albumId }: LetterContentProps) {
   const { data, isPending, isError } = useGetAlbumInvitation(albumId);
   const { isAuthed } = useCheckAuth();
 
+  useEffect(() => {
+    trackGaEvent(GA_EVENTS.view_invited);
+  }, []);
+
   if (isPending) return null;
   if (isError) return null;
   if (!data) return null;
 
   const handleInviteAccept = async () => {
+    trackGaEvent(GA_EVENTS.click_login, { entry_source: 'invitation' });
+
     try {
       if (isAuthed) {
         router.push(`/photo/entry/${albumId}${buildQuery({ isInvite: true })}`);

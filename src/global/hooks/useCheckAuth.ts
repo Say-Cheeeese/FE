@@ -1,6 +1,7 @@
 'use client';
 
-import { EP } from '@/global/api/ep';
+import { ApiReturns, EP } from '@/global/api/ep';
+import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { api } from '../utils/api';
 
@@ -16,23 +17,32 @@ export function useCheckAuth({
   onUnauthed,
 }: UseCheckAuthOptions = {}): {
   isAuthed: boolean | null;
+  userId: number | null;
 } {
+  const queryClient = useQueryClient();
+
   const [isAuthed, setIsAuthed] = useState<boolean | null>(null);
+  const [userId, setUserId] = useState<number | null>(null);
 
   useEffect(() => {
     let cancelled = false;
 
     const checkAuth = async () => {
       try {
-        const res = await api.get({
+        const res = await api.get<ApiReturns['user.userMe']>({
           path: EP.user.userMe(),
           redirectOnAuthError: false,
         });
 
+        queryClient.setQueryData([EP.user.userMe()], res.result);
+
         if (cancelled) return;
 
-        if (res.code === 200) {
+        if (res.code === 200 && res.result) {
+          const _userId = res.result.userId;
+
           setIsAuthed(true);
+          setUserId(_userId);
           onAuthed?.();
         }
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -43,8 +53,8 @@ export function useCheckAuth({
 
         if (status === 401) {
           setIsAuthed(false);
+          setUserId(null);
           onUnauthed?.();
-          return;
         }
       }
     };
@@ -56,5 +66,5 @@ export function useCheckAuth({
     };
   }, [onAuthed, onUnauthed]);
 
-  return { isAuthed };
+  return { isAuthed, userId };
 }

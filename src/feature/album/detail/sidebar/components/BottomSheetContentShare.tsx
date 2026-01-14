@@ -1,3 +1,4 @@
+import { AlbumParticipantResponseSchema } from '@/global/api/ep';
 import CopyShareButton from './CopyShareButton';
 import KakaoShareButton from './KakaoShareButton';
 import MoreShareButton from './MoreShareButton';
@@ -5,10 +6,12 @@ import QrcodeShareButton from './QrcodeShareButton';
 
 interface BottomSheetContentShareProps {
   albumId: string;
+  accessType: AlbumParticipantResponseSchema['myRole'];
 }
 
 export default function BottomSheetContentShare({
   albumId,
+  accessType,
 }: BottomSheetContentShareProps) {
   return (
     <div className='mx-6 mt-6 mb-10'>
@@ -21,10 +24,10 @@ export default function BottomSheetContentShare({
         </span>
       </div>
       <div className='typo-body-sm-medium text-text-subtle flex justify-between'>
-        <KakaoShareButton albumId={albumId} />
-        <QrcodeShareButton albumId={albumId} />
-        <CopyShareButton albumId={albumId} />
-        <MoreShareButton albumId={albumId} />
+        <KakaoShareButton albumId={albumId} accessType={accessType} />
+        <QrcodeShareButton albumId={albumId} accessType={accessType} />
+        <CopyShareButton albumId={albumId} accessType={accessType} />
+        <MoreShareButton albumId={albumId} accessType={accessType} />
       </div>
     </div>
   );
