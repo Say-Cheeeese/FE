@@ -69,7 +69,7 @@ export default function ScreenAlbumSidebar({
   return (
     <>
       <div
-        className={`bg-background-white fixed inset-0 z-[60] ${isClosing ? 'animate-slide-out-right' : 'animate-slide-in-right'}`}
+        className={`bg-background-white fixed inset-0 z-40 ${isClosing ? 'animate-slide-out-right' : 'animate-slide-in-right'}`}
       >
         <main
           className='mx-auto flex h-screen w-full max-w-[430px] flex-col bg-[#f7f7f8] px-5 pb-5'
@@ -109,7 +109,7 @@ export default function ScreenAlbumSidebar({
                 trigger={
                   <button
                     type='button'
-                    className='text-text-error bg-button-tertiary-fill typo-body-lg-semibold w-full rounded-[8px] py-3'
+                    className='text-text-error bg-background-white typo-body-lg-semibold w-full rounded-[8px] py-3'
                   >
                     앨범 나가기
                   </button>
