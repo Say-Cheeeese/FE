@@ -45,7 +45,7 @@ export default function AlbumParticipants({ albumId }: AlbumParticipantsProps) {
             <button
               onClick={() => setIsEditMode(false)}
               type='button'
-              className='typo-body-sm-medium text-text-primary bg-button-primary-fill rounded-[4px] px-4 py-1.5'
+              className='typo-body-sm-medium text-text-subtle bg-button-tertiary-fill rounded-[4px] px-3 py-1.5'
             >
               완료
             </button>
