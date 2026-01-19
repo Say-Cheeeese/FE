@@ -2,8 +2,6 @@ import { useGetAlbumInform } from '@/feature/upload/hooks/useGetAlbumInform';
 import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
 import { Plus } from 'lucide-react';
 import { useState } from 'react';
-import { GA_EVENTS } from '@/global/constants/gaEvents';
-import { trackGaEvent } from '@/global/utils/trackGaEvent';
 import BottomSheetContentShare from './BottomSheetContentShare';
 import ItemParticipant from './ItemParticipant';
 
@@ -24,6 +22,8 @@ export default function AlbumParticipants({ albumId }: AlbumParticipantsProps) {
     ? data.participants?.filter((p) => !p.isMe)
     : data.participants;
 
+  const isMaker = data.myRole === 'MAKER';
+
   return (
     <section className='bg-background-white rounded-[12px] px-5 pt-5 pb-7'>
       <div className='mb-3.5 flex items-center justify-between gap-3'>
@@ -34,7 +34,7 @@ export default function AlbumParticipants({ albumId }: AlbumParticipantsProps) {
           </p>
         </div>
         <div className='flex gap-2'>
-          {!data.isExpired && (
+          {!data.isExpired && isMaker && (
             <button
               onClick={() => setIsEditMode(!isEditMode)}
               type='button'
@@ -65,7 +65,7 @@ export default function AlbumParticipants({ albumId }: AlbumParticipantsProps) {
           >
             <BottomSheetContentShare
               albumId={albumId}
-              accessType={accessType}
+              accessType={data.myRole}
             />
           </BottomSheetModal>
         )}
