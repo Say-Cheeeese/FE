@@ -52,14 +52,13 @@ export default function ScreenAlbumSidebar({
       await mutateAsync(albumId);
       setIsClosing(true);
       setTimeout(() => {
-        setIsClosing(false);
         router.replace('/main');
         Toast.check(
           `${informData?.title ? `${informData.title} ` : ''}앨범이 삭제됐어요.`,
         );
       }, 400);
     } catch (e) {
-      console.log(e);
+      console.error(e);
       Toast.alert(`앨범 삭제를 실패하였어요.\n다시한번 시도해주세요.`);
     }
   };

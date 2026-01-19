@@ -32,22 +32,13 @@ export default function AlbumParticipants({ albumId }: AlbumParticipantsProps) {
           </p>
         </div>
         <div className='flex gap-2'>
-          {!data.isExpired && !isEditMode && (
+          {!data.isExpired && (
             <button
-              onClick={() => setIsEditMode(true)}
+              onClick={() => setIsEditMode(!isEditMode)}
               type='button'
               className='typo-body-sm-medium text-text-subtle bg-button-tertiary-fill rounded-[4px] px-3 py-1.5'
             >
-              편집
-            </button>
-          )}
-          {isEditMode && (
-            <button
-              onClick={() => setIsEditMode(false)}
-              type='button'
-              className='typo-body-sm-medium text-text-subtle bg-button-tertiary-fill rounded-[4px] px-3 py-1.5'
-            >
-              완료
+              {isEditMode ? '완료' : '편집'}
             </button>
           )}
         </div>
@@ -73,18 +64,16 @@ export default function AlbumParticipants({ albumId }: AlbumParticipantsProps) {
             <BottomSheetContentShare albumId={albumId} />
           </BottomSheetModal>
         )}
-        {filteredParticipants?.map(
-          ({ isMe, name, profileImage, role }, index) => (
-            <ItemParticipant
-              key={index}
-              name={name ?? '참여자'}
-              isMe={isMe}
-              profileImage={profileImage}
-              role={role}
-              isEditMode={isEditMode}
-            />
-          ),
-        )}
+        {filteredParticipants?.map(({ isMe, name, profileImage, role }) => (
+          <ItemParticipant
+            key={`${name}-${profileImage}-${role}`}
+            name={name ?? '참여자'}
+            isMe={isMe}
+            profileImage={profileImage}
+            role={role}
+            isEditMode={isEditMode}
+          />
+        ))}
       </div>
     </section>
   );
