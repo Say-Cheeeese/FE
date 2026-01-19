@@ -1,3 +1,4 @@
+import Toast from '@/global/components/toast/Toast';
 import { DEFAULT_PROFILE_IMAGE } from '@/global/constants/images';
 
 interface ItemParticipantProps {
@@ -5,6 +6,7 @@ interface ItemParticipantProps {
   profileImage?: string;
   role?: 'MAKER' | 'GUEST' | 'BLACK';
   isMe?: boolean;
+  isEditMode?: boolean;
 }
 
 export default function ItemParticipant({
@@ -12,7 +14,12 @@ export default function ItemParticipant({
   name,
   isMe,
   role,
+  isEditMode,
 }: ItemParticipantProps) {
+  const handleKick = () => {
+    Toast.check('현재 서비스 준비 중인 기능입니다.');
+  };
+
   return (
     <div className={`flex items-center justify-between gap-3 py-2`}>
       <div className='flex items-center gap-3 overflow-hidden'>
@@ -25,18 +32,27 @@ export default function ItemParticipant({
         />
         <div className='typo-body-lg-semibold text-text-basic truncate'>
           {name}
-          {role === 'MAKER' && (
-            <span className='typo-caption-sm-medium text-text-secondary bg-element-primary-lighter ml-2 rounded-full px-2 py-0.5'>
-              메이커
-            </span>
-          )}
           {isMe && (
             <span className='typo-caption-sm-medium text-text-subtler bg-element-gray-light ml-2 rounded-full px-[3.5px] py-0.5'>
               나
             </span>
           )}
+          {role === 'MAKER' && (
+            <span className='typo-caption-sm-medium text-text-secondary bg-element-primary-lighter ml-2 rounded-full px-2 py-0.5'>
+              메이커
+            </span>
+          )}
         </div>
       </div>
+      {isEditMode && (
+        <button
+          onClick={handleKick}
+          type='button'
+          className='typo-body-sm-medium text-text-error border-border-error rounded-[4px] border px-2 py-1'
+        >
+          내보내기
+        </button>
+      )}
     </div>
   );
 }
