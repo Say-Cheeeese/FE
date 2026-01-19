@@ -103,25 +103,19 @@ function autoName(pathStr: string): string {
 }
 
 function paramsSignatureFor(pathStr: string): string {
-  const hasCode = pathStr.includes('{code}');
-  const hasPhotoId = pathStr.includes('{photoId}');
+  // {xxx} 패턴 전부 추출
+  const matches = [...pathStr.matchAll(/\{([^}]+)\}/g)];
 
-  // 1) code + photoId 둘 다 있을 때
-  if (hasCode && hasPhotoId) {
-    return '(code: string, photoId: number)';
+  if (matches.length === 0) {
+    return '()';
   }
 
-  // 2) code만 있을 때
-  if (hasCode) {
-    return '(code: string)';
-  }
+  const params = matches.map((m) => {
+    const name = m[1];
+    return `${name}: string | number`;
+  });
 
-  // 3) photoId만 있을 때
-  if (hasPhotoId) {
-    return '(photoId: number)';
-  }
-
-  return '()';
+  return `(${params.join(', ')})`;
 }
 
 // --- 바디: 템플릿 문자열 경로 ---

@@ -1,4 +1,7 @@
+import { AlbumParticipantResponseSchema } from '@/global/api/ep';
+import { GA_EVENTS } from '@/global/constants/gaEvents';
 import { shareViaNavigator } from '@/global/utils/shareNavigator';
+import { trackGaEvent } from '@/global/utils/trackGaEvent';
 import { Ellipsis } from 'lucide-react';
 
 const getAlbumEntryUrl = (albumId: string) =>
@@ -6,10 +9,20 @@ const getAlbumEntryUrl = (albumId: string) =>
 
 interface MoreShareButtonProps {
   albumId: string;
+  accessType: AlbumParticipantResponseSchema['myRole'];
 }
 
-export default function MoreShareButton({ albumId }: MoreShareButtonProps) {
+export default function MoreShareButton({
+  albumId,
+  accessType,
+}: MoreShareButtonProps) {
   const handleClick = (): void => {
+    trackGaEvent(GA_EVENTS.click_invite_complete, {
+      album_id: albumId,
+      access_type: accessType === 'MAKER' ? 'creator' : 'member',
+      button_type: 'other',
+    });
+
     const shareData = {
       title: `우리 공유앨범에 초대합니다 - 치이이즈`,
       text: '일주일 뒤에는 앨범이 사라져요!',

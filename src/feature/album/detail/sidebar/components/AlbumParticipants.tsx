@@ -2,6 +2,8 @@ import { useGetAlbumInform } from '@/feature/upload/hooks/useGetAlbumInform';
 import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
 import { Plus } from 'lucide-react';
 import { useState } from 'react';
+import { GA_EVENTS } from '@/global/constants/gaEvents';
+import { trackGaEvent } from '@/global/utils/trackGaEvent';
 import BottomSheetContentShare from './BottomSheetContentShare';
 import ItemParticipant from './ItemParticipant';
 
@@ -61,7 +63,10 @@ export default function AlbumParticipants({ albumId }: AlbumParticipantsProps) {
               </button>
             }
           >
-            <BottomSheetContentShare albumId={albumId} />
+            <BottomSheetContentShare
+              albumId={albumId}
+              accessType={accessType}
+            />
           </BottomSheetModal>
         )}
         {filteredParticipants?.map(({ isMe, name, profileImage, role }) => (

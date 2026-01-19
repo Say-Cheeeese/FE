@@ -4,11 +4,13 @@ import { useGetAlbumInform } from '@/feature/upload/hooks/useGetAlbumInform';
 import { HEADER_HEIGHT } from '@/global/components/header/CustomHeader';
 import ConfirmModal from '@/global/components/modal/ConfirmModal';
 import Toast from '@/global/components/toast/Toast';
+import { GA_EVENTS } from '@/global/constants/gaEvents';
 import { convertUnicodeToEmoji } from '@/global/utils/convertEmoji';
 import {
   formatExpirationTime,
   getIsExpired,
 } from '@/global/utils/time/formatExpirationTime';
+import { trackGaEvent } from '@/global/utils/trackGaEvent';
 import { X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';

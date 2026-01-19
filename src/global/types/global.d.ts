@@ -13,6 +13,8 @@ interface KakaoSDK {
 declare global {
   interface Window {
     Kakao: KakaoSDK;
+    gtag?: (...args: unknown[]) => void;
+    dataLayer?: unknown[];
   }
 }
 

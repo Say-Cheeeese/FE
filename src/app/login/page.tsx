@@ -1,8 +1,16 @@
+'use client';
+
 import KakaoSignupButton from '@/feature/login/components/KakaoSignupButton';
+import { GA_EVENTS } from '@/global/constants/gaEvents';
+import { trackGaEvent } from '@/global/utils/trackGaEvent';
 import Image from 'next/image';
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 
 export default function LoginPage() {
+  useEffect(() => {
+    trackGaEvent(GA_EVENTS.view_login);
+  }, []);
+
   return (
     <div className='flex h-screen w-full flex-col px-4'>
       {/* <LogoHeader showLogin={false} /> */}
