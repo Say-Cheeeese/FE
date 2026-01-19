@@ -1,13 +1,26 @@
+import { AlbumParticipantResponseSchema } from '@/global/api/ep';
 import Toast from '@/global/components/toast/Toast';
+import { GA_EVENTS } from '@/global/constants/gaEvents';
 import { copyToClipboard } from '@/global/utils/copyToClipboard';
+import { trackGaEvent } from '@/global/utils/trackGaEvent';
 import { Copy } from 'lucide-react';
 
 interface CopyShareButtonProps {
   albumId: string;
+  accessType: AlbumParticipantResponseSchema['myRole'];
 }
 
-export default function CopyShareButton({ albumId }: CopyShareButtonProps) {
+export default function CopyShareButton({
+  albumId,
+  accessType,
+}: CopyShareButtonProps) {
   const handleClick = (): void => {
+    trackGaEvent(GA_EVENTS.click_invite_complete, {
+      album_id: albumId,
+      access_type: accessType === 'MAKER' ? 'creator' : 'member',
+      button_type: 'link',
+    });
+
     copyToClipboard(
       `${process.env.NEXT_PUBLIC_CLIENT_URL}/album/entry/${albumId}`,
     );

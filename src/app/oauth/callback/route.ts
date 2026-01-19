@@ -2,6 +2,7 @@ import {
   ACCESS_TOKEN_KEY,
   REFRESH_TOKEN_KEY,
 } from '@/global/constants/cookies';
+import { buildQuery } from '@/global/utils/buildQuery';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
@@ -57,14 +58,20 @@ export async function GET(request: NextRequest) {
     const entry = request.cookies.get('entry')?.value ?? null;
 
     let redirectPath = '/main';
+    const urlQuery: Record<string, string> = {};
     if (data.result.isOnboarded) {
+      urlQuery.authType = 'login';
       if (entry === 'create-album') {
         redirectPath = '/create-album';
       }
     } else {
+      urlQuery.authType = 'signup';
       redirectPath = '/onboarding';
     }
-    const redirectUrl = new URL(redirectPath, `${protocol}://${host}`);
+    const redirectUrl = new URL(
+      `${redirectPath}${buildQuery(urlQuery)}`,
+      `${protocol}://${host}`,
+    );
 
     if (!data.result.isOnboarded) {
       redirectUrl.searchParams.set(

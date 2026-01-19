@@ -1,14 +1,27 @@
+import { AlbumParticipantResponseSchema } from '@/global/api/ep';
+import { GA_EVENTS } from '@/global/constants/gaEvents';
+import { trackGaEvent } from '@/global/utils/trackGaEvent';
 import { QrCode } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 interface QrcodeShareButtonProps {
   albumId: string;
+  accessType: AlbumParticipantResponseSchema['myRole'];
 }
 
-export default function QrcodeShareButton({ albumId }: QrcodeShareButtonProps) {
+export default function QrcodeShareButton({
+  albumId,
+  accessType,
+}: QrcodeShareButtonProps) {
   const router = useRouter();
 
   const handleClick = (): void => {
+    trackGaEvent(GA_EVENTS.click_invite_complete, {
+      album_id: albumId,
+      access_type: accessType === 'MAKER' ? 'creator' : 'member',
+      button_type: 'qr',
+    });
+
     router.push(`/album/qrcode/${albumId}`);
   };
 

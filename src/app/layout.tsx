@@ -1,6 +1,7 @@
+import GlobalClientEffects from '@/global/components/GlobalClientEffects';
 import KakaoProvider from '@/global/context/KakaoProvider';
 import QueryProvider from '@/global/context/QueryProvider';
-import { GoogleTagManager } from '@next/third-parties/google';
+import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';
@@ -94,7 +95,10 @@ export default function RootLayout({
 })(window, document, 'https://snippet.maze.co/maze-universal-loader.js', '65a6039c-2384-4c2d-a8e1-546a4f859a08');`}
       </Script> */}
       {process.env.NODE_ENV === 'production' && (
-        <GoogleTagManager gtmId='GTM-PH2N3NWM' />
+        <>
+          <GoogleTagManager gtmId='GTM-PH2N3NWM' />
+          <GoogleAnalytics gaId='G-2EN8NDYR97' />
+        </>
       )}
       <body
         className={`${pretendard.className} min-h-screen w-full antialiased`}
@@ -102,6 +106,7 @@ export default function RootLayout({
         <div className='min-h-screen w-full bg-white'>
           <div className='mx-auto flex min-h-screen w-full max-w-[430px] flex-col'>
             <QueryProvider>
+              <GlobalClientEffects />
               <KakaoProvider>{children}</KakaoProvider>
             </QueryProvider>
           </div>
