@@ -1,6 +1,7 @@
 'use client';
 import { EP } from '@/global/api/ep';
 import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
+import ConfirmModal from '@/global/components/modal/ConfirmModal';
 import Toast from '@/global/components/toast/Toast';
 import { downloadFile } from '@/global/utils/downloadFile';
 import { getDeviceType } from '@/global/utils/getDeviceType';
@@ -8,6 +9,7 @@ import { shareImage } from '@/global/utils/image/shareImage';
 import { useQueryClient } from '@tanstack/react-query';
 import { Download, Heart, Info } from 'lucide-react';
 import { useState } from 'react';
+import { useDeleteAlbumPhotoMutation } from '../hooks/useDeleteAlbumPhotoMutation';
 import { usePhotoDownloadMutation } from '../hooks/usePhotoDownloadMutation';
 import { usePhotoLikedMutation } from '../hooks/usePhotoLikedMutation';
 import { usePhotoUnlikedMutation } from '../hooks/usePhotoUnlikedMutation';
@@ -40,6 +42,7 @@ export default function FooterPhotoDetail({
   const { mutateAsync: mutateAsyncUnlike, isPending: isUnliking } =
     usePhotoUnlikedMutation();
   const { mutateAsync: mutateAsyncDownload } = usePhotoDownloadMutation();
+  const { mutateAsync: mutateAsyncDeletePhoto } = useDeleteAlbumPhotoMutation();
 
   const handleDeepToggle = async (): Promise<void> => {
     try {
@@ -100,6 +103,16 @@ export default function FooterPhotoDetail({
       Toast.alert('사진을 준비하는 중 오류가 발생했습니다.');
     } finally {
       setIsDownloading(false);
+    }
+  };
+
+  const handleDeleteClick = async () => {
+    try {
+      await mutateAsyncDeletePhoto({ albumId, photoId });
+      queryClient.invalidateQueries({ queryKey: [EP.album.photos(albumId)] });
+    } catch (e) {
+      console.log(e);
+      Toast.alert('사진을 삭제하는 중 오류가 발생했습니다.');
     }
   };
 
@@ -164,6 +177,26 @@ export default function FooterPhotoDetail({
         >
           <ListPhotoLikers albumId={albumId} photoId={photoId} />
         </BottomSheetModal>
+
+        {/* TODO : 사진 리스트 API로 canDelete값이 넘어오면 그 값 기준으로 분기 */}
+        {true && (
+          <ConfirmModal
+            title='사진을 삭제할까요?'
+            description='지운 사진은 다시 복구할 수 없어요.'
+            cancelText='취소'
+            confirmText='삭제하기'
+            confirmClassName='text-text-basic-inverse bg-button-accent-fill active:bg-button-accent-pressed active:text-basic-inverse'
+            onConfirm={handleDeleteClick}
+            trigger={
+              <button
+                type='button'
+                className='bg-element-gray-lighter typo-body-1xl-semibold text-text-error w-full rounded-[8px] py-4'
+              >
+                사진 삭제하기
+              </button>
+            }
+          />
+        )}
       </div>
     </section>
   );
