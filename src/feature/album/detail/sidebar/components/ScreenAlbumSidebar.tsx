@@ -4,14 +4,16 @@ import { useGetAlbumInform } from '@/feature/upload/hooks/useGetAlbumInform';
 import { HEADER_HEIGHT } from '@/global/components/header/CustomHeader';
 import ConfirmModal from '@/global/components/modal/ConfirmModal';
 import Toast from '@/global/components/toast/Toast';
+import { GA_EVENTS } from '@/global/constants/gaEvents';
 import { convertUnicodeToEmoji } from '@/global/utils/convertEmoji';
 import {
   formatExpirationTime,
   getIsExpired,
 } from '@/global/utils/time/formatExpirationTime';
+import { trackGaEvent } from '@/global/utils/trackGaEvent';
 import { X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAlbumExitMutation } from '../hooks/useAlbumExitMutation';
 import AlbumParticipants from './AlbumParticipants';
 
@@ -34,6 +36,15 @@ export default function ScreenAlbumSidebar({
   } = useGetAlbumInform({ code: albumId });
   const { mutateAsync } = useAlbumExitMutation();
   const [isClosing, setIsClosing] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      trackGaEvent(GA_EVENTS.view_albumsidebar, {
+        album_id: albumId,
+        access_type: informData?.myRole === 'MAKER' ? 'creator' : 'member',
+      });
+    }
+  }, [isOpen]);
 
   if (!isOpen && !isClosing) return null;
   if (isPending) return null;

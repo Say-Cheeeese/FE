@@ -128,14 +128,62 @@ export function ScrollableDatePicker({
 }: ScrollableDatePickerProps) {
   const currentDate = value || new Date();
 
-  const selectedYear = currentDate.getFullYear();
-  const selectedMonth = currentDate.getMonth() + 1;
-  const selectedDay = currentDate.getDate();
-
   // Generate years
   const currentYear = new Date().getFullYear();
   const minYear = minDate?.getFullYear() || 2020;
   const maxYear = maxDate?.getFullYear() || currentYear + 50;
+
+  const clamp = (value: number, min: number, max: number) =>
+    Math.min(Math.max(value, min), max);
+
+  const getDaysInMonth = (year: number, month: number) => {
+    return new Date(year, month, 0).getDate();
+  };
+
+  const getMinMonthForYear = (year: number) => {
+    if (minDate && year === minYear) {
+      return minDate.getMonth() + 1;
+    }
+    return 1;
+  };
+
+  const getMaxMonthForYear = (year: number) => {
+    if (maxDate && year === maxYear) {
+      return maxDate.getMonth() + 1;
+    }
+    return 12;
+  };
+
+  const getMinDayForMonth = (year: number, month: number) => {
+    if (minDate && year === minYear && month === minDate.getMonth() + 1) {
+      return minDate.getDate();
+    }
+    return 1;
+  };
+
+  const getMaxDayForMonth = (year: number, month: number) => {
+    const daysInMonth = getDaysInMonth(year, month);
+    if (maxDate && year === maxYear && month === maxDate.getMonth() + 1) {
+      return Math.min(daysInMonth, maxDate.getDate());
+    }
+    return daysInMonth;
+  };
+
+  const selectedYear = clamp(currentDate.getFullYear(), minYear, maxYear);
+  const minMonthForYear = getMinMonthForYear(selectedYear);
+  const maxMonthForYear = getMaxMonthForYear(selectedYear);
+  const selectedMonth = clamp(
+    currentDate.getMonth() + 1,
+    minMonthForYear,
+    maxMonthForYear,
+  );
+  const minDayForMonth = getMinDayForMonth(selectedYear, selectedMonth);
+  const maxDayForMonth = getMaxDayForMonth(selectedYear, selectedMonth);
+  const selectedDay = clamp(
+    currentDate.getDate(),
+    minDayForMonth,
+    maxDayForMonth,
+  );
 
   const years = React.useMemo(
     () => Array.from({ length: maxYear - minYear + 1 }, (_, i) => minYear + i),
@@ -143,37 +191,48 @@ export function ScrollableDatePicker({
   );
 
   const months = React.useMemo(
-    () => Array.from({ length: 12 }, (_, i) => i + 1),
-    [],
+    () =>
+      Array.from(
+        { length: maxMonthForYear - minMonthForYear + 1 },
+        (_, i) => minMonthForYear + i,
+      ),
+    [minMonthForYear, maxMonthForYear],
   );
-
-  const getDaysInMonth = (year: number, month: number) => {
-    return new Date(year, month, 0).getDate();
-  };
 
   const days = React.useMemo(
     () =>
       Array.from(
-        { length: getDaysInMonth(selectedYear, selectedMonth) },
-        (_, i) => i + 1,
+        { length: maxDayForMonth - minDayForMonth + 1 },
+        (_, i) => minDayForMonth + i,
       ),
-    [selectedYear, selectedMonth],
+    [minDayForMonth, maxDayForMonth],
   );
 
   const handleYearChange = (year: number) => {
-    const daysInNewMonth = getDaysInMonth(year, selectedMonth);
-    const newDay = Math.min(selectedDay, daysInNewMonth);
-    onChange(new Date(year, selectedMonth - 1, newDay));
+    const minMonth = getMinMonthForYear(year);
+    const maxMonth = getMaxMonthForYear(year);
+    const newMonth = clamp(selectedMonth, minMonth, maxMonth);
+    const minDay = getMinDayForMonth(year, newMonth);
+    const maxDay = getMaxDayForMonth(year, newMonth);
+    const newDay = clamp(selectedDay, minDay, maxDay);
+    onChange(new Date(year, newMonth - 1, newDay));
   };
 
   const handleMonthChange = (month: number) => {
-    const daysInNewMonth = getDaysInMonth(selectedYear, month);
-    const newDay = Math.min(selectedDay, daysInNewMonth);
-    onChange(new Date(selectedYear, month - 1, newDay));
+    const minMonth = getMinMonthForYear(selectedYear);
+    const maxMonth = getMaxMonthForYear(selectedYear);
+    const newMonth = clamp(month, minMonth, maxMonth);
+    const minDay = getMinDayForMonth(selectedYear, newMonth);
+    const maxDay = getMaxDayForMonth(selectedYear, newMonth);
+    const newDay = clamp(selectedDay, minDay, maxDay);
+    onChange(new Date(selectedYear, newMonth - 1, newDay));
   };
 
   const handleDayChange = (day: number) => {
-    onChange(new Date(selectedYear, selectedMonth - 1, day));
+    const minDay = getMinDayForMonth(selectedYear, selectedMonth);
+    const maxDay = getMaxDayForMonth(selectedYear, selectedMonth);
+    const newDay = clamp(day, minDay, maxDay);
+    onChange(new Date(selectedYear, selectedMonth - 1, newDay));
   };
 
   return (
