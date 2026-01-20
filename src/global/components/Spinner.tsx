@@ -5,7 +5,7 @@ interface SpinnerProps {
 
 export default function Spinner({
   color = '#ffffff', // 기본값 (tailwind primary-400 정도)
-  size = 32,
+  size = 64,
 }: SpinnerProps) {
   return (
     <div className='flex h-full w-full items-center justify-center py-10'>
