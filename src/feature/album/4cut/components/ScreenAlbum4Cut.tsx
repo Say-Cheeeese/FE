@@ -117,6 +117,7 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
     }
 
     try {
+      setIsDownloading(true);
       await showCaptureNode();
 
       const fileName = data?.title
@@ -136,6 +137,7 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
       Toast.alert('이미지를 생성하지 못했습니다. 다시 시도해주세요.');
     } finally {
       setIsCaptureVisible(false);
+      setIsDownloading(false);
     }
   };
 
