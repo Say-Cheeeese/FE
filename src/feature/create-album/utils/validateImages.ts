@@ -1,4 +1,4 @@
-const MAX_SIZE = 6 * 1024 * 1024; // 6MB in bytes
+const MAX_SIZE = 13 * 1024 * 1024; // 13MB in bytes
 
 export function validateImage(file: File): boolean {
   return file.size <= MAX_SIZE;

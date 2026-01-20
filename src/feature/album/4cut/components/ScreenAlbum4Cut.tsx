@@ -152,87 +152,90 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
           </div>
         }
       />
-      <section className='absolute top-[46%] left-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center'>
-        {!isFinalized && (
-          <div className='typo-body-lg-semibold mb-2'>현재 TOP 4 사진</div>
-        )}
-        <div>
-          <Container4Cut
-            albumId={albumId}
-            eventName={data?.title}
-            eventDate={data?.eventDate ? data.eventDate.replace(/-/g, '.') : ''}
-            scale={1}
-          />
-        </div>
-      </section>
-
-      {!is4CutPreviewPending && (
-        <div className='fixed bottom-5 flex w-full max-w-[430px] flex-col items-center px-4'>
-          {isMaker || isFinalized ? (
-            <>
-              {isFinalized ? (
-                <div className='flex w-full justify-center gap-3'>
-                  <ActionButton
-                    icon={Download}
-                    text='다운로드'
-                    onClick={handleDownload}
-                  />
-                  <ActionButton
-                    icon={Send}
-                    text='공유하기'
-                    onClick={handleShare}
-                  />
-                </div>
-              ) : (
-                <>
-                  <div className='typo-body-sm-semibold flex items-center gap-2 pb-3'>
-                    <span>띱 진행상황</span>
-                    <div className='flex items-center'>
-                      <span className='p-[5px]'>
-                        <PersonSvg />
-                      </span>
-                      <span>
-                        {`${data?.currentParticipant} / ${data?.participant}`}{' '}
-                        명
-                      </span>
-                    </div>
-                  </div>
-                  <ConfirmModal
-                    trigger={<LongButton text='사진 확정하기' noFixed />}
-                    title='이대로 확정하시겠어요?'
-                    description='예쁜 치즈네컷을 만들어드릴게요'
-                    confirmText='확정하기'
-                    onConfirm={handleConfirm}
-                  />
-                </>
-              )}
-            </>
-          ) : (
-            <div className=''>
-              <BubbleTooltip
-                message='📸 사진 확정 권한은 메이커에게만 있어요'
-                className='absolute bottom-18 left-1/2 w-full -translate-x-1/2'
-              />
-              <LongButton
-                text='메이커에게 조르기'
-                onClick={async () => {
-                  if (!data) return;
-
-                  await shareViaNavigator({
-                    data: {
-                      title: `'${data.title}'앨범에 대한 치즈네컷을 선정해주세요`,
-                      text: `${name}님이 메이커님에게 조르기를 요청했어요!`,
-                      url: `https://say-cheese.me/album/4cut/${albumId}`,
-                    },
-                    errorMessage:
-                      '공유에 실패하였습니다. 다시한번 시도해주세요.',
-                  });
-                }}
-              />
-            </div>
+      <main className='bg-button-secondary-fill min-h-screen'>
+        <section className='absolute top-[46%] left-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center'>
+          {!isFinalized && (
+            <div className='typo-body-lg-semibold mb-2'>현재 TOP 4 사진</div>
           )}
-        </div>
-      )}
+          <div>
+            <Container4Cut
+              albumId={albumId}
+              eventName={data?.title}
+              eventDate={
+                data?.eventDate ? data.eventDate.replace(/-/g, '.') : ''
+              }
+              scale={1}
+            />
+          </div>
+        </section>
+        {!is4CutPreviewPending && (
+          <div className='fixed bottom-5 flex w-full max-w-[430px] flex-col items-center px-4'>
+            {isMaker || isFinalized ? (
+              <>
+                {isFinalized ? (
+                  <div className='flex w-full justify-center gap-3'>
+                    <ActionButton
+                      icon={Download}
+                      text='다운로드'
+                      onClick={handleDownload}
+                    />
+                    <ActionButton
+                      icon={Send}
+                      text='공유하기'
+                      onClick={handleShare}
+                    />
+                  </div>
+                ) : (
+                  <>
+                    <div className='typo-body-sm-semibold flex items-center gap-2 pb-3'>
+                      <span>띱 진행상황</span>
+                      <div className='flex items-center'>
+                        <span className='p-[5px]'>
+                          <PersonSvg />
+                        </span>
+                        <span>
+                          {`${data?.currentParticipant} / ${data?.participant}`}{' '}
+                          명
+                        </span>
+                      </div>
+                    </div>
+                    <ConfirmModal
+                      trigger={<LongButton text='사진 확정하기' noFixed />}
+                      title='이대로 확정하시겠어요?'
+                      description='예쁜 치즈네컷을 만들어드릴게요'
+                      confirmText='확정하기'
+                      onConfirm={handleConfirm}
+                    />
+                  </>
+                )}
+              </>
+            ) : (
+              <div className=''>
+                <BubbleTooltip
+                  message='📸 사진 확정 권한은 메이커에게만 있어요'
+                  className='absolute bottom-18 left-1/2 w-full -translate-x-1/2'
+                />
+                <LongButton
+                  text='메이커에게 조르기'
+                  onClick={async () => {
+                    if (!data) return;
+
+                    await shareViaNavigator({
+                      data: {
+                        title: `'${data.title}'앨범에 대한 치즈네컷을 선정해주세요`,
+                        text: `${name}님이 메이커님에게 조르기를 요청했어요!`,
+                        url: `https://say-cheese.me/album/4cut/${albumId}`,
+                      },
+                      errorMessage:
+                        '공유에 실패하였습니다. 다시한번 시도해주세요.',
+                    });
+                  }}
+                />
+              </div>
+            )}
+          </div>
+        )}{' '}
+      </main>{' '}
       {isDownloading && (
         <div className='fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-[2px]'>
           <div className='flex items-center gap-3 rounded-2xl bg-white px-4 py-3 shadow-lg'>

@@ -4,13 +4,11 @@ import { useGetAlbumInform } from '@/feature/upload/hooks/useGetAlbumInform';
 import { HEADER_HEIGHT } from '@/global/components/header/CustomHeader';
 import ConfirmModal from '@/global/components/modal/ConfirmModal';
 import Toast from '@/global/components/toast/Toast';
-import { GA_EVENTS } from '@/global/constants/gaEvents';
 import { convertUnicodeToEmoji } from '@/global/utils/convertEmoji';
 import {
   formatExpirationTime,
   getIsExpired,
 } from '@/global/utils/time/formatExpirationTime';
-import { trackGaEvent } from '@/global/utils/trackGaEvent';
 import { X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -70,7 +68,7 @@ export default function ScreenAlbumSidebar({
   return (
     <>
       <div
-        className={`bg-background-white fixed inset-0 z-40 ${isClosing ? 'animate-slide-out-right' : 'animate-slide-in-right'}`}
+        className={`bg-background-white fixed inset-0 z-[60] ${isClosing ? 'animate-slide-out-right' : 'animate-slide-in-right'}`}
       >
         <main
           className='mx-auto flex h-screen w-full max-w-[430px] flex-col bg-[#f7f7f8] px-5 pb-5'

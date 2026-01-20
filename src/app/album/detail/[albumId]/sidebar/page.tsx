@@ -1,12 +1,18 @@
+'use client';
+
 import ScreenAlbumSidebar from '@/feature/album/detail/sidebar/components/ScreenAlbumSidebar';
+import { useParams, useRouter } from 'next/navigation';
 
-interface PageProps {
-  params: Promise<{
-    albumId: string;
-  }>;
-}
+export default function Page() {
+  const params = useParams();
+  const router = useRouter();
+  const albumId = params.albumId as string;
 
-export default async function Page({ params }: PageProps) {
-  const { albumId } = await params;
-  return <ScreenAlbumSidebar albumId={albumId} />;
+  const handleClose = () => {
+    router.back();
+  };
+
+  return (
+    <ScreenAlbumSidebar albumId={albumId} isOpen={true} onClose={handleClose} />
+  );
 }
