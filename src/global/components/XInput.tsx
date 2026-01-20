@@ -2,8 +2,10 @@
 import { X } from 'lucide-react';
 import React, { InputHTMLAttributes, useRef, useState } from 'react';
 
-interface InputProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
+interface InputProps extends Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  'onChange'
+> {
   /** 인풋 상단 라벨 텍스트 */
   label?: string;
   /** 인풋 값 (항상 string) */
@@ -75,23 +77,26 @@ export default function XInput({
             onBlur={() => setIsFocused(false)}
             disabled={disabled}
             maxLength={maxLength}
-            className={`bg-element-gray-lighter typo-body-lg-medium text-text-basic placeholder:text-text-subtler w-full rounded-[8px] p-4 disabled:cursor-not-allowed disabled:opacity-50 ${error
+            className={`bg-element-gray-lighter typo-body-lg-medium text-text-basic placeholder:text-text-subtler w-full rounded-[8px] p-4 disabled:cursor-not-allowed disabled:opacity-50 ${
+              error
                 ? 'outline-text-error outline-1'
                 : 'focus:outline-border-primary focus:outline-1'
-              } ${shouldShowClear ? 'pr-12' : ''} ${type === 'date' ? 'cursor-pointer' : ''
-              } ${type === 'number'
+            } ${shouldShowClear ? 'pr-12' : ''} ${
+              type === 'date' ? 'cursor-pointer' : ''
+            } ${
+              type === 'number'
                 ? '[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none'
                 : ''
-              }`}
+            }`}
             style={
               type === 'date' && !value
                 ? {
-                  color: '#8E9398',
-                }
+                    color: '#8E9398',
+                  }
                 : type === 'date'
                   ? {
-                    color: '#18191B',
-                  }
+                      color: '#18191B',
+                    }
                   : undefined
             }
             {...restProps}
@@ -113,8 +118,9 @@ export default function XInput({
 
         {(error || helperText) && (
           <div
-            className={`typo-caption-sm-medium px-2 ${error ? 'text-text-error' : 'text-text-subtier'
-              }`}
+            className={`typo-caption-sm-medium px-2 ${
+              error ? 'text-text-error' : 'text-text-subtier'
+            }`}
           >
             {error || helperText}
           </div>
