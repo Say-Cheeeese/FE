@@ -2,10 +2,8 @@
 import { X } from 'lucide-react';
 import React, { InputHTMLAttributes, useRef, useState } from 'react';
 
-interface InputProps extends Omit<
-  InputHTMLAttributes<HTMLInputElement>,
-  'onChange'
-> {
+interface InputProps
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
   /** 인풋 상단 라벨 텍스트 */
   label?: string;
   /** 인풋 값 (항상 string) */
