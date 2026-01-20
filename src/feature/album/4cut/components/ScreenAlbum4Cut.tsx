@@ -1,23 +1,25 @@
 'use client';
 import { useGetUserMe } from '@/feature/main/hooks/useGetUserMe';
+import { useGetAlbumInform } from '@/feature/upload/hooks/useGetAlbumInform';
 import { EP } from '@/global/api/ep';
 import CustomHeader from '@/global/components/header/CustomHeader';
 import LongButton from '@/global/components/LongButton';
 import ConfirmModal from '@/global/components/modal/ConfirmModal';
 import Toast from '@/global/components/toast/Toast';
 import BubbleTooltip from '@/global/components/tooltip/BubbleTooltip';
+import { GA_EVENTS } from '@/global/constants/gaEvents';
 import PersonSvg from '@/global/svg/PersonSvg';
 import { downloadFile } from '@/global/utils/downloadFile';
 import { getDeviceType } from '@/global/utils/getDeviceType';
 import { extractHtmlToBlob } from '@/global/utils/image/extractHtmlToBlob';
 import { shareImage } from '@/global/utils/image/shareImage';
 import { shareViaNavigator } from '@/global/utils/shareNavigator';
+import { trackGaEvent } from '@/global/utils/trackGaEvent';
 import { useQueryClient } from '@tanstack/react-query';
 import { Download, Loader2, LucideIcon, Menu, Send } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useGetAlbumInfo } from '../../detail/hooks/useGetAlbumInfo';
 import { use4CutFixed } from '../hooks/use4CutFixed';
 import { use4CutPreviewQuery } from '../hooks/use4CutPreviewQuery';
@@ -31,23 +33,38 @@ interface ScreenAlbum4CutProps {
 }
 
 export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
-  const router = useRouter();
   const queryClient = useQueryClient();
-  const [isConfirmed, setIsConfirmed] = useState(false);
   const [isCaptureVisible, setIsCaptureVisible] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
   const captureRef = useRef<HTMLDivElement>(null);
   const { data } = useGetAlbumInfo(albumId);
+  const { data: albumInformData } = useGetAlbumInform({ code: albumId });
   const { data: { name } = {} } = useGetUserMe();
 
   // TODO : openapi type이 이상해서 임시 any처리. 백엔드랑 협의 필요
-
   const {
     data: { myRole, previewPhotos, isFinalized } = {},
     isPending: is4CutPreviewPending,
+    isSuccess,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   }: any = use4CutPreviewQuery(albumId);
   const { mutateAsync } = use4CutFixed();
+
+  useEffect(() => {
+    if (isSuccess) {
+      if (isFinalized) {
+        trackGaEvent(GA_EVENTS.view_4cut_confirmed, {
+          album_id: albumId,
+          access_type: myRole === 'MAKER' ? 'creator' : 'member',
+        });
+      } else {
+        trackGaEvent(GA_EVENTS.view_4cut_unconfirmed, {
+          album_id: albumId,
+          access_type: myRole === 'MAKER' ? 'creator' : 'member',
+        });
+      }
+    }
+  }, [isSuccess]);
 
   const isMaker = myRole === 'MAKER';
 
@@ -57,21 +74,36 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
       requestAnimationFrame(() => resolve());
     });
 
+  const handleClickCreate4Cut = () => {
+    trackGaEvent(GA_EVENTS.click_create_4cut);
+  };
+
   const handleConfirm = async (): Promise<void> => {
-    await mutateAsync({
-      albumId,
-      photoIds: previewPhotos.map(
-        (photo: { photoId: number; imageUrl: string; photoRank: number }) =>
-          photo.photoId,
-      ),
-    });
-    queryClient.invalidateQueries({
-      queryKey: [EP.cheese4cut.preview(albumId)],
-    });
-    setIsConfirmed(true);
+    trackGaEvent(GA_EVENTS.click_create_4cut_complete, { album_id: albumId });
+    try {
+      await mutateAsync({
+        albumId,
+        photoIds: previewPhotos.map(
+          (photo: { photoId: number; imageUrl: string; photoRank: number }) =>
+            photo.photoId,
+        ),
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: [EP.cheese4cut.preview(albumId)],
+      });
+    } catch (e) {
+      console.log(e);
+      Toast.alert(`잠시후에 다시 시도해주세요.`);
+    }
   };
 
   const handleDownload = async () => {
+    trackGaEvent(GA_EVENTS.click_download_4cut, {
+      album_id: albumId,
+      access_type: albumInformData?.myRole === 'MAKER' ? 'creator' : 'member',
+    });
+
     const deviceType = getDeviceType();
 
     if (!captureRef.current) {
@@ -111,6 +143,11 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
   };
 
   const handleShare = async () => {
+    trackGaEvent(GA_EVENTS.click_share_4cut, {
+      album_id: albumId,
+      access_type: albumInformData?.myRole === 'MAKER' ? 'creator' : 'member',
+    });
+
     if (!captureRef.current) {
       Toast.alert('공유할 이미지를 찾지 못했어요. 잠시 후 다시 시도해주세요.');
       return;
@@ -200,7 +237,13 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
                       </div>
                     </div>
                     <ConfirmModal
-                      trigger={<LongButton text='사진 확정하기' noFixed />}
+                      trigger={
+                        <LongButton
+                          text='사진 확정하기'
+                          noFixed
+                          onClick={handleClickCreate4Cut}
+                        />
+                      }
                       title='이대로 확정하시겠어요?'
                       description='예쁜 치즈네컷을 만들어드릴게요'
                       confirmText='확정하기'
@@ -218,6 +261,10 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
                 <LongButton
                   text='메이커에게 조르기'
                   onClick={async () => {
+                    trackGaEvent(GA_EVENTS.click_request_4cut, {
+                      album_id: albumId,
+                    });
+
                     if (!data) return;
 
                     await shareViaNavigator({
