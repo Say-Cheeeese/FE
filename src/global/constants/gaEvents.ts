@@ -10,4 +10,5 @@ export const GA_EVENTS = {
   view_albumsidebar: 'view_albumsidebar',
   click_invite: 'click_invite',
   click_invite_complete: 'click_invite_complete',
+  click_create_4cut: 'click_create_4cut',
 };

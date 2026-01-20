@@ -6,12 +6,14 @@ import LongButton from '@/global/components/LongButton';
 import ConfirmModal from '@/global/components/modal/ConfirmModal';
 import Toast from '@/global/components/toast/Toast';
 import BubbleTooltip from '@/global/components/tooltip/BubbleTooltip';
+import { GA_EVENTS } from '@/global/constants/gaEvents';
 import PersonSvg from '@/global/svg/PersonSvg';
 import { downloadFile } from '@/global/utils/downloadFile';
 import { getDeviceType } from '@/global/utils/getDeviceType';
 import { extractHtmlToBlob } from '@/global/utils/image/extractHtmlToBlob';
 import { shareImage } from '@/global/utils/image/shareImage';
 import { shareViaNavigator } from '@/global/utils/shareNavigator';
+import { trackGaEvent } from '@/global/utils/trackGaEvent';
 import { useQueryClient } from '@tanstack/react-query';
 import { Download, Loader2, LucideIcon, Menu, Send } from 'lucide-react';
 import dynamic from 'next/dynamic';
@@ -56,6 +58,10 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
       setIsCaptureVisible(true);
       requestAnimationFrame(() => resolve());
     });
+
+  const handleClickCreate4Cut = () => {
+    trackGaEvent(GA_EVENTS.click_create_4cut);
+  };
 
   const handleConfirm = async (): Promise<void> => {
     await mutateAsync({
@@ -200,7 +206,13 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
                       </div>
                     </div>
                     <ConfirmModal
-                      trigger={<LongButton text='사진 확정하기' noFixed />}
+                      trigger={
+                        <LongButton
+                          text='사진 확정하기'
+                          noFixed
+                          onClick={handleClickCreate4Cut}
+                        />
+                      }
                       title='이대로 확정하시겠어요?'
                       description='예쁜 치즈네컷을 만들어드릴게요'
                       confirmText='확정하기'
