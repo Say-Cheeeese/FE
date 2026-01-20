@@ -105,7 +105,7 @@ export default function DateXInput({
                 />
               </div>
               <LongButton
-                text='시작하기'
+                text='확인'
                 noFixed={true}
                 className='mb-5'
                 onClick={handleConfirm}
