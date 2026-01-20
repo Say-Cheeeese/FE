@@ -1,5 +1,7 @@
 import { useGetAlbumInform } from '@/feature/upload/hooks/useGetAlbumInform';
 import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
+import { GA_EVENTS } from '@/global/constants/gaEvents';
+import { trackGaEvent } from '@/global/utils/trackGaEvent';
 import { Plus } from 'lucide-react';
 import { useState } from 'react';
 import BottomSheetContentShare from './BottomSheetContentShare';
@@ -23,6 +25,13 @@ export default function AlbumParticipants({ albumId }: AlbumParticipantsProps) {
     : data.participants;
 
   const isMaker = data.myRole === 'MAKER';
+
+  const handleClickInvite = () => {
+    trackGaEvent(GA_EVENTS.click_invite, {
+      album_id: albumId,
+      access_type: data?.myRole === 'MAKER' ? 'creator' : 'member',
+    });
+  };
 
   return (
     <section className='bg-background-white rounded-[12px] px-5 pt-5 pb-7'>
@@ -53,6 +62,7 @@ export default function AlbumParticipants({ albumId }: AlbumParticipantsProps) {
               <button
                 type='button'
                 className='flex w-full items-center gap-3 py-2'
+                onClick={handleClickInvite}
               >
                 <div className='flex h-9 w-9 items-center justify-center rounded-full bg-[#F1F2F3]'>
                   <Plus width={20} height={20} color='#000' />
