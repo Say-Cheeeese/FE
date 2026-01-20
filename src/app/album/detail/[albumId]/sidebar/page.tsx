@@ -12,5 +12,7 @@ export default function Page() {
     router.back();
   };
 
-  return <ScreenAlbumSidebar albumId={albumId} isOpen={true} onClose={handleClose} />;
+  return (
+    <ScreenAlbumSidebar albumId={albumId} isOpen={true} onClose={handleClose} />
+  );
 }
