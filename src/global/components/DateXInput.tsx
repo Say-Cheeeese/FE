@@ -32,7 +32,6 @@ export default function DateXInput({
   value,
   onChange,
   error,
-  helperText,
   min,
   max,
   placeholder = 'YYYY-MM-DD',
@@ -55,7 +54,7 @@ export default function DateXInput({
     if (open) {
       setTempDate(parsedDate || new Date());
     }
-  }, [open]);
+  }, [open, parsedDate]);
 
   const minDate = min ? new Date(min) : undefined;
   const maxDate = max ? new Date(max) : undefined;
