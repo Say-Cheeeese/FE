@@ -2,6 +2,7 @@
 
 import DateXInput from '@/global/components/DateXInput';
 import XInput from '@/global/components/XInput';
+import { format } from 'date-fns';
 import { useState } from 'react';
 
 interface CreateInputListProps {
@@ -75,12 +76,7 @@ export default function CreateInputList({
     onErrorChange?.(error !== '' || eventNameError !== '');
   };
 
-  // 로컬 시간대 기준으로 오늘 날짜를 YYYY-MM-DD로 계산
-  const todayDate = new Date();
-  const yyyy = todayDate.getFullYear();
-  const mm = String(todayDate.getMonth() + 1).padStart(2, '0'); // 0-11이므로 +1
-  const dd = String(todayDate.getDate()).padStart(2, '0');
-  const today = `${yyyy}-${mm}-${dd}`;
+  const today = format(new Date(), 'yyyy-MM-dd');
 
   return (
     <div className='flex flex-col gap-6 px-4'>
