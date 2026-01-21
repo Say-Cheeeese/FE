@@ -44,13 +44,6 @@ export default function FooterPhotoDetail({
     photoId,
   });
 
-  console.log(
-    '🗑️ FooterPhotoDetail - canDelete:',
-    photoDetail?.canDelete,
-    'photoId:',
-    photoId,
-  );
-
   const { mutateAsync: mutateAsyncLike, isPending: isLiking } =
     usePhotoLikedMutation();
   const { mutateAsync: mutateAsyncUnlike, isPending: isUnliking } =
@@ -62,7 +55,6 @@ export default function FooterPhotoDetail({
     try {
       await mutateAsyncDelete({ albumId, photoId });
       queryClient.invalidateQueries({ queryKey: [EP.album.photos(albumId)] });
-      setIsPhotoInfoOpen(false);
     } catch (e) {
       console.error(e);
       Toast.alert('사진 삭제에 실패했습니다.');
