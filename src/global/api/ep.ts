@@ -104,7 +104,7 @@ export interface PreviewPhotoInfoSchema { "photoId": number; "imageUrl": string;
 export interface AuthExchangeResponseSchema { "accessToken": string; "refreshToken": string; "isOnboarded": boolean; "userId": number; "name": string; "email": string; }
 export interface CommonResponseAuthExchangeResponseSchema { "isSuccess"?: boolean; "code"?: number; "message"?: string; "result"?: AuthExchangeResponseSchema; }
 export interface CommonResponsePhotoPageResponseSchema { "isSuccess"?: boolean; "code"?: number; "message"?: string; "result"?: PhotoPageResponseSchema; }
-export interface PhotoListResponseSchema { "name"?: string; "photoId": number; "profileImage": string; "imageUrl"?: string; "thumbnailUrl": string; "likeCnt": number; "isLiked": boolean; "isDownloaded": boolean; "isRecentlyDownloaded": boolean; }
+export interface PhotoListResponseSchema { "name"?: string; "photoId": number; "profileImage": string; "imageUrl"?: string; "thumbnailUrl": string; "likeCnt": number; "isLiked": boolean; "isDownloaded": boolean; "isRecentlyDownloaded": boolean; "canDelete"?: boolean; }
 export interface PhotoPageResponseSchema { "responses": PhotoListResponseSchema[]; "listSize": number; "isFirst": boolean; "isLast": boolean; "hasNext": boolean; }
 export interface CommonResponsePhotoDetailResponseSchema { "isSuccess"?: boolean; "code"?: number; "message"?: string; "result"?: PhotoDetailResponseSchema; }
 export interface PhotoDetailResponseSchema { "name": string; "profileImage": string; "photoId": number; "imageUrl": string; "thumbnailUrl": string; "likesCnt": number; "isLiked": boolean; "isDownloaded": boolean; "isRecentlyDownloaded": boolean; "canDelete"?: boolean; "captureTime"?: string; "createdAt"?: string; }

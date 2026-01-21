@@ -1,13 +1,16 @@
 'use client';
 import { EP } from '@/global/api/ep';
 import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
+import ConfirmModal from '@/global/components/modal/ConfirmModal';
 import Toast from '@/global/components/toast/Toast';
 import { downloadFile } from '@/global/utils/downloadFile';
 import { getDeviceType } from '@/global/utils/getDeviceType';
 import { shareImage } from '@/global/utils/image/shareImage';
 import { useQueryClient } from '@tanstack/react-query';
-import { Download, Heart, Info } from 'lucide-react';
+import { Download, Heart, Info, Trash2 } from 'lucide-react';
 import { useState } from 'react';
+import { useDeleteAlbumPhotoMutation } from '../hooks/useDeleteAlbumPhotoMutation';
+import { usePhotoDetailQuery } from '../hooks/usePhotoDetailQuery';
 import { usePhotoDownloadMutation } from '../hooks/usePhotoDownloadMutation';
 import { usePhotoLikedMutation } from '../hooks/usePhotoLikedMutation';
 import { usePhotoUnlikedMutation } from '../hooks/usePhotoUnlikedMutation';
@@ -35,11 +38,36 @@ export default function FooterPhotoDetail({
   const queryClient = useQueryClient();
   const [isDownloading, setIsDownloading] = useState(false);
   const [isPhotoInfoOpen, setIsPhotoInfoOpen] = useState(false);
+
+  const { data: photoDetail } = usePhotoDetailQuery({
+    albumId,
+    photoId,
+  });
+
+  console.log(
+    '🗑️ FooterPhotoDetail - canDelete:',
+    photoDetail?.canDelete,
+    'photoId:',
+    photoId,
+  );
+
   const { mutateAsync: mutateAsyncLike, isPending: isLiking } =
     usePhotoLikedMutation();
   const { mutateAsync: mutateAsyncUnlike, isPending: isUnliking } =
     usePhotoUnlikedMutation();
   const { mutateAsync: mutateAsyncDownload } = usePhotoDownloadMutation();
+  const { mutateAsync: mutateAsyncDelete } = useDeleteAlbumPhotoMutation();
+
+  const handleDelete = async (): Promise<void> => {
+    try {
+      await mutateAsyncDelete({ albumId, photoId });
+      queryClient.invalidateQueries({ queryKey: [EP.album.photos(albumId)] });
+      setIsPhotoInfoOpen(false);
+    } catch (e) {
+      console.error(e);
+      Toast.alert('사진 삭제에 실패했습니다.');
+    }
+  };
 
   const handleDeepToggle = async (): Promise<void> => {
     try {
@@ -105,23 +133,6 @@ export default function FooterPhotoDetail({
 
   return (
     <section className='mx-10 flex shrink-0 justify-around py-5'>
-      <BottomSheetModal
-        title={'사진 정보'}
-        open={isPhotoInfoOpen}
-        onOpenChange={setIsPhotoInfoOpen}
-        trigger={
-          <button className='flex w-12 justify-center'>
-            <Info width={24} height={24} color='white' />
-          </button>
-        }
-      >
-        <SectionPhotoData
-          albumId={albumId}
-          photoId={photoId}
-          onAfterDelete={() => setIsPhotoInfoOpen(false)}
-        />
-      </BottomSheetModal>
-
       <button
         type='button'
         onClick={handleDownload}
@@ -135,6 +146,22 @@ export default function FooterPhotoDetail({
           color={`${isRecentlyDownloaded ? 'var(--color-neutral-400)' : 'white'}`}
         />
       </button>
+      <BottomSheetModal
+        title={'사진 정보'}
+        open={isPhotoInfoOpen}
+        onOpenChange={setIsPhotoInfoOpen}
+        trigger={
+          <button className='flex w-12 justify-center'>
+            <Info width={24} height={24} color='white' />
+          </button>
+        }
+      >
+        <SectionPhotoData
+          name={photoDetail?.name}
+          captureTime={photoDetail?.captureTime}
+          createdAt={photoDetail?.createdAt}
+        />
+      </BottomSheetModal>
 
       <div className='typo-body-lg-semibold flex w-12 justify-center gap-1'>
         <button type='button' onClick={handleDeepToggle}>
@@ -165,6 +192,22 @@ export default function FooterPhotoDetail({
           <ListPhotoLikers albumId={albumId} photoId={photoId} />
         </BottomSheetModal>
       </div>
+
+      {photoDetail?.canDelete && (
+        <ConfirmModal
+          title='사진을 삭제할까요?'
+          description='지운 사진은 다시 복구할 수 없어요.'
+          cancelText='취소'
+          confirmText='삭제하기'
+          confirmClassName='text-text-basic-inverse bg-button-accent-fill active:bg-button-accent-pressed active:text-basic-inverse'
+          onConfirm={handleDelete}
+          trigger={
+            <button className='flex w-12 justify-center'>
+              <Trash2 width={24} height={24} color='white' />
+            </button>
+          }
+        />
+      )}
     </section>
   );
 }

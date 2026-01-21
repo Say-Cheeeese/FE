@@ -79,7 +79,7 @@ export default function ConfirmModal({
     <AlertDialog>
       <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>
 
-      <AlertDialogContent className='rounded-[20px]!'>
+      <AlertDialogContent className='rounded-[20px]! border-none'>
         <AlertDialogHeader className='pb-6'>
           <AlertDialogTitle className='typo-heading-sm-semibold text-text-basic pt-4'>
             {title}
