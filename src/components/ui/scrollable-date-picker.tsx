@@ -238,7 +238,7 @@ export function ScrollableDatePicker({
   return (
     <div className='relative mx-auto flex h-[236px] w-full max-w-sm items-center justify-center overflow-hidden'>
       {/* Selection Indicator */}
-      <div className='bg-element-gray-light pointer-events-none absolute inset-x-4 top-1/2 z-0 h-8 -translate-y-1/2 rounded-[6px]' />
+      <div className='bg-element-gray-light pointer-events-none absolute inset-x-0 top-1/2 z-0 h-8 -translate-y-1/2 rounded-[6px]' />
 
       {/* Columns Container */}
       <div className='z-10 flex h-[236px] w-full justify-center px-6'>
