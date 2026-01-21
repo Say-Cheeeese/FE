@@ -105,6 +105,19 @@ export default function FooterPhotoDetail({
 
   return (
     <section className='mx-10 flex shrink-0 justify-around py-5'>
+      <button
+        type='button'
+        onClick={handleDownload}
+        disabled={isDownloading}
+        aria-label='사진 다운로드'
+        className={`flex w-12 justify-center`}
+      >
+        <Download
+          width={24}
+          height={24}
+          color={`${isRecentlyDownloaded ? 'var(--color-neutral-400)' : 'white'}`}
+        />
+      </button>
       <BottomSheetModal
         title={'사진 정보'}
         open={isPhotoInfoOpen}
@@ -122,19 +135,6 @@ export default function FooterPhotoDetail({
         />
       </BottomSheetModal>
 
-      <button
-        type='button'
-        onClick={handleDownload}
-        disabled={isDownloading}
-        aria-label='사진 다운로드'
-        className={`flex w-12 justify-center`}
-      >
-        <Download
-          width={24}
-          height={24}
-          color={`${isRecentlyDownloaded ? 'var(--color-neutral-400)' : 'white'}`}
-        />
-      </button>
 
       <div className='typo-body-lg-semibold flex w-12 justify-center gap-1'>
         <button type='button' onClick={handleDeepToggle}>
