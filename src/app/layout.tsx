@@ -1,7 +1,7 @@
 import GlobalClientEffects from '@/global/components/GlobalClientEffects';
 import KakaoProvider from '@/global/context/KakaoProvider';
 import QueryProvider from '@/global/context/QueryProvider';
-import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
+import { GoogleAnalytics } from '@next/third-parties/google';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';
@@ -96,7 +96,6 @@ export default function RootLayout({
       </Script> */}
       {process.env.NODE_ENV === 'production' && (
         <>
-          <GoogleTagManager gtmId='GTM-PH2N3NWM' />
           <GoogleAnalytics gaId='G-2EN8NDYR97' />
         </>
       )}
