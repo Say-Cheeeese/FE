@@ -49,9 +49,8 @@ describe('convertHeicFilesToJpeg', () => {
     expect(result[0].type).toBe('image/jpeg');
     // The second file should remain as is
     expect(result[1].name).toBe('image.jpg');
-    expect(Toast.alert).toHaveBeenCalledWith(
-      '1개의 HEIC 파일을 변환 중입니다...',
-    );
+    expect(Toast.alert).toHaveBeenCalledWith('변환 중... 0/1');
+    expect(Toast.alert).toHaveBeenCalledWith('변환 중... 1/1');
   });
 
   it('should handle conversion failure gracefully', async () => {
