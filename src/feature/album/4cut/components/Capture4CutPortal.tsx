@@ -10,6 +10,7 @@ interface Capture4CutPortalProps {
   albumId: string;
   eventName?: string;
   eventDate?: string;
+  isFinalized?: boolean;
 }
 
 const Capture4CutPortal = ({
@@ -18,6 +19,7 @@ const Capture4CutPortal = ({
   albumId,
   eventName,
   eventDate,
+  isFinalized = false,
 }: Capture4CutPortalProps) => (
   <BodyPortal>
     <div
@@ -34,6 +36,7 @@ const Capture4CutPortal = ({
         eventName={eventName}
         eventDate={eventDate}
         width={500}
+        isFinalized={isFinalized}
       />
     </div>
   </BodyPortal>

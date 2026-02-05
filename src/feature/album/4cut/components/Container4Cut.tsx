@@ -9,6 +9,7 @@ interface Container4CutProps {
   eventDate?: string;
   scale?: number;
   width?: number;
+  isFinalized?: boolean;
 }
 
 const BASE_WIDTH = 216;
@@ -30,6 +31,7 @@ export default function Container4Cut({
   eventName,
   scale = 1,
   width,
+  isFinalized = false,
 }: Container4CutProps) {
   // TODO : openapi type이 이상해서 임시 any처리. 백엔드랑 협의 필요
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -64,7 +66,12 @@ export default function Container4Cut({
   return (
     <div
       className='border-border-primary text-text-secondary relative border font-medium'
-      style={{ fontSize: scaledFontSize }}
+      style={{
+        fontSize: scaledFontSize,
+        ...(isFinalized && {
+          boxShadow: '0px 0px 25px 5px rgba(0, 0, 0, 0.08)',
+        }),
+      }}
     >
       <Svg4Cut
         width={calculatedWidth}
