@@ -250,5 +250,6 @@ function mapLikedPhotosToPhotoList(
     isLiked: item.isLiked ?? false,
     isDownloaded: item.isDownloaded,
     isRecentlyDownloaded: item.isRecentlyDownloaded,
+    canDelete: false,
   }));
 }

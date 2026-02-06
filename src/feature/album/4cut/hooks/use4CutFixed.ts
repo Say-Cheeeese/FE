@@ -8,8 +8,8 @@ interface Cheese4CutFixedProps {
 }
 
 const fetchData = async ({ albumId, photoIds }: Cheese4CutFixedProps) => {
-  const res = await api.post<ApiReturns['cheese4cut.finalize']>({
-    path: EP.cheese4cut.finalize(albumId),
+  const res = await api.post<ApiReturns['cheese4cut.cheese4cutFixedAi']>({
+    path: EP.cheese4cut.cheese4cutFixedAi(albumId),
     body: { photoIds },
   });
   return res.result;

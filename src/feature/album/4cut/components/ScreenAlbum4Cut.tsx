@@ -21,9 +21,11 @@ import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { useGetAlbumInfo } from '../../detail/hooks/useGetAlbumInfo';
+import { use4CutAiSummary } from '../hooks/use4CutAiSummary';
 import { use4CutFixed } from '../hooks/use4CutFixed';
 import { use4CutPreviewQuery } from '../hooks/use4CutPreviewQuery';
 import Container4Cut from './Container4Cut';
+import Container4CutExplanation from './Container4CutExplanation';
 const Capture4CutPortal = dynamic(() => import('./Capture4CutPortal'), {
   ssr: false,
 });
@@ -36,10 +38,12 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
   const queryClient = useQueryClient();
   const [isCaptureVisible, setIsCaptureVisible] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
+  const [showExplanation, setShowExplanation] = useState(false);
   const captureRef = useRef<HTMLDivElement>(null);
   const { data } = useGetAlbumInfo(albumId);
   const { data: albumInformData } = useGetAlbumInform({ code: albumId });
   const { data: { name } = {} } = useGetUserMe();
+  const { isCompleted } = use4CutAiSummary(albumId);
 
   // TODO : openapi type이 이상해서 임시 any처리. 백엔드랑 협의 필요
   const {
@@ -96,6 +100,13 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
       console.log(e);
       Toast.alert(`잠시후에 다시 시도해주세요.`);
     }
+  };
+
+  const handleFlipCard = () => {
+    if (!isCompleted && !showExplanation) {
+      return;
+    }
+    setShowExplanation(!showExplanation);
   };
 
   const handleDownload = async () => {
@@ -196,15 +207,64 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
           {!isFinalized && (
             <div className='typo-body-lg-semibold mb-2'>현재 TOP 4 사진</div>
           )}
-          <div>
-            <Container4Cut
-              albumId={albumId}
-              eventName={data?.title}
-              eventDate={
-                data?.eventDate ? data.eventDate.replace(/-/g, '.') : ''
-              }
-              scale={1}
-            />
+          <div
+            className='relative cursor-pointer'
+            style={{
+              perspective: '1000px',
+            }}
+            onClick={isFinalized ? handleFlipCard : undefined}
+          >
+            <div
+              style={{
+                transformStyle: 'preserve-3d',
+                transition: 'transform 0.6s',
+                transform: showExplanation
+                  ? 'rotateY(180deg)'
+                  : 'rotateY(0deg)',
+              }}
+            >
+              {/* 앞면 - 4컷 사진 */}
+              <div
+                style={{
+                  backfaceVisibility: 'hidden',
+                  WebkitBackfaceVisibility: 'hidden',
+                }}
+              >
+                <Container4Cut
+                  albumId={albumId}
+                  eventName={data?.title}
+                  eventDate={
+                    data?.eventDate ? data.eventDate.replace(/-/g, '.') : ''
+                  }
+                  scale={isFinalized ? 1.5 : 1}
+                  isFinalized={isFinalized}
+                />
+              </div>
+              {/* 뒷면 - 설명 */}
+              {isFinalized && (
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    backfaceVisibility: 'hidden',
+                    WebkitBackfaceVisibility: 'hidden',
+                    transform: 'rotateY(180deg)',
+                  }}
+                >
+                  <Container4CutExplanation
+                    albumId={albumId}
+                    eventName={data?.title}
+                    eventDate={
+                      data?.eventDate ? data.eventDate.replace(/-/g, '.') : ''
+                    }
+                    scale={1.5}
+                    isFinalized={isFinalized}
+                    onClose={handleFlipCard}
+                  />
+                </div>
+              )}
+            </div>
           </div>
         </section>
         {!is4CutPreviewPending && (
@@ -286,7 +346,7 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
         )}{' '}
       </main>{' '}
       {isDownloading && (
-        <div className='fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-[2px]'>
+        <div className='fixed inset-0 z-9999 flex items-center justify-center bg-black/40 backdrop-blur-[2px]'>
           <div className='flex items-center gap-3 rounded-2xl bg-white px-4 py-3 shadow-lg'>
             <Loader2 className='text-primary h-5 w-5 animate-spin' />
             <span className='typo-body-lg-semibold text-text-basic'>
@@ -301,6 +361,7 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
         albumId={albumId}
         eventName={data?.title}
         eventDate={data?.eventDate ? data.eventDate.replace(/-/g, '.') : ''}
+        isFinalized={isFinalized}
       />
     </>
   );
