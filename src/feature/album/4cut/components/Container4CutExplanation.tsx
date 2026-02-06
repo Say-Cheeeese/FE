@@ -1,6 +1,8 @@
 import { X } from 'lucide-react';
+import { use4CutAiSummary } from '../hooks/use4CutAiSummary';
 
 interface Container4CutExplanationProps {
+  albumId: string;
   eventName?: string;
   eventDate?: string;
   scale?: number;
@@ -14,6 +16,7 @@ const BASE_HEIGHT = 384;
 const BASE_ASPECT_RATIO = BASE_HEIGHT / BASE_WIDTH;
 
 export default function Container4CutExplanation({
+  albumId,
   eventName,
   eventDate,
   scale = 1,
@@ -23,6 +26,7 @@ export default function Container4CutExplanation({
 }: Container4CutExplanationProps) {
   const calculatedWidth = width ?? BASE_WIDTH * scale;
   const calculatedHeight = calculatedWidth * BASE_ASPECT_RATIO;
+  const { aiSummary, isCompleted, isLoading } = use4CutAiSummary(albumId);
 
   return (
     <div
@@ -43,7 +47,9 @@ export default function Container4CutExplanation({
             {eventName || '인생네컷'}
           </h2>
           {eventDate && (
-            <p className='text-text-subtler typo-caption-sm-medium'>{eventDate}</p>
+            <p className='text-text-subtler typo-caption-sm-medium'>
+              {eventDate}
+            </p>
           )}
         </div>
         {/* X 버튼 */}
@@ -59,32 +65,17 @@ export default function Container4CutExplanation({
       {/* Body: 텍스트 설명 */}
       <div className='flex h-full flex-col justify-center p-4'>
         <div className='bg-surface-white rounded-lg p-4'>
-          <div className='space-y-3'>
-            <p className='text-text-basic text-sm leading-relaxed'>
-              여러분의 소중한 순간을 4장의 사진으로 담아내는 특별한 기능입니다.
+          {isLoading ? (
+            <div className='flex items-center justify-center py-8'>
+              <div className='text-text-secondary text-sm'>
+                AI 요약 생성 중...
+              </div>
+            </div>
+          ) : (
+            <p className='text-text-basic text-sm leading-relaxed whitespace-pre-wrap'>
+              {aiSummary}
             </p>
-
-            <div className='space-y-2'>
-              <p className='text-text-secondary text-sm font-semibold'>
-                ✨ 특징
-              </p>
-              <ul className='text-text-secondary space-y-1 pl-4 text-sm'>
-                <li>• 앨범의 베스트 사진 4장 자동 선정</li>
-                <li>• 인생네컷 스타일 레이아웃</li>
-                <li>• 다운로드 및 공유 가능</li>
-              </ul>
-            </div>
-
-            <div className='space-y-2'>
-              <p className='text-text-secondary text-sm font-semibold'>
-                💡 사용 방법
-              </p>
-              <p className='text-text-secondary text-sm leading-relaxed'>
-                메이커가 사진을 확정하면 자동으로 생성됩니다. 다운로드 버튼을
-                눌러 저장하세요!
-              </p>
-            </div>
-          </div>
+          )}
         </div>
       </div>
     </div>

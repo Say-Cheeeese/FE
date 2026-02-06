@@ -248,6 +248,7 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
                   }}
                 >
                   <Container4CutExplanation
+                    albumId={albumId}
                     eventName={data?.title}
                     eventDate={
                       data?.eventDate ? data.eventDate.replace(/-/g, '.') : ''
