@@ -26,7 +26,7 @@ export default function Container4CutExplanation({
 }: Container4CutExplanationProps) {
   const calculatedWidth = width ?? BASE_WIDTH * scale;
   const calculatedHeight = calculatedWidth * BASE_ASPECT_RATIO;
-  const { aiSummary, isCompleted, isLoading } = use4CutAiSummary(albumId);
+  const { aiSummary, isLoading } = use4CutAiSummary(albumId);
 
   return (
     <div
