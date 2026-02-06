@@ -45,7 +45,7 @@ export const EP = {
     "reportUploadResult": () => `/v1/photo/report`,
   },
   cheese4cut: {
-    "finalize": (code: string | number) => `/v1/cheese4cut/${code}/fixed`,
+    "finalize": (code: string | number) => `/v1/cheese4cut/${code}/fixed/ai`,
     "preview": (code: string | number) => `/v1/cheese4cut/${code}/preview`,
   },
   internal: {
