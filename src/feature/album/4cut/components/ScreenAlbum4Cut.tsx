@@ -21,6 +21,7 @@ import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { useGetAlbumInfo } from '../../detail/hooks/useGetAlbumInfo';
+import { use4CutAiSummary } from '../hooks/use4CutAiSummary';
 import { use4CutFixed } from '../hooks/use4CutFixed';
 import { use4CutPreviewQuery } from '../hooks/use4CutPreviewQuery';
 import Container4Cut from './Container4Cut';
@@ -42,6 +43,7 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
   const { data } = useGetAlbumInfo(albumId);
   const { data: albumInformData } = useGetAlbumInform({ code: albumId });
   const { data: { name } = {} } = useGetUserMe();
+  const { isCompleted } = use4CutAiSummary(albumId);
 
   // TODO : openapi type이 이상해서 임시 any처리. 백엔드랑 협의 필요
   const {
@@ -101,6 +103,9 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
   };
 
   const handleFlipCard = () => {
+    if (!isCompleted && !showExplanation) {
+      return;
+    }
     setShowExplanation(!showExplanation);
   };
 
