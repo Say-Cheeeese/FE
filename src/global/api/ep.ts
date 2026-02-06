@@ -45,7 +45,9 @@ export const EP = {
     "reportUploadResult": () => `/v1/photo/report`,
   },
   cheese4cut: {
-    "finalize": (code: string | number) => `/v1/cheese4cut/${code}/fixed/ai`,
+    "cheese4cutAiSummary": (code: string | number) => `/v1/cheese4cut/${code}/ai-summary`,
+    "finalize": (code: string | number) => `/v1/cheese4cut/${code}/fixed`,
+    "cheese4cutFixedAi": (code: string | number) => `/v1/cheese4cut/${code}/fixed/ai`,
     "preview": (code: string | number) => `/v1/cheese4cut/${code}/preview`,
   },
   internal: {
@@ -101,10 +103,12 @@ export interface Cheese4cutResponseSchema { "finalized"?: boolean; }
 export interface CommonResponseCheese4cutResponseSchema { "isSuccess"?: boolean; "code"?: number; "message"?: string; "result"?: Cheese4cutFinalResponseSchema | Cheese4cutPreviewResponseSchema; }
 export interface FinalPhotoInfoSchema { "photoId": number; "imageUrl": string; "photoRank": number; }
 export interface PreviewPhotoInfoSchema { "photoId": number; "imageUrl": string; "photoRank": number; }
+export interface Cheese4cutAiResponseSchema { "status"?: string; "title"?: string; "content"?: string; }
+export interface CommonResponseCheese4cutAiResponseSchema { "isSuccess"?: boolean; "code"?: number; "message"?: string; "result"?: Cheese4cutAiResponseSchema; }
 export interface AuthExchangeResponseSchema { "accessToken": string; "refreshToken": string; "isOnboarded": boolean; "userId": number; "name": string; "email": string; }
 export interface CommonResponseAuthExchangeResponseSchema { "isSuccess"?: boolean; "code"?: number; "message"?: string; "result"?: AuthExchangeResponseSchema; }
 export interface CommonResponsePhotoPageResponseSchema { "isSuccess"?: boolean; "code"?: number; "message"?: string; "result"?: PhotoPageResponseSchema; }
-export interface PhotoListResponseSchema { "name"?: string; "photoId": number; "profileImage": string; "imageUrl"?: string; "thumbnailUrl": string; "likeCnt": number; "isLiked": boolean; "isDownloaded": boolean; "isRecentlyDownloaded": boolean; "canDelete"?: boolean; }
+export interface PhotoListResponseSchema { "name"?: string; "photoId": number; "uploaderId"?: number; "profileImage": string; "imageUrl"?: string; "thumbnailUrl": string; "likeCnt": number; "isLiked": boolean; "isDownloaded": boolean; "isRecentlyDownloaded": boolean; "canDelete": boolean; }
 export interface PhotoPageResponseSchema { "responses": PhotoListResponseSchema[]; "listSize": number; "isFirst": boolean; "isLast": boolean; "hasNext": boolean; }
 export interface CommonResponsePhotoDetailResponseSchema { "isSuccess"?: boolean; "code"?: number; "message"?: string; "result"?: PhotoDetailResponseSchema; }
 export interface PhotoDetailResponseSchema { "name": string; "profileImage": string; "photoId": number; "imageUrl": string; "thumbnailUrl": string; "likesCnt": number; "isLiked": boolean; "isDownloaded": boolean; "isRecentlyDownloaded": boolean; "canDelete"?: boolean; "captureTime"?: string; "createdAt"?: string; }
@@ -164,7 +168,9 @@ export type PhotoUnlikeResponse = CommonResponseVoidSchema["result"];
 export type PhotoPresignedDownloadResponse = CommonResponsePhotoDownloadResponseSchema["result"];
 export type PhotoPresignedUploadResponse = CommonResponsePhotoPresignedUrlResponseSchema["result"];
 export type PhotoReportUploadResultResponse = CommonResponseVoidSchema["result"];
+export type Cheese4cutCheese4cutAiSummaryResponse = CommonResponseCheese4cutAiResponseSchema["result"];
 export type Cheese4cutFinalizeResponse = CommonResponseVoidSchema["result"];
+export type Cheese4cutCheese4cutFixedAiResponse = CommonResponseVoidSchema["result"];
 export type Cheese4cutPreviewResponse = CommonResponseCheese4cutResponseSchema["result"];
 export type InternalThumbnailCompleteResponse = CommonResponseVoidSchema["result"];
 
@@ -201,7 +207,9 @@ export interface ApiReturns {
   "photo.presignedDownload": PhotoPresignedDownloadResponse; // POST /v1/photo/download-url
   "photo.presignedUpload": PhotoPresignedUploadResponse; // POST /v1/photo/presigned-url
   "photo.reportUploadResult": PhotoReportUploadResultResponse; // POST /v1/photo/report
+  "cheese4cut.cheese4cutAiSummary": Cheese4cutCheese4cutAiSummaryResponse; // GET /v1/cheese4cut/{code}/ai-summary
   "cheese4cut.finalize": Cheese4cutFinalizeResponse; // POST /v1/cheese4cut/{code}/fixed
+  "cheese4cut.cheese4cutFixedAi": Cheese4cutCheese4cutFixedAiResponse; // POST /v1/cheese4cut/{code}/fixed/ai
   "cheese4cut.preview": Cheese4cutPreviewResponse; // GET /v1/cheese4cut/{code}/preview
   "internal.thumbnailComplete": InternalThumbnailCompleteResponse; // POST /internal/thumbnail/complete
 }
