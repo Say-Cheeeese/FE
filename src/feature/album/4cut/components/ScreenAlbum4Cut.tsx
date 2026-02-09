@@ -47,7 +47,13 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
 
   // TODO : openapi type이 이상해서 임시 any처리. 백엔드랑 협의 필요
   const {
-    data: { myRole, previewPhotos, isFinalized } = {},
+    data: {
+      myRole,
+      previewPhotos,
+      isFinalized,
+      uniqueLikesCount,
+      participant,
+    } = {},
     isPending: is4CutPreviewPending,
     isSuccess,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -293,8 +299,7 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
                           <PersonSvg />
                         </span>
                         <span>
-                          {`${data?.currentParticipant} / ${data?.participant}`}{' '}
-                          명
+                          {`${uniqueLikesCount ?? 0} / ${participant ?? 0}`}명
                         </span>
                       </div>
                     </div>
