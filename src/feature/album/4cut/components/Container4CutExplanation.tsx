@@ -26,7 +26,7 @@ export default function Container4CutExplanation({
 }: Container4CutExplanationProps) {
   const calculatedWidth = width ?? BASE_WIDTH * scale;
   const calculatedHeight = calculatedWidth * BASE_ASPECT_RATIO;
-  const { aiSummary, isLoading } = use4CutAiSummary(albumId);
+  const { aiSummary } = use4CutAiSummary(albumId);
 
   return (
     <div
@@ -53,29 +53,23 @@ export default function Container4CutExplanation({
           )}
         </div>
         {/* X 버튼 */}
-        <button
-          onClick={onClose}
-          className='rounded-full p-1 transition-colors hover:bg-gray-100'
-          aria-label='닫기'
-        >
-          <X className='text-text-secondary h-5 w-5' />
-        </button>
+        <div className='bg-element-primary-light flex h-8 w-8 items-center justify-center rounded-full'>
+          <button
+            onClick={onClose}
+            className='flex items-center justify-center'
+            aria-label='닫기'
+          >
+            <X className='text-text-secondary h-5 w-5' />
+          </button>
+        </div>
       </div>
 
       {/* Body: 텍스트 설명 */}
-      <div className='flex h-full flex-col justify-center p-4'>
-        <div className='bg-surface-white rounded-lg p-4'>
-          {isLoading ? (
-            <div className='flex items-center justify-center py-8'>
-              <div className='text-text-secondary text-sm'>
-                AI 요약 생성 중...
-              </div>
-            </div>
-          ) : (
-            <p className='text-text-basic text-sm leading-relaxed whitespace-pre-wrap'>
-              {aiSummary}
-            </p>
-          )}
+      <div className='flex h-full flex-col justify-start px-4'>
+        <div className='bg-surface-white h-[320px] rounded-lg p-4'>
+          <p className='text-text-basic text-sm leading-relaxed whitespace-pre-wrap'>
+            {aiSummary}
+          </p>
         </div>
       </div>
     </div>
