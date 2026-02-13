@@ -1,5 +1,5 @@
-import ScreenRoot from '@/feature/root/components/ScreenRoot';
+import ScreenNewRoot from '@/feature/root/components/ScreenNewRoot';
 
 export default function Page() {
-  return <ScreenRoot />;
+  return <ScreenNewRoot />;
 }

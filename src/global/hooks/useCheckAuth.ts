@@ -47,11 +47,18 @@ export function useCheckAuth({
         }
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {
+        console.log('err 타입', err);
         if (cancelled) return;
 
         const status = err?.response?.status;
+        const code = err?.code;
 
-        if (status === 401) {
+        // 401 에러 또는 refresh token 없음 에러 처리
+        if (
+          status === 401 ||
+          code === 401 ||
+          err?.message?.includes('No refresh token')
+        ) {
           setIsAuthed(false);
           setUserId(null);
           onUnauthed?.();
