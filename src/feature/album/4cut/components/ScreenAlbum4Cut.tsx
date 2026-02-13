@@ -225,7 +225,7 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
                 transformStyle: 'preserve-3d',
                 transition: 'transform 0.6s',
                 transform: showExplanation
-                  ? 'rotateY(180deg)'
+                  ? 'rotateY(-180deg)'
                   : 'rotateY(0deg)',
               }}
             >
@@ -255,7 +255,7 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
                     left: 0,
                     backfaceVisibility: 'hidden',
                     WebkitBackfaceVisibility: 'hidden',
-                    transform: 'rotateY(180deg)',
+                    transform: 'rotateY(-180deg)',
                   }}
                 >
                   <Container4CutExplanation
