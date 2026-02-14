@@ -3,6 +3,7 @@
 import { useCheckAuth } from '@/global/hooks/useCheckAuth';
 import { useEffect, useState } from 'react';
 import FlashRending from './FlashRending';
+import { RendingBody } from './RendingBody';
 
 const ScreenNewRoot = () => {
   const { isAuthed } = useCheckAuth();
@@ -27,8 +28,8 @@ const ScreenNewRoot = () => {
 
   // 로그인 상태이거나 스플래시 시간이 지난 비로그인 사용자
   return (
-    <div className='bg-background-brand flex min-h-screen items-center justify-center'>
-      <div>메인 컨텐츠 영역</div>
+    <div className='bg-background-brand flex min-h-screen flex-col items-center justify-center'>
+      <RendingBody />
     </div>
   );
 };
