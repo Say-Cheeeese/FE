@@ -36,7 +36,7 @@ export const RendingBody = () => {
       width: 260,
       height: 530.31,
       title: '모인 자리에서 바로 공유',
-      description: '감튀 모임부터 앨범 만들고 초대까지 딱 10초',
+      description: '앨범 만들고 초대까지 딱 10초',
     },
     {
       src: '/assets/rending/new-swipe/3.png',
