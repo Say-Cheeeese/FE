@@ -133,7 +133,10 @@ export const RendingBody = () => {
       </div>
 
       {/* 하단 흰색 배경 영역 */}
-      <div className='absolute bottom-0 z-10 flex h-[242px] w-full flex-col items-center bg-white px-4 pt-8 pb-5'>
+      <div
+        className='absolute bottom-0 z-10 flex w-full flex-col items-center bg-white px-4 pt-8'
+        style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 20px)' }}
+      >
         {/* 텍스트 및 인디케이터 영역 - 스와이프 가능 */}
         <Carousel
           setApi={setApi}
