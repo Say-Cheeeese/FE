@@ -28,7 +28,7 @@ const ScreenNewRoot = () => {
 
   // 로그인 상태이거나 스플래시 시간이 지난 비로그인 사용자
   return (
-    <div className='bg-background-brand flex min-h-screen flex-col items-center justify-center'>
+    <div className='bg-background-brand flex h-dvh flex-col items-center justify-center'>
       <RendingBody />
     </div>
   );
