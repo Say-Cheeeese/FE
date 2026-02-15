@@ -35,7 +35,7 @@ export const RendingBody = () => {
       alt: 'QR 코드 공유',
       width: 260,
       height: 530.31,
-      title: '이벤트마다 모인 자리에서 바로 공유',
+      title: '모인 자리에서 바로 공유',
       description: '감튀 모임부터 앨범 만들고 초대까지 딱 10초',
     },
     {
@@ -43,7 +43,7 @@ export const RendingBody = () => {
       alt: '베스트컷',
       width: 312.56,
       height: 530.31,
-      title: '이벤트마다 한눈에 보는 베스트컷',
+      title: '한눈에 보는 베스트컷',
       description: '사진 고르는 고민 이제 끝',
     },
     {
@@ -137,7 +137,7 @@ export const RendingBody = () => {
         className='absolute bottom-0 z-10 flex h-[242px] w-full flex-col items-center bg-white px-4 pt-8'
         style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 20px)' }}
       >
-        {/* 텍스트 및 인디케이터 영역 - 스와이프 가능 */}
+        {/* 텍스트 영역 - 스와이프 가능 */}
         <Carousel
           setApi={setApi}
           className='w-full'
@@ -149,37 +149,32 @@ export const RendingBody = () => {
           <CarouselContent>
             {slides.map((slide, index) => (
               <CarouselItem key={index}>
-                <div className='flex flex-col items-center'>
-                  {/* 텍스트 영역 */}
-                  <div className='mb-6 flex flex-col items-center text-center'>
-                    <h2 className='text-text-basic text-[24px] font-[600]'>
-                      {slide.title}
-                    </h2>
-                    <p className='mt-1 text-[16px] font-[500] text-[#746181]'>
-                      {slide.description}
-                    </p>
-                  </div>
-
-                  {/* 인디케이터 점들 */}
-                  <div className='flex gap-2'>
-                    {slides.map((_, idx) => (
-                      <button
-                        key={idx}
-                        onClick={() => api?.scrollTo(idx)}
-                        className={`h-1.5 rounded-full transition-all ${
-                          current === idx
-                            ? 'w-6 bg-gray-700'
-                            : 'w-1.5 bg-gray-200'
-                        }`}
-                        aria-label={`슬라이드 ${idx + 1}로 이동`}
-                      />
-                    ))}
-                  </div>
+                <div className='flex flex-col items-center text-center'>
+                  <h2 className='text-text-basic text-[24px] font-[600]'>
+                    {slide.title}
+                  </h2>
+                  <p className='mt-1 text-[16px] font-[500] text-[#746181]'>
+                    {slide.description}
+                  </p>
                 </div>
               </CarouselItem>
             ))}
           </CarouselContent>
         </Carousel>
+
+        {/* 인디케이터 점들 - 고정 */}
+        <div className='mt-6 flex gap-2'>
+          {slides.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => api?.scrollTo(idx)}
+              className={`h-1.5 rounded-full transition-all ${
+                current === idx ? 'w-6 bg-gray-700' : 'w-1.5 bg-gray-200'
+              }`}
+              aria-label={`슬라이드 ${idx + 1}로 이동`}
+            />
+          ))}
+        </div>
 
         {/* 카카오 로그인 버튼 - 고정 */}
         <div

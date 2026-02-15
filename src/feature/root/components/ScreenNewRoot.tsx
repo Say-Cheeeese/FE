@@ -31,7 +31,7 @@ const ScreenNewRoot = () => {
 
   // 로그인 상태이거나 비로그인에서 스플래시 시간이 지난 경우
   return (
-    <div className='bg-background-brand flex h-screen flex-col items-center justify-center'>
+    <div className='bg-background-brand flex h-dvh flex-col items-center justify-center'>
       <RendingBody />
     </div>
   );

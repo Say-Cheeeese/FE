@@ -53,12 +53,17 @@ export function useCheckAuth({
         const status = err?.response?.status;
         const code = err?.code;
 
-        // 401 에러 또는 refresh token 없음 에러 처리
+        // 401 에러 또는 refresh token 없음 에러 처리, 혹은 그 외 에러도 비로그인 처리
         if (
           status === 401 ||
           code === 401 ||
           err?.message?.includes('No refresh token')
         ) {
+          setIsAuthed(false);
+          setUserId(null);
+          onUnauthed?.();
+        } else {
+          // 그 외 에러 상황에서도(네트워크 에러 등) 일단 비로그인으로 간주하여 무한 로딩 방지
           setIsAuthed(false);
           setUserId(null);
           onUnauthed?.();
