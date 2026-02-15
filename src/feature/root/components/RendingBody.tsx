@@ -23,7 +23,7 @@ export const RendingBody = () => {
 
   const slides = [
     {
-      src: '/assets/rending/new-swipe/1.svg',
+      src: '/assets/rending/new-swipe/1.png',
       alt: '앨범 목록 화면',
       width: 260,
       height: 530.31,
@@ -31,7 +31,7 @@ export const RendingBody = () => {
       description: '감튀 모임부터 찐친 여행까지',
     },
     {
-      src: '/assets/rending/new-swipe/2.svg',
+      src: '/assets/rending/new-swipe/2.png',
       alt: 'QR 코드 공유',
       width: 260,
       height: 530.31,
@@ -39,7 +39,7 @@ export const RendingBody = () => {
       description: '감튀 모임부터 앨범 만들고 초대까지 딱 10초',
     },
     {
-      src: '/assets/rending/new-swipe/3.svg',
+      src: '/assets/rending/new-swipe/3.png',
       alt: '베스트컷',
       width: 312.56,
       height: 530.31,
@@ -47,7 +47,7 @@ export const RendingBody = () => {
       description: '사진 고르는 고민 이제 끝',
     },
     {
-      src: '/assets/rending/new-swipe/4.svg',
+      src: '/assets/rending/new-swipe/4.png',
       alt: '네컷추억',
       width: 288.8,
       height: 530.31,
@@ -134,7 +134,7 @@ export const RendingBody = () => {
 
       {/* 하단 흰색 배경 영역 */}
       <div
-        className='absolute bottom-0 z-10 flex w-full flex-col items-center bg-white px-4 pt-8'
+        className='absolute bottom-0 z-10 flex h-[242px] w-full flex-col items-center bg-white px-4 pt-8'
         style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 20px)' }}
       >
         {/* 텍스트 및 인디케이터 영역 - 스와이프 가능 */}
