@@ -101,9 +101,9 @@ export const RendingBody = () => {
   };
 
   return (
-    <section className='bg-background-white-muted relative flex h-screen w-full flex-col'>
+    <section className='bg-background-white-muted relative flex h-dvh w-full flex-col'>
       {/* 이미지 영역 - 고정 (애니메이션 없음) */}
-      <div className='flex h-screen w-full flex-col items-center justify-start px-4 pt-12'>
+      <div className='flex h-dvh w-full flex-col items-center justify-start px-4 pt-12'>
         <div
           className='relative w-full max-w-md'
           onTouchStart={handleTouchStart}
