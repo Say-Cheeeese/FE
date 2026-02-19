@@ -9,7 +9,8 @@ import {
 import { buildQuery } from '@/global/utils/buildQuery';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
+import { trackGaEvent } from '@/global/utils/trackGaEvent'; // GA 이벤트 추가
 
 const KAKAO_AUTH_URL = `https://dev.say-cheese.me/oauth2/authorization/kakao`;
 
@@ -20,6 +21,8 @@ export const RendingBody = () => {
   const [touchEnd, setTouchEnd] = useState(0);
   const searchParams = useSearchParams();
   const redirect = searchParams.get('redirect');
+  // 어떤 이벤트를 봤는지 집합 자료구조를 통해 표시 / state로 뒀을 때 의존성이 흔들려 ref로 관리
+  const viewedSlidesRef = useRef<Set<number>>(new Set());
 
   const slides = [
     {
@@ -60,9 +63,30 @@ export const RendingBody = () => {
   useEffect(() => {
     if (!api) return;
 
-    api.on('select', () => {
-      setCurrent(api.selectedScrollSnap());
-    });
+    const fireViewEventIfNeeded = (idx: number) => {
+      if (viewedSlidesRef.current.has(idx)) return;
+      trackGaEvent('rendering_slide_view', {
+        slide_index: (idx + 1).toString(),
+        slide_title: slides[idx]?.title ?? '',
+      });
+      viewedSlidesRef.current.add(idx);
+    };
+
+    const initialIndex = api.selectedScrollSnap();
+    setCurrent(initialIndex);
+    fireViewEventIfNeeded(initialIndex);
+
+    const onSelect = () => {
+      const newIndex = api.selectedScrollSnap();
+      setCurrent(newIndex);
+      fireViewEventIfNeeded(newIndex);
+    };
+
+    api.on('select', onSelect);
+
+    return () => {
+      api.off?.('select', onSelect);
+    };
   }, [api]);
 
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -75,6 +99,7 @@ export const RendingBody = () => {
 
   const handleTouchEnd = () => {
     if (!api) return;
+    if (touchEnd === 0) return;
 
     const swipeDistance = touchStart - touchEnd;
     const minSwipeDistance = 50;
@@ -86,9 +111,17 @@ export const RendingBody = () => {
       // 오른쪽으로 스와이프 (이전)
       api.scrollPrev();
     }
+
+    setTouchStart(0);
+    setTouchEnd(0); // 이전 값이 남아 있으면 거리 계산 어려움
   };
 
   const handleKakaoLogin = async () => {
+    trackGaEvent('cta_click', {
+      button_name: 'kakao_login',
+      last_visible_slide: (current + 1).toString()
+    });
+
     try {
       const kakaoUrl = redirect
         ? `${KAKAO_AUTH_URL}${buildQuery({ redirect })}`
