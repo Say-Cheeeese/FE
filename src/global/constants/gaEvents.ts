@@ -17,4 +17,6 @@ export const GA_EVENTS = {
   click_request_4cut: 'click_request_4cut',
   view_4cut_unconfirmed: 'view_4cut_unconfirmed',
   view_4cut_confirmed: 'view_4cut_confirmed',
+  rendering_slide_view: 'rendering_slide_view',
+  cta_click: 'cta_click',
 };

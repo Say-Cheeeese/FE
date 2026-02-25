@@ -9,60 +9,87 @@ import {
 import { buildQuery } from '@/global/utils/buildQuery';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
+import { trackGaEvent } from '@/global/utils/trackGaEvent';
+import { GA_EVENTS } from '@/global/constants/gaEvents'; // GA 이벤트 추가, 상수화
 
 const KAKAO_AUTH_URL = `https://dev.say-cheese.me/oauth2/authorization/kakao`;
+
+const SLIDES = [
+  {
+    src: '/assets/rending/new-swipe/1.png',
+    alt: '앨범 목록 화면',
+    width: 260,
+    height: 530.31,
+    title: '이벤트마다 만드는 공유앨범',
+    description: '감튀 모임부터 찐친 여행까지',
+  },
+  {
+    src: '/assets/rending/new-swipe/2.png',
+    alt: 'QR 코드 공유',
+    width: 260,
+    height: 530.31,
+    title: '모인 자리에서 바로 공유',
+    description: '앨범 만들고 초대까지 딱 10초',
+  },
+  {
+    src: '/assets/rending/new-swipe/3.png',
+    alt: '베스트컷',
+    width: 312.56,
+    height: 530.31,
+    title: '한눈에 보는 베스트컷',
+    description: '사진 고르는 고민 이제 끝',
+  },
+  {
+    src: '/assets/rending/new-swipe/4.png',
+    alt: '네컷추억',
+    width: 288.8,
+    height: 530.31,
+    title: '딱 네컷으로 남는 추억',
+    description: '앨범이 닫히면 사라지는 원본 사진들',
+  },
+] as const;
 
 export const RendingBody = () => {
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
+
   const searchParams = useSearchParams();
   const redirect = searchParams.get('redirect');
 
-  const slides = [
-    {
-      src: '/assets/rending/new-swipe/1.png',
-      alt: '앨범 목록 화면',
-      width: 260,
-      height: 530.31,
-      title: '이벤트마다 만드는 공유앨범',
-      description: '감튀 모임부터 찐친 여행까지',
-    },
-    {
-      src: '/assets/rending/new-swipe/2.png',
-      alt: 'QR 코드 공유',
-      width: 260,
-      height: 530.31,
-      title: '모인 자리에서 바로 공유',
-      description: '앨범 만들고 초대까지 딱 10초',
-    },
-    {
-      src: '/assets/rending/new-swipe/3.png',
-      alt: '베스트컷',
-      width: 312.56,
-      height: 530.31,
-      title: '한눈에 보는 베스트컷',
-      description: '사진 고르는 고민 이제 끝',
-    },
-    {
-      src: '/assets/rending/new-swipe/4.png',
-      alt: '네컷추억',
-      width: 288.8,
-      height: 530.31,
-      title: '딱 네컷으로 남는 추억',
-      description: '앨범이 닫히면 사라지는 원본 사진들',
-    },
-  ];
+  // 어떤 이벤트를 봤는지 집합 자료구조를 통해 표시 / state로 뒀을 때 의존성이 흔들려 ref로 관리
+  const viewedSlidesRef = useRef<Set<number>>(new Set());
 
   // 캐러셀 API를 통해 현재 슬라이드 추적
   useEffect(() => {
     if (!api) return;
 
-    api.on('select', () => {
-      setCurrent(api.selectedScrollSnap());
-    });
+    const fireViewEventIfNeeded = (idx: number) => {
+      if (viewedSlidesRef.current.has(idx)) return;
+      trackGaEvent(GA_EVENTS.rendering_slide_view, {
+        slide_index: (idx + 1).toString(),
+        slide_title: SLIDES[idx]?.title ?? '',
+      });
+      viewedSlidesRef.current.add(idx);
+    };
+
+    const initialIndex = api.selectedScrollSnap();
+    setCurrent(initialIndex);
+    fireViewEventIfNeeded(initialIndex);
+
+    const onSelect = () => {
+      const newIndex = api.selectedScrollSnap();
+      setCurrent(newIndex);
+      fireViewEventIfNeeded(newIndex);
+    };
+
+    api.on('select', onSelect);
+
+    return () => {
+      api.off?.('select', onSelect);
+    };
   }, [api]);
 
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -75,6 +102,7 @@ export const RendingBody = () => {
 
   const handleTouchEnd = () => {
     if (!api) return;
+    if (touchEnd === 0) return;
 
     const swipeDistance = touchStart - touchEnd;
     const minSwipeDistance = 50;
@@ -86,9 +114,17 @@ export const RendingBody = () => {
       // 오른쪽으로 스와이프 (이전)
       api.scrollPrev();
     }
+
+    setTouchStart(0);
+    setTouchEnd(0); // 초기화, 이전 값이 남아 있으면 거리 계산 어려움
   };
 
   const handleKakaoLogin = async () => {
+    trackGaEvent(GA_EVENTS.cta_click, {
+      button_name: 'kakao_login',
+      last_visible_slide: (current + 1).toString(),
+    });
+
     try {
       const kakaoUrl = redirect
         ? `${KAKAO_AUTH_URL}${buildQuery({ redirect })}`
@@ -110,7 +146,7 @@ export const RendingBody = () => {
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
         >
-          {slides.map((slide, index) => (
+          {SLIDES.map((slide, index) => (
             <div
               key={index}
               className={`flex items-center justify-center overflow-hidden rounded-3xl transition-opacity duration-500 ${
@@ -147,7 +183,7 @@ export const RendingBody = () => {
           }}
         >
           <CarouselContent>
-            {slides.map((slide, index) => (
+            {SLIDES.map((slide, index) => (
               <CarouselItem key={index}>
                 <div className='flex flex-col items-center text-center'>
                   <h2 className='text-text-basic text-[24px] font-[600]'>
@@ -164,7 +200,7 @@ export const RendingBody = () => {
 
         {/* 인디케이터 점들 - 고정 */}
         <div className='mt-6 flex gap-2'>
-          {slides.map((_, idx) => (
+          {SLIDES.map((_, idx) => (
             <button
               key={idx}
               onClick={() => api?.scrollTo(idx)}
