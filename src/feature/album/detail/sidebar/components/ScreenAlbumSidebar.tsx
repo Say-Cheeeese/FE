@@ -7,8 +7,8 @@ import Toast from '@/global/components/toast/Toast';
 import { GA_EVENTS } from '@/global/constants/gaEvents';
 import { convertUnicodeToEmoji } from '@/global/utils/convertEmoji';
 import {
-  formatExpirationTime,
-  getIsExpired,
+    formatExpirationTime,
+    getIsExpired,
 } from '@/global/utils/time/formatExpirationTime';
 import { trackGaEvent } from '@/global/utils/trackGaEvent';
 import { X } from 'lucide-react';
@@ -111,7 +111,9 @@ export default function ScreenAlbumSidebar({
             )}
           </section>
 
-          <AlbumParticipants albumId={albumId} />
+          <div className='flex-1 min-h-0 overflow-y-auto'>
+            <AlbumParticipants albumId={albumId} />
+          </div>
 
           {!isMaker && (
             <div className='mt-auto w-full'>
