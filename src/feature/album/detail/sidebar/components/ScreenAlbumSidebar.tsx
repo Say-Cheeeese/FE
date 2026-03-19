@@ -44,7 +44,7 @@ export default function ScreenAlbumSidebar({
         access_type: informData?.myRole === 'MAKER' ? 'creator' : 'member',
       });
     }
-  }, [isOpen]);
+  }, [isOpen, albumId, informData?.myRole]);
 
   if (!isOpen && !isClosing) return null;
   if (isPending) return null;
@@ -111,7 +111,9 @@ export default function ScreenAlbumSidebar({
             )}
           </section>
 
-          <AlbumParticipants albumId={albumId} />
+          <div className='min-h-0 flex-1 overflow-y-auto'>
+            <AlbumParticipants albumId={albumId} />
+          </div>
 
           {!isMaker && (
             <div className='mt-auto w-full'>
