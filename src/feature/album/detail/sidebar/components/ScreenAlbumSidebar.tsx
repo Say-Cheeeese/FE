@@ -7,8 +7,8 @@ import Toast from '@/global/components/toast/Toast';
 import { GA_EVENTS } from '@/global/constants/gaEvents';
 import { convertUnicodeToEmoji } from '@/global/utils/convertEmoji';
 import {
-    formatExpirationTime,
-    getIsExpired,
+  formatExpirationTime,
+  getIsExpired,
 } from '@/global/utils/time/formatExpirationTime';
 import { trackGaEvent } from '@/global/utils/trackGaEvent';
 import { X } from 'lucide-react';
@@ -44,7 +44,7 @@ export default function ScreenAlbumSidebar({
         access_type: informData?.myRole === 'MAKER' ? 'creator' : 'member',
       });
     }
-  }, [isOpen]);
+  }, [isOpen, albumId, informData?.myRole]);
 
   if (!isOpen && !isClosing) return null;
   if (isPending) return null;
@@ -111,7 +111,7 @@ export default function ScreenAlbumSidebar({
             )}
           </section>
 
-          <div className='flex-1 min-h-0 overflow-y-auto'>
+          <div className='min-h-0 flex-1 overflow-y-auto'>
             <AlbumParticipants albumId={albumId} />
           </div>
 
