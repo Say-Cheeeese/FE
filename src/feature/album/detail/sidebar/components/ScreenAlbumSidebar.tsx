@@ -175,7 +175,7 @@ export default function ScreenAlbumSidebar({
 
           <div
             ref={scrollContainerRef}
-            className='min-h-0 flex-1 overflow-y-auto [overscroll-behavior:contain] [-webkit-overflow-scrolling:touch] touch-pan-y'
+            className='min-h-0 flex-1 touch-pan-y overflow-y-auto [overscroll-behavior:contain] [-webkit-overflow-scrolling:touch]'
           >
             <AlbumParticipants albumId={albumId} />
           </div>
