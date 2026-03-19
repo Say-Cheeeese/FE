@@ -13,7 +13,7 @@ import {
 import { trackGaEvent } from '@/global/utils/trackGaEvent';
 import { X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useAlbumExitMutation } from '../hooks/useAlbumExitMutation';
 import AlbumParticipants from './AlbumParticipants';
 
@@ -28,6 +28,8 @@ export default function ScreenAlbumSidebar({
   isOpen,
   onClose,
 }: ScreenAlbumSidebarProps) {
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+  const sidebarLayerRef = useRef<HTMLDivElement | null>(null);
   const router = useRouter();
   const {
     data: informData,
@@ -45,6 +47,65 @@ export default function ScreenAlbumSidebar({
       });
     }
   }, [isOpen, albumId, informData?.myRole]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const { body } = document;
+    const scrollY = window.scrollY;
+    const originalStyle = {
+      overflow: body.style.overflow,
+      position: body.style.position,
+      top: body.style.top,
+      width: body.style.width,
+      left: body.style.left,
+      right: body.style.right,
+    };
+
+    body.style.overflow = 'hidden';
+    body.style.position = 'fixed';
+    body.style.top = `-${scrollY}px`;
+    body.style.width = '100%';
+    body.style.left = '0';
+    body.style.right = '0';
+
+    return () => {
+      body.style.overflow = originalStyle.overflow;
+      body.style.position = originalStyle.position;
+      body.style.top = originalStyle.top;
+      body.style.width = originalStyle.width;
+      body.style.left = originalStyle.left;
+      body.style.right = originalStyle.right;
+      window.scrollTo(0, scrollY);
+    };
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const sidebarLayer = sidebarLayerRef.current;
+    if (!sidebarLayer) return;
+
+    const handleTouchMove = (event: TouchEvent) => {
+      if (
+        scrollContainerRef.current &&
+        event.target instanceof Node &&
+        scrollContainerRef.current.contains(event.target)
+      ) {
+        return;
+      }
+
+      event.preventDefault();
+    };
+
+    sidebarLayer.addEventListener('touchmove', handleTouchMove, {
+      passive: false,
+    });
+
+    return () => {
+      sidebarLayer.removeEventListener('touchmove', handleTouchMove);
+    };
+  }, [isOpen]);
 
   if (!isOpen && !isClosing) return null;
   if (isPending) return null;
@@ -79,10 +140,11 @@ export default function ScreenAlbumSidebar({
   return (
     <>
       <div
+        ref={sidebarLayerRef}
         className={`bg-background-white fixed inset-0 z-[60] ${isClosing ? 'animate-slide-out-right' : 'animate-slide-in-right'}`}
       >
         <main
-          className='mx-auto flex h-screen w-full max-w-[430px] flex-col bg-[#f7f7f8] px-5 pb-5'
+          className='mx-auto flex h-screen w-full max-w-[430px] touch-none flex-col bg-[#f7f7f8] px-5 pb-5'
           style={{ minHeight: `calc(100vh - ${HEADER_HEIGHT}px)` }}
         >
           <section className='flex flex-col items-center rounded-[12px] py-8 text-center'>
@@ -111,7 +173,10 @@ export default function ScreenAlbumSidebar({
             )}
           </section>
 
-          <div className='min-h-0 flex-1 overflow-y-auto'>
+          <div
+            ref={scrollContainerRef}
+            className='min-h-0 flex-1 overflow-y-auto [overscroll-behavior:contain] [-webkit-overflow-scrolling:touch] touch-pan-y'
+          >
             <AlbumParticipants albumId={albumId} />
           </div>
 
