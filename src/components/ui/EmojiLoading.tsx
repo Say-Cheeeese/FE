@@ -1,13 +1,9 @@
 'use client';
-import { EP } from '@/global/api/ep';
 import { convertUnicodeToEmoji } from '@/global/utils/convertEmoji';
-import { useUploadingStore } from '@/store/useUploadingStore';
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
-import Toast from '@/global/components/toast/Toast';
 import BubbleTooltip from '@/global/components/tooltip/BubbleTooltip';
-import { useQueryClient } from '@tanstack/react-query';
 
 interface EmojiLoadingProps {
   duration?: number;
@@ -19,47 +15,13 @@ export default function EmojiLoading({
   emoji = 'U+1F60A',
   albumId,
 }: EmojiLoadingProps) {
-  const queryClient = useQueryClient();
-  const [percent, setPercent] = useState(0);
-
   const displayEmoji = convertUnicodeToEmoji(emoji);
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      let frame: number;
-      const startTime = performance.now();
-
-      const animate = (currentTime: number) => {
-        const elapsed = currentTime - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        setPercent(progress * 100);
-
-        if (progress < 1) {
-          frame = requestAnimationFrame(animate);
-        } else {
-          // albumId를 props로 받아 invalidate
-          if (albumId) {
-            queryClient.invalidateQueries({
-              queryKey: [EP.album.photos(albumId)],
-            });
-            queryClient.invalidateQueries({
-              queryKey: [EP.album.availableCount(albumId)],
-            });
-          }
-
-          const uploadedCount = useUploadingStore.getState().uploadedCount;
-          useUploadingStore.getState().reset();
-          if (uploadedCount > 0) {
-            Toast.check(`총 ${uploadedCount}장을 앨범에 채웠어요.`);
-          }
-        }
-      };
-      frame = requestAnimationFrame(animate);
-      return () => cancelAnimationFrame(frame);
-    }, 100);
-
-    return () => clearTimeout(timeout);
-  }, [duration]);
+    // 5초 타이머 로직 모두 제거
+    // 모달 컴포넌트는 오직 '보여주는 뷰' 역할만 하고,
+    // 진짜 업로드가 끝나면 handleFileUpload 쪽에서 isUploaded=false 처리하여 스스로 사라집니다.
+  }, []);
 
   return (
     <div className='bg-background-dim-darkest fixed inset-0 z-99 flex items-center justify-center'>
@@ -69,14 +31,11 @@ export default function EmojiLoading({
           className='absolute -top-18'
         />
         <motion.div
-          className='absolute rounded-full'
+          className='absolute rounded-full w-full h-full'
+          animate={{ rotate: 360 }}
+          transition={{ duration: 1.2, repeat: Infinity, ease: 'linear' }}
           style={{
-            width: '100%',
-            height: '100%',
-            background:
-              percent > 0
-                ? `conic-gradient(#FFCD14 0% ${percent}%, #FFE480 ${percent}%, white ${percent}% 100%)`
-                : 'white',
+            background: `conic-gradient(#FFCD14 0% 30%, transparent 35% 100%)`,
           }}
         />
         <div
