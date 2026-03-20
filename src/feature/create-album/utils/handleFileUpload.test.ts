@@ -22,6 +22,12 @@ vi.mock('@/store/useUploadingStore', () => ({
   },
 }));
 
+vi.mock('@/global/components/toast/Toast', () => ({
+  default: {
+    check: vi.fn(),
+  },
+}));
+
 vi.mock('./getFilesWithCaptureTime', () => ({
   getFilesWithCaptureTime: vi.fn(),
 }));
