@@ -8,6 +8,9 @@ import { saveFilesToStore } from './saveFilesToStore';
 import { sortImagesByDate } from './sortImagesByDate';
 import { validateUpload } from './validateUpload';
 
+const MIN_WAIT_TIME_MS = 2500;
+const PER_PHOTO_PROCESSING_TIME_MS = 1000;
+
 export async function handleFileUpload(
   e: ChangeEvent<HTMLInputElement>,
   albumId: string,
@@ -52,10 +55,10 @@ export async function handleFileUpload(
         useUploadingStore.getState().setUploadedCount(uploadResult.success);
       }
 
-      // 백엔드 이미지 처리를 위한 추가 대기 시간 (사진 1장당 1초)
-      // 기본 로딩 애니메이션을 위해 최소 2.5초는 유지합니다.
-      const backendProcessingTime = files.length * 1000;
-      const waitTime = Math.max(2500, backendProcessingTime);
+      // 백엔드 이미지 처리를 위한 추가 대기 시간
+      // 기본 로딩 애니메이션을 위해 최소 대기 시간을 유지합니다.
+      const backendProcessingTime = files.length * PER_PHOTO_PROCESSING_TIME_MS;
+      const waitTime = Math.max(MIN_WAIT_TIME_MS, backendProcessingTime);
       await new Promise((resolve) => setTimeout(resolve, waitTime));
 
       if (uploadResult.success > 0) {
@@ -73,9 +76,9 @@ export async function handleFileUpload(
         router.push(`/album/${albumId}/waiting`);
       }
 
-      // waiting 화면에서 최소 2.5초 대기
+      // waiting 화면에서 최소 대기 보장
       const elapsed = Date.now() - startTime;
-      const remainingTime = Math.max(0, 2500 - elapsed);
+      const remainingTime = Math.max(0, MIN_WAIT_TIME_MS - elapsed);
       await new Promise((resolve) => setTimeout(resolve, remainingTime));
 
       if (router) {

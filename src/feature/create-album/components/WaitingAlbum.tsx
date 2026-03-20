@@ -10,7 +10,6 @@ interface WaitingAlbumProps {
 }
 
 export default function WaitingAlbum({ albumId }: WaitingAlbumProps) {
-
   const dotVariants = {
     initial: { opacity: 0 },
     animate: {

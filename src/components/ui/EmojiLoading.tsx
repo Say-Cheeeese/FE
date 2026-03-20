@@ -31,7 +31,7 @@ export default function EmojiLoading({
           className='absolute -top-18'
         />
         <motion.div
-          className='absolute rounded-full w-full h-full'
+          className='absolute h-full w-full rounded-full'
           animate={{ rotate: 360 }}
           transition={{ duration: 1.2, repeat: Infinity, ease: 'linear' }}
           style={{
