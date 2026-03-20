@@ -1,4 +1,5 @@
 import GlobalClientEffects from '@/global/components/GlobalClientEffects';
+import MicrosoftClarity from '@/global/components/MicrosoftClarity';
 import KakaoProvider from '@/global/context/KakaoProvider';
 import QueryProvider from '@/global/context/QueryProvider';
 import { GoogleAnalytics } from '@next/third-parties/google';
@@ -105,6 +106,7 @@ export default function RootLayout({
       {process.env.NODE_ENV === 'production' && (
         <>
           <GoogleAnalytics gaId='G-2EN8NDYR97' />
+          <MicrosoftClarity />
         </>
       )}
       <body
