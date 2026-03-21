@@ -5,8 +5,8 @@ import { handleFileUpload } from '@/feature/create-album/utils/handleFileUpload'
 import CheckNoImgModal from '@/feature/upload/components/CheckNoImgModal';
 import CustomHeader from '@/global/components/header/CustomHeader';
 import LongButton from '@/global/components/LongButton';
-import Toast from '@/global/components/toast/Toast';
 import BubbleTooltip from '@/global/components/tooltip/BubbleTooltip';
+import { useQueryClient } from '@tanstack/react-query';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import AlbumSharePreviewSection from './AlbumSharePreviewSection';
@@ -36,12 +36,10 @@ export default function ScreenPhotoShareEntry({
     fileInputRef.current?.click();
   };
 
-  const onFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { success } = await handleFileUpload(e, albumId, router);
+  const queryClient = useQueryClient();
 
-    if (success) {
-      setTimeout(() => Toast.check(`총 ${success}장을 앨범에 채웠어요.`), 2000);
-    }
+  const onFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    await handleFileUpload(e, albumId, router, { queryClient });
   };
 
   return (

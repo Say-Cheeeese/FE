@@ -1,6 +1,8 @@
+import { EP } from '@/global/api/ep';
 import { presignedAndUploadToNCP } from '@/global/api/presignedAndUploadToNCP';
 import Toast from '@/global/components/toast/Toast';
 import { useUploadingStore } from '@/store/useUploadingStore';
+import { QueryClient } from '@tanstack/react-query';
 import { ChangeEvent } from 'react';
 import { getFilesWithCaptureTime } from './getFilesWithCaptureTime';
 import { convertHeicFilesToJpeg } from './heicToJpeg';
@@ -8,14 +10,14 @@ import { saveFilesToStore } from './saveFilesToStore';
 import { sortImagesByDate } from './sortImagesByDate';
 import { validateUpload } from './validateUpload';
 
-const MIN_WAIT_TIME_MS = 2500;
+const MIN_WAIT_TIME_MS = 4500;
 const PER_PHOTO_PROCESSING_TIME_MS = 1000;
 
 export async function handleFileUpload(
   e: ChangeEvent<HTMLInputElement>,
   albumId: string,
   router?: { push: (path: string) => void; replace: (path: string) => void },
-  options?: { stay?: boolean },
+  options?: { stay?: boolean; queryClient?: QueryClient },
 ): Promise<{
   success?: number;
   failed?: number;
@@ -61,13 +63,35 @@ export async function handleFileUpload(
       const waitTime = Math.max(MIN_WAIT_TIME_MS, backendProcessingTime);
       await new Promise((resolve) => setTimeout(resolve, waitTime));
 
-      if (uploadResult.success > 0) {
-        Toast.check(`총 ${uploadResult.success}장을 앨범에 채웠어요.`);
+      if (options?.queryClient) {
+        const retryInvalidate = () => {
+          options.queryClient!.refetchQueries({
+            queryKey: [EP.album.photos(albumId)],
+          });
+          options.queryClient!.refetchQueries({
+            queryKey: [EP.album.availableCount(albumId)],
+          });
+        };
+        retryInvalidate();
+        setTimeout(retryInvalidate, 3000);
+        setTimeout(retryInvalidate, 6000);
       }
 
       // 원래 WaitingAlbum에서 하던 상세 화면 이동을 리팩토링하여 여기서 수행
       if (!options?.stay && router) {
         router.replace(`/album/detail/${albumId}`);
+      }
+
+      if (uploadResult.success > 0) {
+        if (!options?.stay && router) {
+          setTimeout(
+            () =>
+              Toast.check(`총 ${uploadResult?.success}장을 앨범에 채웠어요.`),
+            500,
+          );
+        } else {
+          Toast.check(`총 ${uploadResult.success}장을 앨범에 채웠어요.`);
+        }
       }
     } else {
       saveFilesToStore(files);
