@@ -79,7 +79,7 @@ src
 
 ```
 
-## 💬 Commit Convention
+## 💬 Commit Convention!
 
 ### {이슈Type} : 커밋내용
 
