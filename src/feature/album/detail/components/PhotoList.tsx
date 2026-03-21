@@ -2,7 +2,9 @@
 import { PhotoListResponseSchema } from '@/global/api/ep';
 import PhotoBox from '@/global/components/photo/PhotoBox';
 import Toast from '@/global/components/toast/Toast';
+import { GA_EVENTS } from '@/global/constants/gaEvents';
 import { buildQuery } from '@/global/utils/buildQuery';
+import { trackGaEvent } from '@/global/utils/trackGaEvent';
 import { useAlbumSortStore } from '@/store/useAlbumSortStore';
 import { useAlbumTypeStore } from '@/store/useAlbumTypeStore';
 import { useSelectedPhotosStore } from '@/store/useSelectedPhotosStore';
@@ -149,7 +151,12 @@ export default function PhotoList({
           <button
             type='button'
             className='typo-body-sm-medium text-text-subtle bg-button-tertiary-fill rounded-[4px] px-3 py-1.5'
-            onClick={() => handleChangeMode('select')}
+            onClick={() => {
+              trackGaEvent(GA_EVENTS.click_album_photo_select, {
+                album_id: albumId,
+              });
+              handleChangeMode('select');
+            }}
           >
             선택
           </button>

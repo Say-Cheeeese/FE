@@ -15,6 +15,7 @@ export default function UploadButton({ albumId }: UploadButtonProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   function handleButtonClick() {
+    trackGaEvent(GA_EVENTS.first_upload_confirm, { album_id: albumId });
     fileInputRef.current?.click();
   }
 

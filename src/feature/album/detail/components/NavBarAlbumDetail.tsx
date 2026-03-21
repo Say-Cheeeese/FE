@@ -3,6 +3,8 @@ import { handleFileUpload } from '@/feature/create-album/utils/handleFileUpload'
 import ToggleAlbumType from '@/feature/main/components/open-album/ToggleAlbumType';
 import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
 import Toast from '@/global/components/toast/Toast';
+import { GA_EVENTS } from '@/global/constants/gaEvents';
+import { trackGaEvent } from '@/global/utils/trackGaEvent';
 import { useAlbumSortStore } from '@/store/useAlbumSortStore';
 import { useAlbumTypeStore } from '@/store/useAlbumTypeStore';
 import { ArrowDownUp, Plus } from 'lucide-react';
@@ -34,6 +36,14 @@ export default function NavBarAlbumDetail({ albumId }: NavBarAlbumDetailProps) {
   );
 
   const handleToggleChange = (value: AlbumType): void => {
+    if (value !== albumType) {
+      trackGaEvent(
+        value === 'all'
+          ? GA_EVENTS.click_album_detail_all
+          : GA_EVENTS.click_album_detail_ddip,
+        { album_id: albumId },
+      );
+    }
     setAlbumType(value);
   };
 

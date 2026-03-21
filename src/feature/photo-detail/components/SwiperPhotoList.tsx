@@ -1,23 +1,29 @@
 'use client';
 
 import { PhotoListResponseSchema } from '@/global/api/ep';
-import { useCallback, useEffect, useState } from 'react';
+import { GA_EVENTS } from '@/global/constants/gaEvents';
+import { trackGaEvent } from '@/global/utils/trackGaEvent';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/css';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { calcThumbSwiperCenterOffset } from '../util/calcThumbSwiperCenterOffset';
 
 interface SwiperPhotoListProps {
+  albumId: string;
   images?: PhotoListResponseSchema[];
   activeIndex: number;
   changeActiveIndex: (newIndex: number) => void;
 }
 
 export default function SwiperPhotoList({
+  albumId,
   activeIndex,
   changeActiveIndex,
   images = [],
 }: SwiperPhotoListProps) {
+  const prevSlideIndexRef = useRef(activeIndex);
+  const pendingNavMethodRef = useRef<'tab' | null>(null);
   const [mainSwiper, setMainSwiper] = useState<SwiperType | null>(null);
   const [thumbSwiper, setThumbSwiper] = useState<SwiperType | null>(null);
   const [thumbOffset, setThumbOffset] = useState(0);
@@ -65,6 +71,15 @@ export default function SwiperPhotoList({
             className={`flex h-full w-full overflow-hidden`}
             onSlideChange={(sw) => {
               const idx = sw.activeIndex;
+              if (idx !== prevSlideIndexRef.current) {
+                const method = pendingNavMethodRef.current ?? 'swipe';
+                pendingNavMethodRef.current = null;
+                trackGaEvent(GA_EVENTS.album_detail_move, {
+                  album_id: albumId,
+                  method,
+                });
+                prevSlideIndexRef.current = idx;
+              }
               changeActiveIndex(idx);
               if (thumbSwiper && !thumbSwiper.destroyed) {
                 thumbSwiper.slideTo(sw.activeIndex);
@@ -87,11 +102,18 @@ export default function SwiperPhotoList({
               const { left, width } = swiper.el.getBoundingClientRect();
               const clickPosition = clientX - left;
 
+              const before = swiper.activeIndex;
+              pendingNavMethodRef.current = 'tab';
               if (clickPosition < width / 2) {
                 swiper.slidePrev();
               } else {
                 swiper.slideNext();
               }
+              requestAnimationFrame(() => {
+                if (swiper.activeIndex === before) {
+                  pendingNavMethodRef.current = null;
+                }
+              });
             }}
           >
             {images.map(({ thumbnailUrl, photoId }, i) => {
@@ -141,6 +163,8 @@ export default function SwiperPhotoList({
                     transition: 'width 0.3s ease, margin 0.3s ease',
                   }}
                   onClick={() => {
+                    if (i === activeIndex) return;
+                    pendingNavMethodRef.current = 'tab';
                     changeActiveIndex(i);
                     mainSwiper?.slideTo(i);
                     thumbSwiper?.slideTo(i);
