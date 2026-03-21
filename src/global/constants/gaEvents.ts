@@ -26,6 +26,8 @@ export const GA_EVENTS = {
   click_album_detail_all: 'click_album_detail_all',
   /** 앨범 상세 하단 네비 「띱한 사진」 탭 */
   click_album_detail_ddip: 'click_album_detail_ddip',
+  /** 앨범 상세 / 사진 상세에서 보기 전환 (method: tab | swipe) */
+  album_detail_move: 'album_detail_move',
   /** 업로드 화면 「내가 찍은 사진 올리기」 클릭 (파일 피커 오픈) */
   first_upload_confirm: 'first_upload_confirm',
   /** 업로드 화면 「올릴 사진이 없어요」 클릭 (확인 모달 오픈) */
