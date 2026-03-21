@@ -19,4 +19,21 @@ export const GA_EVENTS = {
   view_4cut_confirmed: 'view_4cut_confirmed',
   rendering_slide_view: 'rendering_slide_view',
   cta_click: 'cta_click',
+  album_bestcut_click: 'album_bestcut_click',
+  /** 앨범 상세 > 사진 목록에서 「선택」으로 멀티 선택 모드 진입 */
+  click_album_photo_select: 'click_album_photo_select',
+  /** 앨범 상세 하단 네비 「전체」 탭 */
+  click_album_detail_all: 'click_album_detail_all',
+  /** 앨범 상세 하단 네비 「띱한 사진」 탭 */
+  click_album_detail_ddip: 'click_album_detail_ddip',
+  /** 앨범 상세 / 사진 상세에서 보기 전환 (method: tab | swipe) */
+  album_detail_move: 'album_detail_move',
+  /** 업로드 화면 「내가 찍은 사진 올리기」 클릭 (파일 피커 오픈) */
+  first_upload_confirm: 'first_upload_confirm',
+  /** 업로드 화면 「올릴 사진이 없어요」 클릭 (확인 모달 오픈) */
+  first_upload_decline: 'first_upload_decline',
+  /** 올릴 사진 없음 모달 > 「앨범 채우기」(파일 피커로 재시도) */
+  upload_reactivated: 'upload_reactivated',
+  /** 올릴 사진 없음 모달 > 「정말 없어요」(업로드 최종 거절) */
+  upload_declined_final: 'upload_declined_final',
 };

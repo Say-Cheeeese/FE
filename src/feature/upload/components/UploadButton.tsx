@@ -2,6 +2,8 @@
 
 import { handleFileUpload } from '@/feature/create-album/utils/handleFileUpload';
 import LongButton from '@/global/components/LongButton';
+import { GA_EVENTS } from '@/global/constants/gaEvents';
+import { trackGaEvent } from '@/global/utils/trackGaEvent';
 import { useRouter } from 'next/navigation';
 import { useRef } from 'react';
 
@@ -14,6 +16,7 @@ export default function UploadButton({ albumId }: UploadButtonProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   function handleButtonClick() {
+    trackGaEvent(GA_EVENTS.first_upload_confirm, { album_id: albumId });
     fileInputRef.current?.click();
   }
 

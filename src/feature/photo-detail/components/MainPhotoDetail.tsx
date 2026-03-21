@@ -42,6 +42,7 @@ export default function MainPhotoDetail({
         profileImageUrl={activeImage.profileImage}
       />
       <SwiperPhotoList
+        albumId={albumId}
         activeIndex={activeIndex}
         changeActiveIndex={changeActiveIndex}
         images={images}
