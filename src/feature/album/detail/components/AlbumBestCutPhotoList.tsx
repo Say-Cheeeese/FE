@@ -1,6 +1,8 @@
 import { useAlbumPhotosInfiniteQuery } from '@/feature/photo-detail/hooks/useAlbumPhotosInfiniteQuery';
 import PhotoBox from '@/global/components/photo/PhotoBox';
+import { GA_EVENTS } from '@/global/constants/gaEvents';
 import { buildQuery } from '@/global/utils/buildQuery';
+import { trackGaEvent } from '@/global/utils/trackGaEvent';
 import { useRouter } from 'next/navigation';
 
 interface AlbumBestCutPhotoListProps {
@@ -25,16 +27,19 @@ export default function AlbumBestCutPhotoList({
 
   return (
     <div className='grid w-full grid-cols-4'>
-      {items.map(({ thumbnailUrl, photoId, likeCnt, isLiked }) => {
+      {items.map(({ thumbnailUrl, photoId, likeCnt, isLiked }, index) => {
         if (!photoId) return null;
 
         return (
           <PhotoBox
             key={photoId}
             responsive
-            onPress={() =>
-              router.push(`/photo/detail/${albumId}${buildQuery({ photoId })}`)
-            }
+            onPress={() => {
+              trackGaEvent(GA_EVENTS.album_bestcut_click, {
+                index: `${index + 1}`,
+              });
+              router.push(`/photo/detail/${albumId}${buildQuery({ photoId })}`);
+            }}
             imageSrc={thumbnailUrl}
             likeCount={likeCnt}
             liked={isLiked}

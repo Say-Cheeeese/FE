@@ -103,9 +103,9 @@ export default function RootLayout({
   m.mazeUniversalSnippetApiKey = e;
 })(window, document, 'https://snippet.maze.co/maze-universal-loader.js', '65a6039c-2384-4c2d-a8e1-546a4f859a08');`}
       </Script> */}
-      {process.env.NODE_ENV === 'production' && (
+      {process.env.NODE_ENV !== 'production' && (
         <>
-          <GoogleAnalytics gaId='G-2EN8NDYR97' />
+          <GoogleAnalytics gaId='1' />
           <MicrosoftClarity />
         </>
       )}
