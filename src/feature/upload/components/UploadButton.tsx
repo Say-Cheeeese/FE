@@ -4,6 +4,7 @@ import { handleFileUpload } from '@/feature/create-album/utils/handleFileUpload'
 import LongButton from '@/global/components/LongButton';
 import { GA_EVENTS } from '@/global/constants/gaEvents';
 import { trackGaEvent } from '@/global/utils/trackGaEvent';
+import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useRef } from 'react';
 
@@ -20,9 +21,11 @@ export default function UploadButton({ albumId }: UploadButtonProps) {
     fileInputRef.current?.click();
   }
 
-  async function onFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-    await handleFileUpload(e, albumId, router);
-  }
+  const queryClient = useQueryClient();
+
+  const onFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    await handleFileUpload(e, albumId, router, { queryClient });
+  };
 
   return (
     <>

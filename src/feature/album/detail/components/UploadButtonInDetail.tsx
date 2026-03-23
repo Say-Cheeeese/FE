@@ -1,9 +1,7 @@
 'use client';
 
 import { handleFileUpload } from '@/feature/create-album/utils/handleFileUpload';
-import { EP } from '@/global/api/ep';
 import LongButton from '@/global/components/LongButton';
-import Toast from '@/global/components/toast/Toast';
 import { useUploadingStore } from '@/store/useUploadingStore';
 import { useQueryClient } from '@tanstack/react-query';
 import { useParams, useRouter } from 'next/navigation';
@@ -30,17 +28,10 @@ export default function UploadButtonInDetail({
 
   const onFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) return;
-    const { success } = await handleFileUpload(e, albumId, router, {
+    await handleFileUpload(e, albumId, router, {
       stay: true,
+      queryClient,
     });
-
-    await queryClient.invalidateQueries({
-      queryKey: [EP.album.photos(albumId)],
-    });
-
-    if (success) {
-      setTimeout(() => Toast.check(`총 ${success}장을 앨범에 채웠어요.`), 2000);
-    }
   };
 
   const handleButtonClick = () => {

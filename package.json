@@ -12,6 +12,7 @@
     "build:docker": "docker build -t cheese_frontend .",
     "start": "next start",
     "lint": "eslint",
+    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,css}\"",
     "test": "vitest",
     "token": "node scripts/generate-color-token.mjs",
     "ep": "node scripts/generate-endpoint.ts"
