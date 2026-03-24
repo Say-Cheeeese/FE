@@ -1,1 +1,1 @@
-export type FourCutTemplateId = 'default' | 'pnu_one';
+export type FourCutTemplateId = 'default' | 'pnu_one' | 'pnu_two';
