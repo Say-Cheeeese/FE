@@ -13,8 +13,9 @@ import {
   type InfiniteQueryObserverResult,
 } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useShallow } from 'zustand/shallow';
+import IncludeMyPhotosToggle from './IncludeMyPhotosToggle';
 import { AlbumDetailMode } from './ScreenAlbumDetail';
 
 const SELECT_MODE_MIN_HEIGHT = '800px';
@@ -51,26 +52,30 @@ export default function PhotoList({
   const photoListRef = useRef<HTMLElement | null>(null);
   const anchorRef = useRef<HTMLDivElement | null>(null);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
-  const { addSelectedPhoto, deleteSelectedPhoto, isSelected } =
-    useSelectedPhotosStore(
-      useShallow((state) => ({
-        selectedPhotos: state.selectedPhotos,
-        addSelectedPhoto: state.addSelectedPhoto,
-        deleteSelectedPhoto: state.deleteSelectedPhoto,
-        clearSelectedPhotos: state.clearSelectedPhotos,
-        isSelected: state.isSelected,
-      })),
-    );
-  const { sortType, setSortType } = useAlbumSortStore(
+  const {
+    selectedPhotos,
+    addSelectedPhoto,
+    deleteSelectedPhoto,
+    clearSelectedPhotos,
+    isSelected,
+  } = useSelectedPhotosStore(
     useShallow((state) => ({
-      sortType: state.sortType,
-      setSortType: state.setSortType,
+      selectedPhotos: state.selectedPhotos,
+      addSelectedPhoto: state.addSelectedPhoto,
+      deleteSelectedPhoto: state.deleteSelectedPhoto,
+      clearSelectedPhotos: state.clearSelectedPhotos,
+      isSelected: state.isSelected,
     })),
   );
-  const { albumType, setAlbumType } = useAlbumTypeStore(
+  const [includeMyPhotos, setIncludeMyPhotos] = useState(true);
+  const { sortType } = useAlbumSortStore(
+    useShallow((state) => ({
+      sortType: state.sortType,
+    })),
+  );
+  const { albumType } = useAlbumTypeStore(
     useShallow((state) => ({
       albumType: state.albumType,
-      setAlbumType: state.setAlbumType,
     })),
   );
 
@@ -140,17 +145,46 @@ export default function PhotoList({
     changeMode(nextMode);
   };
 
+  const selectablePhotos = useMemo(
+    () =>
+      photos.filter(
+        ({ photoId, imageUrl, isRecentlyDownloaded }) =>
+          !!photoId && !!imageUrl && !isRecentlyDownloaded,
+      ),
+    [photos],
+  );
+  const selectedPhotoIds = useMemo(
+    () => new Set(selectedPhotos.map(({ id }) => id)),
+    [selectedPhotos],
+  );
+  const isAllSelected =
+    selectablePhotos.length > 0 &&
+    selectablePhotos.every(({ photoId }) => selectedPhotoIds.has(photoId));
+
+  const handleToggleSelectAll = () => {
+    if (isAllSelected) {
+      clearSelectedPhotos();
+      return;
+    }
+    selectablePhotos.forEach(({ photoId, imageUrl }) => {
+      addSelectedPhoto({ id: photoId, url: imageUrl ?? '' });
+    });
+  };
+
   return (
     <section ref={photoListRef} className='relative p-4'>
       <div ref={anchorRef} className='invisible absolute top-[-72px] left-0' />
-      <div className='mb-3 flex justify-between'>
-        <span className='typo-body-lg-regular text-text-subtle'>
-          총 {(albumType === 'all' ? totalPhotoCount : photos.length) || 0}장
-        </span>
-        {mode === 'default' && (
+      {mode === 'default' ? (
+        <div className='mb-3 flex justify-between'>
+          <span className='typo-body-lg-regular text-text-subtle'>
+            총 {(albumType === 'all' ? totalPhotoCount : photos.length) || 0}장
+          </span>
           <button
             type='button'
-            className='typo-body-sm-medium text-text-subtle bg-button-tertiary-fill rounded-[4px] px-3 py-1.5'
+            className='typo-body-sm-medium text-text-subtle bg-button-tertiary-fill-pressed rounded-[4px] px-3 py-1.5'
+            style={{
+              background: 'var(--color-button-tertiary-fill-pressed, #F1F2F3)',
+            }}
             onClick={() => {
               trackGaEvent(GA_EVENTS.click_album_photo_select, {
                 album_id: albumId,
@@ -160,17 +194,37 @@ export default function PhotoList({
           >
             선택
           </button>
-        )}
-        {mode === 'select' && (
-          <button
-            type='button'
-            className='typo-body-sm-medium text-text-subtle bg-button-tertiary-fill rounded-[4px] px-3 py-1.5'
-            onClick={() => handleChangeMode('default')}
-          >
-            취소
-          </button>
-        )}
-      </div>
+        </div>
+      ) : (
+        <div className='mb-3'>
+          <div className='mb-3 flex justify-between'>
+            <button
+              type='button'
+              className='typo-body-sm-medium text-text-subtle rounded-[4px] px-3 py-1.5'
+              style={{
+                background: '#F1F2F3',
+              }}
+              onClick={handleToggleSelectAll}
+            >
+              {isAllSelected ? '전체 선택 취소' : '전체 선택'}
+            </button>
+            <button
+              type='button'
+              className='typo-body-sm-medium text-text-subtle rounded-[4px] px-3 py-1.5'
+              style={{
+                background: '#F1F2F3',
+              }}
+              onClick={() => handleChangeMode('default')}
+            >
+              취소
+            </button>
+          </div>
+          <IncludeMyPhotosToggle
+            checked={includeMyPhotos}
+            onChange={setIncludeMyPhotos}
+          />
+        </div>
+      )}
       <div className='grid grid-cols-3 gap-0.5'>
         {photos.map(
           ({
