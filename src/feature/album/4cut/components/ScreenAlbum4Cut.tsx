@@ -242,7 +242,7 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
                   eventDate={
                     data?.eventDate ? data.eventDate.replace(/-/g, '.') : ''
                   }
-                  scale={isFinalized ? 1.5 : 1}
+                  scale={isFinalized ? 1.25 : 1}
                   isFinalized={isFinalized}
                 />
               </div>
