@@ -60,7 +60,7 @@ export default function ScreenPhotoShareEntry({
             <input
               ref={fileInputRef}
               type='file'
-              accept='image/*'
+              accept='image/*, .heic, .heif'
               multiple
               onChange={onFileChange}
               className='hidden'

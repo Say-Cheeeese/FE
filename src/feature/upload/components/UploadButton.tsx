@@ -32,7 +32,7 @@ export default function UploadButton({ albumId }: UploadButtonProps) {
       <input
         ref={fileInputRef}
         type='file'
-        accept='image/*'
+        accept='image/*, .heic, .heif'
         multiple
         onChange={onFileChange}
         className='hidden'

@@ -30,7 +30,12 @@ export async function handleFileUpload(
   let uploadResult: { success: number; failed: number } | null = null;
 
   try {
-    let files = Array.from(fl).filter((f) => f.type.startsWith('image/'));
+    let files = Array.from(fl).filter(
+      (f) =>
+        f.type.startsWith('image/') ||
+        /heic|heif/i.test(f.type) ||
+        /\.heic$|\.heif$/i.test(f.name),
+    );
     files = await sortImagesByDate(files);
     files = await convertHeicFilesToJpeg(files);
 

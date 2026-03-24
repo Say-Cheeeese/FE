@@ -141,7 +141,7 @@ export default function ScreenAlbumSidebar({
     <>
       <div
         ref={sidebarLayerRef}
-        className={`bg-background-white fixed inset-0 z-[60] ${isClosing ? 'animate-slide-out-right' : 'animate-slide-in-right'}`}
+        className={`bg-background-white fixed inset-0 z-60 ${isClosing ? 'animate-slide-out-right' : 'animate-slide-in-right'}`}
       >
         <main
           className='mx-auto flex h-screen w-full max-w-[430px] touch-none flex-col bg-[#f7f7f8] px-5 pb-5'
@@ -175,12 +175,12 @@ export default function ScreenAlbumSidebar({
 
           <div
             ref={scrollContainerRef}
-            className='min-h-0 flex-1 touch-pan-y overflow-y-auto [overscroll-behavior:contain] [-webkit-overflow-scrolling:touch]'
+            className='min-h-0 flex-1 touch-pan-y overflow-y-auto overscroll-contain [-webkit-overflow-scrolling:touch]'
           >
             <AlbumParticipants albumId={albumId} />
           </div>
 
-          {!isMaker && (
+          {(!isMaker || isExpired) && (
             <div className='mt-auto w-full'>
               <ConfirmModal
                 trigger={
