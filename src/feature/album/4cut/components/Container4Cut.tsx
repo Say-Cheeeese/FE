@@ -1,29 +1,28 @@
+'use client';
+
 import { useBase64Images } from '@/global/hooks/useBase64Images';
 import { useMemo } from 'react';
-import { use4CutPreviewQuery } from '../hooks/use4CutPreviewQuery';
 import Svg4Cut from '../svg/Svg4Cut';
+import Svg4CutPNUOne from '../svg/poosanUniversity/Svg4CutPNUOne';
+import { use4CutPreviewQuery } from '../hooks/use4CutPreviewQuery';
+import FourCutPreviewFrameDefault from './FourCutPreviewFrameDefault';
+import {
+  FOUR_CUT_BASE_ASPECT_RATIO,
+  FOUR_CUT_BASE_WIDTH,
+} from './fourCutLayoutConstants';
+import FourCutPreviewFramePNUOne from './poosanUniversity/FourCutPreviewFramePNUOne';
+import type { FourCutTemplateId } from './fourCutTemplateTypes';
 
-interface Container4CutProps {
+export interface Container4CutProps {
   albumId: string;
   eventName?: string;
   eventDate?: string;
   scale?: number;
   width?: number;
   isFinalized?: boolean;
+  /** 기본 프레임 vs 부산대(PNU) 등 — 프레임·SVG 컴포넌트가 함께 바뀜 */
+  template?: FourCutTemplateId;
 }
-
-const BASE_WIDTH = 216;
-const BASE_HEIGHT = 384;
-const BASE_ASPECT_RATIO = BASE_HEIGHT / BASE_WIDTH;
-const BASE_FONT_SIZE = 7.963;
-const BASE_NAME_POSITION = {
-  bottom: 7.4,
-  left: 9.6,
-};
-const BASE_DATE_POSITION = {
-  bottom: 7.4,
-  right: 10.4,
-};
 
 export default function Container4Cut({
   albumId,
@@ -32,6 +31,7 @@ export default function Container4Cut({
   scale = 1,
   width,
   isFinalized = false,
+  template = 'default',
 }: Container4CutProps) {
   // TODO : openapi type이 이상해서 임시 any처리. 백엔드랑 협의 필요
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -49,68 +49,33 @@ export default function Container4Cut({
 
   const { base64List } = useBase64Images({ imageUrls: images });
 
-  const calculatedWidth = width ?? BASE_WIDTH * scale;
-  const calculatedHeight = calculatedWidth * BASE_ASPECT_RATIO;
-  const calculatedScale = calculatedWidth / BASE_WIDTH;
+  const calculatedWidth = width ?? FOUR_CUT_BASE_WIDTH * scale;
+  const calculatedHeight = calculatedWidth * FOUR_CUT_BASE_ASPECT_RATIO;
 
-  const scaledFontSize = BASE_FONT_SIZE * calculatedScale;
-  const scaledNamePosition = {
-    bottom: `${BASE_NAME_POSITION.bottom * calculatedScale}px`,
-    left: `${BASE_NAME_POSITION.left * calculatedScale}px`,
+  const frameCommon = {
+    widthPx: calculatedWidth,
+    eventName,
+    eventDate,
+    isFinalized,
   };
-  const scaledDatePosition = {
-    bottom: `${BASE_DATE_POSITION.bottom * calculatedScale}px`,
-    right: `${BASE_DATE_POSITION.right * calculatedScale}px`,
+
+  const svgCommon = {
+    width: calculatedWidth,
+    height: calculatedHeight,
+    photos: base64List,
   };
+
+  if (template === 'pnu_one') {
+    return (
+      <FourCutPreviewFramePNUOne {...frameCommon}>
+        <Svg4CutPNUOne {...svgCommon} />
+      </FourCutPreviewFramePNUOne>
+    );
+  }
 
   return (
-    <div
-      className='border-border-primary text-text-secondary relative border font-medium'
-      style={{
-        fontSize: scaledFontSize,
-        ...(isFinalized && {
-          boxShadow: '0px 0px 25px 5px rgba(0, 0, 0, 0.08)',
-        }),
-      }}
-    >
-      <Svg4Cut
-        width={calculatedWidth}
-        height={calculatedHeight}
-        photos={base64List}
-      />
-
-      {eventName && (
-        <span
-          className='paperozi-font absolute'
-          style={{ ...scaledNamePosition, fontSize: scaledFontSize }}
-        >
-          {eventName}
-        </span>
-      )}
-
-      {eventDate && (
-        <span
-          className='paperozi-font absolute'
-          style={{ ...scaledDatePosition, fontSize: scaledFontSize }}
-        >
-          {eventDate}
-        </span>
-      )}
-
-      {/* 이 컴포넌트에서만 사용되는 폰트 */}
-      <style jsx global>{`
-        @font-face {
-          font-family: 'Paperozi';
-          src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-5Medium.woff2')
-            format('woff2');
-          font-weight: 500;
-          font-display: swap;
-        }
-
-        .paperozi-font {
-          font-family: 'Paperozi', sans-serif;
-        }
-      `}</style>
-    </div>
+    <FourCutPreviewFrameDefault {...frameCommon}>
+      <Svg4Cut {...svgCommon} />
+    </FourCutPreviewFrameDefault>
   );
 }
