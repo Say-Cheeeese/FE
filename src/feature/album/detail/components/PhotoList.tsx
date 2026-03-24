@@ -68,6 +68,7 @@ export default function PhotoList({
     })),
   );
   const [includeMyPhotos, setIncludeMyPhotos] = useState(true);
+  const [isSelectAllMode, setIsSelectAllMode] = useState(false);
   const { sortType } = useAlbumSortStore(
     useShallow((state) => ({
       sortType: state.sortType,
@@ -113,6 +114,7 @@ export default function PhotoList({
     if (!selectable) return;
 
     if (isSelected(photoId)) {
+      setIsSelectAllMode(false);
       deleteSelectedPhoto(photoId);
     } else {
       addSelectedPhoto({ id: photoId, url: photoUrl });
@@ -163,13 +165,24 @@ export default function PhotoList({
 
   const handleToggleSelectAll = () => {
     if (isAllSelected) {
+      setIsSelectAllMode(false);
       clearSelectedPhotos();
       return;
     }
+    setIsSelectAllMode(true);
     selectablePhotos.forEach(({ photoId, imageUrl }) => {
       addSelectedPhoto({ id: photoId, url: imageUrl ?? '' });
     });
   };
+
+  useEffect(() => {
+    if (mode !== 'select') return;
+    if (!isSelectAllMode) return;
+
+    selectablePhotos.forEach(({ photoId, imageUrl }) => {
+      addSelectedPhoto({ id: photoId, url: imageUrl ?? '' });
+    });
+  }, [addSelectedPhoto, isSelectAllMode, mode, selectablePhotos]);
 
   return (
     <section ref={photoListRef} className='relative p-4'>
@@ -183,7 +196,7 @@ export default function PhotoList({
             type='button'
             className='typo-body-sm-medium text-text-subtle bg-button-tertiary-fill-pressed rounded-[4px] px-3 py-1.5'
             style={{
-              background: 'var(--color-button-tertiary-fill-pressed, #F1F2F3)',
+              background: '#F1F2F3',
             }}
             onClick={() => {
               trackGaEvent(GA_EVENTS.click_album_photo_select, {

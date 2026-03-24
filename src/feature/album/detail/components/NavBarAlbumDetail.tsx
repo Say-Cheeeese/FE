@@ -8,6 +8,7 @@ import { trackGaEvent } from '@/global/utils/trackGaEvent';
 import { useAlbumSortStore } from '@/store/useAlbumSortStore';
 import { useAlbumTypeStore } from '@/store/useAlbumTypeStore';
 import { ArrowDownUp, Plus } from 'lucide-react';
+import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useRef } from 'react';
 import { useShallow } from 'zustand/shallow';
@@ -21,6 +22,7 @@ interface NavBarAlbumDetailProps {
 
 export default function NavBarAlbumDetail({ albumId }: NavBarAlbumDetailProps) {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { sortType, setSortType } = useAlbumSortStore(
     useShallow((state) => ({
@@ -57,6 +59,7 @@ export default function NavBarAlbumDetail({ albumId }: NavBarAlbumDetailProps) {
     try {
       const result = await handleFileUpload(e, albumId, router, {
         stay: true,
+        queryClient,
       });
       const success = result?.success ?? 0;
     } catch (error: unknown) {

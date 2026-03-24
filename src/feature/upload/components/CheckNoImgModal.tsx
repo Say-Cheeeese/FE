@@ -5,6 +5,7 @@ import ConfirmModal from '@/global/components/modal/ConfirmModal';
 import Toast from '@/global/components/toast/Toast';
 import { GA_EVENTS } from '@/global/constants/gaEvents';
 import { trackGaEvent } from '@/global/utils/trackGaEvent';
+import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import {
   cloneElement,
@@ -42,6 +43,7 @@ export default function CheckNoImgModal({
   onConfirm,
 }: CheckNoImgModalProps) {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleCancel = () => {
@@ -61,7 +63,7 @@ export default function CheckNoImgModal({
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
-      await handleFileUpload(e, albumId, router);
+      await handleFileUpload(e, albumId, router, { queryClient });
     } catch (e) {
       console.error(e);
       Toast.alert('사진 업로드 중 오류가 발생했습니다.');
