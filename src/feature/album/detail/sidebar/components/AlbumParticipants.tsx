@@ -34,7 +34,7 @@ export default function AlbumParticipants({ albumId }: AlbumParticipantsProps) {
   };
 
   return (
-    <section className='bg-background-white rounded-[12px] px-5 pt-5 pb-7'>
+    <section className='bg-background-white rounded-[12px] px-5 pt-5 pb-5'>
       <div className='mb-3.5 flex items-center justify-between gap-3'>
         <div>
           <p className='typo-heading-sm-semibold text-text-subtle'>

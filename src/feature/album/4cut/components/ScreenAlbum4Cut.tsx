@@ -208,8 +208,10 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
           </div>
         }
       />
-      <main className='bg-button-secondary-fill min-h-screen'>
-        <section className='absolute top-[46%] left-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center'>
+      <main className='bg-button-secondary-fill min-h-[calc(100dvh-72px)]'>
+        <section
+          className={`absolute left-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center ${isFinalized ? 'top-[50%]' : 'top-[46%]'}`}
+        >
           {!isFinalized && (
             <div className='typo-body-lg-semibold mb-2'>현재 TOP 4 사진</div>
           )}
@@ -264,7 +266,7 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
                     eventDate={
                       data?.eventDate ? data.eventDate.replace(/-/g, '.') : ''
                     }
-                    scale={1.5}
+                    scale={1.25}
                     isFinalized={isFinalized}
                     onClose={handleFlipCard}
                   />

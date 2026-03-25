@@ -26,7 +26,7 @@ export default function AlbumBestCut({
       </div>
 
       <LongButton
-        text='치즈 네컷 만들기'
+        text='이대로 네컷 확정하기'
         onClick={() => router.push(`/album/4cut/${albumId}`)}
         noFixed
         disabled={photoCount < 4}
