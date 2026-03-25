@@ -213,7 +213,7 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
         <section
           className={cn(
             'absolute left-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center',
-            isFinalized ? 'top-[50%]' : 'top-[46%]'
+            isFinalized ? 'top-[50%]' : 'top-[46%]',
           )}
         >
           {!isFinalized && (
