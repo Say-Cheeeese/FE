@@ -9,6 +9,23 @@ export default function GlobalClientEffects() {
   const { userId } = useCheckAuth();
 
   useEffect(() => {
+    // A/B Test Group Allocation
+    const match = document.cookie.match(/(^| )ab_test_group=([^;]+)/);
+    let group = match ? match[2] : null;
+
+    if (!group) {
+      group = Math.random() < 0.5 ? 'A' : 'B';
+      const d = new Date();
+      d.setTime(d.getTime() + 30 * 24 * 60 * 60 * 1000); // 30 days
+      document.cookie = `ab_test_group=${group};path=/;expires=${d.toUTCString()}`;
+    }
+
+    trackGaEvent('ab_test_group_trigger', {
+      ab_test_group: group,
+    });
+  }, []);
+
+  useEffect(() => {
     const url = new URL(window.location.href);
     const authType = url.searchParams.get('authType');
 

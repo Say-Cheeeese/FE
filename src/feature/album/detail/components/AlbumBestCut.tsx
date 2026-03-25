@@ -1,4 +1,5 @@
 import LongButton from '@/global/components/LongButton';
+import { useABTestGroup } from '@/global/hooks/useABTestGroup';
 import { useRouter } from 'next/navigation';
 import AlbumBestCutPhotoList from './AlbumBestCutPhotoList';
 
@@ -12,6 +13,7 @@ export default function AlbumBestCut({
   photoCount,
 }: AlbumBestCutProps) {
   const router = useRouter();
+  const abGroup = useABTestGroup();
 
   if (photoCount === undefined || photoCount === 0) return null;
 
@@ -26,7 +28,13 @@ export default function AlbumBestCut({
       </div>
 
       <LongButton
-        text='이대로 네컷 확정하기'
+        text={
+          abGroup === 'A'
+            ? '네컷사진 미리보기'
+            : abGroup === 'B'
+              ? '네컷사진 만들기'
+              : '이대로 네컷 확정하기'
+        }
         onClick={() => router.push(`/album/4cut/${albumId}`)}
         noFixed
         disabled={photoCount < 4}
