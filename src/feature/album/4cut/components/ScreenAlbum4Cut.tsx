@@ -26,6 +26,7 @@ import { use4CutFixed } from '../hooks/use4CutFixed';
 import { use4CutPreviewQuery } from '../hooks/use4CutPreviewQuery';
 import Container4Cut from './Container4Cut';
 import Container4CutExplanation from './Container4CutExplanation';
+import { getFourCutTemplateForAlbumId } from './fourCutAlbumTemplateMap';
 const Capture4CutPortal = dynamic(() => import('./Capture4CutPortal'), {
   ssr: false,
 });
@@ -244,7 +245,7 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
                   }
                   scale={isFinalized ? 1.25 : 1}
                   isFinalized={isFinalized}
-                  template='pnu_seven'
+                  template={getFourCutTemplateForAlbumId(albumId)}
                 />
               </div>
               {/* 뒷면 - 설명 */}
@@ -368,6 +369,7 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
         eventName={data?.title}
         eventDate={data?.eventDate ? data.eventDate.replace(/-/g, '.') : ''}
         isFinalized={isFinalized}
+        template={getFourCutTemplateForAlbumId(albumId)}
       />
     </>
   );

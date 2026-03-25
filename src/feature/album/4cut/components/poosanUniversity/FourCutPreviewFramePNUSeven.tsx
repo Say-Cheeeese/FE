@@ -40,7 +40,7 @@ export default function FourCutPreviewFramePNUSeven({
 
       {eventName && (
         <span
-          className='four-cut-paperozi absolute text-black'
+          className='four-cut-paperozi absolute text-[#18191B]'
           style={{
             bottom: nameBottom,
             left: nameLeft,
@@ -53,7 +53,7 @@ export default function FourCutPreviewFramePNUSeven({
 
       {eventDate && (
         <span
-          className='four-cut-paperozi absolute text-black'
+          className='four-cut-paperozi absolute text-[#18191B]'
           style={{
             bottom: dateBottom,
             left: dateLeft,

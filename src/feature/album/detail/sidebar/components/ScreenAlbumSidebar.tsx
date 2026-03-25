@@ -126,12 +126,12 @@ export default function ScreenAlbumSidebar({
       setTimeout(() => {
         router.replace('/main');
         Toast.check(
-          `${informData?.title ? `${informData.title} ` : ''}앨범이 삭제됐어요.`,
+          `${informData?.title ? `${informData.title} ` : ''}앨범을 나갔어요.`,
         );
       }, 400);
     } catch (e) {
       console.error(e);
-      Toast.alert(`앨범 삭제를 실패하였어요.\n다시한번 시도해주세요.`);
+      Toast.alert(`앨범 나가기를 실패하였어요.\n다시한번 시도해주세요.`);
     }
   };
   const isExpired = getIsExpired(informData?.expiredAt);
