@@ -15,6 +15,7 @@ import { extractHtmlToBlob } from '@/global/utils/image/extractHtmlToBlob';
 import { shareImage } from '@/global/utils/image/shareImage';
 import { shareViaNavigator } from '@/global/utils/shareNavigator';
 import { trackGaEvent } from '@/global/utils/trackGaEvent';
+import { cn } from '@/lib/utils';
 import { useQueryClient } from '@tanstack/react-query';
 import { Download, Loader2, LucideIcon, Menu, Send } from 'lucide-react';
 import dynamic from 'next/dynamic';
@@ -210,7 +211,10 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
       />
       <main className='bg-button-secondary-fill min-h-[calc(100dvh-72px)]'>
         <section
-          className={`absolute left-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center ${isFinalized ? 'top-[50%]' : 'top-[46%]'}`}
+          className={cn(
+            'absolute left-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center',
+            isFinalized ? 'top-[50%]' : 'top-[46%]'
+          )}
         >
           {!isFinalized && (
             <div className='typo-body-lg-semibold mb-2'>현재 TOP 4 사진</div>
