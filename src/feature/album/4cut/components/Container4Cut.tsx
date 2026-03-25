@@ -84,7 +84,7 @@ export default function Container4Cut({
         className='bg-fill-normal flex items-center justify-center'
         style={{ width: calculatedWidth, height: calculatedHeight }}
       >
-        <Spinner size={48} color='#9ca3af' />
+        <Spinner size={48} color='#18191B' />
       </div>
     );
   }
