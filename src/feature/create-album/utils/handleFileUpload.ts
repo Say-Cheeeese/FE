@@ -13,6 +13,34 @@ import { validateUpload } from './validateUpload';
 const MIN_WAIT_TIME_MS = 3000;
 const PER_PHOTO_PROCESSING_TIME_MS = 1000;
 
+async function refreshAlbumQueries(
+  queryClient: QueryClient,
+  albumId: string,
+): Promise<void> {
+  const queryKeys = [
+    [EP.album.photos(albumId)],
+    [EP.album.likedPhotos(albumId)],
+    [EP.album.availableCount(albumId)],
+  ] as const;
+
+  await Promise.all(
+    queryKeys.map((queryKey) =>
+      queryClient.invalidateQueries({
+        queryKey: [...queryKey],
+      }),
+    ),
+  );
+
+  await Promise.all(
+    queryKeys.map((queryKey) =>
+      queryClient.refetchQueries({
+        queryKey: [...queryKey],
+        type: 'active',
+      }),
+    ),
+  );
+}
+
 export async function handleFileUpload(
   e: ChangeEvent<HTMLInputElement>,
   albumId: string,
@@ -77,19 +105,7 @@ export async function handleFileUpload(
       await new Promise((resolve) => setTimeout(resolve, waitTime));
 
       if (options?.queryClient) {
-        const invalidateAlbumPhotoQueries = () => {
-          void options.queryClient!.invalidateQueries({
-            queryKey: [EP.album.photos(albumId)],
-          });
-          void options.queryClient!.invalidateQueries({
-            queryKey: [EP.album.likedPhotos(albumId)],
-          });
-          void options.queryClient!.invalidateQueries({
-            queryKey: [EP.album.availableCount(albumId)],
-          });
-        };
-
-        setTimeout(invalidateAlbumPhotoQueries, 3000);
+        await refreshAlbumQueries(options.queryClient, albumId);
       }
 
       // 원래 WaitingAlbum에서 하던 상세 화면 이동을 리팩토링하여 여기서 수행

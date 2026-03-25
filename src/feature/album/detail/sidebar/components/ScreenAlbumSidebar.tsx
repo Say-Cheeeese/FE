@@ -176,6 +176,9 @@ export default function ScreenAlbumSidebar({
           <div
             ref={scrollContainerRef}
             className='min-h-0 flex-1 touch-pan-y overflow-y-auto overscroll-contain [-webkit-overflow-scrolling:touch]'
+            style={{
+              paddingBottom: 'calc(env(safe-area-inset-bottom) + 20px)',
+            }}
           >
             <AlbumParticipants albumId={albumId} />
 
