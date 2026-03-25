@@ -2,12 +2,11 @@
 
 import { useId } from 'react';
 import {
-  PNU_THREE_DEFS,
-  PNU_THREE_INNER_AFTER_PHOTOS,
-} from './Svg4CutPNUThreeStatic';
+  PNU_SEVEN_DEFS,
+  PNU_SEVEN_INNER_AFTER_PHOTOS,
+} from './Svg4CutPNUSevenStatic';
 import { applyPnuRichTemplateIds } from './pnuTemplateApplyIds';
 
-/** viewBox 1080×1920 — PNU One/Two와 동일 슬롯: TL → TR → BR → BL */
 const PHOTO_SLOTS = [
   { x: 65, y: 149 },
   { x: 552, y: 78 },
@@ -17,24 +16,24 @@ const PHOTO_SLOTS = [
 
 type PhotoUrl = string | null | undefined;
 
-export interface Svg4CutPNUThreeProps {
+export interface Svg4CutPNUSevenProps {
   width: number | `${number}`;
   height: number | `${number}`;
   photos?: ReadonlyArray<PhotoUrl>;
 }
 
-export default function Svg4CutPNUThree({
+export default function Svg4CutPNUSeven({
   photos,
   height,
   width,
-}: Svg4CutPNUThreeProps) {
+}: Svg4CutPNUSevenProps) {
   const reactId = useId().replace(/:/g, '');
-  const clipId = `pnu3-clip-${reactId}`;
-  const patternBgId = `pnu3-pattern-bg-${reactId}`;
-  const patternBgInnerId = `pnu3-pattern-bg-inner-${reactId}`;
-  const maskId = `pnu3-mask-${reactId}`;
-  const patternQrId = `pnu3-pattern-qr-${reactId}`;
-  const imageQrId = `pnu3-qr-img-${reactId}`;
+  const clipId = `pnu7-clip-${reactId}`;
+  const patternBgId = `pnu7-pattern-bg-${reactId}`;
+  const patternBgInnerId = `pnu7-pattern-bg-inner-${reactId}`;
+  const maskId = `pnu7-mask-${reactId}`;
+  const patternQrId = `pnu7-pattern-qr-${reactId}`;
+  const imageQrId = `pnu7-qr-img-${reactId}`;
 
   const photoSources = photos ?? [];
   const ids = {
@@ -46,8 +45,8 @@ export default function Svg4CutPNUThree({
     imageQrId,
   };
 
-  const innerHtml = applyPnuRichTemplateIds(PNU_THREE_INNER_AFTER_PHOTOS, ids);
-  const defsHtml = applyPnuRichTemplateIds(PNU_THREE_DEFS, ids);
+  const innerHtml = applyPnuRichTemplateIds(PNU_SEVEN_INNER_AFTER_PHOTOS, ids);
+  const defsHtml = applyPnuRichTemplateIds(PNU_SEVEN_DEFS, ids);
 
   return (
     <svg

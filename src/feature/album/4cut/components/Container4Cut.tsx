@@ -6,6 +6,10 @@ import Svg4Cut from '../svg/Svg4Cut';
 import Svg4CutPNUOne from '../svg/poosanUniversity/Svg4CutPNUOne';
 import Svg4CutPNUTwo from '../svg/poosanUniversity/Svg4CutPNUTwo';
 import Svg4CutPNUThree from '../svg/poosanUniversity/Svg4CutPNUThree';
+import Svg4CutPNUFour from '../svg/poosanUniversity/Svg4CutPNUFour';
+import Svg4CutPNUFive from '../svg/poosanUniversity/Svg4CutPNUFive';
+import Svg4CutPNUSix from '../svg/poosanUniversity/Svg4CutPNUSix';
+import Svg4CutPNUSeven from '../svg/poosanUniversity/Svg4CutPNUSeven';
 import { use4CutPreviewQuery } from '../hooks/use4CutPreviewQuery';
 import FourCutPreviewFrameDefault from './FourCutPreviewFrameDefault';
 import {
@@ -15,6 +19,10 @@ import {
 import FourCutPreviewFramePNUOne from './poosanUniversity/FourCutPreviewFramePNUOne';
 import FourCutPreviewFramePNUTwo from './poosanUniversity/FourCutPreviewFramePNUTwo';
 import FourCutPreviewFramePNUThree from './poosanUniversity/FourCutPreviewFramePNUThree';
+import FourCutPreviewFramePNUFour from './poosanUniversity/FourCutPreviewFramePNUFour';
+import FourCutPreviewFramePNUFive from './poosanUniversity/FourCutPreviewFramePNUFive';
+import FourCutPreviewFramePNUSix from './poosanUniversity/FourCutPreviewFramePNUSix';
+import FourCutPreviewFramePNUSeven from './poosanUniversity/FourCutPreviewFramePNUSeven';
 import type { FourCutTemplateId } from './fourCutTemplateTypes';
 
 export interface Container4CutProps {
@@ -90,6 +98,38 @@ export default function Container4Cut({
       <FourCutPreviewFramePNUThree {...frameCommon}>
         <Svg4CutPNUThree {...svgCommon} />
       </FourCutPreviewFramePNUThree>
+    );
+  }
+
+  if (template === 'pnu_four') {
+    return (
+      <FourCutPreviewFramePNUFour {...frameCommon}>
+        <Svg4CutPNUFour {...svgCommon} />
+      </FourCutPreviewFramePNUFour>
+    );
+  }
+
+  if (template === 'pnu_five') {
+    return (
+      <FourCutPreviewFramePNUFive {...frameCommon}>
+        <Svg4CutPNUFive {...svgCommon} />
+      </FourCutPreviewFramePNUFive>
+    );
+  }
+
+  if (template === 'pnu_six') {
+    return (
+      <FourCutPreviewFramePNUSix {...frameCommon}>
+        <Svg4CutPNUSix {...svgCommon} />
+      </FourCutPreviewFramePNUSix>
+    );
+  }
+
+  if (template === 'pnu_seven') {
+    return (
+      <FourCutPreviewFramePNUSeven {...frameCommon}>
+        <Svg4CutPNUSeven {...svgCommon} />
+      </FourCutPreviewFramePNUSeven>
     );
   }
 
