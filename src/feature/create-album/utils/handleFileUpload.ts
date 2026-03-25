@@ -36,6 +36,14 @@ export async function handleFileUpload(
         /heic|heif/i.test(f.type) ||
         /\.heic$|\.heif$/i.test(f.name),
     );
+
+    const hasHeic = files.some(
+      (f) => /heic|heif/i.test(f.type) || /\.heic$|\.heif$/i.test(f.name),
+    );
+    if (hasHeic) {
+      Toast.alert('아이폰(HEIC) 사진을 변환 중입니다. 잠시만 기다려주세요!');
+    }
+
     files = await sortImagesByDate(files);
     files = await convertHeicFilesToJpeg(files);
 
