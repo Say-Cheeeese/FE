@@ -148,9 +148,7 @@ export default function PhotoList({
   };
 
   const filteredPhotos = useMemo(() => {
-    return includeMyPhotos
-      ? photos
-      : photos.filter((photo) => !photo.canDelete);
+    return includeMyPhotos ? photos : photos.filter((photo) => !photo.isMine);
   }, [includeMyPhotos, photos]);
 
   const selectablePhotos = useMemo(
