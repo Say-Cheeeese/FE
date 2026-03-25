@@ -31,7 +31,7 @@ export default function FourCutPreviewFramePNUThree({
 
   return (
     <div
-      className='border-border-primary text-text-secondary relative border font-medium'
+      className='text-text-secondary relative font-medium'
       style={{
         fontSize,
         ...(isFinalized && {
