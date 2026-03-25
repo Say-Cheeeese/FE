@@ -178,28 +178,28 @@ export default function ScreenAlbumSidebar({
             className='min-h-0 flex-1 touch-pan-y overflow-y-auto overscroll-contain [-webkit-overflow-scrolling:touch]'
           >
             <AlbumParticipants albumId={albumId} />
-          </div>
 
-          {(!isMaker || isExpired) && (
-            <div className='mt-auto w-full'>
-              <ConfirmModal
-                trigger={
-                  <button
-                    type='button'
-                    className='text-text-error bg-background-white typo-body-lg-semibold w-full rounded-[8px] py-3'
-                  >
-                    앨범 나가기
-                  </button>
-                }
-                title='앨범에서 나갈까요?'
-                description='나가더라도 내가 올린 사진은 앨범에 남아요.'
-                cancelText='다음에'
-                confirmText='앨범 나가기'
-                confirmClassName='bg-button-accent-fill text-white active:bg-button-accent-pressed active:text-basic-inverse'
-                onConfirm={handleExit}
-              />
-            </div>
-          )}
+            {(!isMaker || isExpired) && (
+              <div className='mt-3 w-full'>
+                <ConfirmModal
+                  trigger={
+                    <button
+                      type='button'
+                      className='text-text-error bg-background-white typo-body-lg-semibold w-full rounded-[8px] py-3'
+                    >
+                      앨범 나가기
+                    </button>
+                  }
+                  title='앨범에서 나갈까요?'
+                  description='나가더라도 내가 올린 사진은 앨범에 남아요.'
+                  cancelText='다음에'
+                  confirmText='앨범 나가기'
+                  confirmClassName='bg-button-accent-fill text-white active:bg-button-accent-pressed active:text-basic-inverse'
+                  onConfirm={handleExit}
+                />
+              </div>
+            )}
+          </div>
         </main>
       </div>
     </>
