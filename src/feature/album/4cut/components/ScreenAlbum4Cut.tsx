@@ -244,7 +244,7 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
                   }
                   scale={isFinalized ? 1.25 : 1}
                   isFinalized={isFinalized}
-                  template='pnu_one'
+                  template='pnu_three'
                 />
               </div>
               {/* 뒷면 - 설명 */}

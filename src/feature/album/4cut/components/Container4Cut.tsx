@@ -5,6 +5,7 @@ import { useMemo } from 'react';
 import Svg4Cut from '../svg/Svg4Cut';
 import Svg4CutPNUOne from '../svg/poosanUniversity/Svg4CutPNUOne';
 import Svg4CutPNUTwo from '../svg/poosanUniversity/Svg4CutPNUTwo';
+import Svg4CutPNUThree from '../svg/poosanUniversity/Svg4CutPNUThree';
 import { use4CutPreviewQuery } from '../hooks/use4CutPreviewQuery';
 import FourCutPreviewFrameDefault from './FourCutPreviewFrameDefault';
 import {
@@ -13,6 +14,7 @@ import {
 } from './fourCutLayoutConstants';
 import FourCutPreviewFramePNUOne from './poosanUniversity/FourCutPreviewFramePNUOne';
 import FourCutPreviewFramePNUTwo from './poosanUniversity/FourCutPreviewFramePNUTwo';
+import FourCutPreviewFramePNUThree from './poosanUniversity/FourCutPreviewFramePNUThree';
 import type { FourCutTemplateId } from './fourCutTemplateTypes';
 
 export interface Container4CutProps {
@@ -80,6 +82,14 @@ export default function Container4Cut({
       <FourCutPreviewFramePNUTwo {...frameCommon}>
         <Svg4CutPNUTwo {...svgCommon} />
       </FourCutPreviewFramePNUTwo>
+    );
+  }
+
+  if (template === 'pnu_three') {
+    return (
+      <FourCutPreviewFramePNUThree {...frameCommon}>
+        <Svg4CutPNUThree {...svgCommon} />
+      </FourCutPreviewFramePNUThree>
     );
   }
 
