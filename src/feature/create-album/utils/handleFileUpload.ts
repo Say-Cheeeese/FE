@@ -10,7 +10,7 @@ import { saveFilesToStore } from './saveFilesToStore';
 import { sortImagesByDate } from './sortImagesByDate';
 import { validateUpload } from './validateUpload';
 
-const MIN_WAIT_TIME_MS = 4500;
+const MIN_WAIT_TIME_MS = 3000;
 const PER_PHOTO_PROCESSING_TIME_MS = 1000;
 
 export async function handleFileUpload(
