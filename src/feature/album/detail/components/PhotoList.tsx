@@ -147,13 +147,19 @@ export default function PhotoList({
     changeMode(nextMode);
   };
 
+  const filteredPhotos = useMemo(() => {
+    return includeMyPhotos
+      ? photos
+      : photos.filter((photo) => !photo.canDelete);
+  }, [includeMyPhotos, photos]);
+
   const selectablePhotos = useMemo(
     () =>
-      photos.filter(
+      filteredPhotos.filter(
         ({ photoId, imageUrl, isRecentlyDownloaded }) =>
           !!photoId && !!imageUrl && !isRecentlyDownloaded,
       ),
-    [photos],
+    [filteredPhotos],
   );
   const selectedPhotoIds = useMemo(
     () => new Set(selectedPhotos.map(({ id }) => id)),
@@ -239,7 +245,7 @@ export default function PhotoList({
         </div>
       )}
       <div className='grid grid-cols-3 gap-0.5'>
-        {photos.map(
+        {filteredPhotos.map(
           ({
             photoId,
             likeCnt,

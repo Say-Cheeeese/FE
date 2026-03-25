@@ -10,7 +10,7 @@ import { saveFilesToStore } from './saveFilesToStore';
 import { sortImagesByDate } from './sortImagesByDate';
 import { validateUpload } from './validateUpload';
 
-const MIN_WAIT_TIME_MS = 4500;
+const MIN_WAIT_TIME_MS = 3000;
 const PER_PHOTO_PROCESSING_TIME_MS = 1000;
 
 export async function handleFileUpload(
@@ -36,6 +36,14 @@ export async function handleFileUpload(
         /heic|heif/i.test(f.type) ||
         /\.heic$|\.heif$/i.test(f.name),
     );
+
+    const hasHeic = files.some(
+      (f) => /heic|heif/i.test(f.type) || /\.heic$|\.heif$/i.test(f.name),
+    );
+    if (hasHeic) {
+      Toast.alert('아이폰(HEIC) 사진을 변환 중입니다. 잠시만 기다려주세요!');
+    }
+
     files = await sortImagesByDate(files);
     files = await convertHeicFilesToJpeg(files);
 
