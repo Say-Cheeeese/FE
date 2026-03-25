@@ -314,7 +314,7 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
                     <ConfirmModal
                       trigger={
                         <LongButton
-                          text='사진 확정하기'
+                          text='이대로 네컷 확정하기'
                           noFixed
                           onClick={handleClickCreate4Cut}
                         />
