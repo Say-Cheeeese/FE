@@ -10,4 +10,3 @@ export default function Container4CutPNUEight(
 ) {
   return <Container4Cut {...props} template='pnu_eight' />;
 }
-
