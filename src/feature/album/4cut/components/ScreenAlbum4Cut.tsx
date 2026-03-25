@@ -27,6 +27,7 @@ import { use4CutFixed } from '../hooks/use4CutFixed';
 import { use4CutPreviewQuery } from '../hooks/use4CutPreviewQuery';
 import Container4Cut from './Container4Cut';
 import Container4CutExplanation from './Container4CutExplanation';
+import { getFourCutTemplateForAlbumId } from './fourCutAlbumTemplateMap';
 const Capture4CutPortal = dynamic(() => import('./Capture4CutPortal'), {
   ssr: false,
 });
@@ -216,7 +217,7 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
             isFinalized ? 'top-[50%]' : 'top-[46%]',
           )}
         >
-          {!isFinalized && (
+          {!is4CutPreviewPending && !isFinalized && (
             <div className='typo-body-lg-semibold mb-2'>현재 TOP 4 사진</div>
           )}
           <div
@@ -250,6 +251,7 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
                   }
                   scale={isFinalized ? 1.25 : 1}
                   isFinalized={isFinalized}
+                  template={getFourCutTemplateForAlbumId(albumId)}
                 />
               </div>
               {/* 뒷면 - 설명 */}
@@ -373,6 +375,7 @@ export default function ScreenAlbum4Cut({ albumId }: ScreenAlbum4CutProps) {
         eventName={data?.title}
         eventDate={data?.eventDate ? data.eventDate.replace(/-/g, '.') : ''}
         isFinalized={isFinalized}
+        template={getFourCutTemplateForAlbumId(albumId)}
       />
     </>
   );

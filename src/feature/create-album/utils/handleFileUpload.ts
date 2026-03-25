@@ -77,17 +77,19 @@ export async function handleFileUpload(
       await new Promise((resolve) => setTimeout(resolve, waitTime));
 
       if (options?.queryClient) {
-        const retryInvalidate = () => {
-          options.queryClient!.refetchQueries({
+        const invalidateAlbumPhotoQueries = () => {
+          void options.queryClient!.invalidateQueries({
             queryKey: [EP.album.photos(albumId)],
           });
-          options.queryClient!.refetchQueries({
+          void options.queryClient!.invalidateQueries({
+            queryKey: [EP.album.likedPhotos(albumId)],
+          });
+          void options.queryClient!.invalidateQueries({
             queryKey: [EP.album.availableCount(albumId)],
           });
         };
-        retryInvalidate();
-        setTimeout(retryInvalidate, 3000);
-        setTimeout(retryInvalidate, 6000);
+
+        setTimeout(invalidateAlbumPhotoQueries, 3000);
       }
 
       // 원래 WaitingAlbum에서 하던 상세 화면 이동을 리팩토링하여 여기서 수행

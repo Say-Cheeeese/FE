@@ -3,6 +3,7 @@
 import { BodyPortal } from '@/global/components/portal/BodyPortal';
 import type { RefObject } from 'react';
 import Container4Cut from './Container4Cut';
+import type { FourCutTemplateId } from './fourCutTemplateTypes';
 
 interface Capture4CutPortalProps {
   captureRef: RefObject<HTMLDivElement | null>;
@@ -11,6 +12,7 @@ interface Capture4CutPortalProps {
   eventName?: string;
   eventDate?: string;
   isFinalized?: boolean;
+  template?: FourCutTemplateId;
 }
 
 const Capture4CutPortal = ({
@@ -20,6 +22,7 @@ const Capture4CutPortal = ({
   eventName,
   eventDate,
   isFinalized = false,
+  template = 'default',
 }: Capture4CutPortalProps) => (
   <BodyPortal>
     <div
@@ -37,6 +40,7 @@ const Capture4CutPortal = ({
         eventDate={eventDate}
         width={500}
         isFinalized={isFinalized}
+        template={template}
       />
     </div>
   </BodyPortal>
