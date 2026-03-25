@@ -6,4 +6,5 @@ export type FourCutTemplateId =
   | 'pnu_four'
   | 'pnu_five'
   | 'pnu_six'
-  | 'pnu_seven';
+  | 'pnu_seven'
+  | 'pnu_eight';

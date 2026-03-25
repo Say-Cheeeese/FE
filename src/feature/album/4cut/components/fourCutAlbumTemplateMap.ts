@@ -9,6 +9,7 @@ const PNU_ALBUM_TEMPLATE_BY_ID: Readonly<Record<string, FourCutTemplateId>> = {
   '1f127ece-f242-6d36-9583-b1e01df3644f': 'pnu_five',
   '1f127ecf-a23e-6187-9583-b1e01df3644f': 'pnu_six',
   '1f127ed0-47c5-6958-9583-b1e01df3644f': 'pnu_seven',
+  '1f126985-3d35-65bf-9aa0-cba45c137a2a': 'pnu_eight',
 };
 
 export function getFourCutTemplateForAlbumId(
