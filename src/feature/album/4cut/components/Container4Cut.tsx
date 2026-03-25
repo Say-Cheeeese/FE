@@ -1,29 +1,30 @@
 'use client';
 
+import Spinner from '@/global/components/Spinner';
 import { useBase64Images } from '@/global/hooks/useBase64Images';
 import { useMemo } from 'react';
-import Svg4Cut from '../svg/Svg4Cut';
-import Svg4CutPNUOne from '../svg/poosanUniversity/Svg4CutPNUOne';
-import Svg4CutPNUTwo from '../svg/poosanUniversity/Svg4CutPNUTwo';
-import Svg4CutPNUThree from '../svg/poosanUniversity/Svg4CutPNUThree';
-import Svg4CutPNUFour from '../svg/poosanUniversity/Svg4CutPNUFour';
-import Svg4CutPNUFive from '../svg/poosanUniversity/Svg4CutPNUFive';
-import Svg4CutPNUSix from '../svg/poosanUniversity/Svg4CutPNUSix';
-import Svg4CutPNUSeven from '../svg/poosanUniversity/Svg4CutPNUSeven';
 import { use4CutPreviewQuery } from '../hooks/use4CutPreviewQuery';
+import Svg4Cut from '../svg/Svg4Cut';
+import Svg4CutPNUFive from '../svg/poosanUniversity/Svg4CutPNUFive';
+import Svg4CutPNUFour from '../svg/poosanUniversity/Svg4CutPNUFour';
+import Svg4CutPNUOne from '../svg/poosanUniversity/Svg4CutPNUOne';
+import Svg4CutPNUSeven from '../svg/poosanUniversity/Svg4CutPNUSeven';
+import Svg4CutPNUSix from '../svg/poosanUniversity/Svg4CutPNUSix';
+import Svg4CutPNUThree from '../svg/poosanUniversity/Svg4CutPNUThree';
+import Svg4CutPNUTwo from '../svg/poosanUniversity/Svg4CutPNUTwo';
 import FourCutPreviewFrameDefault from './FourCutPreviewFrameDefault';
 import {
   FOUR_CUT_BASE_ASPECT_RATIO,
   FOUR_CUT_BASE_WIDTH,
 } from './fourCutLayoutConstants';
-import FourCutPreviewFramePNUOne from './poosanUniversity/FourCutPreviewFramePNUOne';
-import FourCutPreviewFramePNUTwo from './poosanUniversity/FourCutPreviewFramePNUTwo';
-import FourCutPreviewFramePNUThree from './poosanUniversity/FourCutPreviewFramePNUThree';
-import FourCutPreviewFramePNUFour from './poosanUniversity/FourCutPreviewFramePNUFour';
-import FourCutPreviewFramePNUFive from './poosanUniversity/FourCutPreviewFramePNUFive';
-import FourCutPreviewFramePNUSix from './poosanUniversity/FourCutPreviewFramePNUSix';
-import FourCutPreviewFramePNUSeven from './poosanUniversity/FourCutPreviewFramePNUSeven';
 import type { FourCutTemplateId } from './fourCutTemplateTypes';
+import FourCutPreviewFramePNUFive from './poosanUniversity/FourCutPreviewFramePNUFive';
+import FourCutPreviewFramePNUFour from './poosanUniversity/FourCutPreviewFramePNUFour';
+import FourCutPreviewFramePNUOne from './poosanUniversity/FourCutPreviewFramePNUOne';
+import FourCutPreviewFramePNUSeven from './poosanUniversity/FourCutPreviewFramePNUSeven';
+import FourCutPreviewFramePNUSix from './poosanUniversity/FourCutPreviewFramePNUSix';
+import FourCutPreviewFramePNUThree from './poosanUniversity/FourCutPreviewFramePNUThree';
+import FourCutPreviewFramePNUTwo from './poosanUniversity/FourCutPreviewFramePNUTwo';
 
 export interface Container4CutProps {
   albumId: string;
@@ -47,7 +48,7 @@ export default function Container4Cut({
 }: Container4CutProps) {
   // TODO : openapi type이 이상해서 임시 any처리. 백엔드랑 협의 필요
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data }: any = use4CutPreviewQuery(albumId);
+  const { data, isPending }: any = use4CutPreviewQuery(albumId);
 
   const images = useMemo(() => {
     return (
@@ -76,6 +77,17 @@ export default function Container4Cut({
     height: calculatedHeight,
     photos: base64List,
   };
+
+  if (isPending) {
+    return (
+      <div
+        className='bg-fill-normal flex items-center justify-center'
+        style={{ width: calculatedWidth, height: calculatedHeight }}
+      >
+        <Spinner size={48} color='#9ca3af' />
+      </div>
+    );
+  }
 
   if (template === 'pnu_one') {
     return (
