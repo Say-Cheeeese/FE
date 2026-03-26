@@ -148,8 +148,10 @@ export default function PhotoList({
   };
 
   const filteredPhotos = useMemo(() => {
-    return includeMyPhotos ? photos : photos.filter((photo) => !photo.isMine);
-  }, [includeMyPhotos, photos]);
+    return mode === 'default' || includeMyPhotos
+      ? photos
+      : photos.filter((photo) => !photo.isMine);
+  }, [includeMyPhotos, mode, photos]);
 
   const selectablePhotos = useMemo(
     () =>
