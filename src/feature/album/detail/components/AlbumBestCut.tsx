@@ -58,7 +58,10 @@ export default function AlbumBestCut({
                 ? '네컷사진 만들기'
                 : '네컷사진 확정하기'
           }
-          onClick={() => router.push(`/album/4cut/${albumId}`)}
+          onClick={() => {
+            handleCloseBubble();
+            router.push(`/album/4cut/${albumId}`);
+          }}
           noFixed
           disabled={photoCount < 4}
           height={48}
