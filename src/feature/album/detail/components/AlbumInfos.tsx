@@ -18,7 +18,13 @@ interface AlbumInfosProps {
   mode: AlbumDetailMode;
 }
 
-function AlbumInfos({ ref, albumId, photoCount, mode, ...rest }: AlbumInfosProps) {
+function AlbumInfos({
+  ref,
+  albumId,
+  photoCount,
+  mode,
+  ...rest
+}: AlbumInfosProps) {
   const { albumType, setAlbumType } = useAlbumTypeStore(
     useShallow((state) => ({
       albumType: state.albumType,

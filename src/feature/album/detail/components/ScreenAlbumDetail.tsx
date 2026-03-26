@@ -3,13 +3,13 @@
 import EmojiLoading from '@/components/ui/EmojiLoading';
 import { useAlbumPhotosInfiniteQuery } from '@/feature/photo-detail/hooks/useAlbumPhotosInfiniteQuery';
 import {
-    useAlbumPhotosLikedInfiniteQuery,
-    type AlbumPhotosLikedItem,
+  useAlbumPhotosLikedInfiniteQuery,
+  type AlbumPhotosLikedItem,
 } from '@/feature/photo-detail/hooks/useAlbumPhotosLikedInfiniteQuery';
 import { useGetAlbumInform } from '@/feature/upload/hooks/useGetAlbumInform';
 import { PhotoListResponseSchema } from '@/global/api/ep';
 import CustomHeader, {
-    HEADER_HEIGHT,
+  HEADER_HEIGHT,
 } from '@/global/components/header/CustomHeader';
 import { GA_EVENTS } from '@/global/constants/gaEvents';
 import { DEFAULT_PROFILE_IMAGE } from '@/global/constants/images';
