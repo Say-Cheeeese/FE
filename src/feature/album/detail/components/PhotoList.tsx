@@ -217,7 +217,9 @@ export default function PhotoList({
     if (mode !== 'select') return;
 
     const currentSelected = useSelectedPhotosStore.getState().selectedPhotos;
-    const filtered = currentSelected.filter((p) => selectablePhotoIds.has(p.id));
+    const filtered = currentSelected.filter((p) =>
+      selectablePhotoIds.has(p.id),
+    );
 
     if (filtered.length !== currentSelected.length) {
       setSelectedPhotos(filtered);
