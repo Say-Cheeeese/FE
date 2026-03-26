@@ -181,6 +181,11 @@ export default function PhotoList({
     [selectablePhotos],
   );
 
+  const selectablePhotoIds = useMemo(
+    () => new Set(selectablePhotos.map(({ photoId }) => photoId)),
+    [selectablePhotos],
+  );
+
   const handleToggleSelectAll = () => {
     if (hasAnySelected) {
       setIsSelectAllMode(false);
@@ -211,15 +216,14 @@ export default function PhotoList({
   useEffect(() => {
     if (mode !== 'select') return;
 
-    const selectableIds = new Set(selectablePhotos.map((p) => p.photoId));
     const currentSelected = useSelectedPhotosStore.getState().selectedPhotos;
-    const filtered = currentSelected.filter((p) => selectableIds.has(p.id));
+    const filtered = currentSelected.filter((p) => selectablePhotoIds.has(p.id));
 
     if (filtered.length !== currentSelected.length) {
       setSelectedPhotos(filtered);
       setIsSelectAllMode(false);
     }
-  }, [mode, selectablePhotos, setSelectedPhotos]);
+  }, [mode, selectablePhotoIds, setSelectedPhotos]);
 
   return (
     <section ref={photoListRef} className='relative p-4'>
