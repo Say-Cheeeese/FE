@@ -1,7 +1,12 @@
 import LongButton from '@/global/components/LongButton';
+import BubbleTooltip from '@/global/components/tooltip/BubbleTooltip';
 import { useABTestGroup } from '@/global/hooks/useABTestGroup';
+import { X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import AlbumBestCutPhotoList from './AlbumBestCutPhotoList';
+
+const BEST_CUT_TOOLTIP_DISMISSED_KEY = 'best-cut-tooltip-dismissed';
 
 interface AlbumBestCutProps {
   albumId: string;
@@ -14,6 +19,19 @@ export default function AlbumBestCut({
 }: AlbumBestCutProps) {
   const router = useRouter();
   const abGroup = useABTestGroup();
+  const [isBubbleVisible, setIsBubbleVisible] = useState(false);
+
+  useEffect(() => {
+    const dismissed =
+      window.localStorage.getItem(BEST_CUT_TOOLTIP_DISMISSED_KEY) === 'true';
+
+    setIsBubbleVisible(!dismissed);
+  }, []);
+
+  const handleCloseBubble = () => {
+    window.localStorage.setItem(BEST_CUT_TOOLTIP_DISMISSED_KEY, 'true');
+    setIsBubbleVisible(false);
+  };
 
   if (photoCount === undefined || photoCount === 0) return null;
 
@@ -27,19 +45,45 @@ export default function AlbumBestCut({
         <AlbumBestCutPhotoList albumId={albumId} />
       </div>
 
-      <LongButton
-        text={
-          abGroup === 'A'
-            ? '네컷사진 미리보기'
-            : abGroup === 'B'
-              ? '네컷사진 만들기'
-              : '이대로 네컷 확정하기'
-        }
-        onClick={() => router.push(`/album/4cut/${albumId}`)}
-        noFixed
-        disabled={photoCount < 4}
-        height={48}
-      />
+      <div className='relative'>
+        <LongButton
+          text={
+            abGroup === 'A'
+              ? '네컷사진 미리보기'
+              : abGroup === 'B'
+                ? '네컷사진 만들기'
+                : '이대로 네컷 확정하기'
+          }
+          onClick={() => router.push(`/album/4cut/${albumId}`)}
+          noFixed
+          disabled={photoCount < 4}
+          height={48}
+        />
+
+        {isBubbleVisible && (
+          <BubbleTooltip
+            message={
+              <span className='flex items-center gap-2 whitespace-nowrap'>
+                잠깐! 귀여운데 한 번만 보고가요
+                <button
+                  type='button'
+                  aria-label='버블 닫기'
+                  onClick={handleCloseBubble}
+                  className='text-text-basic-inverse'
+                >
+                  <X size={16} />
+                </button>
+              </span>
+            }
+            className='absolute top-[calc(100%+10px)] left-1/2 z-10 -translate-x-1/2'
+            bubbleClassName='rounded-full bg-surface-inverse px-4 py-2 shadow-none'
+            messageClassName='text-text-basic-inverse'
+            tailClassName='bg-surface-inverse shadow-none'
+            tailPosition='top'
+            showBorder={false}
+          />
+        )}
+      </div>
     </section>
   );
 }
