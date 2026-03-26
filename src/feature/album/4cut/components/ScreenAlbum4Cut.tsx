@@ -395,7 +395,7 @@ export const ActionButton = ({
   <button
     type='button'
     onClick={onClick}
-    className='bg-button-tertiary-fill text-text-subtle flex flex-1 items-center justify-center gap-1 rounded-[8px] py-[15px]'
+    className='bg-white text-text-subtle flex flex-1 items-center justify-center gap-1 rounded-[8px] py-[15px]'
   >
     <Icon width={24} height={24} color='var(--color-icon-basic)' />
     <span className='typo-body-1xl-semibold'>{text}</span>

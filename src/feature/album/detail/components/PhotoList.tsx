@@ -9,8 +9,8 @@ import { useAlbumSortStore } from '@/store/useAlbumSortStore';
 import { useAlbumTypeStore } from '@/store/useAlbumTypeStore';
 import { useSelectedPhotosStore } from '@/store/useSelectedPhotosStore';
 import {
-  type FetchNextPageOptions,
-  type InfiniteQueryObserverResult,
+    type FetchNextPageOptions,
+    type InfiniteQueryObserverResult,
 } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -190,12 +190,21 @@ export default function PhotoList({
     if (mode !== 'select') return;
     if (!isSelectAllMode) return;
 
-    setSelectedPhotos(
-      selectablePhotos.map(({ photoId, imageUrl }) => ({
-        id: photoId,
-        url: imageUrl ?? '',
-      })),
-    );
+    const currentSelected = useSelectedPhotosStore.getState().selectedPhotos;
+    const currentIds = new Set(currentSelected.map((p) => p.id));
+
+    const isDifferent =
+      currentSelected.length !== selectablePhotos.length ||
+      selectablePhotos.some((p) => !currentIds.has(p.photoId));
+
+    if (isDifferent) {
+      setSelectedPhotos(
+        selectablePhotos.map(({ photoId, imageUrl }) => ({
+          id: photoId,
+          url: imageUrl ?? '',
+        })),
+      );
+    }
   }, [isSelectAllMode, mode, selectablePhotos, setSelectedPhotos]);
 
   return (
