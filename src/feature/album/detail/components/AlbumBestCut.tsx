@@ -6,16 +6,20 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import AlbumBestCutPhotoList from './AlbumBestCutPhotoList';
 
+import { AlbumDetailMode } from './ScreenAlbumDetail';
+
 const BEST_CUT_TOOLTIP_DISMISSED_KEY = 'best-cut-tooltip-dismissed';
 
 interface AlbumBestCutProps {
   albumId: string;
   photoCount?: number;
+  mode: AlbumDetailMode;
 }
 
 export default function AlbumBestCut({
   albumId,
   photoCount,
+  mode,
 }: AlbumBestCutProps) {
   const router = useRouter();
   const abGroup = useABTestGroup();
@@ -52,7 +56,7 @@ export default function AlbumBestCut({
               ? '네컷사진 미리보기'
               : abGroup === 'B'
                 ? '네컷사진 만들기'
-                : '이대로 네컷 확정하기'
+                : '네컷사진 확정하기'
           }
           onClick={() => router.push(`/album/4cut/${albumId}`)}
           noFixed
@@ -60,7 +64,7 @@ export default function AlbumBestCut({
           height={48}
         />
 
-        {isBubbleVisible && (
+        {isBubbleVisible && mode !== 'select' && (
           <BubbleTooltip
             message={
               <span className='flex items-center gap-2 whitespace-nowrap'>
