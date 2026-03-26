@@ -171,6 +171,15 @@ export default function PhotoList({
     selectablePhotos.length > 0 &&
     selectablePhotos.every(({ photoId }) => selectedPhotoIds.has(photoId));
 
+  const selectableStorePhotos = useMemo(
+    () =>
+      selectablePhotos.map(({ photoId, imageUrl }) => ({
+        id: photoId,
+        url: imageUrl ?? '',
+      })),
+    [selectablePhotos],
+  );
+
   const handleToggleSelectAll = () => {
     if (isAllSelected) {
       setIsSelectAllMode(false);
@@ -178,12 +187,7 @@ export default function PhotoList({
       return;
     }
     setIsSelectAllMode(true);
-    setSelectedPhotos(
-      selectablePhotos.map(({ photoId, imageUrl }) => ({
-        id: photoId,
-        url: imageUrl ?? '',
-      })),
-    );
+    setSelectedPhotos(selectableStorePhotos);
   };
 
   useEffect(() => {
@@ -194,18 +198,13 @@ export default function PhotoList({
     const currentIds = new Set(currentSelected.map((p) => p.id));
 
     const isDifferent =
-      currentSelected.length !== selectablePhotos.length ||
-      selectablePhotos.some((p) => !currentIds.has(p.photoId));
+      currentSelected.length !== selectableStorePhotos.length ||
+      selectableStorePhotos.some((p) => !currentIds.has(p.id));
 
     if (isDifferent) {
-      setSelectedPhotos(
-        selectablePhotos.map(({ photoId, imageUrl }) => ({
-          id: photoId,
-          url: imageUrl ?? '',
-        })),
-      );
+      setSelectedPhotos(selectableStorePhotos);
     }
-  }, [isSelectAllMode, mode, selectablePhotos, setSelectedPhotos]);
+  }, [isSelectAllMode, mode, selectableStorePhotos, setSelectedPhotos]);
 
   return (
     <section ref={photoListRef} className='relative p-4'>
