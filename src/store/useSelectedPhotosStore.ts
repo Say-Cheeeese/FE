@@ -10,6 +10,7 @@ interface SelectedPhotosState {
   addSelectedPhoto: ({ id, url }: StorePhotoItem) => void;
   deleteSelectedPhoto: (photoId: number) => void;
   clearSelectedPhotos: () => void;
+  setSelectedPhotos: (photos: StorePhotoItem[]) => void;
   isSelected: (photoId: number) => boolean;
 }
 
@@ -33,6 +34,8 @@ export const useSelectedPhotosStore = create<SelectedPhotosState>(
       })),
 
     clearSelectedPhotos: () => set({ selectedPhotos: [] }),
+
+    setSelectedPhotos: (photos) => set({ selectedPhotos: photos }),
 
     isSelected: (photoId) => {
       const { selectedPhotos } = get();

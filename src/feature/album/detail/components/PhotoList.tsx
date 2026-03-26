@@ -9,8 +9,8 @@ import { useAlbumSortStore } from '@/store/useAlbumSortStore';
 import { useAlbumTypeStore } from '@/store/useAlbumTypeStore';
 import { useSelectedPhotosStore } from '@/store/useSelectedPhotosStore';
 import {
-  type FetchNextPageOptions,
-  type InfiniteQueryObserverResult,
+    type FetchNextPageOptions,
+    type InfiniteQueryObserverResult,
 } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -57,6 +57,7 @@ export default function PhotoList({
     addSelectedPhoto,
     deleteSelectedPhoto,
     clearSelectedPhotos,
+    setSelectedPhotos,
     isSelected,
   } = useSelectedPhotosStore(
     useShallow((state) => ({
@@ -64,6 +65,7 @@ export default function PhotoList({
       addSelectedPhoto: state.addSelectedPhoto,
       deleteSelectedPhoto: state.deleteSelectedPhoto,
       clearSelectedPhotos: state.clearSelectedPhotos,
+      setSelectedPhotos: state.setSelectedPhotos,
       isSelected: state.isSelected,
     })),
   );
@@ -176,19 +178,25 @@ export default function PhotoList({
       return;
     }
     setIsSelectAllMode(true);
-    selectablePhotos.forEach(({ photoId, imageUrl }) => {
-      addSelectedPhoto({ id: photoId, url: imageUrl ?? '' });
-    });
+    setSelectedPhotos(
+      selectablePhotos.map(({ photoId, imageUrl }) => ({
+        id: photoId,
+        url: imageUrl ?? '',
+      }))
+    );
   };
 
   useEffect(() => {
     if (mode !== 'select') return;
     if (!isSelectAllMode) return;
 
-    selectablePhotos.forEach(({ photoId, imageUrl }) => {
-      addSelectedPhoto({ id: photoId, url: imageUrl ?? '' });
-    });
-  }, [addSelectedPhoto, isSelectAllMode, mode, selectablePhotos]);
+    setSelectedPhotos(
+      selectablePhotos.map(({ photoId, imageUrl }) => ({
+        id: photoId,
+        url: imageUrl ?? '',
+      }))
+    );
+  }, [isSelectAllMode, mode, selectablePhotos, setSelectedPhotos]);
 
   return (
     <section ref={photoListRef} className='relative p-4'>
