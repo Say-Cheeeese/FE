@@ -170,6 +170,7 @@ export default function PhotoList({
   const isAllSelected =
     selectablePhotos.length > 0 &&
     selectablePhotos.every(({ photoId }) => selectedPhotoIds.has(photoId));
+  const hasAnySelected = selectedPhotos.length > 0;
 
   const selectableStorePhotos = useMemo(
     () =>
@@ -181,7 +182,7 @@ export default function PhotoList({
   );
 
   const handleToggleSelectAll = () => {
-    if (isAllSelected) {
+    if (hasAnySelected) {
       setIsSelectAllMode(false);
       clearSelectedPhotos();
       return;
@@ -205,6 +206,20 @@ export default function PhotoList({
       setSelectedPhotos(selectableStorePhotos);
     }
   }, [isSelectAllMode, mode, selectableStorePhotos, setSelectedPhotos]);
+
+  // includeMyPhotos 토글 변경 시, 필터에서 사라진 사진을 selectedPhotos에서 제거
+  useEffect(() => {
+    if (mode !== 'select') return;
+
+    const selectableIds = new Set(selectablePhotos.map((p) => p.photoId));
+    const currentSelected = useSelectedPhotosStore.getState().selectedPhotos;
+    const filtered = currentSelected.filter((p) => selectableIds.has(p.id));
+
+    if (filtered.length !== currentSelected.length) {
+      setSelectedPhotos(filtered);
+      setIsSelectAllMode(false);
+    }
+  }, [mode, selectablePhotos, setSelectedPhotos]);
 
   return (
     <section ref={photoListRef} className='relative p-4'>
@@ -241,7 +256,7 @@ export default function PhotoList({
               }}
               onClick={handleToggleSelectAll}
             >
-              {isAllSelected ? '전체 선택 취소' : '전체 선택'}
+              {hasAnySelected ? '전체 선택 취소' : '전체 선택'}
             </button>
             <button
               type='button'
