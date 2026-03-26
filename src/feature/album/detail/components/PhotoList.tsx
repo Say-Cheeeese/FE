@@ -9,8 +9,8 @@ import { useAlbumSortStore } from '@/store/useAlbumSortStore';
 import { useAlbumTypeStore } from '@/store/useAlbumTypeStore';
 import { useSelectedPhotosStore } from '@/store/useSelectedPhotosStore';
 import {
-  type FetchNextPageOptions,
-  type InfiniteQueryObserverResult,
+    type FetchNextPageOptions,
+    type InfiniteQueryObserverResult,
 } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -170,7 +170,6 @@ export default function PhotoList({
   const isAllSelected =
     selectablePhotos.length > 0 &&
     selectablePhotos.every(({ photoId }) => selectedPhotoIds.has(photoId));
-  const hasAnySelected = selectedPhotos.length > 0;
 
   const selectableStorePhotos = useMemo(
     () =>
@@ -255,17 +254,7 @@ export default function PhotoList({
         <div className='mb-3'>
           <div className='mb-3 flex justify-between'>
             <div className='flex gap-1.5'>
-              <button
-                type='button'
-                className='typo-body-sm-medium text-text-subtle rounded-[4px] px-3 py-1.5'
-                style={{
-                  background: '#F1F2F3',
-                }}
-                onClick={handleSelectAll}
-              >
-                전체 선택
-              </button>
-              {hasAnySelected && (
+              {isAllSelected ? (
                 <button
                   type='button'
                   className='typo-body-sm-medium text-text-subtle rounded-[4px] px-3 py-1.5'
@@ -274,7 +263,18 @@ export default function PhotoList({
                   }}
                   onClick={handleClearAll}
                 >
-                  선택 해제
+                  전체 해제
+                </button>
+              ) : (
+                <button
+                  type='button'
+                  className='typo-body-sm-medium text-text-subtle rounded-[4px] px-3 py-1.5'
+                  style={{
+                    background: '#F1F2F3',
+                  }}
+                  onClick={handleSelectAll}
+                >
+                  전체 선택
                 </button>
               )}
             </div>
