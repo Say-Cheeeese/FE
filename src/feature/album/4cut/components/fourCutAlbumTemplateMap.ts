@@ -2,13 +2,21 @@ import type { FourCutTemplateId } from './fourCutTemplateTypes';
 
 /** 부산대(PNU) 전용 — 앨범 ID별 네컷 SVG 템플릿 */
 const PNU_ALBUM_TEMPLATE_BY_ID: Readonly<Record<string, FourCutTemplateId>> = {
+  // 사회학과
   '1f127ecc-5848-61a4-9583-b1e01df3644f': 'pnu_one',
+  // 정치외교학과
   '1f1277e3-75a6-64b1-9aa0-cba45c137a2a': 'pnu_two',
+  // 행정학과
   '1f1277e1-ee95-6fd0-9aa0-cba45c137a2a': 'pnu_three',
+  // 미디어커뮤니케이션학과
   '1f127ed0-47c5-6958-9583-b1e01df3644f': 'pnu_four',
+  // 문헌정보학과
   '1f127ecf-a23e-6187-9583-b1e01df3644f': 'pnu_five',
+  // 사회복지학과
   '1f1277e4-404e-62d2-9aa0-cba45c137a2a': 'pnu_six',
+  // 심리학과
   '1f127ece-f242-6d36-9583-b1e01df3644f': 'pnu_seven',
+  // 학생회
   '1f126985-3d35-65bf-9aa0-cba45c137a2a': 'pnu_eight',
 };
 
