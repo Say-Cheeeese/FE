@@ -71,7 +71,7 @@ export default function LetterContent({ albumId }: LetterContentProps) {
           {data.eventDate}
         </p>
         {!data.isExpired && (
-          <span className='typo-caption-sm-medium text-text-basic-inverse bg-element-primary mt-3 inline-flex items-center rounded-full px-2.5 py-1'>
+          <span className='typo-caption-sm-medium text-text-basic-inverse bg-element-alpha-dark mt-3 inline-flex items-center rounded-full px-2.5 py-1'>
             앨범 소멸까지 {formatExpirationTime(data.expiredAt)}
           </span>
         )}

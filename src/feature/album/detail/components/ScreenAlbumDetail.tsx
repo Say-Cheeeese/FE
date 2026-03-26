@@ -206,6 +206,7 @@ export default function ScreenAlbumDetail({ albumId }: ScreenAlbumDetailProps) {
           isLoading={isInvitationLoading}
           isError={isInvitationError}
           photoCount={totalPhotoCount}
+          mode={mode}
         />
         <AlbumPhotoSection
           isLoading={isLoading}

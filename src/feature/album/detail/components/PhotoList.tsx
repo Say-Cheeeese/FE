@@ -57,6 +57,7 @@ export default function PhotoList({
     addSelectedPhoto,
     deleteSelectedPhoto,
     clearSelectedPhotos,
+    setSelectedPhotos,
     isSelected,
   } = useSelectedPhotosStore(
     useShallow((state) => ({
@@ -64,6 +65,7 @@ export default function PhotoList({
       addSelectedPhoto: state.addSelectedPhoto,
       deleteSelectedPhoto: state.deleteSelectedPhoto,
       clearSelectedPhotos: state.clearSelectedPhotos,
+      setSelectedPhotos: state.setSelectedPhotos,
       isSelected: state.isSelected,
     })),
   );
@@ -169,6 +171,15 @@ export default function PhotoList({
     selectablePhotos.length > 0 &&
     selectablePhotos.every(({ photoId }) => selectedPhotoIds.has(photoId));
 
+  const selectableStorePhotos = useMemo(
+    () =>
+      selectablePhotos.map(({ photoId, imageUrl }) => ({
+        id: photoId,
+        url: imageUrl ?? '',
+      })),
+    [selectablePhotos],
+  );
+
   const handleToggleSelectAll = () => {
     if (isAllSelected) {
       setIsSelectAllMode(false);
@@ -176,19 +187,24 @@ export default function PhotoList({
       return;
     }
     setIsSelectAllMode(true);
-    selectablePhotos.forEach(({ photoId, imageUrl }) => {
-      addSelectedPhoto({ id: photoId, url: imageUrl ?? '' });
-    });
+    setSelectedPhotos(selectableStorePhotos);
   };
 
   useEffect(() => {
     if (mode !== 'select') return;
     if (!isSelectAllMode) return;
 
-    selectablePhotos.forEach(({ photoId, imageUrl }) => {
-      addSelectedPhoto({ id: photoId, url: imageUrl ?? '' });
-    });
-  }, [addSelectedPhoto, isSelectAllMode, mode, selectablePhotos]);
+    const currentSelected = useSelectedPhotosStore.getState().selectedPhotos;
+    const currentIds = new Set(currentSelected.map((p) => p.id));
+
+    const isDifferent =
+      currentSelected.length !== selectableStorePhotos.length ||
+      selectableStorePhotos.some((p) => !currentIds.has(p.id));
+
+    if (isDifferent) {
+      setSelectedPhotos(selectableStorePhotos);
+    }
+  }, [isSelectAllMode, mode, selectableStorePhotos, setSelectedPhotos]);
 
   return (
     <section ref={photoListRef} className='relative p-4'>
