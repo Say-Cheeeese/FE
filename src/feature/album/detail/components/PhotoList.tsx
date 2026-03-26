@@ -181,14 +181,19 @@ export default function PhotoList({
     [selectablePhotos],
   );
 
-  const handleToggleSelectAll = () => {
-    if (hasAnySelected) {
-      setIsSelectAllMode(false);
-      clearSelectedPhotos();
-      return;
-    }
+  const selectablePhotoIds = useMemo(
+    () => new Set(selectablePhotos.map(({ photoId }) => photoId)),
+    [selectablePhotos],
+  );
+
+  const handleSelectAll = () => {
     setIsSelectAllMode(true);
     setSelectedPhotos(selectableStorePhotos);
+  };
+
+  const handleClearAll = () => {
+    setIsSelectAllMode(false);
+    clearSelectedPhotos();
   };
 
   useEffect(() => {
@@ -211,15 +216,16 @@ export default function PhotoList({
   useEffect(() => {
     if (mode !== 'select') return;
 
-    const selectableIds = new Set(selectablePhotos.map((p) => p.photoId));
     const currentSelected = useSelectedPhotosStore.getState().selectedPhotos;
-    const filtered = currentSelected.filter((p) => selectableIds.has(p.id));
+    const filtered = currentSelected.filter((p) =>
+      selectablePhotoIds.has(p.id),
+    );
 
     if (filtered.length !== currentSelected.length) {
       setSelectedPhotos(filtered);
       setIsSelectAllMode(false);
     }
-  }, [mode, selectablePhotos, setSelectedPhotos]);
+  }, [mode, selectablePhotoIds, setSelectedPhotos]);
 
   return (
     <section ref={photoListRef} className='relative p-4'>
@@ -248,16 +254,30 @@ export default function PhotoList({
       ) : (
         <div className='mb-3'>
           <div className='mb-3 flex justify-between'>
-            <button
-              type='button'
-              className='typo-body-sm-medium text-text-subtle rounded-[4px] px-3 py-1.5'
-              style={{
-                background: '#F1F2F3',
-              }}
-              onClick={handleToggleSelectAll}
-            >
-              {hasAnySelected ? '전체 선택 취소' : '전체 선택'}
-            </button>
+            <div className='flex gap-1.5'>
+              <button
+                type='button'
+                className='typo-body-sm-medium text-text-subtle rounded-[4px] px-3 py-1.5'
+                style={{
+                  background: '#F1F2F3',
+                }}
+                onClick={handleSelectAll}
+              >
+                전체 선택
+              </button>
+              {hasAnySelected && (
+                <button
+                  type='button'
+                  className='typo-body-sm-medium text-text-subtle rounded-[4px] px-3 py-1.5'
+                  style={{
+                    background: '#F1F2F3',
+                  }}
+                  onClick={handleClearAll}
+                >
+                  선택 해제
+                </button>
+              )}
+            </div>
             <button
               type='button'
               className='typo-body-sm-medium text-text-subtle rounded-[4px] px-3 py-1.5'
