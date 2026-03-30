@@ -1,6 +1,6 @@
 import {
-  MIN_WAIT_TIME_MS,
-  PER_PHOTO_PROCESSING_TIME_MS,
+    MIN_WAIT_TIME_MS,
+    PER_PHOTO_PROCESSING_TIME_MS,
 } from '../constants/upload';
 
 /**
@@ -9,5 +9,5 @@ import {
  * @returns 대기 시간 (ms)
  */
 export const calculateUploadWaitTime = (fileCount: number): number => {
-  return Math.max(MIN_WAIT_TIME_MS, fileCount * PER_PHOTO_PROCESSING_TIME_MS);
+  return MIN_WAIT_TIME_MS + fileCount * PER_PHOTO_PROCESSING_TIME_MS;
 };
