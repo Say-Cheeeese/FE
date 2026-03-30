@@ -12,15 +12,14 @@ import { useUploadingStore } from '@/store/useUploadingStore';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 
+import { calculateUploadWaitTime } from '@/global/utils/upload';
+
 type ImageWithUrl = {
   id: string;
   file: File;
   url: string;
   isOversized: boolean;
 };
-
-const MIN_WAIT_TIME_MS = 3000;
-const PER_PHOTO_PROCESSING_TIME_MS = 1000;
 
 export default function SelectAlbumBody() {
   const isUploaded = useUploadingStore((state) => state.isUploaded);
@@ -64,7 +63,7 @@ export default function SelectAlbumBody() {
 
   const { mutate: reportFailed } = useReportFailed();
 
-  const { mutate: uploadMutate } = usePresignedAndUploadToNCP({
+  const { mutate: uploadMutate, isPending } = usePresignedAndUploadToNCP({
     onSuccess: async (result) => {
       if (result.failed > 0) {
         Toast.alert(`${result.failed}개 파일 업로드에 실패했어요`);
@@ -81,10 +80,7 @@ export default function SelectAlbumBody() {
           useUploadingStore.getState().setUploadedCount(result.success);
 
           // 백엔드 이미지 처리를 위해 인위적인 대기 시간 추가 (handleFileUpload와 동일)
-          const waitTime = Math.max(
-            MIN_WAIT_TIME_MS,
-            result.success * PER_PHOTO_PROCESSING_TIME_MS,
-          );
+          const waitTime = calculateUploadWaitTime(result.success);
           await new Promise((resolve) => setTimeout(resolve, waitTime));
 
           router.replace(`/album/detail/${albumId}`);
@@ -241,7 +237,7 @@ export default function SelectAlbumBody() {
       <LongButton
         text={`앨범에 ${selectedIds.size}장 채우기`}
         noFixed={false}
-        disabled={isUploaded || isOverCount || selectedIds.size === 0}
+        disabled={isUploaded || isPending || isOverCount || selectedIds.size === 0}
         onClick={handleUpload}
       />
     </div>

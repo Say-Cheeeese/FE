@@ -1,6 +1,8 @@
 import { EP } from '@/global/api/ep';
 import { presignedAndUploadToNCP } from '@/global/api/presignedAndUploadToNCP';
 import Toast from '@/global/components/toast/Toast';
+import { MIN_WAIT_TIME_MS } from '@/global/constants/upload';
+import { calculateUploadWaitTime } from '@/global/utils/upload';
 import { useUploadingStore } from '@/store/useUploadingStore';
 import { QueryClient } from '@tanstack/react-query';
 import { ChangeEvent } from 'react';
@@ -9,9 +11,6 @@ import { convertHeicFilesToJpeg } from './heicToJpeg';
 import { saveFilesToStore } from './saveFilesToStore';
 import { sortImagesByDate } from './sortImagesByDate';
 import { validateUpload } from './validateUpload';
-
-const MIN_WAIT_TIME_MS = 3000;
-const PER_PHOTO_PROCESSING_TIME_MS = 1000;
 
 async function refreshAlbumQueries(
   queryClient: QueryClient,
@@ -100,8 +99,7 @@ export async function handleFileUpload(
 
       // 백엔드 이미지 처리를 위한 추가 대기 시간
       // 기본 로딩 애니메이션을 위해 최소 대기 시간을 유지합니다.
-      const backendProcessingTime = files.length * PER_PHOTO_PROCESSING_TIME_MS;
-      const waitTime = Math.max(MIN_WAIT_TIME_MS, backendProcessingTime);
+      const waitTime = calculateUploadWaitTime(files.length);
       await new Promise((resolve) => setTimeout(resolve, waitTime));
 
       if (options?.queryClient) {
