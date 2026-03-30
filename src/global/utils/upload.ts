@@ -1,6 +1,6 @@
 import {
-    MIN_WAIT_TIME_MS,
-    PER_PHOTO_PROCESSING_TIME_MS,
+  MIN_WAIT_TIME_MS,
+  PER_PHOTO_PROCESSING_TIME_MS,
 } from '../constants/upload';
 
 /**

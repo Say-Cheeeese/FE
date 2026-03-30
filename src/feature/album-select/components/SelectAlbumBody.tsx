@@ -237,7 +237,9 @@ export default function SelectAlbumBody() {
       <LongButton
         text={`앨범에 ${selectedIds.size}장 채우기`}
         noFixed={false}
-        disabled={isUploaded || isPending || isOverCount || selectedIds.size === 0}
+        disabled={
+          isUploaded || isPending || isOverCount || selectedIds.size === 0
+        }
         onClick={handleUpload}
       />
     </div>
