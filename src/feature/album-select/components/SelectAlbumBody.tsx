@@ -12,6 +12,8 @@ import { useUploadingStore } from '@/store/useUploadingStore';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 
+import { calculateUploadWaitTime } from '@/global/utils/upload';
+
 type ImageWithUrl = {
   id: string;
   file: File;
@@ -61,8 +63,8 @@ export default function SelectAlbumBody() {
 
   const { mutate: reportFailed } = useReportFailed();
 
-  const { mutate: uploadMutate } = usePresignedAndUploadToNCP({
-    onSuccess: (result) => {
+  const { mutate: uploadMutate, isPending } = usePresignedAndUploadToNCP({
+    onSuccess: async (result) => {
       if (result.failed > 0) {
         Toast.alert(`${result.failed}개 파일 업로드에 실패했어요`);
         if (
@@ -73,13 +75,23 @@ export default function SelectAlbumBody() {
         }
       } else {
         revokeAllObjectUrls();
-        useUploadingStore.getState().setUploaded(true);
-        useUploadingStore.getState().setUploadedCount(result.success);
-        router.replace(`/album/detail/${albumId}`);
+        try {
+          useUploadingStore.getState().setUploaded(true);
+          useUploadingStore.getState().setUploadedCount(result.success);
+
+          // 백엔드 이미지 처리를 위해 인위적인 대기 시간 추가 (handleFileUpload와 동일)
+          const waitTime = calculateUploadWaitTime(result.success);
+          await new Promise((resolve) => setTimeout(resolve, waitTime));
+
+          router.replace(`/album/detail/${albumId}`);
+        } finally {
+          useUploadingStore.getState().setUploaded(false);
+        }
       }
     },
     onError: (e) => {
       revokeAllObjectUrls();
+      useUploadingStore.getState().setUploaded(false);
       console.error('에러 발생', e);
       alert('사진을 업로드하는 중 오류가 발생했습니다. 다시 시도해주세요.');
     },
@@ -225,7 +237,9 @@ export default function SelectAlbumBody() {
       <LongButton
         text={`앨범에 ${selectedIds.size}장 채우기`}
         noFixed={false}
-        disabled={isUploaded || isOverCount || selectedIds.size === 0}
+        disabled={
+          isUploaded || isPending || isOverCount || selectedIds.size === 0
+        }
         onClick={handleUpload}
       />
     </div>

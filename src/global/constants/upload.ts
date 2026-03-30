@@ -1,0 +1,2 @@
+export const MIN_WAIT_TIME_MS = 3000;
+export const PER_PHOTO_PROCESSING_TIME_MS = 1000;
