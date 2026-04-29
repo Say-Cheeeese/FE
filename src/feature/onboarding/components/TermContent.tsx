@@ -103,7 +103,7 @@ const PrivacyComponent: FC = () => (
           <p>① 수집 항목</p>
           <p>
             &nbsp;&nbsp;·&nbsp;&nbsp;필수항목: 닉네임, 로그인 계정(카카오 등
-            간편 로그인 정보), 전화번호(카카오 계정 연동)
+            간편 로그인 정보), 전화번호(카카오 계정 연동),
             <br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;업로드된 사진 및 메타데이터, 접속
             로그, 쿠키 등
