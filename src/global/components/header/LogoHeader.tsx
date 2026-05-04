@@ -4,16 +4,20 @@ import { useCheckAuth } from '@/global/hooks/useCheckAuth';
 import { trackGaEvent } from '@/global/utils/trackGaEvent';
 import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
+import { Settings } from 'lucide-react';
+import Link from 'next/link';
 import SvgLogo from './svg/SvgLogo';
 
 interface LogoHeaderProps {
   showLogin?: boolean;
+  showSetting?: boolean;
   bgColor?: string;
   border?: boolean;
 }
 
 export default function LogoHeader({
   showLogin = true,
+  showSetting = false,
   bgColor = 'white',
   border = false,
 }: LogoHeaderProps) {
@@ -39,22 +43,32 @@ export default function LogoHeader({
       >
         <div className='mx-auto flex h-18 w-full max-w-[430px] items-center justify-between px-5'>
           <SvgLogo />
-          {shouldShowLogin && (
-            <button
-              type='button'
-              className='cursor-pointer px-3 py-2.5'
-              onClick={handleLoginClick}
-            >
-              <span className='typo-body-sm-medium text-text-basic'>
-                로그인
-              </span>
-            </button>
+          {showSetting ? (
+            <Link href='/mypage/setting' aria-label='설정'>
+              <Settings
+                width={24}
+                height={24}
+                color='var(--color-icon-basic)'
+              />
+            </Link>
+          ) : (
+            shouldShowLogin && (
+              <button
+                type='button'
+                className='cursor-pointer px-3 py-2.5'
+                onClick={handleLoginClick}
+              >
+                <span className='typo-body-sm-medium text-text-basic'>
+                  로그인
+                </span>
+              </button>
+            )
           )}
         </div>
       </div>
 
       {/* 헤더로인해 가려지는 영역 방지 */}
-      <div style={{ height: 72 }} />
+      <div className='h-[72px]' />
     </>
   );
 }
