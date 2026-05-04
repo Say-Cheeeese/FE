@@ -21,13 +21,14 @@ export default function ScreenProfileEdit() {
   const [isUpdating, setIsUpdating] = useState(false);
 
   // 데이터가 로드되면 초기값 설정
+  // 의존성 배열에 name, selectedImage 로컬 상태를 빼고, API 응답 데이터만 넣습니다.
+  // 이렇게 하면 유저가 이름을 전부 지워도 다시 복구되는 버그가 발생하지 않습니다.
   useEffect(() => {
-    if (data?.name && !name) {
+    if (data?.name) {
       setName(data.name);
     }
 
-    // 현재 프로필 이미지 URL과 일치하는 코드를 찾아 selectedImage 초기화
-    if (data?.profileImage && profileImages?.opts && !selectedImage) {
+    if (data?.profileImage && profileImages?.opts) {
       const match = profileImages.opts.find(
         (opt) => opt.profileImageUrl === data.profileImage,
       );
@@ -35,7 +36,7 @@ export default function ScreenProfileEdit() {
         setSelectedImage(match.imageCode);
       }
     }
-  }, [data, profileImages, name, selectedImage]);
+  }, [data?.name, data?.profileImage, profileImages?.opts]);
 
   const initialImageCode =
     data?.profileImage && profileImages?.opts
