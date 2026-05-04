@@ -94,10 +94,10 @@ export default function ScreenProfileEdit() {
             />
 
             {/* 전화번호 (데이터가 있을 경우에만 노출, 수정 불가) */}
-            {(data as any)?.phoneNumber && (
+            {data?.phoneNumber && (
               <XInput
                 label='전화번호'
-                value={(data as any).phoneNumber}
+                value={data.phoneNumber}
                 onChange={() => {}}
                 disabled
                 showClear={false}
