@@ -1,6 +1,6 @@
 'use client';
 import { DEFAULT_PROFILE_IMAGE } from '@/global/constants/images';
-import { Settings } from 'lucide-react';
+import { Pencil } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useGetUserMe } from '../../hooks/useGetUserMe';
@@ -25,20 +25,18 @@ export default function ProfileMypage({}: ProfileMypageProps) {
         </div>
 
         <div className='flex-1'>
-          <div className='mb-1 flex items-center justify-between'>
-            <span className='typo-body-lg-semibold text-text-basic'>
-              {data?.name ?? '사용자'}
-            </span>
-
-            <Link href={`/mypage/setting`} aria-label='설정'>
-              <Settings
-                width={24}
-                height={24}
-                color={'var(--color-icon-basic)'}
-              />
-            </Link>
+          <div className='mb-1 flex items-center'>
+            <div className='flex items-center gap-1.5'>
+              <span className='typo-body-lg-semibold text-text-basic'>
+                {data?.name ?? '사용자'}
+              </span>
+              <Link href='/profile/edit' aria-label='프로필 수정'>
+                <div className='flex h-5 w-5 items-center justify-center rounded-full bg-[#F1F2F3]'>
+                  <Pencil size={14} color='#424349' strokeWidth={2} />
+                </div>
+              </Link>
+            </div>
           </div>
-
           <div className='grid grid-cols-3 gap-8'>
             <div className='flex flex-col'>
               <span className='typo-heading-sm-semibold text-text-basic'>

@@ -95,7 +95,7 @@ export interface CommonResponseUserProfileImageResponseSchema { "isSuccess"?: bo
 export interface ProfileImageOptSchema { "imageCode"?: string; "profileImageUrl"?: string; }
 export interface UserProfileImageResponseSchema { "opts"?: ProfileImageOptSchema[]; }
 export interface CommonResponseUserInfoResponseSchema { "isSuccess"?: boolean; "code"?: number; "message"?: string; "result"?: UserInfoResponseSchema; }
-export interface UserInfoResponseSchema { "userId": number; "profileImage": string; "email": string; "name": string; "albumCount": number; "photoCount": number; "likesCount": number; }
+export interface UserInfoResponseSchema { "userId": number; "profileImage": string; "email": string; "name": string; "albumCount": number; "photoCount": number; "likesCount": number; "phoneNumber"?: string; }
 export interface CommonResponseStringSchema { "isSuccess"?: boolean; "code"?: number; "message"?: string; "result"?: string; }
 export type Cheese4cutFinalResponseSchema = Cheese4cutResponseSchema & { "isFinalized"?: boolean; "photos"?: FinalPhotoInfoSchema[]; };
 export type Cheese4cutPreviewResponseSchema = Cheese4cutResponseSchema & { "isFinalized"?: boolean; "previewPhotos"?: PreviewPhotoInfoSchema[]; "uniqueLikesCount"?: number; "participant"?: number; "myRole"?: "MAKER" | "GUEST" | "BLACK"; };
