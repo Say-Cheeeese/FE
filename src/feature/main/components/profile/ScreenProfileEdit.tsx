@@ -8,7 +8,7 @@ import XInput from '@/global/components/XInput';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useGetUserMe } from '../../hooks/useGetUserMe';
-import { useUpdateName, useUpdateProfileImage } from '../../hooks/useUpdateProfile';
+import { useUpdateProfile } from '../../hooks/useUpdateProfile';
 
 export default function ScreenProfileEdit() {
   const router = useRouter();
@@ -17,8 +17,7 @@ export default function ScreenProfileEdit() {
   const [name, setName] = useState(data?.name ?? '');
   const [selectedImage, setSelectedImage] = useState<string>('');
 
-  const { mutateAsync: updateName } = useUpdateName();
-  const { mutateAsync: updateProfileImage } = useUpdateProfileImage();
+  const { mutateAsync: updateProfile } = useUpdateProfile();
   const [isUpdating, setIsUpdating] = useState(false);
 
   // 데이터가 로드되면 초기값 설정
@@ -29,19 +28,25 @@ export default function ScreenProfileEdit() {
 
     // 현재 프로필 이미지 URL과 일치하는 코드를 찾아 selectedImage 초기화
     if (data?.profileImage && profileImages?.opts && !selectedImage) {
-      const match = profileImages.opts.find(opt => opt.profileImageUrl === data.profileImage);
+      const match = profileImages.opts.find(
+        (opt) => opt.profileImageUrl === data.profileImage,
+      );
       if (match?.imageCode) {
         setSelectedImage(match.imageCode);
       }
     }
   }, [data, profileImages, name, selectedImage]);
 
-  const initialImageCode = data?.profileImage && profileImages?.opts
-    ? profileImages.opts.find(opt => opt.profileImageUrl === data.profileImage)?.imageCode
-    : '';
+  const initialImageCode =
+    data?.profileImage && profileImages?.opts
+      ? profileImages.opts.find(
+          (opt) => opt.profileImageUrl === data.profileImage,
+        )?.imageCode
+      : '';
 
   const isNameChanged = name !== data?.name;
-  const isImageChanged = selectedImage !== initialImageCode && selectedImage !== '';
+  const isImageChanged =
+    selectedImage !== initialImageCode && selectedImage !== '';
   const isChanged = isNameChanged || isImageChanged;
 
   const handleSubmit = async () => {
@@ -49,17 +54,12 @@ export default function ScreenProfileEdit() {
 
     setIsUpdating(true);
     try {
-      const promises = [];
+      const payload = {
+        name,
+        imageCode: selectedImage,
+      };
 
-      if (isNameChanged) {
-        promises.push(updateName({ name }));
-      }
-
-      if (isImageChanged) {
-        promises.push(updateProfileImage({ imageCode: selectedImage }));
-      }
-
-      await Promise.all(promises);
+      await updateProfile(payload);
       Toast.check('정보가 수정되었습니다.');
     } catch (error) {
       Toast.alert('수정에 실패했습니다. 다시 시도해주세요.');
@@ -79,7 +79,6 @@ export default function ScreenProfileEdit() {
 
       <section className='px-4 pt-10 pb-[100px]'>
         <div className='flex flex-col items-center gap-10'>
-
           {/* 프로필 이미지 수정 영역 (onboarding 컴포넌트 재사용) */}
           <ProfileImage
             selectedImage={selectedImage}

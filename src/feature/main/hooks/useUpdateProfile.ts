@@ -1,42 +1,21 @@
-import { ApiReturns, EP } from '@/global/api/ep';
+import { EP } from '@/global/api/ep';
 import { api } from '@/global/utils/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-// 이름 수정용 타입
-type UpdateNamePayload = {
-  name: string;
+// 프로필 수정 페이로드 타입 (name, imageCode 선택적 포함)
+type UpdateProfilePayload = {
+  name?: string;
+  imageCode?: string;
 };
 
-// 프로필 이미지 수정용 타입
-type UpdateProfileImagePayload = {
-  imageCode: string;
-};
-
-// 이름 수정 Mutation
-export function useUpdateName() {
+// 통합된 프로필 수정 Mutation
+export function useUpdateProfile() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (payload: UpdateNamePayload) => {
-      return await api.patch<ApiReturns['user.userMeName']>({
-        path: EP.user.userMeName(),
-        body: payload,
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [EP.user.userMe()] });
-    },
-  });
-}
-
-// 프로필 이미지 수정 Mutation
-export function useUpdateProfileImage() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: async (payload: UpdateProfileImagePayload) => {
-      return await api.patch<ApiReturns['user.userMeProfileImage']>({
-        path: EP.user.userMeProfileImage(),
+    mutationFn: async (payload: UpdateProfilePayload) => {
+      return await api.patch<void>({
+        path: EP.user.userMe(),
         body: payload,
       });
     },
