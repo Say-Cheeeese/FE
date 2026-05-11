@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
     request.headers.get('host') ||
     'localhost:3000';
   const code = searchParams.get('code');
-  const isSignup = searchParams.get('isSignup');
+  const isSignup = searchParams.get('isSignup') === 'true';
   const redirectParam = searchParams.get('redirect');
   let redirect: string | null = null;
 
@@ -73,17 +73,6 @@ export async function GET(request: NextRequest) {
       `${redirectPath}${buildQuery(urlQuery)}`,
       `${protocol}://${host}`,
     );
-
-    // if (isSignup) {
-    //   redirectUrl.searchParams.set(
-    //     'onboarding',
-    //     data.result.isOnboarded.toString(),
-    //   );
-    //   redirectUrl.searchParams.set(
-    //     'name',
-    //     encodeURIComponent(data.result.name),
-    //   );
-    // }
 
     // redirect 응답 객체 생성
     const res = NextResponse.redirect(redirect || redirectUrl);
