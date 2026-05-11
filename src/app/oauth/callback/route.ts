@@ -13,6 +13,7 @@ export async function GET(request: NextRequest) {
     request.headers.get('host') ||
     'localhost:3000';
   const code = searchParams.get('code');
+  const isSignup = searchParams.get('isSignup') === 'true';
   const redirectParam = searchParams.get('redirect');
   let redirect: string | null = null;
 
@@ -59,30 +60,19 @@ export async function GET(request: NextRequest) {
 
     let redirectPath = '/main';
     const urlQuery: Record<string, string> = {};
-    if (data.result.isOnboarded) {
+    if (isSignup) {
+      urlQuery.authType = 'signup';
+      redirectPath = '/onboarding';
+    } else {
       urlQuery.authType = 'login';
       if (entry === 'create-album') {
         redirectPath = '/create-album';
       }
-    } else {
-      urlQuery.authType = 'signup';
-      redirectPath = '/onboarding';
     }
     const redirectUrl = new URL(
       `${redirectPath}${buildQuery(urlQuery)}`,
       `${protocol}://${host}`,
     );
-
-    if (!data.result.isOnboarded) {
-      redirectUrl.searchParams.set(
-        'onboarding',
-        data.result.isOnboarded.toString(),
-      );
-      redirectUrl.searchParams.set(
-        'name',
-        encodeURIComponent(data.result.name),
-      );
-    }
 
     // redirect 응답 객체 생성
     const res = NextResponse.redirect(redirect || redirectUrl);
