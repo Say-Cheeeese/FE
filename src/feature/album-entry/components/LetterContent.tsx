@@ -45,8 +45,8 @@ export default function LetterContent({ albumId }: LetterContentProps) {
   };
 
   return (
-    <>
-      <header className='border-border-gray-lighter flex items-center gap-2 border-b px-5 py-5'>
+    <div className='flex flex-1 flex-col h-full'>
+      <header className='flex h-[68px] items-center gap-2 border-b border-[#E5E5E7] px-[20px] pb-[16px] pt-[20px]'>
         <Image
           src={data.makerProfileImage}
           width={32}
@@ -54,36 +54,41 @@ export default function LetterContent({ albumId }: LetterContentProps) {
           alt={data.makerName}
           className='rounded-full'
         />
-        <span className='typo-body-lg-semibold text-text-subtler'>
+        <span className='text-[16px] font-semibold leading-[24px] text-[#747681]'>
           {data.makerName}
         </span>
       </header>
-      <section className='flex flex-col items-center py-8'>
-        <div className='bg-element-gray-light mb-4 flex h-20 w-20 items-center justify-center rounded-full text-3xl'>
-          <span>{convertUnicodeToEmoji(data.themeEmoji)}</span>
+
+      <section className='flex flex-1 flex-col items-center justify-center gap-[12px] px-[20px]'>
+        <div className='bg-[#F1F2F3] flex h-20 w-20 items-center justify-center rounded-full'>
+          <span className='text-[40px] leading-[52px]'>{convertUnicodeToEmoji(data.themeEmoji)}</span>
         </div>
 
-        <h2 className='typo-heading-sm-semibold text-text-basic text-center'>
-          {data.title}
-        </h2>
+        <div className='flex flex-col items-center gap-[4px]'>
+          <h2 className='text-[18px] font-semibold leading-[28px] text-[#18191B] text-center'>
+            {data.title}
+          </h2>
+          <p className='text-[14px] leading-[20px] text-[#747681]'>
+            {data.eventDate}
+          </p>
+        </div>
 
-        <p className='typo-body-sm-regular text-text-subtler pt-1'>
-          {data.eventDate}
-        </p>
         {!data.isExpired && (
-          <span className='typo-caption-sm-medium text-text-basic-inverse bg-element-alpha-dark mt-3 inline-flex items-center rounded-full px-2.5 py-1'>
+          <span className='bg-[rgba(24,25,27,0.5)] text-[12px] font-medium leading-[18px] text-[#FFFFFF] inline-flex items-center rounded-full px-[10px] py-[4px]'>
             앨범 소멸까지 {formatExpirationTime(data.expiredAt)}
           </span>
         )}
+      </section>
 
+      <div className='flex h-[72px] flex-col items-center justify-center px-[20px] pb-[24px]'>
         <button
           onClick={handleInviteAccept}
           type='button'
-          className='bg-button-primary-fill typo-body-lg-semibold text-text-inverse mt-8 w-[230px] rounded-[14px] px-6 py-3'
+          className='bg-[#FFCD14] text-[16px] font-semibold leading-[24px] text-[#332100] h-[48px] w-full rounded-[8px] px-5 py-[10px]'
         >
           초대 수락하고 앨범 보기
         </button>
-      </section>
-    </>
+      </div>
+    </div>
   );
 }
