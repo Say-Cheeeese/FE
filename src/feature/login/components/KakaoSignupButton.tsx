@@ -2,28 +2,35 @@
 import { buildQuery } from '@/global/utils/buildQuery';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
-
-const KAKAO_AUTH_URL = `https://dev.say-cheese.me/oauth2/authorization/kakao`;
-
+import { GA_EVENTS } from '@/global/constants/gaEvents';
+import { trackGaEvent } from '@/global/utils/trackGaEvent';
 import { cn } from '@/lib/utils';
 
 interface KakaoSignupButtonProps {
   className?: string;
   redirect?: string;
+  entrySource?: string;
 }
 
 export default function KakaoSignupButton({
   className,
   redirect: customRedirect,
+  entrySource,
 }: KakaoSignupButtonProps) {
   const searchParams = useSearchParams();
   const redirect = customRedirect || searchParams.get('redirect');
 
+  const KAKAO_AUTH_URL = `${process.env.NEXT_PUBLIC_API_URL}/oauth2/authorization/kakao`;
   const handleKakaoLogin = async () => {
     try {
-      const kakaoUrl = redirect
-        ? `${KAKAO_AUTH_URL}${buildQuery({ redirect })}`
-        : KAKAO_AUTH_URL;
+      trackGaEvent(GA_EVENTS.click_login, {
+        entry_source: entrySource ?? 'unknown',
+      });
+
+      const kakaoUrl =
+        redirect && typeof redirect === 'string'
+          ? `${KAKAO_AUTH_URL}${buildQuery({ redirect })}`
+          : KAKAO_AUTH_URL;
 
       window.location.href = kakaoUrl;
     } catch (err) {

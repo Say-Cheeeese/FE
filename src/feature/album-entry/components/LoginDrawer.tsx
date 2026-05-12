@@ -46,7 +46,7 @@ export default function LoginDrawer({
 
         {/* Action Area */}
         <div className='flex w-full flex-col items-center gap-2 pb-1'>
-          <KakaoSignupButton redirect={redirectUrl} />
+          <KakaoSignupButton redirect={redirectUrl} entrySource='invitation' />
 
           <p className='text-text-subtler mt-2 text-center text-[10px] leading-[18px] font-normal'>
             계속하면 [이용약관] 및 [개인정보처리방침]에 동의하는 것으로

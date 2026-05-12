@@ -26,37 +26,33 @@ export default function LetterContent({ albumId }: LetterContentProps) {
 
   return (
     <div className='flex h-full flex-1 flex-col'>
-      <header className='flex h-[68px] items-center gap-2 border-b border-[#E5E5E7] px-[20px] pt-[20px] pb-[16px]'>
+      <header className='border-divider-gray flex h-[68px] items-center gap-2 border-b px-[20px] pt-[20px] pb-[16px]'>
         <Image
-          src={data.makerProfileImage}
-          width={32}
+          src='/assets/login/cheese-logo.svg'
+          width={88}
           height={32}
-          alt={data.makerName}
-          className='rounded-full'
+          alt='Cheeeese Logo'
         />
-        <span className='text-[16px] leading-[24px] font-semibold text-[#747681]'>
-          {data.makerName}
-        </span>
       </header>
 
       <section className='flex flex-1 flex-col items-center justify-center gap-[12px] px-[20px]'>
-        <div className='flex h-20 w-20 items-center justify-center rounded-full bg-[#F1F2F3]'>
+        <div className='bg-element-gray-light flex h-20 w-20 items-center justify-center rounded-full'>
           <span className='text-[40px] leading-[52px]'>
             {convertUnicodeToEmoji(data.themeEmoji)}
           </span>
         </div>
 
         <div className='flex flex-col items-center gap-[4px]'>
-          <h2 className='text-center text-[18px] leading-[28px] font-semibold text-[#18191B]'>
+          <h2 className='typo-heading-sm-semibold text-text-basic text-center'>
             {data.title}
           </h2>
-          <p className='text-[14px] leading-[20px] text-[#747681]'>
+          <p className='typo-body-sm-regular text-text-subtler text-center'>
             {data.eventDate}
           </p>
         </div>
 
         {!data.isExpired && (
-          <span className='inline-flex items-center rounded-full bg-[rgba(24,25,27,0.5)] px-[10px] py-[4px] text-[12px] leading-[18px] font-medium text-[#FFFFFF]'>
+          <span className='typo-caption-sm-medium bg-background-dim inline-flex items-center rounded-full px-[10px] py-[4px] text-white'>
             앨범 소멸까지 {formatExpirationTime(data.expiredAt)}
           </span>
         )}
@@ -68,7 +64,7 @@ export default function LetterContent({ albumId }: LetterContentProps) {
           trigger={
             <button
               type='button'
-              className='h-[48px] w-full rounded-[8px] bg-[#FFCD14] px-5 py-[10px] text-[16px] leading-[24px] font-semibold text-[#332100]'
+              className='typo-body-lg-semibold bg-element-primary text-text-primary h-[48px] w-full rounded-[8px] px-5 py-[10px]'
             >
               초대 수락하고 앨범 보기
             </button>
