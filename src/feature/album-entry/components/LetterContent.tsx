@@ -1,24 +1,20 @@
 'use client';
 import { useGetAlbumInvitation } from '@/feature/album/detail/hooks/useGetAlbumInvitation';
-import Toast from '@/global/components/toast/Toast';
 import { GA_EVENTS } from '@/global/constants/gaEvents';
-import { useCheckAuth } from '@/global/hooks/useCheckAuth';
-import { buildQuery } from '@/global/utils/buildQuery';
 import { convertUnicodeToEmoji } from '@/global/utils/convertEmoji';
 import { formatExpirationTime } from '@/global/utils/time/formatExpirationTime';
 import { trackGaEvent } from '@/global/utils/trackGaEvent';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+
+import LoginDrawer from './LoginDrawer';
 
 interface LetterContentProps {
   albumId: string;
 }
 
 export default function LetterContent({ albumId }: LetterContentProps) {
-  const router = useRouter();
   const { data, isPending, isError } = useGetAlbumInvitation(albumId);
-  const { isAuthed } = useCheckAuth();
 
   useEffect(() => {
     trackGaEvent(GA_EVENTS.view_invited);
@@ -28,62 +24,53 @@ export default function LetterContent({ albumId }: LetterContentProps) {
   if (isError) return null;
   if (!data) return null;
 
-  const handleInviteAccept = async () => {
-    trackGaEvent(GA_EVENTS.click_login, { entry_source: 'invitation' });
-
-    try {
-      if (isAuthed) {
-        router.push(`/photo/entry/${albumId}${buildQuery({ isInvite: true })}`);
-      } else {
-        router.push(
-          `/login${buildQuery({ redirect: encodeURIComponent(`/photo/entry/${albumId}${buildQuery({ isInvite: true })}`) })}`,
-        );
-      }
-    } catch (error) {
-      Toast.alert('앨범 입장에 실패하였습니다');
-    }
-  };
-
   return (
-    <>
-      <header className='border-border-gray-lighter flex items-center gap-2 border-b px-5 py-5'>
+    <div className='flex h-full flex-1 flex-col'>
+      <header className='border-divider-gray flex h-[68px] items-center gap-2 border-b px-[20px] pt-[20px] pb-[16px]'>
         <Image
-          src={data.makerProfileImage}
-          width={32}
+          src='/assets/login/cheese-logo.svg'
+          width={88}
           height={32}
-          alt={data.makerName}
-          className='rounded-full'
+          alt='Cheeeese Logo'
         />
-        <span className='typo-body-lg-semibold text-text-subtler'>
-          {data.makerName}
-        </span>
       </header>
-      <section className='flex flex-col items-center py-8'>
-        <div className='bg-element-gray-light mb-4 flex h-20 w-20 items-center justify-center rounded-full text-3xl'>
-          <span>{convertUnicodeToEmoji(data.themeEmoji)}</span>
+
+      <section className='flex flex-1 flex-col items-center justify-center gap-[12px] px-[20px]'>
+        <div className='bg-element-gray-light flex h-20 w-20 items-center justify-center rounded-full'>
+          <span className='text-[40px] leading-[52px]'>
+            {convertUnicodeToEmoji(data.themeEmoji)}
+          </span>
         </div>
 
-        <h2 className='typo-heading-sm-semibold text-text-basic text-center'>
-          {data.title}
-        </h2>
+        <div className='flex flex-col items-center gap-[4px]'>
+          <h2 className='typo-heading-sm-semibold text-text-basic text-center'>
+            {data.title}
+          </h2>
+          <p className='typo-body-sm-regular text-text-subtler text-center'>
+            {data.eventDate}
+          </p>
+        </div>
 
-        <p className='typo-body-sm-regular text-text-subtler pt-1'>
-          {data.eventDate}
-        </p>
         {!data.isExpired && (
-          <span className='typo-caption-sm-medium text-text-basic-inverse bg-element-alpha-dark mt-3 inline-flex items-center rounded-full px-2.5 py-1'>
+          <span className='typo-caption-sm-medium bg-background-dim inline-flex items-center rounded-full px-[10px] py-[4px] text-white'>
             앨범 소멸까지 {formatExpirationTime(data.expiredAt)}
           </span>
         )}
-
-        <button
-          onClick={handleInviteAccept}
-          type='button'
-          className='bg-button-primary-fill typo-body-lg-semibold text-text-inverse mt-8 w-[230px] rounded-[14px] px-6 py-3'
-        >
-          초대 수락하고 앨범 보기
-        </button>
       </section>
-    </>
+
+      <div className='flex h-[72px] flex-col items-center justify-center px-[20px] pb-[24px]'>
+        <LoginDrawer
+          albumId={albumId}
+          trigger={
+            <button
+              type='button'
+              className='typo-body-lg-semibold bg-element-primary text-text-primary h-[48px] w-full rounded-[8px] px-5 py-[10px]'
+            >
+              초대 수락하고 앨범 보기
+            </button>
+          }
+        />
+      </div>
+    </div>
   );
 }

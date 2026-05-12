@@ -17,10 +17,12 @@ type BottomSheetModalProps = {
   className?: string;
   /** 모달 내용 */
   children: React.ReactNode;
+  /** 내부 콘텐츠 영역의 추가 클래스 (패딩 등 조절용) */
+  contentClassName?: string;
   /** 닫기 버튼 표시 여부 */
   showCloseButton?: boolean;
   /** 모달 제목 (화면에 표시, 없으면 스크린리더용만 사용) */
-  title?: string;
+  title?: React.ReactNode;
   /** 드래그/스와이프 등으로 닫기 허용 여부 (기본값: true) */
   dismissible?: boolean;
   /** 상단 드래그 바 표시 여부 (기본값: true) */
@@ -34,6 +36,7 @@ type BottomSheetModalProps = {
 export default function BottomSheetModal({
   trigger,
   children,
+  contentClassName,
   className = 'max-h-[80vh] w-full',
   showCloseButton = false,
   title,
@@ -55,16 +58,16 @@ export default function BottomSheetModal({
 
       <DrawerContent
         className={cn(
-          className,
           'mx-auto flex max-w-[430px] flex-col border-none',
+          className,
         )}
         showHandle={showHandle}
         aria-describedby={undefined}
       >
-        <div className={title ? 'px-4 py-6' : ''}>
+        <div className={cn(title ? 'px-4 py-6' : '', contentClassName)}>
           {/* 스크린리더용 제목 (항상 필요) */}
           <DrawerTitle
-            className={`typo-heading-md-bold mb-4 px-2 ${title ? '' : 'sr-only'}`}
+            className={cn('typo-heading-md-bold mb-8', title ? '' : 'sr-only')}
           >
             {title || '모달'}
           </DrawerTitle>

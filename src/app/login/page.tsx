@@ -48,7 +48,7 @@ export default function LoginPage() {
         </div>
 
         <Suspense fallback={null}>
-          <KakaoSignupButton />
+          <KakaoSignupButton className='mb-[171px]' />
         </Suspense>
       </div>
     </div>
