@@ -1,8 +1,8 @@
 'use client';
 
-import Image from 'next/image';
 import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
 import { buildQuery } from '@/global/utils/buildQuery';
+import Image from 'next/image';
 
 import KakaoSignupButton from '@/feature/login/components/KakaoSignupButton';
 
@@ -11,10 +11,7 @@ interface LoginDrawerProps {
   albumId: string;
 }
 
-export default function LoginDrawer({
-  trigger,
-  albumId,
-}: LoginDrawerProps) {
+export default function LoginDrawer({ trigger, albumId }: LoginDrawerProps) {
   const redirectUrl = `/photo/entry/${albumId}${buildQuery({ isInvite: true })}`;
 
   return (
@@ -32,7 +29,7 @@ export default function LoginDrawer({
       <div className='flex flex-col items-center gap-[32px]'>
         {/* Illustration */}
         <Image
-          src='/assets/login/cheese-icon.svg'
+          src='/assets/onboarding/book-and-check.png'
           width={150}
           height={150}
           alt='Login Illustration'
