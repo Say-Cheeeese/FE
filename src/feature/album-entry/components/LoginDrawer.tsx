@@ -8,23 +8,17 @@ import KakaoSignupButton from '@/feature/login/components/KakaoSignupButton';
 
 interface LoginDrawerProps {
   trigger?: React.ReactNode;
-  open?: boolean;
-  onOpenChange?: (open: boolean) => void;
   albumId: string;
 }
 
 export default function LoginDrawer({
   trigger,
-  open,
-  onOpenChange,
   albumId,
 }: LoginDrawerProps) {
   const redirectUrl = `/photo/entry/${albumId}${buildQuery({ isInvite: true })}`;
 
   return (
     <BottomSheetModal
-      open={open}
-      onOpenChange={onOpenChange}
       trigger={trigger}
       showHandle={false}
       className='max-h-none'
