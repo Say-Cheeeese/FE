@@ -14,8 +14,8 @@ export default function ScreenAlbumEntry({ albumId }: ScreenAlbumEntryProps) {
     >
       <LogoHeader bgColor='var(--color-background-brand)' />
 
-      <div className='flex flex-1 flex-col items-center pt-[48px] px-[34px] pb-[29px]'>
-        <div className='w-[325px] min-h-[508px] flex-1 rounded-[20px] bg-white shadow-[0px_0px_25px_5px_rgba(0,0,0,0.08)] flex flex-col overflow-hidden'>
+      <div className='flex flex-1 flex-col items-center px-[34px] pt-[48px] pb-[29px]'>
+        <div className='flex min-h-[508px] w-[325px] flex-1 flex-col overflow-hidden rounded-[20px] bg-white shadow-[0px_0px_25px_5px_rgba(0,0,0,0.08)]'>
           <LetterContent albumId={albumId} />
         </div>
       </div>

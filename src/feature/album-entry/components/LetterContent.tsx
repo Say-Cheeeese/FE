@@ -42,8 +42,8 @@ export default function LetterContent({ albumId }: LetterContentProps) {
   };
 
   return (
-    <div className='flex flex-1 flex-col h-full'>
-      <header className='flex h-[68px] items-center gap-2 border-b border-[#E5E5E7] px-[20px] pb-[16px] pt-[20px]'>
+    <div className='flex h-full flex-1 flex-col'>
+      <header className='flex h-[68px] items-center gap-2 border-b border-[#E5E5E7] px-[20px] pt-[20px] pb-[16px]'>
         <Image
           src={data.makerProfileImage}
           width={32}
@@ -51,18 +51,20 @@ export default function LetterContent({ albumId }: LetterContentProps) {
           alt={data.makerName}
           className='rounded-full'
         />
-        <span className='text-[16px] font-semibold leading-[24px] text-[#747681]'>
+        <span className='text-[16px] leading-[24px] font-semibold text-[#747681]'>
           {data.makerName}
         </span>
       </header>
 
       <section className='flex flex-1 flex-col items-center justify-center gap-[12px] px-[20px]'>
-        <div className='bg-[#F1F2F3] flex h-20 w-20 items-center justify-center rounded-full'>
-          <span className='text-[40px] leading-[52px]'>{convertUnicodeToEmoji(data.themeEmoji)}</span>
+        <div className='flex h-20 w-20 items-center justify-center rounded-full bg-[#F1F2F3]'>
+          <span className='text-[40px] leading-[52px]'>
+            {convertUnicodeToEmoji(data.themeEmoji)}
+          </span>
         </div>
 
         <div className='flex flex-col items-center gap-[4px]'>
-          <h2 className='text-[18px] font-semibold leading-[28px] text-[#18191B] text-center'>
+          <h2 className='text-center text-[18px] leading-[28px] font-semibold text-[#18191B]'>
             {data.title}
           </h2>
           <p className='text-[14px] leading-[20px] text-[#747681]'>
@@ -71,7 +73,7 @@ export default function LetterContent({ albumId }: LetterContentProps) {
         </div>
 
         {!data.isExpired && (
-          <span className='bg-[rgba(24,25,27,0.5)] text-[12px] font-medium leading-[18px] text-[#FFFFFF] inline-flex items-center rounded-full px-[10px] py-[4px]'>
+          <span className='inline-flex items-center rounded-full bg-[rgba(24,25,27,0.5)] px-[10px] py-[4px] text-[12px] leading-[18px] font-medium text-[#FFFFFF]'>
             앨범 소멸까지 {formatExpirationTime(data.expiredAt)}
           </span>
         )}
@@ -81,7 +83,7 @@ export default function LetterContent({ albumId }: LetterContentProps) {
         <button
           onClick={handleInviteAccept}
           type='button'
-          className='bg-[#FFCD14] text-[16px] font-semibold leading-[24px] text-[#332100] h-[48px] w-full rounded-[8px] px-5 py-[10px]'
+          className='h-[48px] w-full rounded-[8px] bg-[#FFCD14] px-5 py-[10px] text-[16px] leading-[24px] font-semibold text-[#332100]'
         >
           초대 수락하고 앨범 보기
         </button>

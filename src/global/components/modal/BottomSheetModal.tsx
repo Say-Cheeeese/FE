@@ -67,10 +67,7 @@ export default function BottomSheetModal({
         <div className={cn(title ? 'px-4 py-6' : '', contentClassName)}>
           {/* 스크린리더용 제목 (항상 필요) */}
           <DrawerTitle
-            className={cn(
-              'typo-heading-md-bold mb-8',
-              title ? '' : 'sr-only',
-            )}
+            className={cn('typo-heading-md-bold mb-8', title ? '' : 'sr-only')}
           >
             {title || '모달'}
           </DrawerTitle>
