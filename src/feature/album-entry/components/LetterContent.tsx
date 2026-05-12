@@ -11,6 +11,9 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
+import LoginDrawer from './LoginDrawer';
+import { useState } from 'react';
+
 interface LetterContentProps {
   albumId: string;
 }
@@ -19,6 +22,7 @@ export default function LetterContent({ albumId }: LetterContentProps) {
   const router = useRouter();
   const { data, isPending, isError } = useGetAlbumInvitation(albumId);
   const { isAuthed } = useCheckAuth();
+  const [isLoginDrawerOpen, setIsLoginDrawerOpen] = useState(false);
 
   useEffect(() => {
     trackGaEvent(GA_EVENTS.view_invited);
@@ -29,18 +33,11 @@ export default function LetterContent({ albumId }: LetterContentProps) {
   if (!data) return null;
 
   const handleInviteAccept = async () => {
-    trackGaEvent(GA_EVENTS.click_login, { entry_source: 'invitation' });
-
-    try {
-      if (isAuthed) {
-        router.push(`/photo/entry/${albumId}${buildQuery({ isInvite: true })}`);
-      } else {
-        router.push(
-          `/login${buildQuery({ redirect: encodeURIComponent(`/photo/entry/${albumId}${buildQuery({ isInvite: true })}`) })}`,
-        );
-      }
-    } catch (error) {
-      Toast.alert('앨범 입장에 실패하였습니다');
+    if (isAuthed) {
+      trackGaEvent(GA_EVENTS.click_login, { entry_source: 'invitation' });
+      router.push(`/photo/entry/${albumId}${buildQuery({ isInvite: true })}`);
+    } else {
+      setIsLoginDrawerOpen(true);
     }
   };
 
@@ -89,6 +86,11 @@ export default function LetterContent({ albumId }: LetterContentProps) {
           초대 수락하고 앨범 보기
         </button>
       </div>
+      <LoginDrawer
+        open={isLoginDrawerOpen}
+        onOpenChange={setIsLoginDrawerOpen}
+        albumId={albumId}
+      />
     </div>
   );
 }

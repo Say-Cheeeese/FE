@@ -5,9 +5,19 @@ import { useSearchParams } from 'next/navigation';
 
 const KAKAO_AUTH_URL = `https://dev.say-cheese.me/oauth2/authorization/kakao`;
 
-export default function KakaoSignupButton() {
+import { cn } from '@/lib/utils';
+
+interface KakaoSignupButtonProps {
+  className?: string;
+  redirect?: string;
+}
+
+export default function KakaoSignupButton({
+  className,
+  redirect: customRedirect,
+}: KakaoSignupButtonProps) {
   const searchParams = useSearchParams();
-  const redirect = searchParams.get('redirect');
+  const redirect = customRedirect || searchParams.get('redirect');
 
   const handleKakaoLogin = async () => {
     try {
@@ -22,7 +32,10 @@ export default function KakaoSignupButton() {
   };
   return (
     <div
-      className='mb-[171px] flex h-[56px] w-full cursor-pointer items-center justify-center gap-2 rounded-[6px] bg-[#FEE500]'
+      className={cn(
+        'flex h-[56px] w-full cursor-pointer items-center justify-center gap-2 rounded-[6px] bg-[#FEE500]',
+        className,
+      )}
       onClick={handleKakaoLogin}
     >
       <Image
