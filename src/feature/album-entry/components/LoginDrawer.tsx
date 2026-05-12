@@ -1,17 +1,20 @@
 'use client';
 
+import Image from 'next/image';
 import BottomSheetModal from '@/global/components/modal/BottomSheetModal';
 import { buildQuery } from '@/global/utils/buildQuery';
 
 import KakaoSignupButton from '@/feature/login/components/KakaoSignupButton';
 
 interface LoginDrawerProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
+  trigger?: React.ReactNode;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
   albumId: string;
 }
 
 export default function LoginDrawer({
+  trigger,
   open,
   onOpenChange,
   albumId,
@@ -22,7 +25,7 @@ export default function LoginDrawer({
     <BottomSheetModal
       open={open}
       onOpenChange={onOpenChange}
-      trigger={null}
+      trigger={trigger}
       showHandle={false}
       className='max-h-none'
       contentClassName='pt-10 pb-5 px-6'
@@ -33,13 +36,13 @@ export default function LoginDrawer({
       }
     >
       <div className='flex flex-col items-center gap-[32px]'>
-        {/* Illustration placeholder - In a real app, this would be an Image component or a specialized SVG component */}
-        <div className='relative flex h-[150px] w-[150px] items-center justify-center'>
-          {/* Complex illustration would go here. For now, representing it with a stylized container as described in Figma. */}
-          <div className='bg-element-gray-light flex h-full w-full items-center justify-center rounded-3xl shadow-[0_3px_37.5px_rgba(224,153,0,0.1)]'>
-            <span className='text-6xl'>🧀</span>
-          </div>
-        </div>
+        {/* Illustration */}
+        <Image
+          src='/assets/login/cheese-icon.svg'
+          width={150}
+          height={150}
+          alt='Login Illustration'
+        />
 
         {/* Action Area */}
         <div className='flex w-full flex-col items-center gap-2 pb-1'>

@@ -1,28 +1,20 @@
 'use client';
 import { useGetAlbumInvitation } from '@/feature/album/detail/hooks/useGetAlbumInvitation';
-import Toast from '@/global/components/toast/Toast';
 import { GA_EVENTS } from '@/global/constants/gaEvents';
-import { useCheckAuth } from '@/global/hooks/useCheckAuth';
-import { buildQuery } from '@/global/utils/buildQuery';
 import { convertUnicodeToEmoji } from '@/global/utils/convertEmoji';
 import { formatExpirationTime } from '@/global/utils/time/formatExpirationTime';
 import { trackGaEvent } from '@/global/utils/trackGaEvent';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
 import LoginDrawer from './LoginDrawer';
-import { useState } from 'react';
 
 interface LetterContentProps {
   albumId: string;
 }
 
 export default function LetterContent({ albumId }: LetterContentProps) {
-  const router = useRouter();
   const { data, isPending, isError } = useGetAlbumInvitation(albumId);
-  const { isAuthed } = useCheckAuth();
-  const [isLoginDrawerOpen, setIsLoginDrawerOpen] = useState(false);
 
   useEffect(() => {
     trackGaEvent(GA_EVENTS.view_invited);
@@ -31,15 +23,6 @@ export default function LetterContent({ albumId }: LetterContentProps) {
   if (isPending) return null;
   if (isError) return null;
   if (!data) return null;
-
-  const handleInviteAccept = async () => {
-    if (isAuthed) {
-      trackGaEvent(GA_EVENTS.click_login, { entry_source: 'invitation' });
-      router.push(`/photo/entry/${albumId}${buildQuery({ isInvite: true })}`);
-    } else {
-      setIsLoginDrawerOpen(true);
-    }
-  };
 
   return (
     <div className='flex h-full flex-1 flex-col'>
@@ -80,19 +63,18 @@ export default function LetterContent({ albumId }: LetterContentProps) {
       </section>
 
       <div className='flex h-[72px] flex-col items-center justify-center px-[20px] pb-[24px]'>
-        <button
-          onClick={handleInviteAccept}
-          type='button'
-          className='h-[48px] w-full rounded-[8px] bg-[#FFCD14] px-5 py-[10px] text-[16px] leading-[24px] font-semibold text-[#332100]'
-        >
-          초대 수락하고 앨범 보기
-        </button>
+        <LoginDrawer
+          albumId={albumId}
+          trigger={
+            <button
+              type='button'
+              className='h-[48px] w-full rounded-[8px] bg-[#FFCD14] px-5 py-[10px] text-[16px] leading-[24px] font-semibold text-[#332100]'
+            >
+              초대 수락하고 앨범 보기
+            </button>
+          }
+        />
       </div>
-      <LoginDrawer
-        open={isLoginDrawerOpen}
-        onOpenChange={setIsLoginDrawerOpen}
-        albumId={albumId}
-      />
     </div>
   );
 }
